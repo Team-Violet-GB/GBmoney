@@ -1,12 +1,13 @@
 
 window.Vue = require('vue');
-window.VueRouter  = require('vue-router');
+// window.VueRouter  = require('vue-router');
+import VueRouter from 'vue-router'
 
 Vue.use(VueRouter);
 
-Vue.component('App', require('./components/App.vue'));
-Vue.component('Home', require('./components/Home.vue'));
-Vue.component('User', require('./components/User.vue'));
+import App from './components/App'
+import Home from './components/Home'
+import User from './components/User'
 
 const router = new VueRouter({
     mode: 'history',
