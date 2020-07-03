@@ -1,6 +1,5 @@
 
 window.Vue = require('vue');
-// window.VueRouter  = require('vue-router');
 import VueRouter from 'vue-router'
 
 Vue.use(VueRouter);

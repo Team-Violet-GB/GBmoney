@@ -1,10 +1,10 @@
 <template>
     <div>
-        <h1>Vue Router Demo App</h1>
+        <h1>Проект Gbmoney - деньги любят счёт :)</h1>
 
         <p>
-            <router-link :to="{ name: 'home' }">Home</router-link> |
-            <router-link :to="{ name: 'user' }">User</router-link>
+            <router-link :to="{ name: 'home' }">На главную</router-link> |
+            <router-link :to="{ name: 'user' }">Пользователь</router-link>
         </p>
 
         <div class="container">

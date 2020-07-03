@@ -597,16 +597,18 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h1", [_vm._v("Vue Router Demo App")]),
+    _c("h1", [_vm._v("Проект Gbmoney - деньги любят счёт :)")]),
     _vm._v(" "),
     _c(
       "p",
       [
         _c("router-link", { attrs: { to: { name: "home" } } }, [
-          _vm._v("Home")
+          _vm._v("На главную")
         ]),
         _vm._v(" |\n        "),
-        _c("router-link", { attrs: { to: { name: "user" } } }, [_vm._v("User")])
+        _c("router-link", { attrs: { to: { name: "user" } } }, [
+          _vm._v("Пользователь")
+        ])
       ],
       1
     ),
@@ -636,7 +638,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("p", [_vm._v("This is the homepage")])
+  return _c("p", [_vm._v("Это главная страница проекта.")])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -660,7 +662,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("p", [_vm._v("This is user's page")])
+  return _c("p", [_vm._v("А это страница пользователя.")])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -15840,8 +15842,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_App__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/App */ "./resources/js/components/App.vue");
 /* harmony import */ var _components_Home__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Home */ "./resources/js/components/Home.vue");
 /* harmony import */ var _components_User__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/User */ "./resources/js/components/User.vue");
-window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js"); // window.VueRouter  = require('vue-router');
-
+window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
 Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
