@@ -203,8 +203,7 @@
 
 .cstm-point {
   margin-bottom: 10px;
-  min-width: 16.66%;
-  max-width: 16.66%;
+  width: 16.66%;
   position: relative;
 }
 
