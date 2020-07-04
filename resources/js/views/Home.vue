@@ -123,22 +123,28 @@
 </template>
 
 <style>
-.cstm-box-card {
-  border-radius: 0%;
-  border: none;
-  margin-bottom:30px;
-}
-
 .el-card__header {
+  padding: 0;
   border: none;
-  background-color: #5f6068;
-  padding: 10px 30px
 }
 
 .el-card__body {
   background-color: #3d3e48;
   display: flex;
   flex-wrap: wrap;
+}
+</style>
+
+<style scoped>
+.cstm-box-card {
+  border-radius: 0%;
+  border: none;
+  margin-bottom:30px;
+}
+
+.cstm-header-card {
+  background-color: #5f6068;
+  padding: 10px 30px
 }
 
 .cstm-up-text {
@@ -239,5 +245,4 @@
 .cstm-grey {
     color: #909399;
 }
-
 </style>

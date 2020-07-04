@@ -11,7 +11,7 @@
   </el-header>
 </template>
 
-<style>
+<style scoped>
 .el-header {
   background-color: #4b4c55;
   color: #ffffff;

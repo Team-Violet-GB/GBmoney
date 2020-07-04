@@ -25,30 +25,6 @@
             <i :class=link.class></i>
             <span>{{ link.title }}</span>
           </router-link>
-          <!-- <el-menu-item index="1">
-            <i class="el-icon-user-solid"></i>
-            <span>Профиль</span>
-          </el-menu-item>
-          <el-menu-item index="2">
-            <i class="el-icon-menu"></i>
-            <span>Лента</span>
-          </el-menu-item>
-          <el-menu-item index="3">
-            <i class="el-icon-s-goods"></i>
-            <span>Отчет по дням</span>
-          </el-menu-item>
-          <el-menu-item index="4">
-            <i class="el-icon-date"></i>
-            <span>Отчет по месяцам</span>
-          </el-menu-item>
-          <el-menu-item index="5">
-            <i class="el-icon-s-data"></i>
-            <span>История</span>
-          </el-menu-item>
-          <el-menu-item index="6">
-            <i class="el-icon-s-tools"></i>
-            <span>Настройки</span>
-          </el-menu-item> -->
         </el-menu>
       </el-col>
     </el-row>
@@ -82,7 +58,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .el-aside {
   color: #333;
   background-color: #3d3e48;
