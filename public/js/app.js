@@ -79131,7 +79131,7 @@ var routes = [{
     layout: 'main'
   },
   component: function component() {
-    return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ./views/Home.vue */ "./resources/js/views/Home.vue"));
+    return __webpack_require__.e(/*! import() */ 1).then(__webpack_require__.bind(null, /*! ./views/Home.vue */ "./resources/js/views/Home.vue"));
   }
 }, {
   path: '/user',
@@ -79140,7 +79140,7 @@ var routes = [{
     layout: 'main'
   },
   component: function component() {
-    return __webpack_require__.e(/*! import() */ 1).then(__webpack_require__.bind(null, /*! ./views/User.vue */ "./resources/js/views/User.vue"));
+    return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ./views/User.vue */ "./resources/js/views/User.vue"));
   }
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
@@ -79258,8 +79258,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\OpenServer\OSPanel\domains\GBmoney\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\OpenServer\OSPanel\domains\GBmoney\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! E:\Makc\GoogleDrive\Study\GBmoney\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! E:\Makc\GoogleDrive\Study\GBmoney\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
