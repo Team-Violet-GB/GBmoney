@@ -141,7 +141,7 @@
 }
 
 .cstm-body-card {
-  padding: 10px 0;
+  padding: 10px;
   display: flex;
   flex-wrap: wrap;
   background-color: #3d3e48;
@@ -203,8 +203,10 @@
 
 .cstm-point {
   margin-bottom: 10px;
-  width: 16.66%;
+  flex-basis: 15%;
   position: relative;
+  margin-right: 0.72%;
+  margin-left: 0.72%;
 }
 
 .cstm-point:hover .cstm-edit {
@@ -215,8 +217,8 @@
 .cstm-edit {
   color: #9a9898;
   position: absolute;
-  top: 25px;
-  right: 35px;
+  top: 17%;
+  right: 24%;
   font-size: 15px;
   display: none;
   transition: 0.3s;
