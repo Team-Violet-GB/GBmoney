@@ -1,5 +1,8 @@
 <template>
     <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="200px" class="cstm-ruleForm">
+        <div class="clearfix cstm-up-text">
+            <span>Изменение данных пользователя</span>
+        </div>
         <el-form-item label="Ваше имя" prop="name">
             <el-input v-model="ruleForm.name" id="name"></el-input>
         </el-form-item>
@@ -114,6 +117,14 @@
     }
 </script>
 <style lang="scss">
+    .cstm-up-text {
+        color: #ffffff;
+        text-align: center;
+        padding-bottom: 4px;
+        margin-bottom: 1em;
+        font-size: 25px;
+        font-weight: 700;
+    }
     .cstm-ruleForm {
         margin: 0 auto;
         max-width: 600px;
