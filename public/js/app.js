@@ -1933,7 +1933,7 @@ __webpack_require__.r(__webpack_exports__);
         "class": 'el-icon-s-data'
       }, {
         title: 'Настройки',
-        url: '/6',
+        url: '/test',
         "class": 'el-icon-s-tools'
       }]
     };
@@ -79131,7 +79131,7 @@ var routes = [{
     layout: 'main'
   },
   component: function component() {
-    return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ./views/Home.vue */ "./resources/js/views/Home.vue"));
+    return Promise.all(/*! import() */[__webpack_require__.e(3), __webpack_require__.e(0)]).then(__webpack_require__.bind(null, /*! ./views/Home.vue */ "./resources/js/views/Home.vue"));
   }
 }, {
   path: '/user',
@@ -79140,16 +79140,16 @@ var routes = [{
     layout: 'main'
   },
   component: function component() {
-    return __webpack_require__.e(/*! import() */ 3).then(__webpack_require__.bind(null, /*! ./views/User.vue */ "./resources/js/views/User.vue"));
+    return __webpack_require__.e(/*! import() */ 4).then(__webpack_require__.bind(null, /*! ./views/User.vue */ "./resources/js/views/User.vue"));
   }
 }, {
-  path: '/history',
-  name: 'History',
+  path: '/feed',
+  name: 'Feed',
   meta: {
     layout: 'main'
   },
   component: function component() {
-    return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1)]).then(__webpack_require__.bind(null, /*! ./views/History.vue */ "./resources/js/views/History.vue"));
+    return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1)]).then(__webpack_require__.bind(null, /*! ./views/Feed.vue */ "./resources/js/views/Feed.vue"));
   }
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({

@@ -15,6 +15,12 @@ const routes = [
     name: 'User',
     meta: { layout: 'main' },
     component: () => import('./views/User.vue')
+  },
+  {
+    path: '/feed',
+    name: 'Feed',
+    meta: { layout: 'main' },
+    component: () => import('./views/Feed.vue')
   }
 ]
 
