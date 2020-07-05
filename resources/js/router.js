@@ -15,8 +15,7 @@ const routes = [
     name: 'User',
     meta: { layout: 'main' },
     component: () => import('./views/User.vue')
-  },
-
+  }
 ]
 
 const router = new VueRouter({
