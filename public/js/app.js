@@ -1917,7 +1917,7 @@ __webpack_require__.r(__webpack_exports__);
         "class": 'el-icon-user-solid'
       }, {
         title: 'Лента',
-        url: '/history',
+        url: '/feed',
         "class": 'el-icon-menu'
       }, {
         title: 'Отчет по дням',
