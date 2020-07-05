@@ -1,6 +1,6 @@
 <template>
     <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="200px" class="cstm-ruleForm">
-        <div class="clearfix cstm-up-text">
+        <div class="clearfix cstm-form-text">
             <span>Изменение данных пользователя</span>
         </div>
         <el-form-item label="Ваше имя" prop="name">
@@ -116,8 +116,8 @@
         }
     }
 </script>
-<style lang="scss">
-    .cstm-up-text {
+<style lang="scss" scoped>
+    .cstm-form-text {
         color: #ffffff;
         text-align: center;
         padding-bottom: 4px;
