@@ -3,9 +3,6 @@
         <div class="clearfix cstm-form-text">
             <span>Изменение данных пользователя</span>
         </div>
-        <el-form-item label="Ваше имя" prop="name">
-            <el-input v-model="ruleForm.name" id="name"></el-input>
-        </el-form-item>
         <el-form-item label="Ваш e-mail" prop="email">
             <el-input v-model="ruleForm.email" id="email"></el-input>
         </el-form-item>
@@ -116,15 +113,7 @@
         }
     }
 </script>
-<style lang="scss" scoped>
-    .cstm-form-text {
-        color: #ffffff;
-        text-align: center;
-        padding-bottom: 4px;
-        margin-bottom: 1em;
-        font-size: 25px;
-        font-weight: 700;
-    }
+<style lang="scss">
     .cstm-ruleForm {
         margin: 0 auto;
         max-width: 600px;
@@ -147,5 +136,15 @@
                 color: rgb(255, 208, 75);
             }
         }
+    }
+</style>
+<style lang="scss" scoped>
+    .cstm-form-text {
+        color: #ffffff;
+        text-align: center;
+        padding-bottom: 4px;
+        margin-bottom: 1em;
+        font-size: 25px;
+        font-weight: 700;
     }
 </style>
