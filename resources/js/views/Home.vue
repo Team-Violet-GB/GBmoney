@@ -1,5 +1,7 @@
 <template>
   <div>
+    <!-- Модальное окно  -->
+    <CreateWindow :openCreateWindow="openCreateWindow" ref="details" />
     <!-- ДОХОДЫ -->
     <div class="cstm-box-card">
       <!-- хедер -->
@@ -102,16 +104,19 @@
 <script>
 import { Drag, Drop } from "vue-easy-dnd";
 import Addbutton from "../components/homepage/Addbutton";
+import CreateWindow from "../components/homepage/CreateWindow";
 
 export default {
   name: "App",
   components: {
     Drag,
     Drop,
-    Addbutton
+    Addbutton,
+    CreateWindow,
   },
   data: function() {
     return {
+      openCreateWindow: false,
       incomes: [
         { id: 1, name: "Зарплата", icon: "el-icon-money", money: 20000 },
         { id: 2, name: "Депозит", icon: "el-icon-s-data", money: 1000 },
@@ -140,17 +145,20 @@ export default {
       ],
     };
   },
+
   methods: {
     onWallet (event) {
       let from = event.data
       let to = event.top.$el.parentElement.id
-      alert ('Транзакция из ' + from + ' в wallet' + to);
+      this.openCreateWindow = true
+
+      //alert ('Транзакция из ' + from + ' в wallet' + to);
     },
     onExpense(event) {
       let from = event.data
       let to = event.top.$el.parentElement.id
       alert ('Транзакция из ' + from + ' в expense' + to);
-    }
+    },    
   },
 };
 </script>
