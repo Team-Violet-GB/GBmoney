@@ -1,19 +1,11 @@
 <template>
     <div>
         <!-- Модальное окно  -->
-        <el-radio-group v-model="direction">
-            <el-radio label="ltr">left to right</el-radio>
-            <el-radio label="rtl">right to left</el-radio>
-            <el-radio label="ttb">top to bottom</el-radio>
-            <el-radio label="btt">bottom to top</el-radio>
-        </el-radio-group>
-            <el-button @click="drawer = true" type="primary" style="margin-left: 16px;">
-        open
-        </el-button>
         <el-drawer
-        title="I am the title"
+        :title="transactionData.from + ' -> ' + transactionData.to"
         :visible.sync="drawer"
         :direction="direction"
+        size="50%"
         :before-close="handleClose">
         <span>Hi, there!</span>
         </el-drawer>
@@ -22,25 +14,21 @@
 
 <script>
   export default {
-    props: ['openCreateWindow'],
+    props: ['transactionData'],
     data() {
       return {
-        direction: 'rtl',
+        direction: 'btt',
       };
     },
 
     computed: {
         drawer() {
-            return this.openCreateWindow
+              return this.transactionData.state_window
         }
     },
     methods: {
       handleClose(done) {
-        this.$confirm('Are you sure you want to close this?')
-          .then(_ => {
-            done();
-          })
-          .catch(_ => {});
+        this.$emit('closeCreateWindow')
       }
     },
   };

@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Модальное окно  -->
-    <CreateWindow :openCreateWindow="openCreateWindow" ref="details" />
+    <CreateWindow :transactionData="transactionData" @closeCreateWindow="transactionData.state_window = false" />
     <!-- ДОХОДЫ -->
     <div class="cstm-box-card">
       <!-- хедер -->
@@ -48,7 +48,7 @@
         <div v-for="point in wallets" :key="point.id" :id="point.id" class="cstm-point">
           <div class="cstm-head-point">{{ point.name }}</div>
             <drop
-              @drop="onWallet"
+              @drop="transactionWallet"
               :accepts-data="(data) => data.includes('incomes') || data.includes('wallets')"
             >
               <drag :data="'wallets'+ point.id">
@@ -80,7 +80,7 @@
       <transition-group name="list" tag="div" class="cstm-body-card">
         <div v-for="point in expenses" :key="point.id" :id="point.id" class="cstm-point">
           <div class="cstm-head-point">{{ point.name }}</div>
-          <drop @drop="onExpense" :accepts-data="(data) => data.includes('wallets')">
+          <drop @drop="transactionExpense" :accepts-data="(data) => data.includes('wallets')">
             <el-button
               :type="(point.money > point.plan)? 'danger' : 'success'"
               :icon="point.icon"
@@ -116,7 +116,7 @@ export default {
   },
   data: function() {
     return {
-      openCreateWindow: false,
+      transactionData: { state_window: false, from: '', to: '' },
       incomes: [
         { id: 1, name: "Зарплата", icon: "el-icon-money", money: 20000 },
         { id: 2, name: "Депозит", icon: "el-icon-s-data", money: 1000 },
@@ -147,18 +147,16 @@ export default {
   },
 
   methods: {
-    onWallet (event) {
+    transactionWallet (event) {
       let from = event.data
-      let to = event.top.$el.parentElement.id
-      this.openCreateWindow = true
-
-      //alert ('Транзакция из ' + from + ' в wallet' + to);
+      let to = 'wallet' +  event.top.$el.parentElement.id
+      this.transactionData = { state_window: true, from: from, to: to }
     },
-    onExpense(event) {
+    transactionExpense (event) {
       let from = event.data
-      let to = event.top.$el.parentElement.id
-      alert ('Транзакция из ' + from + ' в expense' + to);
-    },    
+      let to = 'expense' + event.top.$el.parentElement.id
+      this.transactionData = { state_window: true, from: from, to: to }
+    },
   },
 };
 </script>
