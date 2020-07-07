@@ -52554,6 +52554,140 @@ exports.default = { use: use, t: t, i18n: i18n };
 
 /***/ }),
 
+/***/ "./node_modules/element-ui/lib/locale/lang/ru-RU.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/element-ui/lib/locale/lang/ru-RU.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.default = {
+  el: {
+    colorpicker: {
+      confirm: 'OK',
+      clear: 'Очистить'
+    },
+    datepicker: {
+      now: 'Сейчас',
+      today: 'Сегодня',
+      cancel: 'Отмена',
+      clear: 'Очистить',
+      confirm: 'OK',
+      selectDate: 'Выбрать дату',
+      selectTime: 'Выбрать время',
+      startDate: 'Дата начала',
+      startTime: 'Время начала',
+      endDate: 'Дата окончания',
+      endTime: 'Время окончания',
+      prevYear: 'Предыдущий год',
+      nextYear: 'Следующий год',
+      prevMonth: 'Предыдущий месяц',
+      nextMonth: 'Следующий месяц',
+      year: '',
+      month1: 'Январь',
+      month2: 'Февраль',
+      month3: 'Март',
+      month4: 'Апрель',
+      month5: 'Май',
+      month6: 'Июнь',
+      month7: 'Июль',
+      month8: 'Август',
+      month9: 'Сентябрь',
+      month10: 'Октябрь',
+      month11: 'Ноябрь',
+      month12: 'Декабрь',
+      week: 'неделя',
+      weeks: {
+        sun: 'Вс',
+        mon: 'Пн',
+        tue: 'Вт',
+        wed: 'Ср',
+        thu: 'Чт',
+        fri: 'Пт',
+        sat: 'Сб'
+      },
+      months: {
+        jan: 'Янв',
+        feb: 'Фев',
+        mar: 'Мар',
+        apr: 'Апр',
+        may: 'Май',
+        jun: 'Июн',
+        jul: 'Июл',
+        aug: 'Авг',
+        sep: 'Сен',
+        oct: 'Окт',
+        nov: 'Ноя',
+        dec: 'Дек'
+      }
+    },
+    select: {
+      loading: 'Загрузка',
+      noMatch: 'Совпадений не найдено',
+      noData: 'Нет данных',
+      placeholder: 'Выбрать'
+    },
+    cascader: {
+      noMatch: 'Совпадений не найдено',
+      loading: 'Загрузка',
+      placeholder: 'Выбрать',
+      noData: 'Нет данных'
+    },
+    pagination: {
+      goto: 'Перейти',
+      pagesize: ' на странице',
+      total: 'Всего {total}',
+      pageClassifier: ''
+    },
+    messagebox: {
+      title: 'Сообщение',
+      confirm: 'OK',
+      cancel: 'Отмена',
+      error: 'Недопустимый ввод данных'
+    },
+    upload: {
+      deleteTip: 'Нажмите [Удалить] для удаления',
+      delete: 'Удалить',
+      preview: 'Превью',
+      continue: 'Продолжить'
+    },
+    table: {
+      emptyText: 'Нет данных',
+      confirmFilter: 'Подтвердить',
+      resetFilter: 'Сбросить',
+      clearFilter: 'Все',
+      sumText: 'Сумма'
+    },
+    tree: {
+      emptyText: 'Нет данных'
+    },
+    transfer: {
+      noMatch: 'Совпадений не найдено',
+      noData: 'Нет данных',
+      titles: ['Список 1', 'Список 2'],
+      filterPlaceholder: 'Введите ключевое слово',
+      noCheckedFormat: '{total} пунктов',
+      hasCheckedFormat: '{checked}/{total} выбрано'
+    },
+    image: {
+      error: 'FAILED' // to be translated
+    },
+    pageHeader: {
+      title: 'Back' // to be translated
+    },
+    popconfirm: {
+      confirmButtonText: 'OK',
+      cancelButtonText: 'Отмена'
+    }
+  }
+};
+
+/***/ }),
+
 /***/ "./node_modules/element-ui/lib/locale/lang/zh-CN.js":
 /*!**********************************************************!*\
   !*** ./node_modules/element-ui/lib/locale/lang/zh-CN.js ***!
@@ -97896,11 +98030,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./router */ "./resources/js/router.js");
 /* harmony import */ var element_ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! element-ui */ "./node_modules/element-ui/lib/element-ui.common.js");
 /* harmony import */ var element_ui__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(element_ui__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var element_ui_lib_theme_chalk_index_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! element-ui/lib/theme-chalk/index.css */ "./node_modules/element-ui/lib/theme-chalk/index.css");
-/* harmony import */ var element_ui_lib_theme_chalk_index_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(element_ui_lib_theme_chalk_index_css__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var element_theme_dark__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! element-theme-dark */ "./node_modules/element-theme-dark/lib/index.css");
-/* harmony import */ var element_theme_dark__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(element_theme_dark__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _components_App__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/App */ "./resources/js/components/App.vue");
+/* harmony import */ var element_ui_lib_locale_lang_ru_RU__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! element-ui/lib/locale/lang/ru-RU */ "./node_modules/element-ui/lib/locale/lang/ru-RU.js");
+/* harmony import */ var element_ui_lib_locale_lang_ru_RU__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(element_ui_lib_locale_lang_ru_RU__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var element_ui_lib_theme_chalk_index_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! element-ui/lib/theme-chalk/index.css */ "./node_modules/element-ui/lib/theme-chalk/index.css");
+/* harmony import */ var element_ui_lib_theme_chalk_index_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(element_ui_lib_theme_chalk_index_css__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var element_theme_dark__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! element-theme-dark */ "./node_modules/element-theme-dark/lib/index.css");
+/* harmony import */ var element_theme_dark__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(element_theme_dark__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _components_App__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/App */ "./resources/js/components/App.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
@@ -97909,14 +98045,17 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 
 
 
+
 Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
-Vue.use(element_ui__WEBPACK_IMPORTED_MODULE_2___default.a);
-Vue.use(element_theme_dark__WEBPACK_IMPORTED_MODULE_4___default.a);
+Vue.use(element_ui__WEBPACK_IMPORTED_MODULE_2___default.a, {
+  locale: element_ui_lib_locale_lang_ru_RU__WEBPACK_IMPORTED_MODULE_3___default.a
+});
+Vue.use(element_theme_dark__WEBPACK_IMPORTED_MODULE_5___default.a);
 
 new Vue({
   router: _router__WEBPACK_IMPORTED_MODULE_1__["default"],
   render: function render(h) {
-    return h(_components_App__WEBPACK_IMPORTED_MODULE_5__["default"]);
+    return h(_components_App__WEBPACK_IMPORTED_MODULE_6__["default"]);
   }
 }).$mount('#app');
 
