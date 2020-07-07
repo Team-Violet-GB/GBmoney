@@ -1,10 +1,11 @@
 <template>
-  <el-select v-model="selectedID" placeholder="Select">
+  <el-select v-model="selectedID" placeholder="Select" @change="$emit('changeSelect', selectedID )">
     <el-option
       v-for="item in points"
       :key="item.id"
       :label="item.name"
-      :value="item.id">
+      :value="item.id"
+      class = "cstm-select-item">
     </el-option>
   </el-select>
 </template>
@@ -19,3 +20,38 @@
     },
   }
 </script>
+
+<style>
+  .el-input__inner, .el-scrollbar {
+    background: #2c2e38;
+    color: #ffffff;
+    border-radius: 0%;
+    border-color: #5f6068;
+    font-weight: 100;
+    font-size: 16px;
+  }
+
+  .el-select .el-input.is-focus .el-input__inner, 
+  .el-select .el-input__inner:focus {
+    border-color: #ffffff !important; 
+}
+
+</style>
+
+<style scoped>
+  .cstm-select-item {
+    background: #3d3e48;
+    color: #ffffff;
+    border-radius: 0%;
+    font-size: 16px;
+  }
+
+  .hover {
+    color: rgb(255, 208, 75) !important;
+    background-color: rgb(49, 50, 58);
+  }
+
+  .selected {
+    color: rgb(255, 208, 75) !important;
+  }
+</style>

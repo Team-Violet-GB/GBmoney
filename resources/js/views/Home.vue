@@ -1,7 +1,13 @@
 <template>
   <div>
     <!-- Модальное окно  -->
-    <CreateWindow :transactionData="transactionData" @closeCreateWindow="transactionData.state_window = false" />
+    <CreateWindow
+      :transactionData="transactionData"
+      :incomes="incomes"
+      :wallets="wallets"
+      :expenses="expenses"
+      @closeCreateWindow="transactionData.state_window = false"  
+    />
     <!-- ДОХОДЫ -->
     <div class="cstm-box-card">
       <!-- хедер -->
@@ -148,10 +154,24 @@ export default {
 
   methods: {
     transactionWallet (event) {
-      this.transactionData = { state_window: true, fromID: event.data.id, toID: event.top.$el.parentElement.id, fromType: event.data.type, toType: 'wallet'}
+        if ((event.data.id == event.top.$el.parentElement.id) && (event.data.type == 'wallet')) {
+          return
+        }
+        this.transactionData = { 
+          state_window: true,
+          fromID: event.data.id, 
+          toID: event.top.$el.parentElement.id, 
+          fromType: event.data.type, 
+          toType: 'wallet'
+          }
     },
     transactionExpense (event) {
-      this.transactionData = { state_window: true, fromID: event.data.id, toID: event.top.$el.parentElement.id, fromType: event.data.type, toType: 'expense'}
+      this.transactionData = { 
+        state_window: true, 
+        fromID: event.data.id, 
+        toID: event.top.$el.parentElement.id, 
+        fromType: event.data.type, 
+        toType: 'expense'}
     },
   },
 };

@@ -7,8 +7,13 @@
         :direction="direction"
         size="40%"
         :before-close="handleClose">
-          <div>{{ transactionData.fromType }} {{ transactionData.fromID }} -> {{ transactionData.toType }} {{ transactionData.toID }}</div>
-          <div> <SelectCustom :points="pointsFrom" :id="transactionData.fromID" /> -> <SelectCustom :points="pointsTo" :id="transactionData.toID" /></div>
+          <div class="cstm-body-window">
+            <div class="cstm-select-double">
+              <SelectCustom :points="pointsFrom" :id="transactionData.fromID" />
+              <i class="el-icon-right"></i>
+              <SelectCustom :points="pointsTo" :id="transactionData.toID" />
+            </div>
+          </div>
         </el-drawer>
     </div>
 </template>
@@ -17,7 +22,7 @@
 import SelectCustom from "../homepage/SelectCustom";
 
   export default {
-    props: ['transactionData'],
+    props: ['transactionData', 'incomes', 'wallets', 'expenses'],
     components: {
       SelectCustom
     },
@@ -28,23 +33,19 @@ import SelectCustom from "../homepage/SelectCustom";
         // rtl > right to left
         // ttb > top to bottom
         // btt > bottom to top
-      pointsFrom: [
-        { id: 1, name: "Зарплата", icon: "el-icon-money", money: 20000 },
-        { id: 2, name: "Депозит", icon: "el-icon-s-data", money: 1000 },
-        { id: 3, name: "Кэшбэк", icon: "el-icon-coin", money: 500 },
-        { id: 4, name: "Подарки", icon: "el-icon-present", money: 5000 }
-      ],
-      pointsTo: [
-        { id: 1, name: "Наличные", icon: "el-icon-wallet", money: 20000 },
-        { id: 2, name: "Карта Такая", icon: "el-icon-bank-card", money: 15000 },
-        { id: 3, name: "Карта Сякая", icon: "el-icon-bank-card", money: 100000 }
-      ],};
+      };
     },
 
     computed: {
         drawer() {
               return this.transactionData.state_window
-        }
+        },
+        pointsFrom() {
+            return (this.transactionData.fromType === 'income') ? this.incomes : this.wallets
+        }, 
+        pointsTo() {
+            return (this.transactionData.toType === 'wallet') ? this.wallets : this.expenses
+        }, 
     },
     methods: {
       handleClose(done) {
@@ -55,6 +56,11 @@ import SelectCustom from "../homepage/SelectCustom";
 </script>
 
 <style>
+
+  .el-drawer:focus {
+    outline: none;
+    border: none;
+  }
   .el-drawer__header {
     background-color: #5f6068;
     color: #ffffff;
@@ -76,4 +82,19 @@ import SelectCustom from "../homepage/SelectCustom";
   background-color: #3d3e48;
   }
 
+  .el-icon-right{
+    color: #ffffff;
+    font-size: 20px;
+  }
+</style>
+
+<style scoped>
+  .cstm-body-window {
+    display: flex;
+    justify-content: center;
+  }
+
+  .cstm-select-double {
+    margin-top: 20px;
+  }
 </style>
