@@ -9,10 +9,14 @@
         :before-close="handleClose">
           <div class="cstm-body-window">
             <Calendar />
-            <div class="cstm-select-double cstm-mrgn-top-20">
+            <div class="cstm-select-box cstm-mrgn-top-20">
               <SelectCustom :points="pointsFrom" :id="transactionData.fromID" />
               <i class="el-icon-right"></i>
               <SelectCustom :points="pointsTo" :id="transactionData.toID" />
+            </div>
+            <div  v-if="transactionData.toType == 'expense'" class="cstm-select-box cstm-mrgn-top-20">
+                <span class="cstm-label">Подкатегория:</span> 
+                <SelectCustom :points="tags" :id="1" />
             </div>
             <el-input placeholder="Сумма" class="cstm-input cstm-mrgn-top-20" v-model="amount"></el-input>
             <el-input
@@ -20,8 +24,9 @@
               :rows="2"
               placeholder="Комментарий"
               class="cstm-input cstm-mrgn-top-20"
-              v-model="textarea">
+              v-model="comment">
             </el-input>
+            <el-button class="cstm-create-button cstm-mrgn-top-20" type="success">Записать транзакцию</el-button>
           </div>
         </el-drawer>
     </div>
@@ -39,11 +44,14 @@ import Calendar from "../homepage/Calendar";
     data() {
       return {
         amount: '',
+        comment: '',
         direction: 'rtl',
-        // ltr > left to right
-        // rtl > right to left
-        // ttb > top to bottom
-        // btt > bottom to top
+        tags: [
+          { id: 1, name: "Подкатегория1" },
+          { id: 2, name: "Подкатегория2"},
+          { id: 3, name: "Подкатегория3" },
+          { id: 4, name: "Подкатегория4" }
+        ]
       };
     },
 
@@ -88,6 +96,10 @@ import Calendar from "../homepage/Calendar";
 
   }
 
+  .el-input__inner:focus{
+    border-color: #ffffff;
+  }
+
   .el-drawer__body {
     background-color: #3d3e48;
   }
@@ -114,16 +126,38 @@ import Calendar from "../homepage/Calendar";
     font-size: 16px;
   }
 
+.cstm-input textarea {
+  font-style: italic;
+  border: 1px #5f6068 solid;
+}
+
+.cstm-input textarea:focus {
+  border-color: #ffffff;
+}
+
+
 </style>
 
 <style scoped>
+  .cstm-create-button{
+    border-radius: 0;
+    width: 90%;
+    font-size: 20px;
+    transition: .2s;
+  }
+
+  .cstm-create-button:hover {
+    filter: brightness(80%);
+    transition: .2s;
+  }
+
   .cstm-body-window {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
 
-  .cstm-select-double {
+  .cstm-select-box {
     margin-top: 20px;
     width: 90%;
     display: flex;
@@ -132,6 +166,12 @@ import Calendar from "../homepage/Calendar";
   }
 .cstm-input {
   width: 90%;
+}
+
+.cstm-label {
+  width: 50%;
+  text-align: right;
+  color: #ffffff;
 }
 
 </style>

@@ -13,5 +13,5 @@ export default {
 </script>
 
 <style scoped>
-    .cstm-input
+
 </style>
