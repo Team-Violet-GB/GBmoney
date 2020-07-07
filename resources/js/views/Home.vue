@@ -19,7 +19,7 @@
       <transition-group name="list" tag="div" class="cstm-body-card">
         <div v-for="point in incomes" :key="point.id" :id="point.id" class="cstm-point">
           <div class="cstm-head-point">{{ point.name }}</div>
-          <drag :data="'incomes'+ point.id">
+          <drag :data="{ id: point.id, type: 'income'}">
             <drop :accepts-data="() => false">
               <el-button type="primary" :icon="point.icon" circle class="cstm-icon-point"></el-button>
             </drop>
@@ -49,9 +49,9 @@
           <div class="cstm-head-point">{{ point.name }}</div>
             <drop
               @drop="transactionWallet"
-              :accepts-data="(data) => data.includes('incomes') || data.includes('wallets')"
+              :accepts-data="(data) => (data.type == 'income') || data.type == 'wallet'"
             >
-              <drag :data="'wallets'+ point.id">
+              <drag :data="{ id: point.id, type: 'wallet'}">
                 <el-button type="warning" :icon="point.icon" circle class="cstm-icon-point"></el-button>
                 </drag>
             </drop>
@@ -80,7 +80,7 @@
       <transition-group name="list" tag="div" class="cstm-body-card">
         <div v-for="point in expenses" :key="point.id" :id="point.id" class="cstm-point">
           <div class="cstm-head-point">{{ point.name }}</div>
-          <drop @drop="transactionExpense" :accepts-data="(data) => data.includes('wallets')">
+          <drop @drop="transactionExpense" :accepts-data="(data) => (data.type == 'wallet')">
             <el-button
               :type="(point.money > point.plan)? 'danger' : 'success'"
               :icon="point.icon"
@@ -114,9 +114,9 @@ export default {
     Addbutton,
     CreateWindow,
   },
-  data: function() {
+  data() {
     return {
-      transactionData: { state_window: false, from: '', to: '' },
+       transactionData: { state_window: false },
       incomes: [
         { id: 1, name: "Зарплата", icon: "el-icon-money", money: 20000 },
         { id: 2, name: "Депозит", icon: "el-icon-s-data", money: 1000 },
@@ -148,14 +148,10 @@ export default {
 
   methods: {
     transactionWallet (event) {
-      let from = event.data
-      let to = 'wallet' +  event.top.$el.parentElement.id
-      this.transactionData = { state_window: true, from: from, to: to }
+      this.transactionData = { state_window: true, fromID: event.data.id, toID: event.top.$el.parentElement.id, fromType: event.data.type, toType: 'wallet'}
     },
     transactionExpense (event) {
-      let from = event.data
-      let to = 'expense' + event.top.$el.parentElement.id
-      this.transactionData = { state_window: true, from: from, to: to }
+      this.transactionData = { state_window: true, fromID: event.data.id, toID: event.top.$el.parentElement.id, fromType: event.data.type, toType: 'expense'}
     },
   },
 };
@@ -179,7 +175,6 @@ export default {
   flex-wrap: wrap;
   background-color: #3d3e48;
 }
-
 
 .cstm-point {
   margin-bottom: 10px;
