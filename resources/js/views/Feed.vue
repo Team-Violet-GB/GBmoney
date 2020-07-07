@@ -8,17 +8,26 @@
         </el-alert>
 
         <el-card v-if="!dataError" v-for="(item, index) in transactionData" :key="index" class="box-card">
-            <div @click="showInput = !showInput" slot="header" class="clearfix">
-                <h2>{{ transactionData[index].date }}</h2>
+            <div @click="showEdit()" slot="header" class="clearfix orange">
+                <h2>{{ item.date }}</h2>
             </div>
 
             <el-card v-for="(transaction, indexx) in item.transactions" :key="indexx" class="box-card">
-                <div  v-show="showInput">
-                    <el-input type="text" v-model="transactionData[index].transactions[indexx].name"></el-input>
-                    <el-input type="text" v-show="showInput" v-model="transactionData[index].transactions[indexx].amount"></el-input>
-                    <el-input type="date" v-show="showInput" v-model="transactionData[index].date"></el-input>
-                    <el-input type="textarea" v-model="transactionData[index].transactions[indexx].comment"></el-input>
+                <div v-show="showText">
+                    <H3>{{ transaction.name }}</H3>
+                    <H3>{{ transaction.amount }}</H3>
+                    <H3>{{ transaction.date }}</H3>
+                    <H3>{{ transaction.comment }}</H3>
                 </div>
+                <el-collapse-transition>
+                    <div v-show="showInput">
+                        <el-input type="text" v-model="transactionData[index].transactions[indexx].name"></el-input>
+                        <el-input type="text" v-model="transactionData[index].transactions[indexx].amount"></el-input>
+                        <el-input type="date" v-model="transactionData[index].date"></el-input>
+                        <el-input type="textarea"
+                                  v-model="transactionData[index].transactions[indexx].comment"></el-input>
+                    </div>
+                </el-collapse-transition>
             </el-card>
 
         </el-card>
@@ -38,7 +47,12 @@
                 transactionData: {}
             };
         },
-        methods: {},
+        methods: {
+            showEdit(event) {
+                this.showInput = !this.showInput
+                // this.showText = !this.showText
+            }
+        },
         mounted() {
             axios.get('storage/testData.json', {
                 headers: {
@@ -72,4 +86,9 @@
         font-size: 18pt;
         cursor: pointer !important;
     }
+
+    .orange {
+        color: darkorange;
+    }
+
 </style>
