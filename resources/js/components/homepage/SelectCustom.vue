@@ -1,7 +1,7 @@
 <template>
-  <el-select v-model="selectedID" placeholder="Select" @change="$emit('changeSelect', selectedID )">
+  <el-select v-model="selectedID" placeholder="Категория" @change="$emit('changeSelect', selectedID)">
     <el-option
-      v-for="item in points"
+      v-for="item in poinList"
       :key="item.id"
       :label="item.name"
       :value="item.id"
@@ -13,9 +13,18 @@
 <script>
   export default {
     props: ['points', 'id'],
-    computed: {
-      selectedID() {
-        return Number(this.id)
+    data() {
+      return {
+        selectedID: Number(this.id),
+        poinList: this.points
+      }
+    },
+    watch: {
+      id(id) {
+        this.selectedID = Number(id)
+      },
+      points(list) {
+        this.poinList = list
       }
     },
   }
@@ -36,11 +45,16 @@
     border-color: #ffffff !important; 
 }
 
+.el-scrollbar,
+.el-select-dropdown {
+    border: none;
+}
+
 </style>
 
 <style scoped>
   .cstm-select-item {
-    background: #3d3e48;
+    background: #2c2e38;
     color: #ffffff;
     border-radius: 0%;
     font-size: 16px;

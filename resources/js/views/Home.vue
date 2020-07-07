@@ -151,6 +151,11 @@ export default {
       ],
     };
   },
+  // computed: {
+  //      transactionData() { 
+  //        return { state_window: false } 
+  //   },
+  // },
 
   methods: {
     transactionWallet (event) {
