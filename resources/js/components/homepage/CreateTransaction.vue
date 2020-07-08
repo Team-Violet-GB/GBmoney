@@ -18,7 +18,7 @@
                 <span class="cstm-label">Подкатегория:</span> 
                 <SelectCustom :points="tags" :id="1"  @changeSelect="(tagID) => { tag = tagID }"/>
             </div>
-            <el-input placeholder="Сумма" class="cstm-input cstm-mrgn-top-20" v-model="amount"></el-input>
+            <el-input placeholder="Сумма" class="cstm-input cstm-mrgn-top-20" type="number" v-model="amount"></el-input>
             <el-input
               type="textarea"
               :rows="2"
@@ -58,7 +58,9 @@ import Calendar from "../homepage/Calendar"
         ]
       };
     },
-
+    // validations: {
+    //   amount:
+    // },
     computed: {
         drawer() {
               return this.transaction.state_window
