@@ -16,9 +16,9 @@
                 <el-row type="flex" align="middle">
                     <el-col :span="18">
                         <el-row :gutter="20" class="tr-data-row">
-                            <el-col :span="4">{{ transaction.source }}</el-col>
-                            <el-col :span="4">{{ transaction.amount }} {{ rub }}</el-col>
-                            <el-col :span="4">{{ transaction.receiver }}</el-col>
+                            <el-col :span="8">{{ transaction.source }}</el-col>
+                            <el-col :span="8">{{ transaction.amount }} {{ rub }}</el-col>
+                            <el-col :span="8">{{ transaction.receiver }}</el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24" style="color: #8f95a7">
@@ -48,7 +48,7 @@
                     <div v-if="transaction.id == currentItem.id" v-show="showInput" class="edit-view">
                         <el-form ref="form" label-width=" 90px" size="small">
                             <el-row>
-                                <el-col :span="6">
+                                <el-col :span="8">
                                     <el-form-item label="Откуда">
                                         <el-select v-model="transactionData[index][indexx].source"
                                                    placeholder="источник">
@@ -58,13 +58,13 @@
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="6">
+                                <el-col :span="8">
                                     <el-form-item :label="rub">
                                         <el-input clearable v-model="transactionData[index][indexx].amount"
                                                   style="font-size: 1em;"></el-input>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="6">
+                                <el-col :span="8">
                                     <el-form-item label="Куда">
                                         <el-select v-model="transactionData[index][indexx].receiver"
                                                    placeholder="приемник">
@@ -74,18 +74,18 @@
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="6">
-                                    <el-form-item label="Когда">
-                                        <el-date-picker type="date" v-model="transactionData[index][indexx].date"
-                                                        style="font-size: 1em; width: 100%;"></el-date-picker>
-                                    </el-form-item>
-                                </el-col>
                             </el-row>
                             <el-row>
-                                <el-col :span="24">
+                                <el-col :span="16">
                                     <el-form-item label="Коментарий">
                                         <el-input v-model="transactionData[index][indexx].comment"
                                                   style="font-size: 1em;"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="8">
+                                    <el-form-item label="Когда">
+                                        <el-date-picker type="date" v-model="transactionData[index][indexx].date"
+                                                        style="font-size: 1em; width: 100%;"></el-date-picker>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
