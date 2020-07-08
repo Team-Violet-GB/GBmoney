@@ -117,21 +117,17 @@
     .cstm-ruleForm {
         margin: 0 auto;
         max-width: 600px;
-
         label {
             color: white;
         }
-
         .el-form-item:hover, .el-form-item:focus-within {
             label {
                 color: rgb(255, 208, 75);
             }
         }
-
         input {
             background-color: #4b4c55;
             color: white;
-
             &:hover, &:focus {
                 color: rgb(255, 208, 75);
             }

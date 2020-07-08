@@ -1,5 +1,13 @@
 <template>
   <div>
+    <!-- Модальное окно  -->
+    <CreateTransaction
+      :transactionData="transactionData"
+      :incomesData="incomes"
+      :walletsData="wallets"
+      :expensesData="expenses"
+      @closeCreateWindow="transactionData.state_window = false"  
+    />
     <!-- ДОХОДЫ -->
     <div class="cstm-box-card">
       <!-- хедер -->
@@ -17,7 +25,7 @@
       <transition-group name="list" tag="div" class="cstm-body-card">
         <div v-for="point in incomes" :key="point.id" :id="point.id" class="cstm-point">
           <div class="cstm-head-point">{{ point.name }}</div>
-          <drag :data="'incomes'+ point.id">
+          <drag :data="{ id: point.id, type: 'income'}">
             <drop :accepts-data="() => false">
               <el-button type="primary" :icon="point.icon" circle class="cstm-icon-point"></el-button>
             </drop>
@@ -46,10 +54,10 @@
         <div v-for="point in wallets" :key="point.id" :id="point.id" class="cstm-point">
           <div class="cstm-head-point">{{ point.name }}</div>
             <drop
-              @drop="onWallet"
-              :accepts-data="(data) => data.includes('incomes') || data.includes('wallets')"
+              @drop="transactionWallet"
+              :accepts-data="(data) => (data.type == 'income') || data.type == 'wallet'"
             >
-              <drag :data="'wallets'+ point.id">
+              <drag :data="{ id: point.id, type: 'wallet'}">
                 <el-button type="warning" :icon="point.icon" circle class="cstm-icon-point"></el-button>
                 </drag>
             </drop>
@@ -78,7 +86,7 @@
       <transition-group name="list" tag="div" class="cstm-body-card">
         <div v-for="point in expenses" :key="point.id" :id="point.id" class="cstm-point">
           <div class="cstm-head-point">{{ point.name }}</div>
-          <drop @drop="onExpense" :accepts-data="(data) => data.includes('wallets')">
+          <drop @drop="transactionExpense" :accepts-data="(data) => (data.type == 'wallet')">
             <el-button
               :type="(point.money > point.plan)? 'danger' : 'success'"
               :icon="point.icon"
@@ -102,16 +110,19 @@
 <script>
 import { Drag, Drop } from "vue-easy-dnd";
 import Addbutton from "../components/homepage/Addbutton";
+import CreateTransaction from "../components/homepage/CreateTransaction";
 
 export default {
   name: "App",
   components: {
     Drag,
     Drop,
-    Addbutton
+    Addbutton,
+    CreateTransaction,
   },
-  data: function() {
+  data() {
     return {
+       transactionData: { state_window: false },
       incomes: [
         { id: 1, name: "Зарплата", icon: "el-icon-money", money: 20000 },
         { id: 2, name: "Депозит", icon: "el-icon-s-data", money: 1000 },
@@ -140,17 +151,31 @@ export default {
       ],
     };
   },
+
   methods: {
-    onWallet (event) {
-      let from = event.data
-      let to = event.top.$el.parentElement.id
-      alert ('Транзакция из ' + from + ' в wallet' + to);
+    transactionWallet (event) {
+        let fromID = Number(event.data.id)
+        let toID = Number(event.top.$el.parentElement.id)
+        if ((fromID == toID) && (event.data.type == 'wallet')) {
+          return
+        }
+        this.transactionData = { 
+          state_window: true,
+          fromID: fromID, 
+          toID: toID, 
+          fromType: event.data.type, 
+          toType: 'wallet',
+          }
     },
-    onExpense(event) {
-      let from = event.data
-      let to = event.top.$el.parentElement.id
-      alert ('Транзакция из ' + from + ' в expense' + to);
-    }
+    transactionExpense (event) {
+      this.transactionData = { 
+        state_window: true, 
+        fromID: Number(event.data.id), 
+        toID: Number(event.top.$el.parentElement.id), 
+        fromType: event.data.type, 
+        toType: 'expense',
+        }
+    },
   },
 };
 </script>
@@ -173,7 +198,6 @@ export default {
   flex-wrap: wrap;
   background-color: #3d3e48;
 }
-
 
 .cstm-point {
   margin-bottom: 10px;
