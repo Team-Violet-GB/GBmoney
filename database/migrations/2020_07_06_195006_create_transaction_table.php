@@ -28,7 +28,7 @@ class CreateTransactionTable extends Migration
 
         });
 
-        Schema::create('transaction', function (Blueprint $table) {
+        Schema::table('transaction', function (Blueprint $table) {
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users');

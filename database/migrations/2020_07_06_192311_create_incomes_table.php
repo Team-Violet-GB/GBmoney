@@ -22,7 +22,7 @@ class CreateIncomesTable extends Migration
             $table->bigInteger('icon_id')->unsigned();
         });
 
-        Schema::create('incomes', function (Blueprint $table){
+        Schema::table('incomes', function (Blueprint $table){
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users');

@@ -23,7 +23,7 @@ class CreateExpensesTable extends Migration
             $table->bigInteger('icon_id')->unsigned();
         });
 
-        Schema::create('expenses', function (Blueprint $table) {
+        Schema::table('expenses', function (Blueprint $table) {
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users');

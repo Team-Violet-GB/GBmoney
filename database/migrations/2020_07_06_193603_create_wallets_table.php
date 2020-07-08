@@ -23,7 +23,7 @@ class CreateWalletsTable extends Migration
             $table->bigInteger('icon_id')->unsigned();
         });
 
-        Schema::create('wallets', function (Blueprint $table) {
+        Schema::table('wallets', function (Blueprint $table) {
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users');

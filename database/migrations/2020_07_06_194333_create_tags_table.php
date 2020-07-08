@@ -20,7 +20,7 @@ class CreateTagsTable extends Migration
             $table->bigInteger('expense_id')->unsigned();
         });
 
-        Schema::create('tags', function (Blueprint $table) {
+        Schema::table('tags', function (Blueprint $table) {
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users');
