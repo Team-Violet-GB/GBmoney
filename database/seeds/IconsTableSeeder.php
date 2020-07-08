@@ -13,7 +13,9 @@ class IconsTableSeeder extends Seeder
     public function run()
     {
         // Предварительно очищаем таблицу для предотвращения удвоения данных.
-        DB::statement('truncate table icons');
+        DB::statement('delete from icons');
+        // Добавляем сброс auto_increment
+        DB::statement('ALTER TABLE icons AUTO_INCREMENT = 1');
         // Вставляем данные в таблицу.
         DB::table('icons')->insert($this->getData());
     }
