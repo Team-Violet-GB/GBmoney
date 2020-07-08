@@ -15,9 +15,9 @@ class CreateTagsTable extends Migration
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->bigIncrements('id')->unsigned();
-            $table->bigInteger('user_id')->unique();
+            $table->bigInteger('user_id')->unsigned();
             $table->string('name', 45);
-            $table->bigInteger('expense_id')->unique();
+            $table->bigInteger('expense_id')->unsigned();
         });
 
         Schema::create('tags', function (Blueprint $table) {

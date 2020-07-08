@@ -15,16 +15,16 @@ class CreateTransactionTable extends Migration
     {
         Schema::create('transaction', function (Blueprint $table) {
             $table->bigIncrements('id')->unsigned();
-            $table->bigInteger('user_id')->unique();
+            $table->bigInteger('user_id')->unsigned();
             $table->boolean('type');
             $table->decimal('amount', 10,2);
             $table->dateTime('date');
             $table->string('comment')->nullable();
-            $table->bigInteger('wallet_id_from')->unique();
-            $table->bigInteger('wallet_id_to')->unique();
-            $table->bigInteger('income_id')->unique();
-            $table->bigInteger('expense_id')->unique();
-            $table->bigInteger('tag_id')->unique();
+            $table->bigInteger('wallet_id_from')->unsigned()->nullable();
+            $table->bigInteger('wallet_id_to')->unsigned()->nullable();
+            $table->bigInteger('income_id')->unsigned()->nullable();
+            $table->bigInteger('expense_id')->unsigned()->nullable();
+            $table->bigInteger('tag_id')->unsigned()->nullable();
 
         });
 

@@ -15,11 +15,11 @@ class CreateIncomesTable extends Migration
     {
         Schema::create('incomes', function (Blueprint $table) {
             $table->bigIncrements('id')->unsigned();
-            $table->bigInteger('user_id')->unique();
+            $table->bigInteger('user_id')->unsigned();
             $table->string('name', 45);
             $table->decimal('amount', 10,2)->default(0);
             $table->string('description', 255)->nullable();
-            $table->bigInteger('icon_id')->unique();
+            $table->bigInteger('icon_id')->unsigned();
         });
 
         Schema::create('incomes', function (Blueprint $table){

@@ -15,12 +15,12 @@ class CreateExpensesTable extends Migration
     {
         Schema::create('expenses', function (Blueprint $table) {
             $table->bigIncrements('id')->unsigned();
-            $table->bigInteger('user_id')->unique();
+            $table->bigInteger('user_id')->unsigned();
             $table->string('name', 45);
             $table->decimal('amount', 10,2)->default(0);
             $table->string('description')->nullable();
             $table->decimal('max_limit', 10, 2)->nullable();
-            $table->bigInteger('icon_id')->unique();
+            $table->bigInteger('icon_id')->unsigned();
         });
 
         Schema::create('expenses', function (Blueprint $table) {
