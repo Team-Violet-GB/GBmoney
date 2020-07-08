@@ -14,12 +14,19 @@ class CreateTagsTable extends Migration
     public function up()
     {
         Schema::create('tags', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('id')->unsigned();
+            $table->bigInteger('user_id')->unique();
+            $table->string('name', 45);
+            $table->bigInteger('expense_id')->unique();
+        });
+
+        Schema::create('tags', function (Blueprint $table) {
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users');
-            $table->string('name');
-            $table->integer('expense_id');
+            $table->foreign('expense_id')
+                ->references('id')
+                ->on('expenses');
         });
     }
 
@@ -30,6 +37,10 @@ class CreateTagsTable extends Migration
      */
     public function down()
     {
+        Schema::table('tags', function (Blueprint $table){
+            $table->dropForeign(['user_id', 'expense_id']);
+        });
+
         Schema::dropIfExists('tags');
     }
 }

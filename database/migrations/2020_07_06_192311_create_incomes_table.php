@@ -14,13 +14,18 @@ class CreateIncomesTable extends Migration
     public function up()
     {
         Schema::create('incomes', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('id')->unsigned();
+            $table->bigInteger('user_id')->unique();
+            $table->string('name', 45);
+            $table->decimal('amount', 10,2)->default(0);
+            $table->string('description', 255)->nullable();
+            $table->bigInteger('icon_id')->unique();
+        });
+
+        Schema::create('incomes', function (Blueprint $table){
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users');
-            $table->string('name');
-            $table->decimal('amount');
-            $table->string('description');
             $table->foreign('icon_id')
                 ->references('id')
                 ->on('icons');
@@ -34,6 +39,11 @@ class CreateIncomesTable extends Migration
      */
     public function down()
     {
+        Schema::table('incomes', function (Blueprint $table){
+            $table->dropForeign(['user_id']);
+            $table->dropForeign(['icon_id']);
+        });
+
         Schema::dropIfExists('incomes');
     }
 }

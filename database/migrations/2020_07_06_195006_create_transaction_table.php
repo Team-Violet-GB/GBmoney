@@ -14,12 +14,24 @@ class CreateTransactionTable extends Migration
     public function up()
     {
         Schema::create('transaction', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('id')->unsigned();
+            $table->bigInteger('user_id')->unique();
+            $table->boolean('type');
+            $table->decimal('amount', 10,2);
+            $table->dateTime('date');
+            $table->string('comment')->nullable();
+            $table->bigInteger('wallet_id_from')->unique();
+            $table->bigInteger('wallet_id_to')->unique();
+            $table->bigInteger('income_id')->unique();
+            $table->bigInteger('expense_id')->unique();
+            $table->bigInteger('tag_id')->unique();
+
+        });
+
+        Schema::create('transaction', function (Blueprint $table) {
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users');
-            $table->tinyInteger('type');
-            $table->timestamps('created_at');
             $table->foreign('wallet_id_from')
                 ->references('id')
                 ->on('wallets');
@@ -35,8 +47,8 @@ class CreateTransactionTable extends Migration
             $table->foreign('tag_id')
                 ->references('id')
                 ->on('tags');
-            $table->text('comment');
         });
+
     }
 
     /**
@@ -46,6 +58,17 @@ class CreateTransactionTable extends Migration
      */
     public function down()
     {
+        Schema::table('transaction', function (Blueprint $table){
+            $table->dropForeign([
+                'user_id',
+                'wallet_id_from',
+                'wallet_id_to',
+                'income_id',
+                'expense_id',
+                'tag_id'
+            ]);
+        });
+
         Schema::dropIfExists('transaction');
     }
 }
