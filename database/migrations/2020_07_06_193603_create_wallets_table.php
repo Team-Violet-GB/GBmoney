@@ -19,7 +19,7 @@ class CreateWalletsTable extends Migration
             $table->string('name', 45);
             $table->decimal('amount', 10, 2)->default(0);
             $table->string('description', 255)->nullable();
-            $table->boolean('include');
+            $table->boolean('include')->default(1);
             $table->bigInteger('icon_id')->unsigned();
         });
 
