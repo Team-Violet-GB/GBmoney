@@ -1,5 +1,5 @@
 <template>
-  <el-select v-model="selectedID" placeholder="Категория" @change="$emit('changeSelect', selectedID)">
+  <el-select v-model="selectedID" placeholder="Категория" @change="$emit('changeSelect', Number(selectedID))">
     <el-option
       v-for="item in poinList"
       :key="item.id"
@@ -15,13 +15,13 @@
     props: ['points', 'id'],
     data() {
       return {
-        selectedID: Number(this.id),
+        selectedID: this.id,
         poinList: this.points
       }
     },
     watch: {
       id(id) {
-        this.selectedID = Number(id)
+        this.selectedID = id
       },
       points(list) {
         this.poinList = list
@@ -31,17 +31,17 @@
 </script>
 
 <style>
-  .el-input__inner, .el-scrollbar {
+.el-input__inner, .el-scrollbar {
     background: #2c2e38;
     color: #ffffff;
     border-radius: 0%;
     border-color: #5f6068;
     font-weight: 100;
     font-size: 16px;
-  }
+}
 
-  .el-select .el-input.is-focus .el-input__inner, 
-  .el-select .el-input__inner:focus {
+.el-select .el-input.is-focus .el-input__inner, 
+.el-select .el-input__inner:focus {
     border-color: #ffffff !important; 
 }
 

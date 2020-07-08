@@ -1,11 +1,11 @@
 <template>
   <div>
     <!-- Модальное окно  -->
-    <CreateWindow
+    <CreateTransaction
       :transactionData="transactionData"
-      :incomes="incomes"
-      :wallets="wallets"
-      :expenses="expenses"
+      :incomesData="incomes"
+      :walletsData="wallets"
+      :expensesData="expenses"
       @closeCreateWindow="transactionData.state_window = false"  
     />
     <!-- ДОХОДЫ -->
@@ -110,7 +110,7 @@
 <script>
 import { Drag, Drop } from "vue-easy-dnd";
 import Addbutton from "../components/homepage/Addbutton";
-import CreateWindow from "../components/homepage/CreateWindow";
+import CreateTransaction from "../components/homepage/CreateTransaction";
 
 export default {
   name: "App",
@@ -118,7 +118,7 @@ export default {
     Drag,
     Drop,
     Addbutton,
-    CreateWindow,
+    CreateTransaction,
   },
   data() {
     return {
@@ -151,32 +151,30 @@ export default {
       ],
     };
   },
-  // computed: {
-  //      transactionData() { 
-  //        return { state_window: false } 
-  //   },
-  // },
 
   methods: {
     transactionWallet (event) {
-        if ((event.data.id == event.top.$el.parentElement.id) && (event.data.type == 'wallet')) {
+        let fromID = Number(event.data.id)
+        let toID = Number(event.top.$el.parentElement.id)
+        if ((fromID == toID) && (event.data.type == 'wallet')) {
           return
         }
         this.transactionData = { 
           state_window: true,
-          fromID: event.data.id, 
-          toID: event.top.$el.parentElement.id, 
+          fromID: fromID, 
+          toID: toID, 
           fromType: event.data.type, 
-          toType: 'wallet'
+          toType: 'wallet',
           }
     },
     transactionExpense (event) {
       this.transactionData = { 
         state_window: true, 
-        fromID: event.data.id, 
-        toID: event.top.$el.parentElement.id, 
+        fromID: Number(event.data.id), 
+        toID: Number(event.top.$el.parentElement.id), 
         fromType: event.data.type, 
-        toType: 'expense'}
+        toType: 'expense',
+        }
     },
   },
 };
