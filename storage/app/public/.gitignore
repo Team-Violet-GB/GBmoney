@@ -1,2 +1,6 @@
 *
 !.gitignore
+
+!testData.json
+!testReceivers.json
+!testSources.json

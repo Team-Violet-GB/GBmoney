@@ -27,7 +27,7 @@
                         </el-row>
                     </el-col>
 
-<!--                    кнопачки операций над транзакцией-->
+                    <!--                    кнопачки операций над транзакцией-->
                     <el-col :span="6">
                         <el-row type="flex" class="row-bg" justify="end">
                             <el-button-group>
@@ -46,13 +46,15 @@
                 <!--                выпадающий редактор транзакции-->
                 <el-collapse-transition>
                     <div v-if="transaction.id == currentItem.id" v-show="showInput" class="edit-view">
-                        <el-form ref="form" :model="editFormData" label-width=" 90px" size="small">
+                        <el-form ref="form" label-width=" 90px" size="small">
                             <el-row>
                                 <el-col :span="6">
                                     <el-form-item label="Откуда">
-                                        <el-select v-model="editFormData.source" placeholder="источник">
-                                            <el-option label="Наличные" value="Наличные"></el-option>
-                                            <el-option label="Карта" value="Карта"></el-option>
+                                        <el-select v-model="transactionData[index][indexx].source"
+                                                   placeholder="источник">
+                                            <el-option v-for="src in sources" :key="src.id" :label="src.title"
+                                                       :value="src.title">{{ src.title }}
+                                            </el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
@@ -64,9 +66,11 @@
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="Куда">
-                                        <el-select v-model="editFormData.receiver" placeholder="приемник">
-                                            <el-option label="Авто" value="Авто"></el-option>
-                                            <el-option label="Разное" value="Разное"></el-option>
+                                        <el-select v-model="transactionData[index][indexx].receiver"
+                                                   placeholder="приемник">
+                                            <el-option v-for="rsv in receivers" :key="rsv.id" :label="rsv.title"
+                                                       :value="rsv.title">{{ rsv.title }}
+                                            </el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
@@ -97,16 +101,6 @@
     export default {
         data() {
             return {
-                editFormData: {
-                    date: '',
-                    time: '',
-                    source: '',
-                    receiver: '',
-                    amount: '',
-                    comment: ''
-                },
-
-                showText: true,
                 showInput: false,
                 currentItem: {
                     id: null,
@@ -116,7 +110,9 @@
 
                 dataError: false,
                 errorInfo: 'Ошибка при получении данных с сервера',
-                transactionData: {}
+                transactionData: {},
+                sources: [],
+                receivers: {}
             };
         },
         computed: {
@@ -131,10 +127,12 @@
             onSubmitData() {
                 this.$message({
                     showClose: true,
-                    message: "axios.put('/api/update/${currentItem.Id}', this.transactionData[this.currentItem.index]",
+                    dangerouslyUseHTMLString: true,
+                    message: '<h4>axios.put(\'/api/update/${currentItem.Id}\', this.transactionData[this.currentItem.index]</h4>',
                     duration: 6000,
                     type: 'success'
                 });
+                console.log(this.transactionData[this.currentItem.index]);
 
                 this.showInput = false;
 
@@ -168,6 +166,49 @@
                         this.dataError = true
                         //todo: обработка других кодов с сервера
                     });
+
+                axios
+                    .get('storage/testSources.json', {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    })
+                    .then(response => {
+                        // console.log(response);
+                        if (response.headers['content-type'] === "application/json") {
+                            this.sources = response.data;
+                        } else {
+                            this.errorInfo = "данные поступили в неверном формате (нам бы json'на)"
+                            this.dataError = true
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        this.dataError = true
+                        //todo: обработка других кодов с сервера
+                    });
+
+                axios
+                    .get('storage/testReceivers.json', {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    })
+                    .then(response => {
+                        // console.log(response);
+                        if (response.headers['content-type'] === "application/json") {
+                            this.receivers = response.data;
+                        } else {
+                            this.errorInfo = "данные поступили в неверном формате (нам бы json'на)"
+                            this.dataError = true
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        this.dataError = true
+                        //todo: обработка других кодов с сервера
+                    });
+
             },
             showEditForm(id, index, indexx) {
                 this.currentItem.id = id;
@@ -219,5 +260,4 @@
         padding: 20px 20px 0;
         box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
     }
-
 </style>
