@@ -84,7 +84,7 @@
                                 </el-col>
                                 <el-col :span="8">
                                     <el-form-item label="Когда">
-                                        <el-date-picker type="date" v-model="transactionData[index][indexx].date"
+                                        <el-date-picker type="date" format="dd.MM.yyyy" v-model="transactionData[index][indexx].date"
                                                         style="font-size: 1em; width: 100%;"></el-date-picker>
                                     </el-form-item>
                                 </el-col>
@@ -127,7 +127,12 @@
         },
         methods: {
             dateLocal(date) {
-                return new Date(date).toLocaleDateString();
+                let days =["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
+                let month =["Января", "Февраля", "Марта", "Апреля", "Мая", "Июня", "Июля", "Августа", "Сентября", "Октября", "Ноября", "Декабря"];
+                let dateObj = new Date(date);
+                let result = days[dateObj.getDay()] + ', ' + dateObj.getDate() + ' ' + month[dateObj.getMonth() - 1];
+                // return new Date(date).toLocaleDateString();
+                return result;
             },
             onSubmitData() {
                 this.$message({
