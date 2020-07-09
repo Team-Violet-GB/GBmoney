@@ -9,7 +9,8 @@
 
         <!--        заголовок группы транзакций-->
         <el-card v-if="!dataError" v-for="(item, index) in transactionData" :key="index" class="box-card">
-            <div slot="header" class="clearfix group-header">{{ dateLocal(item[0].date) }}</div>
+            <div v-if="item.length > 1" slot="header" class="clearfix group-header">{{ dateLocal(index) }}</div>
+            <div v-else slot="header" class="clearfix group-header">{{ dateLocal(item[0].date) }}</div>
 
             <!--            список транзакций в группе-->
             <el-card v-for="(transaction, indexx) in item" :key="indexx" class="box-card">
@@ -31,13 +32,12 @@
                     <el-col :span="6">
                         <el-row type="flex" class="row-bg" justify="end">
                             <el-button-group>
-                                <el-button v-if="showInput && transaction.id == currentItem.id" type="success"
-                                           @click="onSubmitData" size="small" icon="el-icon-check"></el-button>
-                                <el-button @click="showEditForm(transaction.id, index, indexx)" size="small"
-                                           type="primary"
-                                           icon="el-icon-edit"></el-button>
-                                <el-button @click="deleteTransaction(transaction.id)" size="small" type="danger"
-                                           icon="el-icon-delete"></el-button>
+                                <el-button v-if="showInput && transaction.id == currentItem.id"
+                                           type="success" @click="onSubmitData" size="small" icon="el-icon-check"></el-button>
+                                <el-button v-else @click="showEditForm(transaction.id, index, indexx)"
+                                           type="primary" size="small" icon="el-icon-edit"></el-button>
+                                <el-button @click="deleteTransaction(transaction.id)"
+                                           type="danger" size="small" icon="el-icon-delete"></el-button>
                             </el-button-group>
                         </el-row>
                     </el-col>
@@ -45,7 +45,7 @@
 
                 <!--                выпадающий редактор транзакции-->
                 <el-collapse-transition>
-                    <div v-if="transaction.id == currentItem.id" v-show="showInput" class="edit-view">
+                    <div v-if="transaction.id === currentItem.id" v-show="showInput" class="edit-view">
                         <el-form ref="form" label-width=" 90px" size="small">
                             <el-row>
                                 <el-col :span="8">
@@ -105,9 +105,14 @@
                 currentItem: {
                     id: null,
                     index: null,
-                    indexx: null
+                    indexx: null,
                 },
-
+                backupData: {
+                    restore: false,
+                    index: null,
+                    indexx: null,
+                    data: null
+                },
                 dataError: false,
                 errorInfo: 'Ошибка при получении данных с сервера',
                 transactionData: {},
@@ -132,7 +137,7 @@
                     duration: 6000,
                     type: 'success'
                 });
-                console.log(this.transactionData[this.currentItem.index]);
+
 
                 this.showInput = false;
 
@@ -140,9 +145,15 @@
                 //     .put(`/api/update/${this.currentItem}`, this.transactionData[this.currentItem.index])
                 //     .then(response => {
                 //         this.getTransaction();
+                //         this.canceledData.data = null;
                 //         // console.log(response)
                 //     })
                 //     .catch(error => console.log(error));
+
+                //временно, пока не работает настоящий запрос:
+                // this.getTransaction();
+                this.backupData.restore = false;
+
 
             },
             getTransaction() {
@@ -214,6 +225,16 @@
                 this.currentItem.id = id;
                 this.currentItem.index = index;
                 this.currentItem.indexx = indexx;
+
+
+                if (this.backupData.restore) {
+                    this.transactionData[this.backupData.index][this.backupData.indexx] = Object.assign({}, this.backupData.data);
+                }
+                this.backupData.index = index;
+                this.backupData.indexx = indexx;
+                this.backupData.data = Object.assign({}, this.transactionData[index][indexx]);
+                this.backupData.restore = true;
+
                 this.showInput = true;
             },
             deleteTransaction(id) {
@@ -224,16 +245,18 @@
                     type: 'error'
                 });
 
-                axios
-                    .delete(`/api/del/${id}`)
-                    .then(response => console.log(response))
-                    .catch(error => console.log(error));
-                this.getTransaction()
+                // axios
+                //     .delete(`/api/del/${id}`)
+                //     .then(response => {
+                //         console.log(response);
+                //         this.getTransaction();
+                //     })
+                //     .catch(error => console.log(error));
             }
         },
         filters: {},
         mounted() {
-            this.getTransaction()
+            this.getTransaction();
         }
     }
 </script>
@@ -244,9 +267,9 @@
     }
 
     .group-header {
-        color: #0097FF;
-        font-size: xx-large;
-        font-weight: 500;
+        color: #008cff;
+        font-size: x-large;
+        font-weight: 700;
         padding-left: 20px;
     }
 
