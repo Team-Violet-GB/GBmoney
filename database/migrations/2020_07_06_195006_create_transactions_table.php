@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTransactionTable extends Migration
+class CreateTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateTransactionTable extends Migration
      */
     public function up()
     {
-        Schema::create('transaction', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->bigIncrements('id')->unsigned();
             $table->bigInteger('user_id')->unsigned();
             $table->boolean('type');
@@ -28,7 +28,7 @@ class CreateTransactionTable extends Migration
 
         });
 
-        Schema::table('transaction', function (Blueprint $table) {
+        Schema::table('transactions', function (Blueprint $table) {
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users');
@@ -58,17 +58,15 @@ class CreateTransactionTable extends Migration
      */
     public function down()
     {
-        Schema::table('transaction', function (Blueprint $table){
-            $table->dropForeign([
-                'user_id',
-                'wallet_id_from',
-                'wallet_id_to',
-                'income_id',
-                'expense_id',
-                'tag_id'
-            ]);
-        });
+        Schema::table('transactions', function (Blueprint $table){
+            $table->dropForeign(['user_id']);
+            $table->dropForeign(['wallet_id_from']);
+            $table->dropForeign(['wallet_id_to']);
+            $table->dropForeign(['income_id']);
+            $table->dropForeign(['expense_id']);
+            $table->dropForeign(['tag_id']);
+            });
 
-        Schema::dropIfExists('transaction');
+        Schema::dropIfExists('transactions');
     }
 }
