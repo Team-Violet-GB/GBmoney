@@ -1,0 +1,60 @@
+{
+    "2010-07-29": [
+        {
+            "id": 1,
+            "date": "2010-07-29",
+            "user_id": 1,
+            "type_id": 1,
+            "wallet_id_from": null,
+            "wallet_id_to": 3,
+            "income_id": 1,
+            "expense_id": null,
+            "tag_id": null,
+            "amount": 2000,
+            "comment": "Перевод зряплаты на карту ..."
+        }
+    ],
+    "2011-01-11": [
+        {
+            "id": 2,
+            "date": "2011-01-11",
+            "user_id": 1,
+            "type_id": 3,
+            "wallet_id_from": 3,
+            "wallet_id_to": 1,
+            "income_id": null,
+            "expense_id": null,
+            "tag_id": null,
+            "amount": 2000,
+            "comment": "Снятие с карты и засовывание налички в кошелек ..."
+        },
+        {
+            "id": 3,
+            "date": "2011-01-11",
+            "user_id": 1,
+            "type_id": 2,
+            "wallet_id_from": 3,
+            "wallet_id_to": null,
+            "income_id": null,
+            "expense_id": 1,
+            "tag_id": 1,
+            "amount": 2000,
+            "comment": "Заправка бензином на заправке, марка A93 с карты..."
+        }
+    ],
+    "2012-09-30": [
+        {
+            "id": 4,
+            "date": "2012-09-30",
+            "user_id": 1,
+            "type_id": 1,
+            "wallet_id_from": 2,
+            "wallet_id_to": null,
+            "income_id": null,
+            "expense_id": 1,
+            "tag_id": 2,
+            "amount": 2000,
+            "comment": "штраф из кошелька наличными гаишнику"
+        }
+    ]
+}

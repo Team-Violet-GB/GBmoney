@@ -8,18 +8,20 @@
         </el-alert>
 
         <!--        заголовок группы транзакций-->
-        <el-card v-if="!dataError" v-for="(item, index) in transactionData" :key="index" class="box-card">
-            <div v-if="item.length > 1" slot="header" class="clearfix group-header">{{ dateLocal(index) }}</div>
-            <div v-else slot="header" class="clearfix group-header">{{ dateLocal(item[0].date) }}</div>
+        <el-card v-if="!dataError" v-for="(transactionsGroup, index) in transactions" :key="index" class="box-card">
+            <div v-if="transactionsGroup.length > 1" slot="header" class="clearfix group-header">{{ dateLocal(index)
+                }}
+            </div>
+            <div v-else slot="header" class="clearfix group-header">{{ dateLocal(index) }}</div>
 
             <!--            список транзакций в группе-->
-            <el-card v-for="(transaction, indexx) in item" :key="indexx" class="box-card">
+            <el-card v-for="(transaction, indexx) in transactionsGroup" :key="indexx" class="box-card">
                 <el-row type="flex" align="middle">
                     <el-col :span="18">
-                        <el-row :gutter="20" class="tr-data-row">
-                            <el-col :span="8">{{ transaction.source }}</el-col>
+                        <el-row :gutter="10" class="tr-data-row">
+                            <el-col :span="8">{{ fromCalc(transaction) }}</el-col>
                             <el-col :span="8">{{ transaction.amount }} {{ rub }}</el-col>
-                            <el-col :span="8">{{ transaction.receiver }}</el-col>
+                            <el-col :span="8">{{ toCalc(transaction) }}</el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24" style="color: #8f95a7">
@@ -33,7 +35,8 @@
                         <el-row type="flex" class="row-bg" justify="end">
                             <el-button-group>
                                 <el-button v-if="showInput && transaction.id == currentItem.id"
-                                           type="success" @click="onSubmitData" size="small" icon="el-icon-check"></el-button>
+                                           type="success" @click="onSubmitData" size="small"
+                                           icon="el-icon-check"></el-button>
                                 <el-button v-else @click="showEditForm(transaction.id, index, indexx)"
                                            type="primary" size="small" icon="el-icon-edit"></el-button>
                                 <el-button @click="deleteTransaction(transaction.id)"
@@ -48,43 +51,57 @@
                     <div v-if="transaction.id === currentItem.id" v-show="showInput" class="edit-view">
                         <el-form ref="form" label-width=" 90px" size="small">
                             <el-row>
-                                <el-col :span="8">
+                                <el-col :span="6">
                                     <el-form-item label="Откуда">
-                                        <el-select v-model="transactionData[index][indexx].source"
+                                        <!--                                        <el-select v-model="transactions[index][indexx].source"-->
+                                        <el-select v-model="transactions[index][indexx].source"
                                                    placeholder="источник">
-                                            <el-option v-for="src in sources" :key="src.id" :label="src.title"
+                                            <el-option v-for="src in incomes" :key="src.id" :label="src.title"
                                                        :value="src.title">{{ src.title }}
                                             </el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="8">
-                                    <el-form-item :label="rub">
-                                        <el-input clearable v-model="transactionData[index][indexx].amount"
-                                                  style="font-size: 1em;"></el-input>
-                                    </el-form-item>
+                                <el-col :span="12">
+                                    <el-row :gutter="10" type="flex" justify="end">
+                                        <el-form-item label="Куда">
+                                            <el-col :span="12">
+                                                <!--                                                <el-select v-model="transactionData[index][indexx].receiver">-->
+                                                <el-select :value="transactions[index][indexx].receiver">
+                                                    <el-option v-for="category in expensesCategory" :key="category.id"
+                                                               :value="category.name">{{ category.name }}
+                                                    </el-option>
+                                                </el-select>
+                                            </el-col>
+                                            <el-col :span="12">
+                                                <el-select v-model="transactions[index][indexx].receiver">
+                                                    <el-option v-for="expense in expenses" :key="expense.id"
+                                                               :label="expense.name"
+                                                               :value="expense.name">
+                                                    </el-option>
+                                                </el-select>
+                                            </el-col>
+                                        </el-form-item>
+                                    </el-row>
                                 </el-col>
-                                <el-col :span="8">
-                                    <el-form-item label="Куда">
-                                        <el-select v-model="transactionData[index][indexx].receiver"
-                                                   placeholder="приемник">
-                                            <el-option v-for="rsv in receivers" :key="rsv.id" :label="rsv.title"
-                                                       :value="rsv.title">{{ rsv.title }}
-                                            </el-option>
-                                        </el-select>
+                                <el-col :span="6">
+                                    <el-form-item label="Сколько">
+                                        <el-input clearable v-model="transactions[index][indexx].amount"
+                                                  style="font-size: 1em;"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
                             <el-row>
-                                <el-col :span="16">
+                                <el-col :span="18">
                                     <el-form-item label="Коментарий">
-                                        <el-input v-model="transactionData[index][indexx].comment"
+                                        <el-input v-model="transactions[index][indexx].comment"
                                                   style="font-size: 1em;"></el-input>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="8">
+                                <el-col :span="6">
                                     <el-form-item label="Когда">
-                                        <el-date-picker type="date" format="dd.MM.yyyy" v-model="transactionData[index][indexx].date"
+                                        <el-date-picker type="date" format="dd.MM.yyyy"
+                                                        v-model="transactions[index][indexx].date"
                                                         style="font-size: 1em; width: 100%;"></el-date-picker>
                                     </el-form-item>
                                 </el-col>
@@ -98,6 +115,8 @@
 </template>
 
 <script>
+    import constants from '../constants';
+
     export default {
         data() {
             return {
@@ -115,9 +134,11 @@
                 },
                 dataError: false,
                 errorInfo: 'Ошибка при получении данных с сервера',
-                transactionData: {},
-                sources: [],
-                receivers: {}
+                transactions: {},
+                wallets: {},
+                incomes: {},
+                expensesCategory: {},
+                expenses: {}
             };
         },
         computed: {
@@ -126,13 +147,64 @@
             }
         },
         methods: {
-            dateLocal(date) {
-                let days =["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
-                let month =["Января", "Февраля", "Марта", "Апреля", "Мая", "Июня", "Июля", "Августа", "Сентября", "Октября", "Ноября", "Декабря"];
-                let dateObj = new Date(date);
-                let result = days[dateObj.getDay()] + ', ' + dateObj.getDate() + ' ' + month[dateObj.getMonth() - 1];
-                // return new Date(date).toLocaleDateString();
-                return result;
+            showEditForm(id, index, indexx) {
+                this.showInput = true;
+                this.currentItem.id = id;
+                this.currentItem.index = index;
+                this.currentItem.indexx = indexx;
+
+                if (this.backupData.restore) {
+                    this.transactions[this.backupData.index][this.backupData.indexx] = Object.assign({}, this.backupData.data);
+                }
+                this.backupData.index = index;
+                this.backupData.indexx = indexx;
+                this.backupData.data = Object.assign({}, this.transactions[index][indexx]);
+                this.backupData.restore = true;
+            },
+            fromCalc(tran) {
+                switch (tran.type_id) {
+                    case constants.FROM_INCOMES:
+                        if (tran.income_id != null) {
+                            return this.incomes[tran.income_id].name;
+                        }
+                        break;
+
+                    case constants.TRANSFER:
+                        if (tran.wallet_id_from != null) {
+                            return this.wallets[tran.wallet_id_from].name;
+                        }
+                        break;
+
+                    case constants.FROM_WALLET:
+                        if (tran.wallet_id_from != null) {
+                            return this.wallets[tran.wallet_id_from].name;
+                        }
+                        break;
+
+                    default:
+                        return 'нет данных';
+                }
+            },
+            toCalc(tran) {
+                switch (tran.type_id) {
+                    case constants.FROM_INCOMES:
+                        if (tran.wallet_id_to != null) {
+                            return this.wallets[tran.wallet_id_to].name;
+                        }
+                        break;
+                    case constants.TRANSFER:
+                        if (tran.wallet_id_to != null) {
+                            return this.wallets[tran.wallet_id_to].name;
+                        }
+                        break;
+                    case constants.FROM_WALLET:
+                        if (tran.tag_id != null) {
+                            return this.expenses[tran.tag_id].name;
+                        }
+                        break;
+                    default:
+                        return 'нет данных';
+                }
             },
             onSubmitData() {
                 this.$message({
@@ -142,7 +214,6 @@
                     duration: 6000,
                     type: 'success'
                 });
-
 
                 this.showInput = false;
 
@@ -163,7 +234,7 @@
             },
             getTransaction() {
                 axios
-                    .get('storage/testData.json', {
+                    .get('storage/testWallets.json', {
                         headers: {
                             'Content-Type': 'application/json',
                         }
@@ -171,7 +242,27 @@
                     .then(response => {
                         // console.log(response);
                         if (response.headers['content-type'] === "application/json") {
-                            this.transactionData = response.data;
+                            this.wallets = response.data;
+                        } else {
+                            this.errorInfo = "данные поступили в неверном формате (нам бы json'на)"
+                            this.dataError = true
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        this.dataError = true
+                        //todo: обработка других кодов с сервера
+                    });
+                axios
+                    .get('storage/testIncomes.json', {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    })
+                    .then(response => {
+                        // console.log(response);
+                        if (response.headers['content-type'] === "application/json") {
+                            this.incomes = response.data;
                         } else {
                             this.errorInfo = "данные поступили в неверном формате (нам бы json'на)"
                             this.dataError = true
@@ -184,7 +275,7 @@
                     });
 
                 axios
-                    .get('storage/testSources.json', {
+                    .get('storage/testExpensesCategory.json', {
                         headers: {
                             'Content-Type': 'application/json',
                         }
@@ -192,7 +283,7 @@
                     .then(response => {
                         // console.log(response);
                         if (response.headers['content-type'] === "application/json") {
-                            this.sources = response.data;
+                            this.expensesCategory = response.data;
                         } else {
                             this.errorInfo = "данные поступили в неверном формате (нам бы json'на)"
                             this.dataError = true
@@ -205,7 +296,7 @@
                     });
 
                 axios
-                    .get('storage/testReceivers.json', {
+                    .get('storage/testExpenses.json', {
                         headers: {
                             'Content-Type': 'application/json',
                         }
@@ -213,7 +304,7 @@
                     .then(response => {
                         // console.log(response);
                         if (response.headers['content-type'] === "application/json") {
-                            this.receivers = response.data;
+                            this.expenses = response.data;
                         } else {
                             this.errorInfo = "данные поступили в неверном формате (нам бы json'на)"
                             this.dataError = true
@@ -225,22 +316,26 @@
                         //todo: обработка других кодов с сервера
                     });
 
-            },
-            showEditForm(id, index, indexx) {
-                this.currentItem.id = id;
-                this.currentItem.index = index;
-                this.currentItem.indexx = indexx;
-
-
-                if (this.backupData.restore) {
-                    this.transactionData[this.backupData.index][this.backupData.indexx] = Object.assign({}, this.backupData.data);
-                }
-                this.backupData.index = index;
-                this.backupData.indexx = indexx;
-                this.backupData.data = Object.assign({}, this.transactionData[index][indexx]);
-                this.backupData.restore = true;
-
-                this.showInput = true;
+                axios
+                    .get('storage/testTransactions.json', {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    })
+                    .then(response => {
+                        // console.log(response);
+                        if (response.headers['content-type'] === "application/json") {
+                            this.transactions = response.data;
+                        } else {
+                            this.errorInfo = "данные поступили в неверном формате (нам бы json'на)"
+                            this.dataError = true
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        this.dataError = true
+                        //todo: обработка других кодов с сервера
+                    });
             },
             deleteTransaction(id) {
                 this.$message({
@@ -257,6 +352,13 @@
                 //         this.getTransaction();
                 //     })
                 //     .catch(error => console.log(error));
+            },
+            dateLocal(date) {
+                let days = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
+                let month = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+                let dateObj = new Date(date);
+                let monthCalculate = dateObj.getMonth() === 0 ? month[dateObj.getMonth()] : month[dateObj.getMonth() - 1];
+                return days[dateObj.getDay()] + ', ' + dateObj.getDate() + ' ' + monthCalculate;
             }
         },
         filters: {},

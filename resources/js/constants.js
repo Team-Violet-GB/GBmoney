@@ -1,0 +1,9 @@
+const FROM_INCOMES = 1
+const FROM_WALLET = 2
+const TRANSFER = 3
+
+export default {
+    FROM_INCOMES: FROM_INCOMES,
+    FROM_WALLET: FROM_WALLET,
+    TRANSFER: TRANSFER
+}

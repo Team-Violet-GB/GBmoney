@@ -1,0 +1,50 @@
+{
+    "1": {
+        "id": 1,
+        "user_id": 1,
+        "icon_id": 1,
+        "amount": 50000,
+        "description": "Зряплата описание",
+        "name": "Зряплата"
+    },
+    "2": {
+        "id": 2,
+        "user_id": 1,
+        "icon_id": 1,
+        "amount": 50000,
+        "description": "Нашел описание",
+        "name": "Нашел"
+    },
+    "3": {
+        "id": 3,
+        "user_id": 1,
+        "icon_id": 1,
+        "amount": 50000,
+        "description": "Подарили описание",
+        "name": "Подарили"
+    },
+    "4": {
+        "id": 4,
+        "user_id": 1,
+        "icon_id": 1,
+        "amount": 50000,
+        "description": "Намайнил описание",
+        "name": "Намайнил"
+    },
+    "5": {
+        "id": 5,
+        "user_id": 1,
+        "icon_id": 1,
+        "amount": 50000,
+        "description": "Вымолил описание",
+        "name": "Вымолил"
+    },
+    "6": {
+        "id": 6,
+        "user_id": 1,
+        "icon_id": 1,
+        "amount": 50000,
+        "description": "Сектор приз описание",
+        "name": "Сектор приз!"
+    }
+}

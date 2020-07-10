@@ -1,6 +1,8 @@
 *
 !.gitignore
 
-!testData.json
-!testReceivers.json
-!testSources.json
+!testTransactions.json
+!testExpenses.json
+!testIncomes.json
+!testWallets.json
+!testExpensesCategory.json
