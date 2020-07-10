@@ -180,7 +180,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 %cstm-color-background-body {
   background-color: #3d3e48;
