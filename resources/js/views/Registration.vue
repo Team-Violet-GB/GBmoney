@@ -4,24 +4,28 @@
         :visible.sync="dialogVisible"
         width="40%"
         :before-close="() => true"
-        class="cstm-auth">
+        class="cstm-registr">
         <div>
             <div class="cstm-logo">
                 <el-image class="cstm-logo-img" :src="url"></el-image>GBmoney
             </div>
-            <div class="cstm-auth-header">Вход в личный кабинет</div>
+            <div class="cstm-auth-header">Регистрация</div>
         </div>
         <span slot="footer" class="dialog-footer">
                 <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="200px" class="cstm-ruleForm">
                     <el-form-item label="E-mail" prop="email">
                         <el-input v-model="ruleForm.email" id="email"></el-input>
                     </el-form-item>
-                    <el-form-item label="Пароль" prop="pass">
+                    <el-form-item label="Придумайте пароль" prop="pass">
                         <el-input type="password" v-model="ruleForm.pass" autocomplete="off" show-password id="pass"></el-input>
                     </el-form-item>
+                    <el-form-item label="Повторите пароль" prop="checkPass">
+                        <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off" show-password
+                                id="checkPass"></el-input>
+                    </el-form-item>
                     <el-form-item>
-                        <el-button type="success" @click="() => this.$router.push('/registration')">Регистрация</el-button>
-                        <el-button type="primary" @click="submitForm('ruleForm')">Войти</el-button>
+                        <el-button type="success" @click="() => this.$router.push('/auth')">У меня есть аккаунт</el-button>
+                        <el-button type="primary" @click="submitForm('ruleForm')">Регистрация</el-button>
                     </el-form-item> 
                 </el-form> 
         </span>
@@ -32,19 +36,33 @@
 <script>
   export default {
     data() {
+        var accordancePass = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('Введите пароль повторно'));
+            } else if (value !== this.ruleForm.pass) {
+                callback(new Error('Пароли не совпадают!'));
+            } else {
+                callback();
+            }
+        };
+
         return {
             dialogVisible: true,
             ruleForm: {
+                email: '',
                 pass: '',
-                email: 'money@gb.ru', //TODO вставка имейла текущего пользователя,
+                checkPass: '',
             },
             rules: {
+                email: [
+                    { required: true, message: 'Введите e-mail', trigger: 'blur' },
+                    { type: 'email', message: 'Введен некорректрный e-mail  ', trigger: 'blur' }
+                ],
                 pass: [
                     { required: true, message: 'Введите пароль', trigger: 'blur' },
                 ],
-                email: [
-                    { required: true, message: 'Введите e-mail', trigger: 'blur' },
-                    { type: 'email', message: 'Введен некорректрный e-mail  ', trigger: 'blur'}
+                checkPass: [
+                    { required: true, validator: accordancePass, trigger: ['blur', 'change'] }
                 ],
             },
         }
@@ -81,7 +99,7 @@
 %cstm-color-text {
   color: #ffffff;
 }
-    .cstm-auth {
+    .cstm-registr {
         .el-dialog__header {
             display: none;
         }
