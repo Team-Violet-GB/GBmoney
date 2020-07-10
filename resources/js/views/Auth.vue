@@ -34,6 +34,7 @@
     data() {
         return {
             dialogVisible: true,
+            url: '../images/gm-money-logo.jpg',
             ruleForm: {
                 pass: '',
                 email: 'money@gb.ru', //TODO вставка имейла текущего пользователя,
