@@ -3,7 +3,7 @@
     <el-row class="tac">
       <el-col :span="24">
         <h5 class="cstm-logo">
-          <el-image class="cstm-img" :src="url"></el-image>GBmoney
+          <el-image class="cstm-logo-img" :src="url"></el-image>GBmoney
         </h5>
         <el-menu
           default-active="2"
@@ -35,7 +35,7 @@
 export default {
   data () {
     return {
-      url: 'https://oknanews.info/wp-content/uploads/2020/05/Coin-keeper.jpg',
+      url: '../images/gm-money-logo.jpg',
       links: [
         { title: 'Главная', url: '/', class: 'el-icon-star-on' },
         { title: 'Профиль', url: '/user', class: 'el-icon-user-solid' },
@@ -66,6 +66,7 @@ export default {
 }
 
 .cstm-logo {
+  position: relative;
   margin: 0 auto;
   line-height: 60px;
   text-align: center;
@@ -79,7 +80,7 @@ export default {
   border-right: solid 1px #3d3e48;
 }
 
-.cstm-img {
+.cstm-logo-img {
   position: absolute;
   top: 10px;
   left: 17%;

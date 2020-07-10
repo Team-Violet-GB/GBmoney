@@ -151,104 +151,33 @@ import Calendar from "../homepage/Calendar"
   };
 </script>
 
-<style>
-  .el-drawer:focus {
-    outline: none;
-    border: none;
-  }
-  .el-drawer__header {
-    background-color: #5f6068;
-    color: #ffffff;
-    margin: 0;
-    padding: 0;
-  }
-
-  .el-drawer__header span {
-    text-transform: uppercase;
-    font-size: 20px;
-    display: flex;
-    justify-content: center;
-    outline: none;
-    line-height: 60px;
-
-  }
-
-  .el-input__inner:focus{
-    border-color: #ffffff;
-  }
-
-  .el-drawer__body {
-    background-color: #3d3e48;
-  }
-
-  .el-icon-right{
-    color: #ffffff;
-    font-size: 20px;
-  }
-
-  .cstm-mrgn-top-20 {
-    margin-top: 20px;
-  }
-
-  .el-textarea__inner{
-    border: none;
-    width: 100%;
-  }
-
-.cstm-input,
-.cstm-input textarea{
-    background: #2c2e38;
-    color: #ffffff;
-    border-radius: 0%;
-    font-size: 16px;
-  }
-
-.cstm-input textarea {
-  font-style: italic;
-  border: 1px #5f6068 solid;
-}
-
-.cstm-input textarea:focus {
-  border-color: #ffffff;
-}
-
-input[type='number'] {
-    -moz-appearance:textfield;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-}
-
-</style>
-
 <style scoped>
-  .cstm-create-button{
-    border-radius: 0;
-    width: 90%;
-    font-size: 20px;
-    transition: .2s;
-  }
+.cstm-create-button{
+  border-radius: 0;
+  width: 90%;
+  font-size: 20px;
+  transition: .2s;
+}
 
-  .cstm-create-button:hover {
-    filter: brightness(110%);
-    transition: .2s;
-  }
+.cstm-create-button:hover {
+  filter: brightness(110%);
+  transition: .2s;
+}
 
-  .cstm-body-window {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+.cstm-body-window {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .cstm-select-box {
-    margin-top: 20px;
-    width: 90%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+.cstm-select-box {
+  margin-top: 20px;
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .cstm-input {
   width: 90%;
 }
