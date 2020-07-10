@@ -13,7 +13,7 @@ import EmptyLayout from '../views/layouts/EmptyLayout'
 export default {
   computed: {
     layout () {
-      return (this.$route.meta.layout || 'empty') + '-layout'
+      return (this.$route.meta.layout || 'main') + '-layout'
     }
   },
   components: {
