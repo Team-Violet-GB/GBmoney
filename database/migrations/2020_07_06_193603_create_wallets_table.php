@@ -20,7 +20,7 @@ class CreateWalletsTable extends Migration
             $table->decimal('amount', 10, 2)->default(0);
             $table->string('description', 255)->nullable();
             $table->boolean('include')->default(1);
-            $table->bigInteger('icon_id')->unsigned();
+            $table->integer('icon_id')->unsigned();
         });
 
         Schema::table('wallets', function (Blueprint $table) {
@@ -42,7 +42,8 @@ class CreateWalletsTable extends Migration
     public function down()
     {
         Schema::table('wallets', function (Blueprint $table){
-            $table->dropForeign(['user_id', 'icon_id']);
+            $table->dropForeign(['user_id']);
+            $table->dropForeign(['icon_id']);
         });
 
         Schema::dropIfExists('wallets');

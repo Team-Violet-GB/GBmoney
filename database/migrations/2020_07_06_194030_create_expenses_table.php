@@ -20,7 +20,7 @@ class CreateExpensesTable extends Migration
             $table->decimal('amount', 10,2)->default(0);
             $table->string('description')->nullable();
             $table->decimal('max_limit', 10, 2)->nullable();
-            $table->bigInteger('icon_id')->unsigned();
+            $table->integer('icon_id')->unsigned();
         });
 
         Schema::table('expenses', function (Blueprint $table) {

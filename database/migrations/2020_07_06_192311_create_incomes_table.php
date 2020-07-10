@@ -19,7 +19,7 @@ class CreateIncomesTable extends Migration
             $table->string('name', 45);
             $table->decimal('amount', 10,2)->default(0);
             $table->string('description', 255)->nullable();
-            $table->bigInteger('icon_id')->unsigned();
+            $table->integer('icon_id')->unsigned();
         });
 
         Schema::table('incomes', function (Blueprint $table){
