@@ -180,7 +180,20 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss">
+
+%cstm-color-background-body {
+  background-color: #3d3e48;
+}
+
+%cstm-color-background-header {
+  background-color: #5f6068;
+}
+
+%cstm-color-text {
+  color: #ffffff;
+}
+
 .cstm-box-card {
   border-radius: 0%;
   border: none;
@@ -188,7 +201,7 @@ export default {
 }
 
 .cstm-header-card {
-  background-color: #5f6068;
+  @extend %cstm-color-background-header;
   padding: 10px 30px;
 }
 
@@ -196,7 +209,7 @@ export default {
   padding: 10px;
   display: flex;
   flex-wrap: wrap;
-  background-color: #3d3e48;
+  @extend %cstm-color-background-body;
 }
 
 .cstm-point {
@@ -208,9 +221,9 @@ export default {
 }
 
 .cstm-up-text {
+  @extend %cstm-color-text;
   text-transform: uppercase;
   font-size: 20px;
-  color: #ffffff;
   display: flex;
   justify-content: space-between;
 }
@@ -237,12 +250,12 @@ export default {
 }
 
 .cstm-icon-point-add {
-  background-color: #3d3e48;
-  color: #ffffff;
+  @extend %cstm-color-background-body;
+  @extend %cstm-color-text;
 }
 
 .cstm-head-point {
-  color: #ffffff;
+  @extend %cstm-color-text;
   text-align: center;
   padding-bottom: 4px;
   font-weight: 300;
