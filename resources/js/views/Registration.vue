@@ -48,6 +48,7 @@
 
         return {
             dialogVisible: true,
+            url: '../images/gm-money-logo.jpg',
             ruleForm: {
                 email: '',
                 pass: '',
@@ -71,7 +72,26 @@
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    alert('submit!');
+                        this.axios({
+                        method: 'post',
+                        url: '/api/register',
+                        'Content-Type':'application/x-www-form-urlencoded',
+                        'Accept': 'application/json',
+                        data: {
+                            name:'ivan ivanov',
+                            email:'gjsjhsh@mail.ru',
+                            password: '123fsf938'
+                        }
+                        });
+    //                 this.axios.post('/api/register' , {
+    //                     name:'ivan ivanov',
+    //                     email:'gjsjhsh@mail.ru',
+    //                     password: '123fsf938'
+
+    //                 })
+    //                 .then(response => {
+    //                     console.log(response.data);
+    // });
                 } else {
                     console.log('error submit!!');
                     return false;
