@@ -13,7 +13,7 @@ class AuthController extends Controller
 {
     protected function generateAccessToken($user)
     {
-        $token = $user->createToken($user->email.'-'.now());
+        $token = $user->createToken($user->email . '-' . now());
 
         return $token->accessToken;
     }
@@ -21,7 +21,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            
+
             'email' => ['required', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'min:6'],
         ]);
@@ -37,30 +37,20 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email|exists:users,email',
-            'password' => 'required'
-        ]);
 
-
-        if( Auth::attempt(['email'=>$request->email, 'password'=>$request->password]) ) {
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
 
-            $token = $user->createToken($user->email.'-'.now());
+            $token = $user->createToken($user->email . '-' . now());
 
             return response()->json([
                 'token' => $token->accessToken
             ]);
         } else {
             return response()->json([
-                'message' => 'The given data was invalid.',
-                'errors' => [
-                    'password' => [
-                        'The selected password is invalid.'
-                    ]
-                ]
-            ], 422);
+                'errors' => 'Пользователь не найден'
+            ], 500);
         }
-}
+    }
 
 }
