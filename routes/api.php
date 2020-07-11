@@ -18,7 +18,6 @@ use Illuminate\Http\Request;
 //});
 
 Route::post('register', 'AuthController@register');
-Route::get('getUser', 'UserController@getUser');
 
 
 
