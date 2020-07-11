@@ -26,7 +26,7 @@ export default {
       this.axios
           .get('/api/getUser')
           .then(response => {if (typeof(response.data) == 'string')
-              this.ruleForm.email = response.data
+              this.email = response.data
           else
               console.log('Неверные данные')
           })
