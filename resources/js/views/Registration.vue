@@ -46,8 +46,19 @@
             }
         };
 
+        var sizePass = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('Введите пароль'));
+            } else if (value.length < 6) {
+                callback(new Error('Пароль должен состоять не менее чем из 6 символов'))
+            } else {
+                callback();
+            }
+        };
+
         return {
             dialogVisible: true,
+            url: '../images/gm-money-logo.jpg',
             ruleForm: {
                 email: '',
                 pass: '',
@@ -59,7 +70,7 @@
                     { type: 'email', message: 'Введен некорректрный e-mail  ', trigger: 'blur' }
                 ],
                 pass: [
-                    { required: true, message: 'Введите пароль', trigger: 'blur' },
+                    { required: true, validator: sizePass, trigger: 'blur' },
                 ],
                 checkPass: [
                     { required: true, validator: accordancePass, trigger: ['blur', 'change'] }
@@ -71,11 +82,31 @@
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    alert('submit!');
+                    this.axios.post('/api/register' , {
+                        email: this.ruleForm.email,
+                        password: this.ruleForm.pass
+                    })
+                    .then(response => {
+                        this.MessageSuccess('Пользователь ' + response.data.email + ' успешно зарегистрирован')
+                        this.$router.push('/')
+                    })
+                    .catch(error => {
+                        this.MessageError('Пользователь ' + this.ruleForm.email + ' уже существует');
+                    })
                 } else {
-                    console.log('error submit!!');
+                    this.MessageError('Проверьте правильность заполнения полей');
                     return false;
                 }
+            });
+        },
+        MessageError(message) {
+            this.$message.error(message);
+        },
+
+        MessageSuccess(message) {
+            this.$message({
+            message: message,
+            type: 'success'
             });
         },
     }
