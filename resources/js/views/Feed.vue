@@ -35,7 +35,7 @@
                         <el-row type="flex" class="row-bg" justify="end">
                             <el-button-group>
                                 <el-button v-if="showInput && transaction.id == currentItem.id"
-                                           type="success" @click="onSubmitData" size="small"
+                                           type="success" @click="onSubmitData(editor)" size="small"
                                            icon="el-icon-check"></el-button>
                                 <el-button v-else @click="showEditForm(transaction.id, index, indexx)"
                                            type="primary" size="small" icon="el-icon-edit"></el-button>
@@ -49,13 +49,13 @@
                 <!--                выпадающий редактор транзакции-->
                 <el-collapse-transition>
                     <div v-if="transaction.id === currentItem.id" v-show="showInput" class="edit-view">
-                        <el-form ref="form" label-width=" 90px" size="small">
-                            <el-row>
+                        <el-form :model="transactions[index][indexx]" ref="editor" :rules="rules" label-position="top" label-width=" 90px" size="small">
+                            <el-row :gutter="10">
                                 <el-col :span="6">
                                     <el-form-item label="Когда">
                                         <el-date-picker type="date" format="dd.MM.yyyy"
                                                         v-model="transactions[index][indexx].date"
-                                                        style="font-size: 1em; width: 100%;"></el-date-picker>
+                                                        style="margin-top: 0; font-size: 1em; width: 100%;"></el-date-picker>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
@@ -101,9 +101,12 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="Сколько">
-                                        <el-input clearable v-model="transactions[index][indexx].amount"
+                                    <el-form-item prop="amount" label="Сколько">
+                                        <el-input clearable v-model.number="transactions[index][indexx].amount"
                                                   style="font-size: 1em;"></el-input>
+                                        <el-button v-if="showInput && transaction.id === currentItem.id"
+                                                   type="success" @click="onSubmitData(editor)" size="small"
+                                                   icon="el-icon-check"></el-button>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -133,16 +136,19 @@
                 currentItem: {
                     id: null,
                     index: null,
-                    indexx: null,
-                    data: {
-                        from: ''
-                    }
+                    indexx: null
                 },
                 backupData: {
                     restore: false,
                     index: null,
                     indexx: null,
                     data: null
+                },
+                rules: {
+                    amount: [
+                        {required: true, message: 'Ну, хоть немношко!', trigger: 'blur'},
+                        { type: 'number', message: 'Только цыфры!'},
+                    ],
                 },
                 dataError: false,
                 errorInfo: 'Ошибка при получении данных с сервера',
@@ -152,7 +158,6 @@
                 allIncomes: {},
                 expensesCategory: {},
                 expenses: {},
-                sortedExpenses: []
             };
         },
         computed: {
@@ -220,16 +225,26 @@
                         return 'нет данных';
                 }
             },
-            onSubmitData() {
-                this.$message({
-                    showClose: true,
-                    dangerouslyUseHTMLString: true,
-                    message: '<h4>axios.put(\'/api/update/${currentItem.Id}\', this.transactionData[this.currentItem.index]</h4>',
-                    duration: 6000,
-                    type: 'success'
+            onSubmitData(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        alert('submit!');
+
+                        this.$message({
+                            showClose: true,
+                            dangerouslyUseHTMLString: true,
+                            message: '<h4>axios.put(\'/api/update/${currentItem.Id}\', this.transactionData[this.currentItem.index]</h4>',
+                            duration: 6000,
+                            type: 'success'
+                        });
+
+                        this.showInput = false;
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
                 });
 
-                this.showInput = false;
 
                 // axios
                 //     .put(`/api/update/${this.currentItem}`, this.transactionData[this.currentItem.index])
@@ -246,7 +261,7 @@
 
 
             },
-            getTransaction() {
+            getTransactions() {
                 const headers = {
                     'Content-Type': 'application/json'
                 }
@@ -276,10 +291,6 @@
                                         axios.get('storage/testExpenses.json', {headers: headers})
                                             .then(response => {
                                                 this.expenses = response.data;
-                                                axios.get('storage/testTransactions.json', {headers: headers})
-                                                    .then(response => {
-                                                        this.transactions = response.data;
-                                                    })
                                             })
                                     })
                             })
@@ -315,6 +326,8 @@
         },
         mounted() {
             this.getData();
+            this.getTransactions();
+
         }
     }
 </script>
