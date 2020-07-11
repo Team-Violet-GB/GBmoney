@@ -49,7 +49,7 @@ class AuthController extends Controller
         } else {
             return response()->json([
                 'errors' => 'Пользователь не найден'
-            ], 500);
+            ], 403);
         }
     }
 
