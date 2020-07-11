@@ -125,6 +125,7 @@
 
 <script>
     import constants from '../constants';
+
     export default {
         data() {
             return {
@@ -246,103 +247,42 @@
 
             },
             getTransaction() {
-                axios
-                    .get('storage/testWallets.json', {
-                        headers: {
-                            'Content-Type': 'application/json',
-                        }
-                    })
+                const headers = {
+                    'Content-Type': 'application/json'
+                }
+                axios.get('storage/testTransactions.json', {headers: headers})
                     .then(response => {
-                        // console.log(response);
-                        if (response.headers['content-type'] === "application/json") {
-                            this.wallets = response.data;
-                        } else {
-                            this.errorInfo = "данные поступили в неверном формате (нам бы json'на)"
-                            this.dataError = true
-                        }
+                        this.transactions = response.data;
                     })
                     .catch(error => {
                         console.log(error)
                         this.dataError = true
                         //todo: обработка других кодов с сервера
                     });
-                axios
-                    .get('storage/testIncomes.json', {
-                        headers: {
-                            'Content-Type': 'application/json',
-                        }
-                    })
+            },
+            getData() {
+                const headers = {
+                    'Content-Type': 'application/json'
+                }
+                axios.get('storage/testWallets.json', {headers: headers})
                     .then(response => {
-                        // console.log(response);
-                        if (response.headers['content-type'] === "application/json") {
-                            this.incomes = response.data;
-                        } else {
-                            this.errorInfo = "данные поступили в неверном формате (нам бы json'на)"
-                            this.dataError = true
-                        }
-                    })
-                    .catch(error => {
-                        console.log(error)
-                        this.dataError = true
-                        //todo: обработка других кодов с сервера
-                    });
-
-                axios
-                    .get('storage/testExpensesCategory.json', {
-                        headers: {
-                            'Content-Type': 'application/json',
-                        }
-                    })
-                    .then(response => {
-                        // console.log(response);
-                        if (response.headers['content-type'] === "application/json") {
-                            this.expensesCategory = response.data;
-                        } else {
-                            this.errorInfo = "данные поступили в неверном формате (нам бы json'на)"
-                            this.dataError = true
-                        }
-                    })
-                    .catch(error => {
-                        console.log(error)
-                        this.dataError = true
-                        //todo: обработка других кодов с сервера
-                    });
-
-                axios
-                    .get('storage/testExpenses.json', {
-                        headers: {
-                            'Content-Type': 'application/json',
-                        }
-                    })
-                    .then(response => {
-                        // console.log(response);
-                        if (response.headers['content-type'] === "application/json") {
-                            this.expenses = response.data;
-                        } else {
-                            this.errorInfo = "данные поступили в неверном формате (нам бы json'на)"
-                            this.dataError = true
-                        }
-                    })
-                    .catch(error => {
-                        console.log(error)
-                        this.dataError = true
-                        //todo: обработка других кодов с сервера
-                    });
-
-                axios
-                    .get('storage/testTransactions.json', {
-                        headers: {
-                            'Content-Type': 'application/json',
-                        }
-                    })
-                    .then(response => {
-                        // console.log(response);
-                        if (response.headers['content-type'] === "application/json") {
-                            this.transactions = response.data;
-                        } else {
-                            this.errorInfo = "данные поступили в неверном формате (нам бы json'на)"
-                            this.dataError = true
-                        }
+                        this.wallets = response.data;
+                        axios.get('storage/testIncomes.json', {headers: headers})
+                            .then(response => {
+                                this.incomes = response.data;
+                                axios.get('storage/testExpensesCategory.json', {headers: headers})
+                                    .then(response => {
+                                        this.expensesCategory = response.data;
+                                        axios.get('storage/testExpenses.json', {headers: headers})
+                                            .then(response => {
+                                                this.expenses = response.data;
+                                                axios.get('storage/testTransactions.json', {headers: headers})
+                                                    .then(response => {
+                                                        this.transactions = response.data;
+                                                    })
+                                            })
+                                    })
+                            })
                     })
                     .catch(error => {
                         console.log(error)
@@ -374,7 +314,7 @@
             }
         },
         mounted() {
-            this.getTransaction();
+            this.getData();
         }
     }
 </script>
