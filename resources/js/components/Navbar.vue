@@ -4,10 +4,10 @@
       <i class="el-icon-user-solid"></i>
       <el-dropdown-menu slot="dropdown" class="cstm-dropdown">
         <el-dropdown-item>Настройки</el-dropdown-item>
-        <el-dropdown-item><span @click="logout">Выйти</span></el-dropdown-item>
+        <el-dropdown-item @click="logout"><span>Выйти</span></el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
-    <span >money@gb.ru</span>
+    <span>money@gb.ru</span>
   </el-header>
 </template>
 
@@ -15,7 +15,6 @@
 export default {
   methods: {
     logout() {
-      console.log('logout')
       this.$router.push('/auth')
     }
   }
