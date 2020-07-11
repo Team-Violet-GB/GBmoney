@@ -77,8 +77,7 @@
                     pass: '',
                     newpass: '',
                     checkPass: '',
-                    email: 'money@gb.ru', //TODO вставка имейла текущего пользователя,
-                    name: 'Money' //TODO вставка name текущего пользователя,
+                    email: '',
                 },
                 rules: {
                     pass: [
@@ -93,11 +92,16 @@
                     email: [
                         {validator: checkEmail, trigger: 'blur'}
                     ],
-                    name: [
-                        {validator: checkName, trigger: 'blur'}
-                    ]
                 },
             };
+        },
+        mounted() {
+            this.axios
+                .get('/api/getUser')
+                .then(response => {this.ruleForm.email = response.data})
+                //Проверку на null в данном случае не делаю, т.к. если вернет null - поле останется пустым
+                .catch(error => console.log(error))
+                .finally(() => (console.log('finished')));
         },
         methods: {
             submitForm(formName) {

@@ -7,7 +7,7 @@
         <el-dropdown-item @click="logout"><span>Выйти</span></el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
-    <span>money@gb.ru</span>
+    <span>{{ email }}</span>
   </el-header>
 </template>
 
@@ -17,6 +17,18 @@ export default {
     logout() {
       this.$router.push('/auth')
     }
+  },
+  data() {
+    return {
+      email: '',
+  }},
+  mounted() {
+      this.axios
+          .get('/api/getUser')
+          .then(response => {this.email = response.data})
+          //Проверку на null в данном случае не делаю, т.к. если вернет null - поле останется пустым
+          .catch(error => console.log(error))
+          .finally(() => (console.log('finished')));
   }
 }
 </script>
