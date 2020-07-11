@@ -52,37 +52,53 @@
                         <el-form ref="form" label-width=" 90px" size="small">
                             <el-row>
                                 <el-col :span="6">
+                                    <el-form-item label="Когда">
+                                        <el-date-picker type="date" format="dd.MM.yyyy"
+                                                        v-model="transactions[index][indexx].date"
+                                                        style="font-size: 1em; width: 100%;"></el-date-picker>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
                                     <el-form-item label="Откуда">
-                                        <!--                                        <el-select v-model="transactions[index][indexx].source"-->
-                                        <el-select v-model="transactions[index][indexx].source"
-                                                   placeholder="источник">
-                                            <el-option v-for="src in incomes" :key="src.id" :label="src.title"
-                                                       :value="src.title">{{ src.title }}
+                                        <el-select filterable v-if="transaction.type_id === 1"
+                                                   v-model="transactions[index][indexx].income_id">
+                                            <el-option v-for="income in incomes" :key="income.id" :label="income.name"
+                                                       :value="income.id">
+                                            </el-option>
+                                        </el-select>
+                                        <el-select v-else v-model="transactions[index][indexx].wallet_id_from">
+                                            <el-option v-for="wallet in wallets" :key="wallet.id" :label="wallet.name"
+                                                       :value="wallet.id">
+                                                {{ wallet.name }}
                                             </el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="12">
-                                    <el-row :gutter="10" type="flex" justify="end">
-                                        <el-form-item label="Куда">
-                                            <el-col :span="12">
-                                                <!--                                                <el-select v-model="transactionData[index][indexx].receiver">-->
-                                                <el-select :value="transactions[index][indexx].receiver">
-                                                    <el-option v-for="category in expensesCategory" :key="category.id"
-                                                               :value="category.name">{{ category.name }}
-                                                    </el-option>
-                                                </el-select>
-                                            </el-col>
-                                            <el-col :span="12">
-                                                <el-select v-model="transactions[index][indexx].receiver">
-                                                    <el-option v-for="expense in expenses" :key="expense.id"
-                                                               :label="expense.name"
-                                                               :value="expense.name">
-                                                    </el-option>
-                                                </el-select>
-                                            </el-col>
-                                        </el-form-item>
-                                    </el-row>
+                                <el-col :span="6">
+                                    <el-form-item label="Куда">
+                                        <el-select filterable v-if="transaction.type_id === 1"
+                                                   v-model="transactions[index][indexx].wallet_id_to">
+                                            <el-option v-for="wallet in wallets" :key="wallet.id"
+                                                       :label="wallet.name" :value="wallet.id">
+                                            </el-option>
+                                        </el-select>
+                                        <el-select filterable v-if="transaction.type_id === 2"
+                                                   v-model="transactions[index][indexx].tag_id">
+                                            <el-option v-for="expense in expenses" :key="expense.id"
+                                                       :label="expense.name" :value="expense.id">
+                                                <span style="float: left">{{ expense.name }}</span>
+                                                <span style="float: right; color: #536e8e; font-size: 10px">
+                                                    {{ expensesCategory[expense.expense_id].name }}</span>
+                                            </el-option>
+                                        </el-select>
+                                        <el-select v-if="transaction.type_id === 3"
+                                                   v-model="transactions[index][indexx].wallet_id_to">
+                                            <el-option v-for="wallet in wallets" :key="wallet.id"
+                                                       :label="wallet.name"
+                                                       :value="wallet.id">
+                                            </el-option>
+                                        </el-select>
+                                    </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="Сколько">
@@ -92,17 +108,10 @@
                                 </el-col>
                             </el-row>
                             <el-row>
-                                <el-col :span="18">
+                                <el-col :span="24">
                                     <el-form-item label="Коментарий">
                                         <el-input v-model="transactions[index][indexx].comment"
                                                   style="font-size: 1em;"></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="6">
-                                    <el-form-item label="Когда">
-                                        <el-date-picker type="date" format="dd.MM.yyyy"
-                                                        v-model="transactions[index][indexx].date"
-                                                        style="font-size: 1em; width: 100%;"></el-date-picker>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -116,7 +125,6 @@
 
 <script>
     import constants from '../constants';
-
     export default {
         data() {
             return {
@@ -125,6 +133,9 @@
                     id: null,
                     index: null,
                     indexx: null,
+                    data: {
+                        from: ''
+                    }
                 },
                 backupData: {
                     restore: false,
@@ -137,8 +148,10 @@
                 transactions: {},
                 wallets: {},
                 incomes: {},
+                allIncomes: {},
                 expensesCategory: {},
-                expenses: {}
+                expenses: {},
+                sortedExpenses: []
             };
         },
         computed: {
@@ -357,11 +370,9 @@
                 let days = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
                 let month = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
                 let dateObj = new Date(date);
-                let monthCalculate = dateObj.getMonth() === 0 ? month[dateObj.getMonth()] : month[dateObj.getMonth() - 1];
-                return days[dateObj.getDay()] + ', ' + dateObj.getDate() + ' ' + monthCalculate;
+                return days[dateObj.getDay()] + ', ' + dateObj.getDate() + ' ' + month[dateObj.getMonth()];
             }
         },
-        filters: {},
         mounted() {
             this.getTransaction();
         }

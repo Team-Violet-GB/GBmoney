@@ -10,7 +10,7 @@
             "income_id": 1,
             "expense_id": null,
             "tag_id": null,
-            "amount": 2000,
+            "amount": 1700,
             "comment": "Перевод зряплаты на карту ..."
         }
     ],
@@ -38,23 +38,23 @@
             "income_id": null,
             "expense_id": 1,
             "tag_id": 1,
-            "amount": 2000,
+            "amount": 4000,
             "comment": "Заправка бензином на заправке, марка A93 с карты..."
         }
     ],
-    "2012-09-30": [
+    "2012-12-30": [
         {
             "id": 4,
             "date": "2012-09-30",
             "user_id": 1,
-            "type_id": 1,
+            "type_id": 2,
             "wallet_id_from": 2,
             "wallet_id_to": null,
             "income_id": null,
             "expense_id": 1,
             "tag_id": 2,
-            "amount": 2000,
-            "comment": "штраф из кошелька наличными гаишнику"
+            "amount": 3000,
+            "comment": "штраф из заначки наличными гаишнику"
         }
     ]
 }
