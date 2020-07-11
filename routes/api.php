@@ -17,7 +17,8 @@ use Illuminate\Http\Request;
 //    return $request->user();
 //});
 
+# Регистрация
 Route::post('register', 'AuthController@register');
 
-
+Route::post('login', 'AuthController@login');
 
