@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateIconsTable extends Migration
+class RemoveColumnNameFromTableUsers extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreateIconsTable extends Migration
      */
     public function up()
     {
-        Schema::create('icons', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name', 45);
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('name');
         });
     }
 
@@ -26,6 +25,8 @@ class CreateIconsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('icons');
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('name', 255)->after('id');
+        });
     }
 }
