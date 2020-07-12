@@ -134,6 +134,18 @@
                 </el-collapse-transition>
             </el-card>
         </el-card>
+
+<!--        Пагинация-->
+        <div class="pager">
+             <el-pagination
+                 background
+                 :page-size="20"
+                 :pager-count="10"
+                 :total="1000"
+                 hide-on-single-page
+                 layout="prev, pager, next">
+             </el-pagination>
+        </div>
     </div>
 </template>
 
@@ -234,21 +246,21 @@
                     }
                 });
 
-                this.loading = true;
-                axios
-                    .put(`/api/update/${this.editor.data.id}`, this.editor.data)
-                    .then(response => {
-                        if (response.status === 200) {
-                            this.transactions[this.editor.index][this.editor.indexx] = Object.assign({}, this.editor.data);
-                        }
-                    })
-                    .catch(error => {
-                        this.error = true;
-                        this.errorInfo = 'Ошибка во время запроса на обновление данных';
-                        console.log(error)
-                        //todo: обработка кодов с сервера
-                    });
-                this.loading = false;
+                // this.loading = true;
+                // axios
+                //     .put(`/api/update/${this.editor.data.id}`, this.editor.data)
+                //     .then(response => {
+                //         if (response.status === 200) {
+                //             this.transactions[this.editor.index][this.editor.indexx] = Object.assign({}, this.editor.data);
+                //         }
+                //     })
+                //     .catch(error => {
+                //         this.error = true;
+                //         this.errorInfo = 'Ошибка во время запроса на обновление данных';
+                //         console.log(error)
+                //         //todo: обработка кодов с сервера
+                //     });
+                // this.loading = false;
             },
             getTransactions() {
                 const headers = {
@@ -354,6 +366,13 @@
 <style scoped>
     body {
         margin: 0;
+    }
+
+    .pager {
+        margin-top: 20px;
+        margin-bottom: 50px;
+        display: flex;
+        justify-content: center;
     }
 
     .el-card {
