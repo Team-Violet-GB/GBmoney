@@ -47,13 +47,13 @@
                         <el-row type="flex" class="row-bg" justify="end">
                             <el-button-group>
                                 <el-button v-if="showInput && transaction.id === editor.data.id"
-                                           type="success" @click="updateTransaction('editorForm')" size="small"
+                                           type="success" @click="updateTransaction('editorForm')" size="mini"
                                            icon="el-icon-check"></el-button>
                                 <el-button v-else @click="showEditForm(index, indexx)"
-                                           type="primary" size="small" icon="el-icon-edit"></el-button>
+                                           type="primary" size="mini" icon="el-icon-edit"></el-button>
                                 <el-button v-if="showInput && transaction.id === editor.data.id"
                                            @click="deleteTransaction(transaction.id)"
-                                           type="danger" size="small" icon="el-icon-delete"></el-button>
+                                           type="danger" size="mini" icon="el-icon-delete"></el-button>
                             </el-button-group>
                         </el-row>
                     </el-col>
@@ -67,6 +67,7 @@
                             <el-row :gutter="20" type="flex" justify="space-between">
                                 <el-col :span="6">
                                     <el-form-item prop="date" label="когда">
+
                                         <el-date-picker type="date" format="dd.MM.yyyy"
                                                         v-model="editor.data.date"
                                                         style="margin-top: 0; font-size: 1em; width: 100%;"></el-date-picker>
@@ -116,10 +117,12 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
+                                    <div class="editor-input">
                                     <el-form-item prop="amount" label="сколько">
                                         <el-input clearable v-model.number="editor.data.amount"
                                                   style="font-size: 1em;"></el-input>
                                     </el-form-item>
+                                    </div>
                                 </el-col>
                             </el-row>
                             <el-row>
@@ -136,11 +139,11 @@
         </el-card>
 
 <!--        Пагинация-->
-        <div class="pager">
+        <div class="pagination block">
              <el-pagination
                  background
                  :page-size="20"
-                 :pager-count="10"
+                 :pager-count="11"
                  :total="1000"
                  hide-on-single-page
                  layout="prev, pager, next">
@@ -368,7 +371,7 @@
         margin: 0;
     }
 
-    .pager {
+    .pagination {
         margin-top: 20px;
         margin-bottom: 50px;
         display: flex;
@@ -412,6 +415,10 @@
         padding-right: 17px;
         padding-left: 17px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, .2), 0 0 6px rgba(0, 0, 0, .07);
+    }
+
+    .editor-input {
+       color: #ffed4a;
     }
 
     .editor-comment {
