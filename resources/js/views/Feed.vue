@@ -9,7 +9,8 @@
 
         <!--        заголовок группы транзакций-->
         <el-card v-if="!error" v-for="(transactionsGroup, index) in transactions" :key="index" class="box-card">
-            <div slot="header" class="clearfix group-header">{{ dateLocal(index) }}</div>
+            <div slot="header" class="clearfix group-header">{{ getLocalDateString(transactionsGroup[0]['date']) }}
+            </div>
 
             <!--            список транзакций в группе-->
             <el-card v-for="(transaction, indexx) in transactionsGroup" :key="indexx" class="box-card">
@@ -20,7 +21,7 @@
                             <el-col :span="8">{{ transaction.amount }} {{ rub }}</el-col>
                             <el-col :span="8">{{ toCalc(transaction) }}</el-col>
                         </el-row>
-                        <el-row>
+                        <el-row class="comment">
                             <el-col :span="24" style="color: #8f95a7">
                                 {{ transaction.comment }}
                             </el-col>
@@ -32,11 +33,12 @@
                         <el-row type="flex" class="row-bg" justify="end">
                             <el-button-group>
                                 <el-button v-if="showInput && transaction.id === editor.data.id"
-                                           type="success" @click="onSubmitData('editorForm')" size="small"
+                                           type="success" @click="submitData('editorForm')" size="small"
                                            icon="el-icon-check"></el-button>
                                 <el-button v-else @click="showEditForm(index, indexx)"
                                            type="primary" size="small" icon="el-icon-edit"></el-button>
-                                <el-button @click="deleteTransaction(transaction.id)"
+                                <el-button v-if="showInput && transaction.id === editor.data.id"
+                                           @click="deleteTransaction(transaction.id)"
                                            type="danger" size="small" icon="el-icon-delete"></el-button>
                             </el-button-group>
                         </el-row>
@@ -49,14 +51,14 @@
                         <el-form :model="editor.data" ref="editorForm" :rules="rules" label-position="top"
                                  label-width=" 90px" size="small">
                             <el-row :gutter="20" type="flex" justify="space-between">
-                                <el-col :span="5">
+                                <el-col :span="4">
                                     <el-form-item prop="date" label="когда">
                                         <el-date-picker type="date" format="dd.MM.yyyy"
                                                         v-model="editor.data.date"
                                                         style="margin-top: 0; font-size: 1em; width: 100%;"></el-date-picker>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="5">
+                                <el-col :span="4">
                                     <el-form-item label="откуда">
                                         <el-select prop="from" filterable v-if="transaction.type_id === 1"
                                                    v-model="editor.data.income_id">
@@ -72,7 +74,7 @@
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="5">
+                                <el-col :span="4">
                                     <el-form-item label="куда">
                                         <el-select prop="to" filterable v-if="transaction.type_id === 1"
                                                    v-model="editor.data.wallet_id_to">
@@ -98,7 +100,7 @@
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="5">
+                                <el-col :span="4">
                                     <el-form-item prop="amount" label="сколько">
                                         <el-input clearable v-model.number="editor.data.amount"
                                                   style="font-size: 1em;"></el-input>
@@ -107,8 +109,8 @@
                             </el-row>
                             <el-row>
                                 <el-col :span="24">
-                                    <el-form-item prop="comment" label="коментарий" label-position="top">
-                                        <el-input v-model="editor.data.comment"></el-input>
+                                    <el-form-item prop="comment" label="зечем" label-position="top">
+                                        <el-input v-model="editor.data.comment" clearable></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -122,6 +124,8 @@
 
 <script>
     import constants from '../constants';
+    import rules from '../components/feed/feedValidationRules';
+
     export default {
         data() {
             return {
@@ -130,15 +134,10 @@
                     indexx: null,
                     data: {}
                 },
-                rules: {
-                    amount: [
-                        {required: true, message: 'Ну, хоть немношко!', trigger: 'blur'},
-                        {type: 'number', message: 'Только цыфры!'},
-                    ],
-                },
+                rules: rules.rules,
                 showInput: false,
                 error: false,
-                errorInfo: 'Ошибка при получении данных с сервера',
+                errorInfo: 'Нет данных',
                 transactions: {},
                 wallets: {},
                 incomes: {},
@@ -201,7 +200,9 @@
                         return 'нет данных';
                 }
             },
-            onSubmitData(formName) {
+            submitData(formName) {
+                // для теста, убрать потом
+                this.transactions[this.editor.index][this.editor.indexx] = Object.assign({}, this.editor.data);
                 this.$refs[formName][0].validate((valid) => {
                     if (valid) {
                         this.$message({
@@ -211,27 +212,20 @@
                             duration: 10000,
                             type: 'success'
                         });
-
                         this.showInput = false;
                     } else {
                         return false;
                     }
                 });
 
-
                 // axios
-                //     .put(`/api/update/${this.currentItem}`, this.transactionData[this.currentItem.index])
+                //     .put(`/api/update/${this.editor.data.id}`, this.editor.data)
                 //     .then(response => {
-                //         this.getTransaction();
-                //         this.canceledData.data = null;
-                //         // console.log(response)
+                //         if (response.status === 200) {
+                //             this.transactions[this.editor.index][this.editor.indexx] = Object.assign({}, this.editor.data);
+                //         }
                 //     })
                 //     .catch(error => console.log(error));
-
-                //временно, пока не работает настоящий запрос:
-                // this.getTransaction();
-                this.editor.restore = false;
-
             },
             getTransactions() {
                 const headers = {
@@ -273,33 +267,54 @@
                         //todo: обработка других кодов с сервера
                     });
             },
-            deleteTransaction(id) {
-                this.$message({
-                    showClose: true,
-                    message: "axios.delete('/api/delete/${currentItem.Id}'",
-                    duration: 6000,
-                    type: 'error'
+            deleteTransaction() {
+                this.$confirm('Подтверждение удаления транзакции', 'Warning', {
+                    confirmButtonText: 'Удалить',
+                    cancelButtonText: 'Отмена',
+                    type: 'warning'
+                }).then(() => {
+                    this.showInput = false;
+                    if (this.transactions[this.editor.index].length > 1) {
+                        this.transactions[this.editor.index].splice(this.editor.indexx, 1);
+                    } else {
+                        delete this.transactions[this.editor.index];
+                    }
+                    !Object.keys(this.transactions).length ? this.error = true : '';
+                    this.$message({
+                        type: 'success',
+                        message: 'Транзакция удалена'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: 'Отмена удаления транзакции'
+                    });
                 });
 
                 // axios
-                //     .delete(`/api/del/${id}`)
+                //     .delete(`/api/del/${this.editor.data.id}`)
                 //     .then(response => {
-                //         console.log(response);
-                //         this.getTransaction();
+                //         if (response.status === 200) {
+                //             if (this.transactions[this.editor.index].length > 1) {
+                //                 this.transactions[this.editor.index].splice(this.editor.indexx, 1);
+                //             } else {
+                //                 delete this.transactions[this.editor.index];
+                //             }
+                //         }
+                //         !Object.keys(this.transactions).length ? this.error = true : '';
                 //     })
                 //     .catch(error => console.log(error));
             },
-            dateLocal(date) {
+            getLocalDateString(date) {
                 let days = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
-                let month = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+                let months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
                 let dateObj = new Date(date);
-                return days[dateObj.getDay()] + ', ' + dateObj.getDate() + ' ' + month[dateObj.getMonth()];
+                return days[dateObj.getDay()] + ', ' + dateObj.getDate() + ' ' + months[dateObj.getMonth()];
             }
         },
         mounted() {
             this.getData();
             this.getTransactions();
-
         }
     }
 </script>
@@ -318,12 +333,19 @@
 
     .tr-data-row {
         font-size: x-large;
-        margin-bottom: 15px;
+
     }
 
     .edit-view {
-        margin-top: 30px;
-        padding: 20px 20px 0;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, .2), 0 0 6px rgba(0, 0, 0, .08);
+        margin-top: 15px;
+        padding-top: 5px;
+        padding-bottom: 10px;
+        padding-right: 17px;
+        padding-left: 17px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, .2), 0 0 6px rgba(0, 0, 0, .07);
+    }
+
+    .comment {
+        margin-top: 10px;
     }
 </style>
