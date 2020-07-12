@@ -13,12 +13,13 @@ use Illuminate\Http\Request;
 |
 */
 
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
 
 # Регистрация
 Route::post('register', 'AuthController@register');
-
+# Вход
 Route::post('login', 'AuthController@login');
+# получение своих данных пользователем
+Route::middleware('auth:api')->group(function() {
 
+    Route::get('user/show', 'UserController@show');
+});
