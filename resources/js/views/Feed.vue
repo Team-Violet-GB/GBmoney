@@ -8,7 +8,9 @@
         </el-alert>
 
         <!--        заголовок группы транзакций-->
-        <el-card v-if="!error" v-for="(transactionsGroup, index) in transactions" :key="index" class="box-card">
+        <el-card v-if="!error" v-for="(transactionsGroup, index) in transactions" :key="index"
+                 v-loading="loading" element-loading-text="Загрузка..." element-loading-spinner="el-icon"
+                 element-loading-background="rgba(0, 0, 0, 0.8)" class="box-card">
             <div slot="header" class="clearfix group-header">{{ getLocalDateString(transactionsGroup[0]['date']) }}
             </div>
 
@@ -51,14 +53,14 @@
                         <el-form :model="editor.data" ref="editorForm" :rules="rules" label-position="top"
                                  label-width=" 90px" size="small">
                             <el-row :gutter="20" type="flex" justify="space-between">
-                                <el-col :span="4">
+                                <el-col :span="6">
                                     <el-form-item prop="date" label="когда">
                                         <el-date-picker type="date" format="dd.MM.yyyy"
                                                         v-model="editor.data.date"
                                                         style="margin-top: 0; font-size: 1em; width: 100%;"></el-date-picker>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="4">
+                                <el-col :span="6">
                                     <el-form-item label="откуда">
                                         <el-select prop="from" filterable v-if="transaction.type_id === 1"
                                                    v-model="editor.data.income_id">
@@ -74,12 +76,13 @@
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="4">
+                                <el-col :span="6">
                                     <el-form-item label="куда">
                                         <el-select prop="to" filterable v-if="transaction.type_id === 1"
                                                    v-model="editor.data.wallet_id_to">
                                             <el-option v-for="wallet in wallets" :key="wallet.id"
-                                                       :label="wallet.name" :value="wallet.id">
+                                                       :label="wallet.name" :value="wallet.id"
+                                                       style="width: 100%">
                                             </el-option>
                                         </el-select>
                                         <el-select prop="to" filterable v-if="transaction.type_id === 2"
@@ -100,7 +103,7 @@
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="4">
+                                <el-col :span="6">
                                     <el-form-item prop="amount" label="сколько">
                                         <el-input clearable v-model.number="editor.data.amount"
                                                   style="font-size: 1em;"></el-input>
@@ -135,6 +138,7 @@
                     data: {}
                 },
                 rules: rules,
+                loading: false,
                 showInput: false,
                 error: false,
                 errorInfo: 'Нет данных',
@@ -231,9 +235,14 @@
                 const headers = {
                     'Content-Type': 'application/json'
                 }
+                this.loading = true
                 axios.get('storage/testTransactions.json', {headers: headers})
                     .then(response => {
                         this.transactions = response.data;
+                        //todo: убрать потом отсюдава таймер
+                        setTimeout(() => {
+                            this.loading = false
+                        }, 2000);
                     })
                     .catch(error => {
                         console.log(error)
@@ -268,10 +277,12 @@
                     });
             },
             deleteTransaction() {
-                this.$confirm('Подтверждение удаления транзакции', 'Warning', {
+                this.$confirm('Подтверждение удаления транзакции', 'Внимание!', {
                     confirmButtonText: 'Удалить',
-                    cancelButtonText: 'Отмена',
-                    type: 'warning'
+                    confirmButtonClass: 'danger',
+                    showCancelButton: false,
+                    iconClass: 'el-icon-delete',
+                    type: 'warning',
                 }).then(() => {
                     this.showInput = false;
                     if (this.transactions[this.editor.index].length > 1) {
@@ -283,11 +294,6 @@
                     this.$message({
                         type: 'success',
                         message: 'Транзакция удалена'
-                    });
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: 'Отмена удаления транзакции'
                     });
                 });
 
@@ -320,6 +326,10 @@
 </script>
 
 <style scoped>
+    body {
+        margin: 0;
+    }
+
     .el-card {
         margin-top: 15px;
     }
