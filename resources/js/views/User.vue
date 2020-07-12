@@ -77,7 +77,7 @@
                     pass: '',
                     newpass: '',
                     checkPass: '',
-                    email: '',
+                    email: this.$store.state.email,
                 },
                 rules: {
                     pass: [
@@ -95,19 +95,6 @@
                 },
             };
         },
-        mounted() {
-            this.axios
-                .get('/api/getUser')
-                .then(response => {
-                    if (typeof(response.data) == 'string')
-                        this.ruleForm.email = response.data
-                    else
-                        console.log('Неверные данные')
-                })
-                //Проверку на null в данном случае не делаю, т.к. если вернет null - поле останется пустым
-                .catch(error => console.log(error))
-                .finally(() => (console.log('finished')));
-        },
         methods: {
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
@@ -118,7 +105,7 @@
                         return false;
                     }
                 });
-            }
+            },
         }
     }
 </script>
