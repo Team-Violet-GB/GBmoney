@@ -5,7 +5,7 @@ export default {
     actions: {
         setUserData({commit}) {
             axios
-                .get('/api/getUser')
+                .get('/api/user/show')
                 .then(response => {
                     if (typeof (response.data) == 'object') {
                         let userData = response.data;
