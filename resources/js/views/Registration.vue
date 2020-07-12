@@ -38,21 +38,21 @@
     data() {
         var accordancePass = (rule, value, callback) => {
             if (value === '') {
-                callback(new Error('Введите пароль повторно'));
+                callback(new Error('Введите пароль повторно'))
             } else if (value !== this.ruleForm.pass) {
-                callback(new Error('Пароли не совпадают!'));
+                callback(new Error('Пароли не совпадают!'))
             } else {
-                callback();
+                callback()
             }
         };
 
         var sizePass = (rule, value, callback) => {
             if (value === '') {
-                callback(new Error('Введите пароль'));
+                callback(new Error('Введите пароль'))
             } else if (value.length < 6) {
                 callback(new Error('Пароль должен состоять не менее чем из 6 символов'))
             } else {
-                callback();
+                callback()
             }
         };
 
@@ -67,7 +67,7 @@
             rules: {
                 email: [
                     { required: true, message: 'Введите e-mail', trigger: 'blur' },
-                    { type: 'email', message: 'Введен некорректрный e-mail  ', trigger: 'blur' }
+                    { type: 'email', message: 'Введен некорректрный e-mail ', trigger: 'blur' }
                 ],
                 pass: [
                     { required: true, validator: sizePass, trigger: 'blur' },
@@ -90,27 +90,34 @@
                         this.MessageSuccess('Пользователь ' + response.data.email + ' успешно зарегистрирован')
                         this.$router.push('/')
                     })
-                    .catch(error => {
-                        this.MessageError('Пользователь ' + this.ruleForm.email + ' уже существует');
+                    .catch((error) => {
+                        var errors = error.response.data.errors
+                        for (var err in errors) {
+                            errors[err].forEach((e, i) => {
+                                setTimeout(() => {
+                                    this.MessageError(e)
+                                }, 100 * ++i)
+                            });
+                        }
                     })
                 } else {
-                    this.MessageError('Проверьте правильность заполнения полей');
-                    return false;
+                    this.MessageError('Проверьте правильность заполнения полей')
+                    return false
                 }
             });
         },
         MessageError(message) {
-            this.$message.error(message);
+            this.$message.error(message)
         },
 
         MessageSuccess(message) {
             this.$message({
-            message: message,
-            type: 'success'
-            });
+                message: message,
+                type: 'success'
+            })
         },
     }
-  };
+  }
 </script>
 
 <style lang="scss">
