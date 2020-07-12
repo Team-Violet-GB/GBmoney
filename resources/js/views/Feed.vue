@@ -11,21 +11,33 @@
         <el-card v-if="!error" v-for="(transactionsGroup, index) in transactions" :key="index"
                  v-loading="loading" element-loading-text="Загрузка..." element-loading-spinner="el-icon"
                  element-loading-background="rgba(0, 0, 0, 0.8)" class="box-card">
-            <div slot="header" class="clearfix group-header">{{ getLocalDateString(transactionsGroup[0]['date']) }}
-            </div>
+            <el-row :gutter="10" slot="header" class="clearfix tran-group-header">
+                <el-col :span="6">
+                    <div>{{ getLocalDateString(transactionsGroup[0]['date']) }}</div>
+                </el-col>
+                <el-col :span="6" :offset="12">
+                    <div class="tran-group-header-sum">{{ groupSumCalc(transactionsGroup) }}</div>
+                </el-col>
+            </el-row>
 
             <!--            список транзакций в группе-->
             <el-card v-for="(transaction, indexx) in transactionsGroup" :key="indexx" class="box-card">
                 <el-row type="flex" align="middle">
                     <el-col :span="18">
-                        <el-row :gutter="10" class="tr-data-row">
-                            <el-col :span="8">{{ fromCalc(transaction) }}</el-col>
-                            <el-col :span="8">{{ transaction.amount }} {{ rub }}</el-col>
-                            <el-col :span="8">{{ toCalc(transaction) }}</el-col>
+                        <el-row :gutter="10" class="tran-row-data">
+                            <el-col :span="8">
+                                <!--                                <div>{{ fromCalc(transaction) }}</div>-->
+                            </el-col>
+                            <el-col :span="8">
+                                <div>{{ transaction.amount }} {{ rub }}</div>
+                            </el-col>
+                            <el-col :span="8">
+                                <!--                                <div>{{ toCalc(transaction) }}</div>-->
+                            </el-col>
                         </el-row>
-                        <el-row class="comment">
-                            <el-col :span="24" style="color: #8f95a7">
-                                {{ transaction.comment }}
+                        <el-row class="editor-comment">
+                            <el-col :span="24" class="tran-comment">
+                                <div>{{ transaction.comment }}</div>
                             </el-col>
                         </el-row>
                     </el-col>
@@ -35,7 +47,7 @@
                         <el-row type="flex" class="row-bg" justify="end">
                             <el-button-group>
                                 <el-button v-if="showInput && transaction.id === editor.data.id"
-                                           type="success" @click="submitData('editorForm')" size="small"
+                                           type="success" @click="updateTransaction('editorForm')" size="small"
                                            icon="el-icon-check"></el-button>
                                 <el-button v-else @click="showEditForm(index, indexx)"
                                            type="primary" size="small" icon="el-icon-edit"></el-button>
@@ -49,7 +61,7 @@
 
                 <!--                редактор транзакции-->
                 <el-collapse-transition>
-                    <div v-if="transaction.id === editor.data.id" v-show="showInput" class="edit-view">
+                    <div v-if="transaction.id === editor.data.id" v-show="showInput" class="editor">
                         <el-form :model="editor.data" ref="editorForm" :rules="rules" label-position="top"
                                  label-width=" 90px" size="small">
                             <el-row :gutter="20" type="flex" justify="space-between">
@@ -204,7 +216,7 @@
                         return 'нет данных';
                 }
             },
-            submitData(formName) {
+            updateTransaction(formName) {
                 // для теста, убрать потом
                 this.transactions[this.editor.index][this.editor.indexx] = Object.assign({}, this.editor.data);
                 this.$refs[formName][0].validate((valid) => {
@@ -222,33 +234,39 @@
                     }
                 });
 
-                // axios
-                //     .put(`/api/update/${this.editor.data.id}`, this.editor.data)
-                //     .then(response => {
-                //         if (response.status === 200) {
-                //             this.transactions[this.editor.index][this.editor.indexx] = Object.assign({}, this.editor.data);
-                //         }
-                //     })
-                //     .catch(error => console.log(error));
+                this.loading = true;
+                axios
+                    .put(`/api/update/${this.editor.data.id}`, this.editor.data)
+                    .then(response => {
+                        if (response.status === 200) {
+                            this.transactions[this.editor.index][this.editor.indexx] = Object.assign({}, this.editor.data);
+                        }
+                    })
+                    .catch(error => {
+                        this.error = true;
+                        this.errorInfo = 'Ошибка во время запроса на обновление данных';
+                        console.log(error)
+                        //todo: обработка кодов с сервера
+                    });
+                this.loading = false;
             },
             getTransactions() {
                 const headers = {
                     'Content-Type': 'application/json'
                 }
-                this.loading = true
+                this.loading = true;
                 axios.get('storage/testTransactions.json', {headers: headers})
                     .then(response => {
                         this.transactions = response.data;
-                        //todo: убрать потом отсюдава таймер
-                        setTimeout(() => {
-                            this.loading = false
-                        }, 2000);
+                        this.loading = false;
                     })
                     .catch(error => {
                         console.log(error)
-                        this.error = true
-                        //todo: обработка других кодов с сервера
+                        this.error = true;
+                        this.errorInfo = 'Ошибка во время запроса данных о транзакциях';
+                        //todo: обработка кодов с сервера
                     });
+                this.loading = false;
             },
             getData() {
                 const headers = {
@@ -271,8 +289,9 @@
                             })
                     })
                     .catch(error => {
-                        console.log(error)
-                        this.error = true
+                        console.log(error);
+                        this.error = true;
+                        this.errorInfo = 'Ошибка во время запроса данных';
                         //todo: обработка других кодов с сервера
                     });
             },
@@ -316,6 +335,13 @@
                 let months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
                 let dateObj = new Date(date);
                 return days[dateObj.getDay()] + ', ' + dateObj.getDate() + ' ' + months[dateObj.getMonth()];
+            },
+            groupSumCalc(group) {
+                let sum = 0;
+                for (let i = 0; i < group.length; i++) {
+                    sum += group[i].amount;
+                }
+                return sum += ' ' + this.rub;
             }
         },
         mounted() {
@@ -334,19 +360,33 @@
         margin-top: 15px;
     }
 
-    .group-header {
-        color: #008cff;
+    .tran-group-header {
+        color: #92a226;
         font-size: x-large;
-        font-weight: 700;
+        font-weight: 600;
         padding-left: 20px;
     }
 
-    .tr-data-row {
-        font-size: x-large;
-
+    .tran-group-header-sum {
+        text-align: right;
+        color: #008ea6ed;
+        font-size: large;
+        font-weight: 700;
+        padding-right: 20px;
     }
 
-    .edit-view {
+    .tran-row-data div {
+        color: #acdaff;
+        font-size: large;
+        font-weight: 600;
+    }
+
+    .tran-comment div {
+        color: #0abda4d1;
+        font-weight: bold;
+    }
+
+    .editor {
         margin-top: 15px;
         padding-top: 5px;
         padding-bottom: 10px;
@@ -355,7 +395,7 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, .2), 0 0 6px rgba(0, 0, 0, .07);
     }
 
-    .comment {
+    .editor-comment {
         margin-top: 10px;
     }
 </style>
