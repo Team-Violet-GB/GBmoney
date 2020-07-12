@@ -20,11 +20,11 @@ export default {
   },
   computed: {
     email() {
-        return this.$store.state.email;
+        return this.$store.getters['user/user'].email;
     }
   },
   mounted() {
-      this.$store.dispatch('setUserData');
+      this.$store.dispatch('user/setUserData');
   }
 }
 </script>

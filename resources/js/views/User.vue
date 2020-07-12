@@ -77,7 +77,7 @@
                     pass: '',
                     newpass: '',
                     checkPass: '',
-                    email: this.$store.state.email,
+                    email: this.$store.getters['user/user'].email,
                 },
                 rules: {
                     pass: [
