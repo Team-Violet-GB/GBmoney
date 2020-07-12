@@ -18,21 +18,13 @@ export default {
       this.$router.push('/auth')
     }
   },
-  data() {
-    return {
-      email: '',
-  }},
+  computed: {
+    email() {
+        return this.$store.state.email;
+    }
+  },
   mounted() {
-      this.axios
-          .get('/api/getUser')
-          .then(response => {if (typeof(response.data) == 'string')
-              this.email = response.data
-          else
-              console.log('Неверные данные')
-          })
-          //Проверку на null в данном случае не делаю, т.к. если вернет null - поле останется пустым
-          .catch(error => console.log(error))
-          .finally(() => (console.log('finished')));
+      this.$store.dispatch('setUserData');
   }
 }
 </script>
