@@ -134,7 +134,7 @@
                     indexx: null,
                     data: {}
                 },
-                rules: rules.rules,
+                rules: rules,
                 showInput: false,
                 error: false,
                 errorInfo: 'Нет данных',
