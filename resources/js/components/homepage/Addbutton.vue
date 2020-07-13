@@ -48,26 +48,6 @@
 <script>
     export default {
         data() {
-            let validateName = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('Введите название'));
-                } else {
-                    if (this.name !== '') {
-                        this.$refs.ruleForm.validateField('checkPass');
-                    }
-                    callback();
-                }
-            };
-            let validateChoose = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('Выберите иконку'));
-                } else {
-                    if (this.name !== '') {
-                        this.$refs.ruleForm.validateField('checkPass');
-                    }
-                    callback();
-                }
-            };
             return {
                 dialogVisible: false,
                 ruleForm: {
@@ -128,10 +108,10 @@
                 ],
                 rules: {
                     name: [
-                        { validator: validateName, trigger: 'blur' }
+                        { required: true, message: 'Введите название', trigger: 'blur' },
                         ],
                     choose: [
-                        { validator: validateChoose, trigger: 'blur' }
+                        { required: true, message: 'Выберите картинку', trigger: 'change' },
                     ]
                 }
             };
@@ -140,7 +120,7 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        alert('submit!');
+                        alert('Форма отправлена. Название - ' + this.ruleForm.name + ', картинка - ' + this.ruleForm.choose);
                     } else {
                         console.log('error submit!!');
                         return false;
