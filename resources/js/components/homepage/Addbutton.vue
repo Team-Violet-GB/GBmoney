@@ -1,47 +1,45 @@
 <template>
-  <div class="cstm-point">
-    <div class="cstm-head-point" @click="dialogVisible = true">Добавить</div>
-      <el-button
-          type="el-icon-search"
-          icon="el-icon-plus"
-          circle
-          class="cstm-icon-point cstm-icon-point-add"
-          @click="dialogVisible = true"
-      ></el-button>
-      <el-dialog
-          :visible.sync="dialogVisible"
-          width="30%"
-          >
-          <el-form :rules="rules" :model="ruleForm" status-icon ref="ruleForm">
-              <el-form-item prop="name">
-                  <el-input placeholder="Введите название" v-model="ruleForm.name" autocomplete="off"></el-input>
-              </el-form-item>
-              <br>
-              <div align="center">
-                  <el-form-item prop="choose">
-                      <el-radio-group v-model="ruleForm.choose">
+    <div class="cstm-point">
+        <div class="cstm-head-point" @click="dialogVisible = true">Добавить</div>
+        <el-button
+            type="el-icon-search"
+            icon="el-icon-plus"
+            circle
+            class="cstm-icon-point cstm-icon-point-add"
+            @click="dialogVisible = true"
+        ></el-button>
+        <el-dialog
+            :visible.sync="dialogVisible"
+            width="30%"
+        >
+            <el-form :rules="rules" :model="ruleForm" status-icon ref="ruleForm">
+                <el-form-item prop="name">
+                    <el-input placeholder="Введите название" v-model="ruleForm.name" autocomplete="off"></el-input>
+                </el-form-item>
+                <br>
+                <div align="center">
+                    <el-form-item prop="choose">
+                        <el-radio-group v-model="ruleForm.choose">
+                            <el-radio-button
+                                class="cstm-radio-gap"
+                                :label="elem"
+                                v-for="elem in element"
+                                :key="elem"
+                            >
+                                <i :class="elem"></i>
+                            </el-radio-button>
+                        </el-radio-group>
+                    </el-form-item>
+                </div>
+                <br>
+                <el-form-item align="center">
+                    <el-button @click="dialogVisible = false">Отмена</el-button>
+                    <el-button type="primary" @click="submitForm('ruleForm')">Подтвердить</el-button>
+                </el-form-item>
 
-                          <el-radio-button
-                              class="cstm-radio-gap"
-                              :label="elem"
-                              v-for="elem in element"
-                              :key="elem"
-                          >
-                              <i :class="elem"></i>
-                          </el-radio-button>
-
-                      </el-radio-group>
-                  </el-form-item>
-              </div>
-              <br>
-              <el-form-item align="center">
-                  <el-button @click="dialogVisible = false">Отмена</el-button>
-                  <el-button type="primary" @click="submitForm('ruleForm')">Подтвердить</el-button>
-              </el-form-item>
-
-          </el-form>
-      </el-dialog>
-  </div>
+            </el-form>
+        </el-dialog>
+    </div>
 </template>
 
 
@@ -51,8 +49,8 @@
             return {
                 dialogVisible: false,
                 ruleForm: {
-                  name: '',
-                  choose: ''
+                    name: '',
+                    choose: ''
                 },
                 element: [
                     'el-icon-phone-outline',
@@ -108,10 +106,10 @@
                 ],
                 rules: {
                     name: [
-                        { required: true, message: 'Введите название', trigger: 'blur' },
-                        ],
+                        {required: true, message: 'Введите название', trigger: 'blur'},
+                    ],
                     choose: [
-                        { required: true, message: 'Выберите картинку', trigger: 'change' },
+                        {required: true, message: 'Выберите картинку', trigger: 'change'},
                     ]
                 }
             };
@@ -121,19 +119,13 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         alert('Форма отправлена. Название - ' + this.ruleForm.name + ', картинка - ' + this.ruleForm.choose);
+                        this.dialogVisible = false;
                     } else {
                         console.log('error submit!!');
                         return false;
                     }
                 });
             },
-              // if (this.name) {
-              //     alert('Название ' + this.name + ' выбрана картинка ' + this.choose );
-              //     this.dialogVisible = false
-              // } else {
-              //     alert('Введите название')
-              // }
-
         }
     };
 </script>
@@ -141,40 +133,40 @@
 <style scoped>
 
 
-.cstm-point {
-  margin-bottom: 10px;
-  flex-basis: 15%;
-  position: relative;
-  margin-right: 0.72%;
-  margin-left: 0.72%;
-}
+    .cstm-point {
+        margin-bottom: 10px;
+        flex-basis: 15%;
+        position: relative;
+        margin-right: 0.72%;
+        margin-left: 0.72%;
+    }
 
-.cstm-head-point {
-  color: #ffffff;
-  text-align: center;
-  padding-bottom: 4px;
-  font-weight: 300;
-}
+    .cstm-head-point {
+        color: #ffffff;
+        text-align: center;
+        padding-bottom: 4px;
+        font-weight: 300;
+    }
 
-.cstm-icon-point {
-  font-size: 50px;
-  position: relative;
-  left: 50%;
-  transform: translate(-50%, 0);
-  cursor: grab;
-}
+    .cstm-icon-point {
+        font-size: 50px;
+        position: relative;
+        left: 50%;
+        transform: translate(-50%, 0);
+        cursor: grab;
+    }
 
-.cstm-icon-point-add {
-  background-color: #3d3e48;
-  color: #ffffff;
-}
+    .cstm-icon-point-add {
+        background-color: #3d3e48;
+        color: #ffffff;
+    }
 
-.cstm-radio-gap {
-    margin: 2px;
-    border-left: 1px solid #e6e6e6;
-}
+    .cstm-radio-gap {
+        margin: 2px;
+        border-left: 1px solid #e6e6e6;
+    }
 
-.cstm-radio-gap:first-child {
-    border-left: none;
-}
+    .cstm-radio-gap:first-child {
+        border-left: none;
+    }
 </style>
