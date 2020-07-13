@@ -13,6 +13,7 @@
             width="40%"
         >
             <el-form :rules="rules" :model="ruleForm" status-icon ref="ruleForm">
+                <span class="cstm-header">Добавление карточки</span>
                 <el-form-item prop="name">
                     <el-input placeholder="Введите название" v-model="ruleForm.name" autocomplete="off"></el-input>
                 </el-form-item>
@@ -39,7 +40,7 @@
                                 v-for="elem in element"
                                 :key="elem"
                             >
-                                <i :class="elem"></i>
+                                <i :class="elem" class="cstm-icon-size"></i>
                             </el-radio-button>
                         </el-radio-group>
                     </el-form-item>
@@ -63,6 +64,7 @@
             return {
                 dialogVisible: false,
                 ruleForm: {
+                    category: this.category,
                     name: '',
                     choose: '',
                     balance: true,
@@ -134,7 +136,18 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        alert('Форма отправлена. Название - ' + this.ruleForm.name + ', картинка - ' + this.ruleForm.choose + ', выбрана категория - ' + this.$props['category']);
+                        alert(
+                            'Форма отправлена. Название - '
+                            + this.ruleForm.name
+                            + ', картинка - '
+                            + this.ruleForm.choose
+                            + ', выбрана категория - '
+                            + this.ruleForm.category
+                            + ', учитывать в балансе - '
+                            + this.ruleForm.balance
+                            + ', планирую потратить - '
+                            + this.ruleForm.amount
+                        );
                         this.dialogVisible = false;
                     } else {
                         console.log('error submit!!');
@@ -147,7 +160,13 @@
 </script>
 
 <style scoped>
-
+    .cstm-header {
+        display: block;
+        font-size: 25px;
+        color: #ffffff;
+        margin-bottom: 10px;
+        text-align: center;
+    }
 
     .cstm-point {
         margin-bottom: 10px;
@@ -199,5 +218,9 @@
         display: block;
         margin-bottom: 10px;
         color: #ffffff;
+    }
+
+    .cstm-icon-size {
+        font-size: 30px;
     }
 </style>
