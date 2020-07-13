@@ -10,11 +10,20 @@
         ></el-button>
         <el-dialog
             :visible.sync="dialogVisible"
-            width="35%"
+            width="40%"
         >
             <el-form :rules="rules" :model="ruleForm" status-icon ref="ruleForm">
                 <el-form-item prop="name">
                     <el-input placeholder="Введите название" v-model="ruleForm.name" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item prop="category">
+                    <el-select v-model="category">
+                        <el-option label="Доход" value="Доход" style="color: #ffffff"></el-option>
+                        <el-option label="Счета" value="Счета" style="color: #ffffff"></el-option>
+                        <el-option label="Расход" value="Расход" style="color: #ffffff"></el-option>
+                    </el-select>
+                    <el-switch v-if="(category === 'Счета')" v-model="ruleForm.balance" class="cstm-switch-margin"></el-switch>
+                        <span v-if="(category === 'Счета')" class="cstm-switch-text">Учитывать в общем балансе</span>
                 </el-form-item>
                 <br>
                 <div align="center">
@@ -51,7 +60,8 @@
                 dialogVisible: false,
                 ruleForm: {
                     name: '',
-                    choose: ''
+                    choose: '',
+                    balance: true
                 },
                 element: [
                     'el-icon-phone-outline',
@@ -169,5 +179,14 @@
 
     .cstm-radio-gap:first-child {
         border-left: none;
+    }
+
+    .cstm-switch-margin {
+        margin-left: 15px;
+    }
+
+    .cstm-switch-text {
+        margin-left: 15px;
+        color: #ffffff;
     }
 </style>
