@@ -136,6 +136,7 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+                        this.isBalance();
                         alert(
                             'Форма отправлена. Название - '
                             + this.ruleForm.name
@@ -155,7 +156,11 @@
                     }
                 });
             },
-        }
+            isBalance: function () {
+                if (this.ruleForm.category !== 'Счета')
+                    this.ruleForm.balance = true
+            }
+        },
     };
 </script>
 
