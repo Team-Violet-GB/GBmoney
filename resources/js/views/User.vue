@@ -77,8 +77,7 @@
                     pass: '',
                     newpass: '',
                     checkPass: '',
-                    email: 'money@gb.ru', //TODO вставка имейла текущего пользователя,
-                    name: 'Money' //TODO вставка name текущего пользователя,
+                    email: this.$store.getters['user/user'].email,
                 },
                 rules: {
                     pass: [
@@ -93,9 +92,6 @@
                     email: [
                         {validator: checkEmail, trigger: 'blur'}
                     ],
-                    name: [
-                        {validator: checkName, trigger: 'blur'}
-                    ]
                 },
             };
         },
@@ -109,7 +105,7 @@
                         return false;
                     }
                 });
-            }
+            },
         }
     }
 </script>

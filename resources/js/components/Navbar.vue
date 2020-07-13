@@ -7,7 +7,7 @@
         <el-dropdown-item @click="logout"><span>Выйти</span></el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
-    <span>money@gb.ru</span>
+    <span>{{ email }}</span>
   </el-header>
 </template>
 
@@ -17,6 +17,14 @@ export default {
     logout() {
       this.$router.push('/auth')
     }
+  },
+  computed: {
+    email() {
+        return this.$store.getters['user/user'].email;
+    }
+  },
+  mounted() {
+      this.$store.dispatch('user/setUserData');
   }
 }
 </script>
