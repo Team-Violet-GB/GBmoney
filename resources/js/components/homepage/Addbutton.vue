@@ -25,6 +25,10 @@
                     <el-switch v-if="(category === 'Счета')" v-model="ruleForm.balance" class="cstm-switch-margin"></el-switch>
                         <span v-if="(category === 'Счета')" class="cstm-switch-text">Учитывать в общем балансе</span>
                 </el-form-item>
+                <span v-if="(category === 'Расход')" class="cstm-amount">Планирую потратить</span>
+                <el-form-item v-if="(category === 'Расход')">
+                    <el-input-number v-model="ruleForm.amount" :min="ruleForm.amount" :step="500"></el-input-number>
+                </el-form-item>
                 <br>
                 <div align="center">
                     <el-form-item prop="choose">
@@ -61,7 +65,8 @@
                 ruleForm: {
                     name: '',
                     choose: '',
-                    balance: true
+                    balance: true,
+                    amount: 0
                 },
                 element: [
                     'el-icon-phone-outline',
@@ -187,6 +192,12 @@
 
     .cstm-switch-text {
         margin-left: 15px;
+        color: #ffffff;
+    }
+
+    .cstm-amount {
+        display: block;
+        margin-bottom: 10px;
         color: #ffffff;
     }
 </style>

@@ -33,7 +33,7 @@
           <div class="cstm-money-point cstm-blue">{{ point.money }} &#8381;</div>
           <i class="el-icon-edit cstm-edit"></i>
         </div>
-        <Addbutton :key="'add'" category="Доходы"/>
+        <Addbutton :key="'add'" category="Доход"/>
       </transition-group>
     </div>
     <!-- СЧЕТА -->
@@ -101,7 +101,7 @@
           <div class="cstm-plan">{{ point.plan }} &#8381;</div>
           <i class="el-icon-edit cstm-edit"></i>
         </div>
-        <Addbutton :key="'add'" category="Расходы"/>
+        <Addbutton :key="'add'" category="Расход"/>
       </transition-group>
     </div>
   </div>
