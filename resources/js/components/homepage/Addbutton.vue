@@ -9,30 +9,37 @@
           @click="dialogVisible = true"
       ></el-button>
       <el-dialog
-          title="Добавить"
           :visible.sync="dialogVisible"
           width="30%"
           >
-          <el-input placeholder="Введите название" v-model="name"></el-input>
-          <br><br>
-          <div align="center">
-              <el-radio-group v-model="choose">
+          <el-form :rules="rules" :model="ruleForm" status-icon ref="ruleForm">
+              <el-form-item prop="name">
+                  <el-input placeholder="Введите название" v-model="ruleForm.name" autocomplete="off"></el-input>
+              </el-form-item>
+              <br>
+              <div align="center">
+                  <el-form-item prop="choose">
+                      <el-radio-group v-model="ruleForm.choose">
 
-                  <el-radio-button
-                      class="cstm-radio-gap"
-                      :label="elem"
-                      v-for="elem in element"
-                      :key="elem"
-                  >
-                      <i :class="elem"></i>
-                  </el-radio-button>
+                          <el-radio-button
+                              class="cstm-radio-gap"
+                              :label="elem"
+                              v-for="elem in element"
+                              :key="elem"
+                          >
+                              <i :class="elem"></i>
+                          </el-radio-button>
 
-              </el-radio-group>
-          </div>
-          <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible = false">Отмена</el-button>
-            <el-button type="primary" @click="[dialogVisible = false, send()]">Подтвердить</el-button>
-          </span>
+                      </el-radio-group>
+                  </el-form-item>
+              </div>
+              <br>
+              <el-form-item align="center">
+                  <el-button @click="dialogVisible = false">Отмена</el-button>
+                  <el-button type="primary" @click="submitForm('ruleForm')">Подтвердить</el-button>
+              </el-form-item>
+
+          </el-form>
       </el-dialog>
   </div>
 </template>
@@ -41,9 +48,32 @@
 <script>
     export default {
         data() {
+            let validateName = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('Введите название'));
+                } else {
+                    if (this.name !== '') {
+                        this.$refs.ruleForm.validateField('checkPass');
+                    }
+                    callback();
+                }
+            };
+            let validateChoose = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('Выберите иконку'));
+                } else {
+                    if (this.name !== '') {
+                        this.$refs.ruleForm.validateField('checkPass');
+                    }
+                    callback();
+                }
+            };
             return {
                 dialogVisible: false,
-                name: '',
+                ruleForm: {
+                  name: '',
+                  choose: ''
+                },
                 element: [
                     'el-icon-phone-outline',
                     'el-icon-star-off',
@@ -96,21 +126,41 @@
                     'el-icon-coffee',
                     'el-icon-ice-tea'
                 ],
-                choose: ''
+                rules: {
+                    name: [
+                        { validator: validateName, trigger: 'blur' }
+                        ],
+                    choose: [
+                        { validator: validateChoose, trigger: 'blur' }
+                    ]
+                }
             };
         },
         methods: {
-            send () {
-              alert('Название ' + this.name + ' выбрана картинка ' + this.choose )
+            submitForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        alert('submit!');
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
             },
-            renderImage(className) {
-                return `<i class="${className}"></i>`
-            }
+              // if (this.name) {
+              //     alert('Название ' + this.name + ' выбрана картинка ' + this.choose );
+              //     this.dialogVisible = false
+              // } else {
+              //     alert('Введите название')
+              // }
+
         }
     };
 </script>
 
 <style scoped>
+
+
 .cstm-point {
   margin-bottom: 10px;
   flex-basis: 15%;
