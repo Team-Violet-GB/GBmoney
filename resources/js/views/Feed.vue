@@ -22,17 +22,19 @@
 
             <!--            список транзакций в группе-->
             <el-card v-for="(transaction, indexx) in transactionsGroup" :key="indexx" class="box-card">
-                <el-row type="flex" align="middle">
+                <el-row type="flex" justify="center">
                     <el-col :span="18">
                         <el-row :gutter="10" class="tran-row-data">
                             <el-col :span="8">
-                                <!--                                <div>{{ fromCalc(transaction) }}</div>-->
+                                <div v-if="transaction['type_id'] === 1">{{ incomes[transaction.income_id].name }}</div>
+                                <div v-else>{{ wallets[transaction.wallet_id_from].name }}</div>
                             </el-col>
                             <el-col :span="8">
                                 <div>{{ transaction.amount }} {{ rub }}</div>
                             </el-col>
                             <el-col :span="8">
-                                <!--                                <div>{{ toCalc(transaction) }}</div>-->
+                                <div v-if="transaction['type_id'] === 2">{{ expenses[transaction.tag_id].name }}</div>
+                                <div v-else>{{ wallets[transaction.wallet_id_to].name }}</div>
                             </el-col>
                         </el-row>
                         <el-row class="editor-comment">
@@ -62,8 +64,8 @@
                 <!--                редактор транзакции-->
                 <el-collapse-transition>
                     <div v-if="transaction.id === editor.data.id" v-show="showInput" class="editor">
-                        <el-form :model="editor.data" ref="editorForm" :rules="rules" label-position="top"
-                                 label-width=" 90px" size="small">
+                        <el-form :model="editor.data" ref="editorForm" :rules="rules" label-position="right"
+                                 label-width=" 70px" size="small">
                             <el-row :gutter="20" type="flex" justify="space-between">
                                 <el-col :span="6">
                                     <el-form-item prop="date" label="когда">
@@ -117,12 +119,10 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <div class="editor-input">
                                     <el-form-item prop="amount" label="сколько">
                                         <el-input clearable v-model.number="editor.data.amount"
                                                   style="font-size: 1em;"></el-input>
                                     </el-form-item>
-                                    </div>
                                 </el-col>
                             </el-row>
                             <el-row>
@@ -138,22 +138,22 @@
             </el-card>
         </el-card>
 
-<!--        Пагинация-->
+        <!--        Пагинация-->
         <div class="pagination block">
-             <el-pagination
-                 background
-                 :page-size="20"
-                 :pager-count="11"
-                 :total="1000"
-                 hide-on-single-page
-                 layout="prev, pager, next">
-             </el-pagination>
+            <el-pagination
+                background
+                :page-size="20"
+                :pager-count="11"
+                :total="1000"
+                hide-on-single-page
+                layout="prev, pager, next">
+            </el-pagination>
         </div>
     </div>
 </template>
 
 <script>
-    import constants from '../constants';
+    // import constants from '../constants';
     import rules from '../components/feed/feedValidationRules';
 
     export default {
@@ -189,48 +189,6 @@
                 this.editor.indexx = indexx;
                 this.editor.data = Object.assign({}, this.transactions[index][indexx]);
             },
-            fromCalc(tran) {
-                switch (tran.type_id) {
-                    case constants.FROM_INCOMES:
-                        if (tran.income_id != null) {
-                            return this.incomes[tran.income_id].name;
-                        }
-                        break;
-                    case constants.TRANSFER:
-                        if (tran.wallet_id_from != null) {
-                            return this.wallets[tran.wallet_id_from].name;
-                        }
-                        break;
-                    case constants.FROM_WALLET:
-                        if (tran.wallet_id_from != null) {
-                            return this.wallets[tran.wallet_id_from].name;
-                        }
-                        break;
-                    default:
-                        return 'нет данных';
-                }
-            },
-            toCalc(tran) {
-                switch (tran.type_id) {
-                    case constants.FROM_INCOMES:
-                        if (tran.wallet_id_to != null) {
-                            return this.wallets[tran.wallet_id_to].name;
-                        }
-                        break;
-                    case constants.TRANSFER:
-                        if (tran.wallet_id_to != null) {
-                            return this.wallets[tran.wallet_id_to].name;
-                        }
-                        break;
-                    case constants.FROM_WALLET:
-                        if (tran.tag_id != null) {
-                            return this.expenses[tran.tag_id].name;
-                        }
-                        break;
-                    default:
-                        return 'нет данных';
-                }
-            },
             updateTransaction(formName) {
                 // для теста, убрать потом
                 this.transactions[this.editor.index][this.editor.indexx] = Object.assign({}, this.editor.data);
@@ -265,12 +223,12 @@
                 //     });
                 // this.loading = false;
             },
-            getTransactions() {
+            async getTransactions() {
                 const headers = {
                     'Content-Type': 'application/json'
                 }
                 this.loading = true;
-                axios.get('storage/testTransactions.json', {headers: headers})
+                await axios.get('storage/testTransactions.json', {headers: headers})
                     .then(response => {
                         this.transactions = response.data;
                         this.loading = false;
@@ -283,11 +241,11 @@
                     });
                 this.loading = false;
             },
-            getData() {
+            async getData() {
                 const headers = {
                     'Content-Type': 'application/json'
                 }
-                axios.get('storage/testWallets.json', {headers: headers})
+                await axios.get('storage/testWallets.json', {headers: headers})
                     .then(response => {
                         this.wallets = response.data;
                         axios.get('storage/testIncomes.json', {headers: headers})
@@ -359,9 +317,9 @@
                 return sum += ' ' + this.rub;
             }
         },
-        mounted() {
-            this.getData();
-            this.getTransactions();
+        async mounted() {
+            await this.getData();
+            await this.getTransactions();
         }
     }
 </script>
@@ -415,10 +373,6 @@
         padding-right: 17px;
         padding-left: 17px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, .2), 0 0 6px rgba(0, 0, 0, .07);
-    }
-
-    .editor-input {
-       color: #ffed4a;
     }
 
     .editor-comment {
