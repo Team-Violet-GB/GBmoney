@@ -26,14 +26,14 @@
                     <el-col :span="18">
                         <el-row :gutter="10" class="tran-row-data">
                             <el-col :span="8">
-                                <div v-if="transaction['type_id'] === 1">{{ incomes[transaction.income_id].name }}</div>
+                                <div v-if="transaction['type_id'] === constants.FROM_INCOME">{{ incomes[transaction.income_id].name }}</div>
                                 <div v-else>{{ wallets[transaction.wallet_id_from].name }}</div>
                             </el-col>
                             <el-col :span="8">
                                 <div>{{ transaction.amount }} {{ rub }}</div>
                             </el-col>
                             <el-col :span="8">
-                                <div v-if="transaction['type_id'] === 2">{{ expenses[transaction.tag_id].name }}</div>
+                                <div v-if="transaction['type_id'] === constants.FROM_WALLET">{{ expenses[transaction.tag_id].name }}</div>
                                 <div v-else>{{ wallets[transaction.wallet_id_to].name }}</div>
                             </el-col>
                         </el-row>
@@ -51,7 +51,7 @@
                                 <el-button v-if="showInput && transaction.id === editor.data.id"
                                            type="success" @click="updateTransaction('editorForm')" size="mini"
                                            icon="el-icon-check"></el-button>
-                                <el-button v-else @click="showEditForm(index, indexx)"
+                                <el-button v-else @click="editTransaction(index, indexx)"
                                            type="primary" size="mini" icon="el-icon-edit"></el-button>
                                 <el-button v-if="showInput && transaction.id === editor.data.id"
                                            @click="deleteTransaction(transaction.id)"
@@ -77,7 +77,7 @@
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="откуда">
-                                        <el-select prop="from" filterable v-if="transaction.type_id === 1"
+                                        <el-select prop="from" filterable v-if="transaction.type_id === constants.FROM_INCOME"
                                                    v-model="editor.data.income_id">
                                             <el-option v-for="income in incomes" :key="income.id" :label="income.name"
                                                        :value="income.id">
@@ -93,23 +93,23 @@
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="куда">
-                                        <el-select prop="to" filterable v-if="transaction.type_id === 1"
+                                        <el-select prop="to" filterable v-if="transaction.type_id === constants.FROM_INCOME"
                                                    v-model="editor.data.wallet_id_to">
                                             <el-option v-for="wallet in wallets" :key="wallet.id"
                                                        :label="wallet.name" :value="wallet.id"
                                                        style="width: 100%">
                                             </el-option>
                                         </el-select>
-                                        <el-select prop="to" filterable v-if="transaction.type_id === 2"
+                                        <el-select prop="to" filterable v-if="transaction.type_id === constants.FROM_WALLET"
                                                    v-model="editor.data.tag_id">
                                             <el-option v-for="expense in expenses" :key="expense.id"
                                                        :label="expense.name" :value="expense.id">
                                                 <span style="float: left">{{ expense.name }}</span>
-                                                <span style="float: right; color: #536e8e; font-size: 10px">
+                                                <span style="float: right; color: #666666; font-size: 1em">
                                             {{ expensesCategory[expense.expense_id].name }}</span>
                                             </el-option>
                                         </el-select>
-                                        <el-select prop="to" filterable v-if="transaction.type_id === 3"
+                                        <el-select prop="to" filterable v-if="transaction.type_id === constants.TRANSFER"
                                                    v-model="editor.data.wallet_id_to">
                                             <el-option v-for="wallet in wallets" :key="wallet.id"
                                                        :label="wallet.name"
@@ -153,8 +153,9 @@
 </template>
 
 <script>
-    // import constants from '../constants';
+    import constants from '../components/feed/constants';
     import rules from '../components/feed/feedValidationRules';
+    import 'element-theme-dark'
 
     export default {
         data() {
@@ -164,6 +165,7 @@
                     indexx: null,
                     data: {}
                 },
+                constants: constants,
                 rules: rules,
                 loading: false,
                 showInput: false,
@@ -172,7 +174,6 @@
                 transactions: {},
                 wallets: {},
                 incomes: {},
-                allIncomes: {},
                 expensesCategory: {},
                 expenses: {},
             };
@@ -183,17 +184,17 @@
             }
         },
         methods: {
-            showEditForm(index, indexx) {
+            editTransaction(index, indexx) {
                 this.showInput = true
                 this.editor.index = index;
                 this.editor.indexx = indexx;
                 this.editor.data = Object.assign({}, this.transactions[index][indexx]);
             },
             updateTransaction(formName) {
-                // для теста, убрать потом
-                this.transactions[this.editor.index][this.editor.indexx] = Object.assign({}, this.editor.data);
                 this.$refs[formName][0].validate((valid) => {
                     if (valid) {
+                        // для теста, убрать потом
+                        this.transactions[this.editor.index][this.editor.indexx] = Object.assign({}, this.editor.data);
                         this.$message({
                             showClose: true,
                             dangerouslyUseHTMLString: true,
@@ -248,18 +249,39 @@
                 await axios.get('storage/testWallets.json', {headers: headers})
                     .then(response => {
                         this.wallets = response.data;
-                        axios.get('storage/testIncomes.json', {headers: headers})
-                            .then(response => {
-                                this.incomes = response.data;
-                                axios.get('storage/testExpensesCategory.json', {headers: headers})
-                                    .then(response => {
-                                        this.expensesCategory = response.data;
-                                        axios.get('storage/testExpenses.json', {headers: headers})
-                                            .then(response => {
-                                                this.expenses = response.data;
-                                            })
-                                    })
-                            })
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        this.error = true;
+                        this.errorInfo = 'Ошибка во время запроса данных';
+                        //todo: обработка других кодов с сервера
+                    });
+
+                axios.get('storage/testIncomes.json', {headers: headers})
+                    .then(response => {
+                        this.incomes = response.data;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        this.error = true;
+                        this.errorInfo = 'Ошибка во время запроса данных';
+                        //todo: обработка других кодов с сервера
+                    });
+
+                axios.get('storage/testExpensesCategory.json', {headers: headers})
+                    .then(response => {
+                        this.expensesCategory = response.data;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        this.error = true;
+                        this.errorInfo = 'Ошибка во время запроса данных';
+                        //todo: обработка других кодов с сервера
+                    });
+
+                axios.get('storage/testExpenses.json', {headers: headers})
+                    .then(response => {
+                        this.expenses = response.data;
                     })
                     .catch(error => {
                         console.log(error);
