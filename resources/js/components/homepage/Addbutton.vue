@@ -10,7 +10,7 @@
         ></el-button>
         <el-dialog
             :visible.sync="dialogVisible"
-            width="30%"
+            width="35%"
         >
             <el-form :rules="rules" :model="ruleForm" status-icon ref="ruleForm">
                 <el-form-item prop="name">
@@ -45,6 +45,7 @@
 
 <script>
     export default {
+        props: ['category'],
         data() {
             return {
                 dialogVisible: false,
@@ -118,7 +119,7 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        alert('Форма отправлена. Название - ' + this.ruleForm.name + ', картинка - ' + this.ruleForm.choose);
+                        alert('Форма отправлена. Название - ' + this.ruleForm.name + ', картинка - ' + this.ruleForm.choose + ', выбрана категория - ' + this.$props['category']);
                         this.dialogVisible = false;
                     } else {
                         console.log('error submit!!');

@@ -6,7 +6,7 @@
       :incomesData="incomes"
       :walletsData="wallets"
       :expensesData="expenses"
-      @closeCreateWindow="transactionData.state_window = false"  
+      @closeCreateWindow="transactionData.state_window = false"
     />
     <!-- ДОХОДЫ -->
     <div class="cstm-box-card">
@@ -33,7 +33,7 @@
           <div class="cstm-money-point cstm-blue">{{ point.money }} &#8381;</div>
           <i class="el-icon-edit cstm-edit"></i>
         </div>
-        <Addbutton :key="'add'" />
+        <Addbutton :key="'add'" category="Доходы"/>
       </transition-group>
     </div>
     <!-- СЧЕТА -->
@@ -64,7 +64,7 @@
           <div class="cstm-money-point cstm-yellow">{{ point.money }} &#8381;</div>
           <i class="el-icon-edit cstm-edit"></i>
         </div>
-        <Addbutton :key="'add'" />
+        <Addbutton :key="'add'" category="Счета"/>
       </transition-group>
     </div>
     <!-- Расходы -->
@@ -101,7 +101,7 @@
           <div class="cstm-plan">{{ point.plan }} &#8381;</div>
           <i class="el-icon-edit cstm-edit"></i>
         </div>
-        <Addbutton :key="'add'" />
+        <Addbutton :key="'add'" category="Расходы"/>
       </transition-group>
     </div>
   </div>
@@ -159,20 +159,20 @@ export default {
         if ((fromID == toID) && (event.data.type == 'wallet')) {
           return
         }
-        this.transactionData = { 
+        this.transactionData = {
           state_window: true,
-          fromID: fromID, 
-          toID: toID, 
-          fromType: event.data.type, 
+          fromID: fromID,
+          toID: toID,
+          fromType: event.data.type,
           toType: 'wallet',
           }
     },
     transactionExpense (event) {
-      this.transactionData = { 
-        state_window: true, 
-        fromID: Number(event.data.id), 
-        toID: Number(event.top.$el.parentElement.id), 
-        fromType: event.data.type, 
+      this.transactionData = {
+        state_window: true,
+        fromID: Number(event.data.id),
+        toID: Number(event.top.$el.parentElement.id),
+        fromType: event.data.type,
         toType: 'expense',
         }
     },
@@ -331,7 +331,7 @@ export default {
   filter: brightness(130%);
   transition: 0.15s;
 }
-  
+
 /* элементы, НЕдоступные для транзакции */
 .drop-forbidden button {
   filter: brightness(60%);
