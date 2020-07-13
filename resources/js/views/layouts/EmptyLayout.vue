@@ -1,7 +1,6 @@
 <template>
   <div>
     <el-container class="cstm-container">
-      <Sidebar />
       <el-container class="is-vertical">
         <Navbar />
         <el-main class="cstm-main">
@@ -14,12 +13,12 @@
 
 <script>
 import Navbar from '../../components/Navbar'
-import Sidebar from '../../components/Sidebar'
 
 export default {
-  name: 'main-layout',
+  name: 'empty-layout',
   components: {
-    Navbar, Sidebar
+    Navbar
   }
 }
 </script>
+
