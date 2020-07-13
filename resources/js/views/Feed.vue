@@ -257,7 +257,7 @@
                         //todo: обработка других кодов с сервера
                     });
 
-                axios.get('storage/testIncomes.json', {headers: headers})
+                await axios.get('storage/testIncomes.json', {headers: headers})
                     .then(response => {
                         this.incomes = response.data;
                     })
@@ -268,7 +268,7 @@
                         //todo: обработка других кодов с сервера
                     });
 
-                axios.get('storage/testExpensesCategory.json', {headers: headers})
+                await axios.get('storage/testExpensesCategory.json', {headers: headers})
                     .then(response => {
                         this.expensesCategory = response.data;
                     })
@@ -279,7 +279,7 @@
                         //todo: обработка других кодов с сервера
                     });
 
-                axios.get('storage/testExpenses.json', {headers: headers})
+                await axios.get('storage/testExpenses.json', {headers: headers})
                     .then(response => {
                         this.expenses = response.data;
                     })
@@ -289,6 +289,7 @@
                         this.errorInfo = 'Ошибка во время запроса данных';
                         //todo: обработка других кодов с сервера
                     });
+
             },
             deleteTransaction() {
                 this.$confirm('Подтверждение удаления транзакции', 'Внимание!', {
