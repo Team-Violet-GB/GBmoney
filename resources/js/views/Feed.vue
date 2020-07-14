@@ -12,10 +12,10 @@
                  v-loading="loading" element-loading-text="Загрузка..." element-loading-spinner="el-icon"
                  element-loading-background="rgba(0, 0, 0, 0.8)" class="box-card">
             <el-row :gutter="10" slot="header" class="clearfix tran-group-header">
-                <el-col :span="6">
+                <el-col :span="14">
                     <div>{{ getLocalDateString(transactionsGroup[0]['date']) }}</div>
                 </el-col>
-                <el-col :span="6" :offset="12">
+                <el-col :span="10" >
                     <div class="tran-group-header-sum">{{ groupSumCalc(transactionsGroup) }}</div>
                 </el-col>
             </el-row>
