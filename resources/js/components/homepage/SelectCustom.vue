@@ -1,5 +1,5 @@
 <template>
-  <el-select v-model="selectedID" placeholder="Категория" @change="$emit('changeSelect', Number(selectedID))">
+  <el-select v-model="selectedID" placeholder="Подкатегория" @change="$emit('changeSelect', Number(selectedID))">
     <el-option
       v-for="item in poinList"
       :key="item.id"

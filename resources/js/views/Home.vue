@@ -2,11 +2,7 @@
   <div>
     <!-- Модальное окно  -->
     <CreateTransaction
-      :transactionData="transactionData"
-      :incomesData="incomes"
-      :walletsData="wallets"
-      :expensesData="expenses"
-      @closeCreateWindow="transactionData.state_window = false"  
+      @closeCreateWindow="transaction.state_window = false"  
     />
     <!-- ДОХОДЫ -->
     <div class="cstm-box-card">
@@ -106,112 +102,97 @@
     </div>
   </div>
 </template>
-
 <script>
-import { Drag, Drop } from "vue-easy-dnd";
-import Addbutton from "../components/homepage/Addbutton";
-import CreateTransaction from "../components/homepage/CreateTransaction";
+    import { Drag, Drop } from "vue-easy-dnd"
+    import { mapGetters, mapActions, mapMutations } from "vuex"
+    import Addbutton from "../components/homepage/Addbutton"
+    import CreateTransaction from "../components/homepage/CreateTransaction"
 
-export default {
-  name: "App",
-  components: {
-    Drag,
-    Drop,
-    Addbutton,
-    CreateTransaction,
-  },
-  data() {
-    return {
-       transactionData: { state_window: false },
-      incomes: [
-        { id: 1, name: "Зарплата", icon: "el-icon-money", money: 20000 },
-        { id: 2, name: "Депозит", icon: "el-icon-s-data", money: 1000 },
-        { id: 3, name: "Кэшбэк", icon: "el-icon-coin", money: 500 },
-        { id: 4, name: "Подарки", icon: "el-icon-present", money: 5000 }
-      ],
-      wallets: [
-        { id: 1, name: "Наличные", icon: "el-icon-wallet", money: 20000 },
-        { id: 2, name: "Карта Такая", icon: "el-icon-bank-card", money: 15000 },
-        { id: 3, name: "Карта Сякая", icon: "el-icon-bank-card", money: 100000 }
-      ],
-      expenses: [
-        { id: 1, name: "Бензин", icon: "el-icon-tableware", money: 20000, plan: 5000 },
-        { id: 2, name: "Еда", icon: "el-icon-truck", money: 15000, plan: 5000 },
-        { id: 3, name: "Связь", icon: "el-icon-present", money: 5000, plan: 5000  },
-        { id: 4, name: "Развлечения", icon: "el-icon-tableware", money: 5000, plan: 5000 },
-        { id: 5, name: "Вещи", icon: "el-icon-truck", money: 4000, plan: 5000 },
-        { id: 6, name: "Автомобиль", icon: "el-icon-present", money: 1000, plan: 5000 },
-        { id: 7, name: "Дорога", icon: "el-icon-tableware", money: 500, plan: 5000 },
-        { id: 8, name: "Ребенок", icon: "el-icon-truck", money: 300, plan: 5000 },
-        { id: 9, name: "Другое", icon: "el-icon-present", money: 3300, plan: 5000 },
-        { id: 10, name: "Здоровье", icon: "el-icon-tableware", money: 15000, plan: 5000 },
-        { id: 11, name: "Ипотека", icon: "el-icon-truck", money: 4500, plan: 5000 },
-        { id: 12, name: "Квартира", icon: "el-icon-present", money: 6000, plan: 5000 },
-        { id: 13, name: "Учеба", icon: "el-icon-tableware", money: 15000, plan: 5000 },
-      ],
+    export default {
+        name: "App",
+        components: {
+            Drag,
+            Drop,
+            Addbutton,
+            CreateTransaction,
+        },
+        computed: {
+          ...mapGetters([
+              'incomes',
+              'wallets',
+              'expenses',
+              'transaction'
+              ]),
+        },
+
+        mounted() {
+            this.fetchIncomes()
+            this.fetchWallets()
+            this.fetchExpenses()
+        },
+
+        methods: {
+            ...mapActions([
+              'fetchIncomes',
+              'fetchWallets',
+              'fetchExpenses',
+            ]),
+            ...mapMutations([
+              'createTransaction'
+            ]),
+
+            transactionWallet (event) {
+                let fromID = Number(event.data.id)
+                let toID = Number(event.top.$el.parentElement.id)
+                if ((fromID == toID) && (event.data.type == 'wallet')) {
+                    return
+                }
+                this.createTransaction({
+                    state_window: true,
+                    fromID: fromID,
+                    toID: toID,
+                    fromType: event.data.type,
+                    toType: 'wallet',
+                })
+            },
+            transactionExpense (event) {
+                this.createTransaction({
+                    state_window: true,
+                    fromID: Number(event.data.id),
+                    toID: Number(event.top.$el.parentElement.id),
+                    fromType: event.data.type,
+                    toType: 'expense',
+                })
+            },
+        },
     };
-  },
-
-  methods: {
-    transactionWallet (event) {
-        let fromID = Number(event.data.id)
-        let toID = Number(event.top.$el.parentElement.id)
-        if ((fromID == toID) && (event.data.type == 'wallet')) {
-          return
-        }
-        this.transactionData = { 
-          state_window: true,
-          fromID: fromID, 
-          toID: toID, 
-          fromType: event.data.type, 
-          toType: 'wallet',
-          }
-    },
-    transactionExpense (event) {
-      this.transactionData = { 
-        state_window: true, 
-        fromID: Number(event.data.id), 
-        toID: Number(event.top.$el.parentElement.id), 
-        fromType: event.data.type, 
-        toType: 'expense',
-        }
-    },
-  },
-};
 </script>
 
 <style lang="scss" scoped>
-
 %cstm-color-background-body {
   background-color: #3d3e48;
 }
-
 %cstm-color-background-header {
   background-color: #5f6068;
 }
-
 %cstm-color-text {
   color: #ffffff;
 }
-
 .cstm-box-card {
   border-radius: 0%;
   border: none;
   margin-bottom: 30px;
 }
-
 .cstm-header-card {
   @extend %cstm-color-background-header;
   padding: 10px 30px;
 }
-
 .cstm-body-card {
   padding: 10px;
   display: flex;
   flex-wrap: wrap;
   @extend %cstm-color-background-body;
 }
-
 .cstm-point {
   margin-bottom: 10px;
   flex-basis: 15%;
@@ -219,7 +200,6 @@ export default {
   margin-right: 0.72%;
   margin-left: 0.72%;
 }
-
 .cstm-up-text {
   @extend %cstm-color-text;
   text-transform: uppercase;
@@ -227,7 +207,6 @@ export default {
   display: flex;
   justify-content: space-between;
 }
-
 .cstm-down-text {
   text-transform: lowercase;
   font-size: 12px;
@@ -235,12 +214,10 @@ export default {
   display: flex;
   justify-content: space-between;
 }
-
 .cstm-right-text {
   float: right;
   padding: 3px 0;
 }
-
 .cstm-icon-point {
   font-size: 50px;
   position: relative;
@@ -248,25 +225,21 @@ export default {
   transform: translate(-50%, 0);
   cursor: grab;
 }
-
 .cstm-icon-point-add {
   @extend %cstm-color-background-body;
   @extend %cstm-color-text;
 }
-
 .cstm-head-point {
   @extend %cstm-color-text;
   text-align: center;
   padding-bottom: 4px;
   font-weight: 300;
 }
-
 .cstm-money-point {
   text-align: center;
   padding-top: 4px;
   font-weight: 500;
 }
-
 .cstm-plan {
   text-align: center;
   margin-top: -7px;
@@ -274,16 +247,13 @@ export default {
   color: #9a9898;
   font-weight: 200;
 }
-
 .cstm-expense {
   cursor: pointer;
 }
-
 .cstm-point:hover .cstm-edit {
   display: block;
   cursor: pointer;
 }
-
 .cstm-edit {
   color: #9a9898;
   position: absolute;
@@ -293,30 +263,24 @@ export default {
   display: none;
   transition: 0.3s;
 }
-
 .cstm-edit:hover {
   color: #67c23a;
 }
-
 .cstm-blue {
   color: #0a93d1;
 }
 .cstm-yellow {
   color: #e6a23c;
 }
-
 .cstm-green {
   color: #67c23a;
 }
-
 .cstm-red {
   color: #f56c6c;
 }
-
 .cstm-grey {
   color: #909399;
 }
-
 /* при наведении взятого элемента на ячейку */
 .drop-in button {
   background: grey;
@@ -325,7 +289,6 @@ export default {
   border: none;
   /* border: 1px grey solid; */
 }
-
 /* элементы, доступные для транзакции */
 .drop-allowed button {
   filter: brightness(130%);
