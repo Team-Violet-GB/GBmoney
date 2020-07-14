@@ -26,14 +26,18 @@
                     <el-col :span="18">
                         <el-row :gutter="10" class="tran-row-data">
                             <el-col :span="8">
-                                <div v-if="transaction['type_id'] === constants.FROM_INCOME">{{ incomes[transaction.income_id].name }}</div>
+                                <div v-if="transaction['type_id'] === constants.FROM_INCOME">{{
+                                    incomes[transaction.income_id].name }}
+                                </div>
                                 <div v-else>{{ wallets[transaction.wallet_id_from].name }}</div>
                             </el-col>
                             <el-col :span="8">
                                 <div>{{ transaction.amount }} {{ rub }}</div>
                             </el-col>
                             <el-col :span="8">
-                                <div v-if="transaction['type_id'] === constants.FROM_WALLET">{{ expenses[transaction.tag_id].name }}</div>
+                                <div v-if="transaction['type_id'] === constants.FROM_WALLET">{{
+                                    expenses[transaction.tag_id].name }}
+                                </div>
                                 <div v-else>{{ wallets[transaction.wallet_id_to].name }}</div>
                             </el-col>
                         </el-row>
@@ -45,8 +49,7 @@
                     </el-col>
 
                     <!--                    кнопачки операций над транзакцией-->
-                    <el-col :span="6">
-                        <el-row type="flex" class="row-bg" justify="end">
+                    <el-col :span="6" class="tran-opps">
                             <el-button-group>
                                 <el-button v-if="showInput && transaction.id === editor.data.id"
                                            type="success" @click="updateTransaction('editorForm')" size="mini"
@@ -57,7 +60,6 @@
                                            @click="deleteTransaction(transaction.id)"
                                            type="danger" size="mini" icon="el-icon-delete"></el-button>
                             </el-button-group>
-                        </el-row>
                     </el-col>
                 </el-row>
 
@@ -77,7 +79,8 @@
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="откуда">
-                                        <el-select prop="from" filterable v-if="transaction.type_id === constants.FROM_INCOME"
+                                        <el-select prop="from" filterable
+                                                   v-if="transaction.type_id === constants.FROM_INCOME"
                                                    v-model="editor.data.income_id">
                                             <el-option v-for="income in incomes" :key="income.id" :label="income.name"
                                                        :value="income.id">
@@ -93,14 +96,16 @@
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="куда">
-                                        <el-select prop="to" filterable v-if="transaction.type_id === constants.FROM_INCOME"
+                                        <el-select prop="to" filterable
+                                                   v-if="transaction.type_id === constants.FROM_INCOME"
                                                    v-model="editor.data.wallet_id_to">
                                             <el-option v-for="wallet in wallets" :key="wallet.id"
                                                        :label="wallet.name" :value="wallet.id"
                                                        style="width: 100%">
                                             </el-option>
                                         </el-select>
-                                        <el-select prop="to" filterable v-if="transaction.type_id === constants.FROM_WALLET"
+                                        <el-select prop="to" filterable
+                                                   v-if="transaction.type_id === constants.FROM_WALLET"
                                                    v-model="editor.data.tag_id">
                                             <el-option v-for="expense in expenses" :key="expense.id"
                                                        :label="expense.name" :value="expense.id">
@@ -109,7 +114,8 @@
                                             {{ expensesCategory[expense.expense_id].name }}</span>
                                             </el-option>
                                         </el-select>
-                                        <el-select prop="to" filterable v-if="transaction.type_id === constants.TRANSFER"
+                                        <el-select prop="to" filterable
+                                                   v-if="transaction.type_id === constants.TRANSFER"
                                                    v-model="editor.data.wallet_id_to">
                                             <el-option v-for="wallet in wallets" :key="wallet.id"
                                                        :label="wallet.name"
@@ -387,6 +393,12 @@
     .tran-comment div {
         color: #0abda4d1;
         font-weight: bold;
+    }
+
+    .tran-opps {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
     }
 
     .editor {
