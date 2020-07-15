@@ -18,8 +18,12 @@ use Illuminate\Http\Request;
 Route::post('register', 'AuthController@register');
 # Вход
 Route::post('login', 'AuthController@login');
-# получение своих данных пользователем
-Route::middleware('auth:api')->group(function() {
 
+
+
+Route::middleware('auth:api')->group(function() {
+# получение своих данных пользователем
     Route::get('user/show', 'UserController@show');
+    # Выход
+    Route::get('logout','AuthController@logout');
 });
