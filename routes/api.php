@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Resources\IconsCollection;
+use App\Models\Icon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,13 +16,16 @@ use Illuminate\Http\Request;
 |
 */
 
-
 # Регистрация
 Route::post('register', 'AuthController@register');
 # Вход
 Route::post('login', 'AuthController@login');
 # получение своих данных пользователем
-Route::middleware('auth:api')->group(function() {
-
+Route::middleware('auth:api')->group(function () {
     Route::get('user/show', 'UserController@show');
+
+    Route::group(['namespace' => 'Api'], function () {
+        // Возвращаем коллекцию иконок.
+        Route::get('get/icons', 'IconController');
+    });
 });
