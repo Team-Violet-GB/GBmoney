@@ -20,8 +20,14 @@ export default {
             })
         },
         logout({ commit }, data) {
-            localStorage.removeItem('user-token') 
-            commit('logout')
+            data.this.axios.get('/api/logout')
+            .then(response => {
+                localStorage.removeItem('user-token') 
+                commit('logout')
+            })
+            .catch((error) => {
+                data.this.$message.error(error.response.data.errors) 
+            })
         }
     },
     mutations: {
