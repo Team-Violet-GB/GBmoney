@@ -30,5 +30,8 @@ Route::middleware('auth:api')->group(function () {
     Route::group(['namespace' => 'Api'], function () {
         // Получение коллекции иконок.
         Route::get('get/icons', 'IconController');
+        Route::get('get/wallets', 'WalletController@getWalletsWithIconName');
+        Route::get('get/expenses', 'ExpenseController@getExpensesWithIconName');
+        Route::get('get/incomes', 'IncomeController@getIncomesWithIconName');
     });
 });
