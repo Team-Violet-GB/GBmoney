@@ -48,9 +48,17 @@ class AuthController extends Controller
             ]);
         } else {
             return response()->json([
-                'errors' => 'Пользователь не найден'
+                'errors' => 'Неправильный логин или пароль'
             ], 403);
         }
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->token()->revoke();
+        return response()->json([
+            'message' => 'Пользователь вышел'
+        ]);
     }
 
 }
