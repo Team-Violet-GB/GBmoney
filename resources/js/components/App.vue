@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <component :is="layout">
+    <component v-if="isAuthenticated" :is="layout">
       <router-view/>
     </component>
   </div>
@@ -9,11 +9,19 @@
 <script>
 import MainLayout from '../views/layouts/MainLayout'
 import EmptyLayout from '../views/layouts/EmptyLayout'
+import { mapGetters } from 'vuex'
 
 export default {
   computed: {
+    ...mapGetters([
+      'isAuth',
+    ]),
     layout () {
       return (this.$route.meta.layout || 'main') + '-layout'
+    },
+    isAuthenticated() {
+      if (!this.isAuth) this.$router.push('/login')
+      return true
     }
   },
   components: {

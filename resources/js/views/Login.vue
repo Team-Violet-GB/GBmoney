@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
   export default {
     data() {
         return {
@@ -51,16 +53,24 @@
         }
     },
     methods: {
+        ...mapActions([
+            'login'
+        ]),
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    alert('submit!');
+                    this.login({
+                        email: this.ruleForm.email,
+                        password: this.ruleForm.pass,
+                        this: this
+                    })
                 } else {
                     console.log('error submit!!');
                     return false;
                 }
             });
         },
+
     }
   };
 </script>

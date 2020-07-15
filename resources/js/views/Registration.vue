@@ -24,7 +24,7 @@
                                 id="checkPass"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="success" @click="() => this.$router.push('/auth')">У меня есть аккаунт</el-button>
+                        <el-button type="success" @click="() => this.$router.push('/login')">У меня есть аккаунт</el-button>
                         <el-button type="primary" @click="submitForm('ruleForm')">Регистрация</el-button>
                     </el-form-item> 
                 </el-form> 
@@ -88,7 +88,7 @@
                     })
                     .then(response => {
                         this.MessageSuccess('Пользователь ' + response.data.email + ' успешно зарегистрирован')
-                        this.$router.push('/')
+                        this.$router.push('/login')
                     })
                     .catch((error) => {
                         var errors = error.response.data.errors

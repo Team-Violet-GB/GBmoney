@@ -2,7 +2,6 @@
   <div>
     <el-container class="cstm-container">
       <el-container class="is-vertical">
-        <Navbar />
         <el-main class="cstm-main">
           <router-view />
         </el-main>
