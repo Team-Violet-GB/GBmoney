@@ -15,11 +15,8 @@
                 <el-col :span="14">
                     <div>{{ getLocalDateString(transactionsGroup[0]['date']) }}</div>
                 </el-col>
-                <el-col :span="10" >
-                    <div class="tran-group-header-sum">{{ groupSumCalc(transactionsGroup) }}</div>
-                </el-col>
-                <el-col :span="6" :offset="12">
-                    <div class="tran-group-header-sum">{{ groupSumCalc(transactionsGroup) }}  &#8381</div>
+                <el-col :span="10">
+                    <div class="tran-group-header-sum">{{ groupSumCalc(transactionsGroup) }} &#8381</div>
                 </el-col>
             </el-row>
 
@@ -79,24 +76,7 @@
                 'requestTransactions'
             ]),
 
-            // async getTransactions() {
-            //     const headers = {
-            //         'Content-Type': 'application/json'
-            //     }
-            //     this.loading = true;
-            //     await axios.get('storage/testTransactions.json', {headers: headers})
-            //         .then(response => {
-            //             this.transactions = response.data;
-            //             this.loading = false;
-            //         })
-            //         .catch(error => {
-            //             console.log(error)
-            //             this.error = true;
-            //             this.errorInfo = 'Ошибка во время запроса данных о транзакциях';
-            //             //todo: обработка кодов с сервера
-            //         });
-            //     this.loading = false;
-            // },
+
             async getData() {
                 const headers = {
                     'Content-Type': 'application/json'
@@ -156,7 +136,7 @@
                 for (let i = 0; i < group.length; i++) {
                     sum += group[i].amount;
                 }
-                return sum += ' ' + this.rub;
+                return sum;
             }
         },
         async mounted() {
