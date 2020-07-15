@@ -28,7 +28,10 @@ Route::middleware('auth:api')->group(function () {
     Route::get('logout', 'AuthController@logout');
 
     Route::group(['namespace' => 'Api'], function () {
-        // Получение коллекции иконок.
+        // Получение коллекции иконок, кошельков, расходов, доходов.
         Route::get('get/icons', 'IconController');
+        Route::get('get/wallets', 'WalletController@getWalletsWithIconName');
+        Route::get('get/expenses', 'ExpenseController@getExpensesWithIconName');
+        Route::get('get/incomes', 'IncomeController@getIncomesWithIconName');
     });
 });
