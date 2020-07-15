@@ -16,7 +16,7 @@
             </div>
             <div  v-if="transaction.toType == 'expense'" class="cstm-select-box cstm-mrgn-top-20">
                 <span class="cstm-label">Подкатегория:</span> 
-                <SelectCustom :points="tags" :id="1"  @changeSelect="(tagID) => { tag = tagID }"/>
+                <SelectCustom :points="tags" @changeSelect="(tagID) => { tag = tagID }"/>
             </div>
             <el-input placeholder="Сумма" class="cstm-input cstm-mrgn-top-20" type="number" v-model="amount"></el-input>
             <el-input
@@ -33,46 +33,36 @@
 </template>
 
 <script>
-import SelectCustom from "../homepage/SelectCustom"
-import Calendar from "../homepage/Calendar"
+  import SelectCustom from "../homepage/SelectCustom"
+  import Calendar from "../homepage/Calendar"
+  import { mapGetters, mapActions } from "vuex"
 
   export default {
-    props: ['transactionData', 'incomesData', 'walletsData', 'expensesData'],
     components: {
       SelectCustom, Calendar
     },
     data() {
       return {
-        transaction: this.transactionData,
         amount: null,
         comment: null,
         tag: null,
         date: Date.now(),
         direction: 'rtl',
         errors: [],
-        tags: [
-          { id: 1, name: "Подкатегория1" },
-          { id: 2, name: "Подкатегория2" },
-          { id: 3, name: "Подкатегория3" },
-          { id: 4, name: "Подкатегория4" }
-        ]
       };
     },
-    // validations: {
-    //   amount:
-    // },
+
     computed: {
+        ...mapGetters([
+            'incomes',
+            'wallets',
+            'expenses',
+            'tags',
+            'transaction'
+        ]),
+
         drawer() {
-              return this.transaction.state_window
-        },
-        incomes() {
-              return this.incomesData
-        },
-        wallets() {
-              return this.walletsData
-        },
-        expenses() {
-              return this.expensesData
+            return this.transaction.state_window
         },
         pointsFrom() {
             return (this.transaction.fromType === 'income') ? this.incomes : this.wallets
@@ -81,12 +71,22 @@ import Calendar from "../homepage/Calendar"
             return (this.transaction.toType === 'wallet') ? this.wallets : this.expenses
         }, 
     },
-    watch: {
-      transactionData(newValue) {
-        this.transaction = newValue
-      },
+
+    mounted() {
+        this.fetchIncomes()
+        this.fetchWallets()
+        this.fetchExpenses()
+        this.fetchTags()
     },
+
     methods: {
+        ...mapActions([
+            'fetchIncomes',
+            'fetchWallets',
+            'fetchExpenses',
+            'fetchTags',
+            ]),
+
       handleClose() {
         this.$emit('closeCreateWindow')
       },
