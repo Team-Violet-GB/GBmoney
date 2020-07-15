@@ -1,6 +1,6 @@
 export default {
     actions: {
-        authRequest({ commit }, data) {
+        login({ commit }, data) {
             data.this.axios.post('/api/login' , {
                 email: data.email,
                 password: data.password
@@ -8,39 +8,35 @@ export default {
             .then(response => {
                 const token = response.data.token
                 localStorage.setItem('user-token', token)
-                // data.this.axios.defaults.headers.common = {
-                //     'X-Requested-With': token,
-                //     'X-CSRF-TOKEN': token,
-                // };
-                window.axios.defaults.headers.common = {
-                    'X-Requested-With': 'XMLHttpRequest',
-                };
-                commit('authSuccess', token)
                 data.this.$message({
                     message: 'Добро пожаловать!',
                     type: 'success'
                 })
+                commit('login', token)
                 data.this.$router.push('/')
-
             })
             .catch((error) => {
                 data.this.$message.error(error.response.data.errors) 
             })
+        },
+        logout({ commit }, data) {
+            localStorage.removeItem('user-token') 
+            commit('logout')
         }
     },
     mutations: {
-        authSuccess(state, token) {
-            state.status = 'success'
+        login(state, token) {
             state.token = token
+        },
+
+        logout(state) {
+            state.token = ''
         }
     },
     state: {
         token: localStorage.getItem('user-token') || '',
-        status: '',
-      
     },
     getters: {
-        isAuthenticated: state => !!state.token,
-        authStatus: state => state.status,
+        isAuth: (state) => !!state.token,
     }
 }

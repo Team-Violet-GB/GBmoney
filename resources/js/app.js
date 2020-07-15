@@ -14,10 +14,13 @@ Vue.use(VueAxios, axios)
 
 import App from './components/App'
 
+const token = localStorage.getItem('user-token')
+if (token) {
+  axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+}
+
 new Vue({
+    store,
     router,
     render: h => h(App),
-    store
 }).$mount('#app')
-
-

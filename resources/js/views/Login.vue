@@ -54,12 +54,12 @@ import { mapActions } from 'vuex'
     },
     methods: {
         ...mapActions([
-            'authRequest'
+            'login'
         ]),
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    this.authRequest({
+                    this.login({
                         email: this.ruleForm.email,
                         password: this.ruleForm.pass,
                         this: this
@@ -70,16 +70,7 @@ import { mapActions } from 'vuex'
                 }
             });
         },
-        MessageError(message) {
-            this.$message.error(message)
-        },
 
-        MessageSuccess(message) {
-            this.$message({
-                message: message,
-                type: 'success'
-            })
-        },
     }
   };
 </script>
