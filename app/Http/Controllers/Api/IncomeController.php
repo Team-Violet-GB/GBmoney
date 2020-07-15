@@ -7,6 +7,10 @@ use App\Models\Income;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+/**
+ * Class IncomeController
+ * @package App\Http\Controllers\Api
+ */
 class IncomeController extends Controller
 {
     /**

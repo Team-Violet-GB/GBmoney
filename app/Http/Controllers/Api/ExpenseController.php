@@ -7,6 +7,10 @@ use App\Models\Expense;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+/**
+ * Class ExpenseController
+ * @package App\Http\Controllers\Api
+ */
 class ExpenseController extends Controller
 {
     /**

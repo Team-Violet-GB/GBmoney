@@ -7,6 +7,10 @@ use App\Models\Wallet;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+/**
+ * Class WalletController
+ * @package App\Http\Controllers\Api
+ */
 class WalletController extends Controller
 {
     /**
