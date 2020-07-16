@@ -8,29 +8,22 @@
         </el-alert>
 
         <!--        заголовок группы транзакций-->
-        <el-card v-if="!error" v-for="(transactionsGroup, index) in getTransactions" :key="index"
+        <el-card v-if="!error" v-for="(transactionGroups, index) in getTransactions" :key="index"
                  v-loading="loading" element-loading-text="Загрузка..." element-loading-spinner="el-icon"
                  element-loading-background="rgba(0, 0, 0, 0.8)" class="box-card">
             <el-row :gutter="10" slot="header" class="clearfix tran-group-header">
                 <el-col :span="14">
-                    <div>{{ getLocalDateString(transactionsGroup[0]['date']) }}</div>
+                    <div>{{ getLocalDateString(transactionGroups[0]['date']) }}</div>
                 </el-col>
                 <el-col :span="10">
-                    <div class="tran-group-header-sum">{{ groupSumCalc(transactionsGroup) }} &#8381</div>
+                    <div class="tran-group-header-sum">{{ groupSumCalc(transactionGroups) }} &#8381</div>
                 </el-col>
             </el-row>
 
-            <!--            список транзакций в группе-->
-            <el-card v-for="(transactionOfGroup, indexx) in transactionsGroup" :key="indexx" class="box-card">
-                <transaction
-                    :transaction="transactionOfGroup"
-                    :wallets="wallets"
-                    :incomes="incomes"
-                    :expensesCategory="expensesCategory"
-                    :expenses="expenses"
-
-                />
-            </el-card>
+            <!--            группа транзакций-->
+            <Transaction-groups
+                :transactionGroups="transactionGroups"
+            />
         </el-card>
 
         <!--        Пагинация-->
@@ -49,8 +42,8 @@
 
 <script>
     import 'element-theme-dark';
-    import {mapActions, mapMutations, mapGetters} from 'vuex';
-    import transaction from '../components/feed/transaction';
+    import {mapActions, mapGetters} from 'vuex';
+    import TransactionGroups from "../components/feed/TransactionGroups";
 
     export default {
         data() {
@@ -60,12 +53,9 @@
                 errorInfo: 'Нет данных',
 
                 // transactions: {},
-                wallets: {},
-                incomes: {},
-                expensesCategory: {},
-                expenses: {},
             };
         },
+
         computed: {
             ...mapGetters([
                 'getTransactions',
@@ -134,18 +124,18 @@
             groupSumCalc(group) {
                 let sum = 0;
                 for (let i = 0; i < group.length; i++) {
-                    sum += group[i].amount;
+                    sum += group[i].money;
                 }
                 return sum;
             }
         },
-        async mounted() {
-            await this.getData();
+        mounted() {
+            // await this.getData();
             // await this.getTransactions();
             this.requestTransactions();
         },
         components: {
-            transaction
+            TransactionGroups,
         }
     }
 </script>
