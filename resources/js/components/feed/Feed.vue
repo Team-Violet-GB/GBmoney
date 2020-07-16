@@ -1,15 +1,15 @@
 <template>
     <div>
         <el-alert
-            v-if="error"
-            :title="errorInfo"
+            v-show="getErrorStatus"
+            :title="getErrorInfo"
             type="error"
             effect="dark">
         </el-alert>
 
         <!--        заголовок группы транзакций-->
-        <el-card v-if="!error" v-for="(transactionGroup, index) in getTransactions" :key="index"
-                 v-loading="loading" element-loading-text="Загрузка..." element-loading-spinner="el-icon"
+        <el-card v-show="!getErrorStatus" v-for="(transactionGroup, index) in getTransactions" :key="index"
+                 v-loading="getLoadingStatus" element-loading-text="Загрузка..." element-loading-spinner="el-icon"
                  element-loading-background="rgba(0, 0, 0, 0.8)" class="box-card">
             <el-row :gutter="10" slot="header" class="clearfix tran-group-header">
                 <el-col :span="14">
@@ -21,13 +21,11 @@
             </el-row>
 
             <!--            группа транзакций-->
-            <transaction-group
-                :transactionGroup="transactionGroup"
-            />
+            <transaction-group :transactionGroup="transactionGroup"/>
         </el-card>
 
         <!--        Пагинация-->
-        <div class="pagination block">
+        <div  v-show="!getErrorStatus" class="pagination block">
             <el-pagination
                 background
                 :page-size="20"
@@ -46,75 +44,18 @@
     import transactionGroup from "./TransactionGroup";
 
     export default {
-        data() {
-            return {
-                loading: false,
-                error: false,
-                errorInfo: 'Нет данных',
-
-                // transactions: {},
-            };
-        },
-
         computed: {
             ...mapGetters([
                 'getTransactions',
+                'getLoadingStatus',
+                'getErrorStatus',
+                'getErrorInfo'
             ]),
         },
         methods: {
             ...mapActions([
                 'requestTransactions'
             ]),
-
-
-            async getData() {
-                const headers = {
-                    'Content-Type': 'application/json'
-                }
-                await axios.get('storage/testWallets.json', {headers: headers})
-                    .then(response => {
-                        this.wallets = response.data;
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        this.error = true;
-                        this.errorInfo = 'Ошибка во время запроса данных';
-                        //todo: обработка других кодов с сервера
-                    });
-
-                await axios.get('storage/testIncomes.json', {headers: headers})
-                    .then(response => {
-                        this.incomes = response.data;
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        this.error = true;
-                        this.errorInfo = 'Ошибка во время запроса данных';
-                        //todo: обработка других кодов с сервера
-                    });
-
-                await axios.get('storage/testExpensesCategory.json', {headers: headers})
-                    .then(response => {
-                        this.expensesCategory = response.data;
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        this.error = true;
-                        this.errorInfo = 'Ошибка во время запроса данных';
-                        //todo: обработка других кодов с сервера
-                    });
-
-                await axios.get('storage/testExpenses.json', {headers: headers})
-                    .then(response => {
-                        this.expenses = response.data;
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        this.error = true;
-                        this.errorInfo = 'Ошибка во время запроса данных';
-                        //todo: обработка других кодов с сервера
-                    });
-            },
             getLocalDateString(date) {
                 let days = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
                 let months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
@@ -136,8 +77,6 @@
             ]),
         },
         async mounted() {
-            // await this.getData();
-            // await this.getTransactions();
             await this.fetchIncomes()
             await this.fetchWallets()
             await this.fetchExpenses()

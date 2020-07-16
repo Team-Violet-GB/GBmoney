@@ -7,20 +7,17 @@ export default {
                 'Content-Type': 'application/json'
             }
             commit('setLoadingStatus', true);
-            axios.get('storage/testTransactions.json', {headers: headers})
+            axios.get('storage/testTrnsactions.json', {headers: headers})
                 .then(response => {
                     commit('setTransactions', response.data);
-                    commit('setLoadingStatus', false);
                 })
                 .catch(error => {
-                    console.log(error)
-                    this.error = true;
-                    this.errorInfo = 'Ошибка во время запроса данных о транзакциях';
+                    commit('setErrorStatus', true);
+                    commit('setErrorInfo', 'Ошибка во время запроса данных о транзакциях');
                     //todo: обработка кодов с сервера
                 })
                 .finally(() => {
                     commit('setLoadingStatus', false);
-                    console.log('finished fetch transaction')
                 });
         }
     },
@@ -37,13 +34,21 @@ export default {
         setTransaction(state, data) {
             state.transaction = data
         },
+        setErrorStatus(state, data) {
+            state.errorStatus = data
+        },
+        setErrorInfo(state, data) {
+            state.errorInfo = data
+        }
 
     },
     state: {
         transactions: {},
         transaction: {},
         loadingStatus: false,
-        editorShowStatus: false
+        editorShowStatus: false,
+        errorStatus: true,
+        errorInfo: 'Непредсказуемая ситуация, данные не поступили!'
     },
     getters: {
         getTransactions(state) {
@@ -57,6 +62,12 @@ export default {
         },
         getEditorShowStatus(state) {
             return state.editorShowStatus
+        },
+        getErrorStatus(state) {
+            return state.errorStatus
+        },
+        getErrorInfo(state) {
+            return state.errorInfo
         }
     }
 }

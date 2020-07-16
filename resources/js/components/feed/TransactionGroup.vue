@@ -1,17 +1,14 @@
 <template>
     <div>
         <el-card v-for="(transaction, index) in transactionGroup" :key="index" class="box-card">
-            <transaction
-                :transaction="transaction"
-            />
-
+            <transaction :transaction="transaction"/>
         </el-card>
-
     </div>
 </template>
 
 <script>
     import transaction from './Transaction';
+
     export default {
         name: "transactionGroup",
         props: {
