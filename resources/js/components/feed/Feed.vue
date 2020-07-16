@@ -21,7 +21,7 @@
             </el-row>
 
             <!--            группа транзакций-->
-            <Transaction-group
+            <transaction-group
                 :transactionGroup="transactionGroup"
             />
         </el-card>
@@ -43,7 +43,7 @@
 <script>
     import 'element-theme-dark';
     import {mapActions, mapGetters} from 'vuex';
-    import TransactionGroup from "./TransactionGroup";
+    import transactionGroup from "./TransactionGroup";
 
     export default {
         data() {
@@ -145,7 +145,7 @@
             await this.requestTransactions();
         },
         components: {
-            TransactionGroup,
+            transactionGroup,
         }
     }
 </script>
