@@ -31,26 +31,32 @@ export default {
         setLoadingStatus(state, data) {
             state.loadingStatus = data
         },
+        setEditorShowStatus(state, data) {
+            state.editorShowStatus = data
+        },
+        setTransaction(state, data) {
+            state.transaction = data
+        },
 
     },
     state: {
         transactions: {},
+        transaction: {},
         loadingStatus: false,
-
+        editorShowStatus: false
     },
     getters: {
         getTransactions(state) {
             return state.transactions
         },
-        getGroupeCount(state, groupName) {
-            return state.transactions.find(tran => {
-                if (tran.key === groupName) {
-                    return tran.length
-                }
-            })
+        getTransaction(state) {
+            return state.transaction
         },
         getLoadingStatus(state) {
             return state.loadingStatus;
+        },
+        getEditorShowStatus(state) {
+            return state.editorShowStatus
         }
     }
 }

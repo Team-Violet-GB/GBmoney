@@ -13,7 +13,7 @@
                  element-loading-background="rgba(0, 0, 0, 0.8)" class="box-card">
             <el-row :gutter="10" slot="header" class="clearfix tran-group-header">
                 <el-col :span="14">
-                    <div>{{ getLocalDateString(transactionGroup[0]['date']) }}</div>
+                    <div>{{ getLocalDateString(index) }}</div>
                 </el-col>
                 <el-col :span="10">
                     <div class="tran-group-header-sum">{{ groupSumCalc(transactionGroup) }} &#8381</div>
