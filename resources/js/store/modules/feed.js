@@ -20,7 +20,7 @@ export default {
                 })
                 .finally(() => {
                     commit('setLoadingStatus', false);
-                    console.log('finished')
+                    console.log('finished fetch transaction')
                 });
         }
     },

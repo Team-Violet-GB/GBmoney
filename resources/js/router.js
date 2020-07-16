@@ -32,7 +32,7 @@ const routes = [
     path: '/feed',
     name: 'Feed',
     meta: { layout: 'main' },
-    component: () => import('./views/Feed.vue')
+    component: () => import('./components/feed/Feed.vue')
   }
 ]
 

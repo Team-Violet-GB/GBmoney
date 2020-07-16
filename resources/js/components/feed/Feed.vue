@@ -8,21 +8,21 @@
         </el-alert>
 
         <!--        заголовок группы транзакций-->
-        <el-card v-if="!error" v-for="(transactionGroups, index) in getTransactions" :key="index"
+        <el-card v-if="!error" v-for="(transactionGroup, index) in getTransactions" :key="index"
                  v-loading="loading" element-loading-text="Загрузка..." element-loading-spinner="el-icon"
                  element-loading-background="rgba(0, 0, 0, 0.8)" class="box-card">
             <el-row :gutter="10" slot="header" class="clearfix tran-group-header">
                 <el-col :span="14">
-                    <div>{{ getLocalDateString(transactionGroups[0]['date']) }}</div>
+                    <div>{{ getLocalDateString(transactionGroup[0]['date']) }}</div>
                 </el-col>
                 <el-col :span="10">
-                    <div class="tran-group-header-sum">{{ groupSumCalc(transactionGroups) }} &#8381</div>
+                    <div class="tran-group-header-sum">{{ groupSumCalc(transactionGroup) }} &#8381</div>
                 </el-col>
             </el-row>
 
             <!--            группа транзакций-->
-            <Transaction-groups
-                :transactionGroups="transactionGroups"
+            <Transaction-group
+                :transactionGroup="transactionGroup"
             />
         </el-card>
 
@@ -43,7 +43,7 @@
 <script>
     import 'element-theme-dark';
     import {mapActions, mapGetters} from 'vuex';
-    import TransactionGroups from "../components/feed/TransactionGroups";
+    import TransactionGroup from "./TransactionGroup";
 
     export default {
         data() {
@@ -127,15 +127,25 @@
                     sum += group[i].money;
                 }
                 return sum;
-            }
+            },
+            ...mapActions([
+                'fetchWallets',
+                'fetchIncomes',
+                'fetchExpenses',
+                'fetchTags',
+            ]),
         },
-        mounted() {
+        async mounted() {
             // await this.getData();
             // await this.getTransactions();
-            this.requestTransactions();
+            await this.fetchIncomes()
+            await this.fetchWallets()
+            await this.fetchExpenses()
+            await this.fetchTags()
+            await this.requestTransactions();
         },
         components: {
-            TransactionGroups,
+            TransactionGroup,
         }
     }
 </script>
