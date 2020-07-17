@@ -1,7 +1,6 @@
 <template>
     <div>
-        <el-row id="transaction.id" type="flex" justify="center">
-            <el-col :span="18">
+        <div class="tran-wrapper" @click="edit(transaction)">
                 <el-row :gutter="10" class="tran-row-data">
                     <el-col :span="8">
                         <div>{{ from }}</div>
@@ -18,31 +17,17 @@
                         <div>{{ transaction.comment }}</div>
                     </el-col>
                 </el-row>
-            </el-col>
-
-            <!--                    кнопачки операций над транзакцией-->
-            <el-col :span="6" class="tran-opps">
-                <el-button-group>
-                    <el-button v-if="getEditorShowStatus" @click="updateTransaction('editorForm')" type="success" size="small"
-                               icon="el-icon-check"></el-button>
-                    <el-button @click="edit(transaction)"
-                               type="primary" size="small" icon="el-icon-edit"></el-button>
-                    <el-button @click="deleteTransaction(transaction.id)" type="danger" size="small"
-                               icon="el-icon-delete"></el-button>
-                </el-button-group>
-            </el-col>
-        </el-row>
+            </div>
         <transactionEditor
-            :transactionEditorId="Number(transaction.id)"
+            :transactionEditorId="transaction.id"
         />
     </div>
 </template>
 
 <script>
-    import constants from './constants';
+    import constants from '../../constants';
     import transactionEditor from './TransactionEditor';
-    import rules from './feedValidationRules';
-    import {mapGetters, mapMutations} from 'vuex'
+    import {mapGetters, mapMutations, mapActions} from 'vuex'
 
     export default {
         name: "transaction",
@@ -52,14 +37,15 @@
         data() {
             return {
                 constants: constants,
-                rules: rules,
-                showInput: false,
             }
         },
         props: {
             transaction: {
                 type: Object
             },
+            transactionsInGroup: {
+                type: Number
+            }
         },
         computed: {
             ...mapGetters([
@@ -68,7 +54,10 @@
                 'expenses',
                 'tags',
                 'getEditorShowStatus',
-                'getTransaction'
+                'getTransaction',
+                'getLoadingStatus',
+                'getErrorStatus',
+                'getErrorInfo'
             ]),
             from() {
                 if (this.transaction['type_id'] === this.constants.FROM_INCOME) {
@@ -86,52 +75,21 @@
             },
         },
         methods: {
+            ...mapActions([
+                'requestTransactions'
+            ]),
             ...mapMutations([
                 'setEditorShowStatus',
-                'setTransaction'
+                'setTransaction',
+                'setLoadingStatus',
+                'setErrorStatus',
+                'setErrorInfo'
             ]),
             edit(transaction) {
                 this.setTransaction(transaction);
                 this.setEditorShowStatus(true)
             },
-            deleteTransaction(id) {
-                // this.$confirm('Подтверждение удаления транзакции', 'Внимание!', {
-                //     confirmButtonText: 'Удалить',
-                //     confirmButtonClass: 'danger',
-                //     showCancelButton: false,
-                //     iconClass: 'el-icon-delete',
-                //     type: 'warning',
-                // }).then(() => {
-                //     this.showInput = false;
-                //     if (this.transactions[this.transaction.index].length > 1) {
-                //         this.transactions[this.editor.index].splice(this.transaction.indexx, 1);
-                //     } else {
-                //         delete this.transactions[this.transaction.index];
-                //     }
-                //     !Object.keys(this.transactions).length ? this.error = true : '';
-                //     this.$message({
-                //         type: 'success',
-                //         message: `<h2>axios.delete('/api/delete/${this.transaction.id}')</h2>`
-                //     });
-                // });
 
-                // axios
-                //     .delete(`/api/del/${this.transaction.id}`)
-                //     .then(response => {
-                //         if (response.status === 200) {
-                //             if (this.transactions[this.transaction.index].length > 1) {
-                //                 this.transactions[this.transaction.index].splice(this.transaction.indexx, 1);
-                //             } else {
-                //                 delete this.transactions[this.transaction.index];
-                //             }
-                //         }
-                //         !Object.keys(this.transactions).length ? this.error = true : '';
-                //     })
-                //     .catch(error => console.log(error));
-            }
-        },
-        mounted() {
-            // this.current = Object.assign({}, this.transaction);
         }
     }
 </script>
@@ -139,6 +97,10 @@
 <style scoped>
     .el-card {
         margin-top: 15px;
+    }
+
+    .tran-wrapper {
+        cursor: pointer;
     }
 
     .tran-row-data div {
@@ -167,8 +129,4 @@
         padding-left: 17px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, .2), 0 0 6px rgba(0, 0, 0, .07);
     }
-
-    /*.editor-comment {*/
-    /*    margin-top: 10px;*/
-    /*}*/
 </style>

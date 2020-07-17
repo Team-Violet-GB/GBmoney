@@ -25,7 +25,7 @@
         </el-card>
 
         <!--        Пагинация-->
-        <div  v-show="!getErrorStatus" class="pagination block">
+        <div v-show="!getErrorStatus" class="pagination block">
             <el-pagination
                 background
                 :page-size="20"
@@ -54,6 +54,10 @@
         },
         methods: {
             ...mapActions([
+                'fetchWallets',
+                'fetchIncomes',
+                'fetchExpenses',
+                'fetchTags',
                 'requestTransactions'
             ]),
             getLocalDateString(date) {
@@ -68,13 +72,7 @@
                     sum += group[i].money;
                 }
                 return sum;
-            },
-            ...mapActions([
-                'fetchWallets',
-                'fetchIncomes',
-                'fetchExpenses',
-                'fetchTags',
-            ]),
+            }
         },
         async mounted() {
             await this.fetchIncomes()

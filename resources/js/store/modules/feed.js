@@ -7,7 +7,7 @@ export default {
                 'Content-Type': 'application/json'
             }
             commit('setLoadingStatus', true);
-            axios.get('storage/testTrnsactions.json', {headers: headers})
+            axios.get('storage/testTransactions.json', {headers: headers})
                 .then(response => {
                     commit('setTransactions', response.data);
                 })
@@ -40,15 +40,14 @@ export default {
         setErrorInfo(state, data) {
             state.errorInfo = data
         }
-
     },
     state: {
         transactions: {},
         transaction: {},
         loadingStatus: false,
         editorShowStatus: false,
-        errorStatus: true,
-        errorInfo: 'Непредсказуемая ситуация, данные не поступили!'
+        errorStatus: false,
+        errorInfo: 'Нет данных!'
     },
     getters: {
         getTransactions(state) {
