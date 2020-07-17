@@ -3,7 +3,7 @@
         <el-collapse-transition>
             <div v-if="getEditorShowStatus && transactionEditorId === getTransaction.id" class="editor">
                 <el-form :model="getTransaction" ref="editorForm" :rules="rules" label-position="right"
-                         label-width=" 70px" size="small">
+                         label-width=" 80px" size="small">
                     <el-row :gutter="10" type="flex" justify="space-between">
                         <el-col :span="6">
                             <el-form-item label="когда">
@@ -13,68 +13,53 @@
                                                 style="margin-top: 0; font-size: 1em; width: 100%;"></el-date-picker>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="откуда">
-                                <el-select filterable
-                                           v-if="getTransaction.type_id === constants.FROM_INCOME"
-                                           v-model="getTransaction.income_id">
-                                    <el-option v-for="income in incomes" :key="income.id" :label="income.name"
-                                               :value="income.id">
-                                    </el-option>
-                                </el-select>
-                                <el-select prop="from" filterable v-else v-model="getTransaction.wallet_id_from">
-                                    <el-option v-for="wallet in wallets" :key="wallet.id" :label="wallet.name"
-                                               :value="wallet.id">
-                                        {{ wallet.name }}
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="куда">
-                                <el-select filterable
-                                           v-if="getTransaction.type_id === constants.FROM_INCOME"
-                                           v-model="getTransaction.wallet_id_to">
-                                    <el-option v-for="wallet in wallets" :key="wallet.id"
-                                               :label="wallet.name" :value="wallet.id"
-                                               style="width: 100%">
-                                    </el-option>
-                                </el-select>
-                                <el-select filterable
-                                           v-if="getTransaction.type_id === constants.FROM_WALLET"
-                                           v-model="getTransaction.tag_id">
-                                    <el-option v-for="tag in tags" :key="tag.id"
-                                               :label="tag.name" :value="tag.id">
-                                        <span style="float: left">{{ tag.name }}</span>
-                                        <span style="float: right; color: #666666; font-size: 1em">
-                                            {{ String((expenses.find(item => item.id === tag.expense_id)).name) }}</span>
-                                    </el-option>
-                                </el-select>
-                                <el-select filterable
-                                           v-if="getTransaction.type_id === constants.TRANSFER"
-                                           v-model="getTransaction.wallet_id_to">
-                                    <el-option v-for="wallet in wallets" :key="wallet.id"
-                                               :label="wallet.name"
-                                               :value="wallet.id">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item prop="money" label="сколько">
-                                <el-input clearable v-model.number="getTransaction.money"
-                                          style="font-size: 1em;"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="20">
-                            <el-form-item prop="comment" label="зечем">
-                                <el-input v-model="getTransaction.comment" clearable></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="4">
-                            <div class="editor-btn">
+                        <el-col :span="18">
+                            <div class="editor-pointers">
+                                <el-form-item label="откуда">
+                                    <el-select filterable
+                                               v-if="getTransaction.type_id === constants.FROM_INCOME"
+                                               v-model="getTransaction.income_id">
+                                        <el-option v-for="income in incomes" :key="income.id" :label="income.name"
+                                                   :value="income.id">
+                                        </el-option>
+                                    </el-select>
+                                    <el-select prop="from" filterable v-else v-model="getTransaction.wallet_id_from">
+                                        <el-option v-for="wallet in wallets" :key="wallet.id" :label="wallet.name"
+                                                   :value="wallet.id"> {{ wallet.name }}
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                                <el-form-item label="куда">
+                                    <el-select filterable
+                                               v-if="getTransaction.type_id === constants.FROM_INCOME"
+                                               v-model="getTransaction.wallet_id_to">
+                                        <el-option v-for="wallet in wallets" :key="wallet.id"
+                                                   :label="wallet.name" :value="wallet.id" style="width: 100%">
+                                        </el-option>
+                                    </el-select>
+                                    <el-select @select="prepareCurrentTags" filterable
+                                               v-if="getTransaction.type_id === constants.FROM_WALLET"
+                                               v-model="getTransaction.expense_id">
+                                        <el-option v-for="expense in expenses" :key="expense.id"
+                                                   :label="expense.name" :value="expense.id">
+                                        </el-option>
+                                    </el-select>&nbsp;&nbsp;
+                                    <el-select filterable
+                                               v-if="getTransaction.type_id === constants.FROM_WALLET"
+                                               v-model="getTransaction.tag_id">
+                                        <el-option v-for="tag in currentTags" :key="tag.id"
+                                                   :label="tag.name" :value="tag.id">
+                                        </el-option>
+                                    </el-select>
+
+                                    <el-select filterable
+                                               v-if="getTransaction.type_id === constants.TRANSFER"
+                                               v-model="getTransaction.wallet_id_to">
+                                        <el-option v-for="wallet in wallets" :key="wallet.id"
+                                                   :label="wallet.name" :value="wallet.id">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
                                 <el-form-item label="нажать">
                                     <el-button-group>
                                         <el-button @click="updateTransaction('editorForm')" type="success" size="small"
@@ -86,6 +71,24 @@
                                 </el-form-item>
                             </div>
                         </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="6">
+                            <el-form-item prop="money" label="сколько">
+                                <el-input clearable v-model.number="getTransaction.money"
+                                          style="font-size: 1em;"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="18">
+                            <el-form-item prop="comment" label="зечем">
+                                <el-input v-model="getTransaction.comment" clearable></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <!--                        <el-col :span="4">-->
+                        <!--                            <div class="editor-btn">-->
+                        <!--                                -->
+                        <!--                            </div>-->
+                        <!--                        </el-col>-->
                     </el-row>
                 </el-form>
             </div>
@@ -108,10 +111,9 @@
                         {type: 'number', message: 'Только цыфры!', trigger: 'blur'},
                     ],
                     comment: [
-                        {max: 100, message: 'Хватит!', trigger: 'change'}
+                        {max: 70, message: 'Хватит!', trigger: 'change'}
                     ]
-                },
-                model: {}
+                }
             }
         },
         props: {
@@ -126,12 +128,18 @@
                 'getEditorShowStatus',
                 'getTransaction'
             ]),
+            currentTags() {
+                return this.tags.filter(tag => tag.expense_id == this.getTransaction.expense_id)
+            },
         },
         methods: {
             ...mapMutations([
                 'setEditorShowStatus',
                 'setErrorStatus'
             ]),
+            prepareCurrentTags() {
+                return this.currentTags();
+            },
             updateTransaction(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
@@ -209,6 +217,11 @@
     }
 
     .editor-btn {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .editor-pointers {
         display: flex;
         justify-content: flex-end;
     }

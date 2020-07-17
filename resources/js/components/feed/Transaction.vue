@@ -68,7 +68,9 @@
             },
             to() {
                 if (this.transaction['type_id'] === this.constants.FROM_WALLET) {
-                    return this.expenses.find(item => item.id === this.transaction.tag_id).name;
+                    let expenseName = this.expenses.find(expense => expense.id === this.transaction.expense_id).name
+                    let tagName = this.tags.find(item => item.id === this.transaction.tag_id).name;
+                    return `${expenseName} (${tagName})`
                 } else {
                     return this.wallets.find(item => item.id === this.transaction.wallet_id_to).name;
                 }

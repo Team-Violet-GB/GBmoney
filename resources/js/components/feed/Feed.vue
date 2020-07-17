@@ -21,7 +21,7 @@
             </el-row>
 
             <!--            группа транзакций-->
-            <transaction-group :transactionGroup="transactionGroup"/>
+            <transaction-group :transactionGroup="transactionGroup" class="tran-group"/>
         </el-card>
 
         <!--        Пагинация-->
@@ -100,13 +100,13 @@
     }
 
     .el-card {
-        margin-top: 15px;
+        margin-bottom: 30px;
     }
 
     .tran-group-header {
         color: #92a226;
         font-size: x-large;
-        font-weight: 600;
+        font-weight: 500;
         padding-left: 20px;
     }
 
@@ -114,7 +114,7 @@
         text-align: right;
         color: #008ea6ed;
         font-size: large;
-        font-weight: 700;
+        font-weight: 500;
         padding-right: 20px;
     }
 </style>

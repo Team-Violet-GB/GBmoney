@@ -36,10 +36,10 @@
             "wallet_id_from": 3,
             "wallet_id_to": null,
             "income_id": null,
-            "expense_id": 1,
+            "expense_id": 2,
             "tag_id": 1,
-            "money": 4000,
-            "comment": "Заправка бензином на заправке, марка A93 с карты..."
+            "money": 40,
+            "comment": "хлеб"
         }
     ],
     "2012-09-30": [
@@ -51,10 +51,36 @@
             "wallet_id_from": 2,
             "wallet_id_to": null,
             "income_id": null,
-            "expense_id": 1,
+            "expense_id": 2,
             "tag_id": 2,
-            "money": 3000,
-            "comment": "штраф из заначки наличными гаишнику"
+            "money": 300,
+            "comment": "молоко"
+        },
+        {
+            "id": 5,
+            "date": "2012-09-30",
+            "user_id": 1,
+            "type_id": 2,
+            "wallet_id_from": 2,
+            "wallet_id_to": null,
+            "income_id": null,
+            "expense_id": 8,
+            "tag_id": 4,
+            "money": 7000,
+            "comment": "рыбенку шарфик и тапачки"
+        },
+        {
+            "id": 66,
+            "date": "2012-09-30",
+            "user_id": 1,
+            "type_id": 2,
+            "wallet_id_from": 2,
+            "wallet_id_to": null,
+            "income_id": null,
+            "expense_id": 8,
+            "tag_id": 4,
+            "money": 7000,
+            "comment": "рыбенку шарфик и тапачки"
         }
     ]
 }
