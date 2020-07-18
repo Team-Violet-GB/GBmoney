@@ -54,7 +54,6 @@
                 'expenses',
                 'tags',
                 'getEditorShowStatus',
-                'getTransaction',
                 'getLoadingStatus',
                 'getErrorStatus',
                 'getErrorInfo'
@@ -82,13 +81,13 @@
             ]),
             ...mapMutations([
                 'setEditorShowStatus',
-                'setTransaction',
+                'setEditorData',
                 'setLoadingStatus',
                 'setErrorStatus',
                 'setErrorInfo'
             ]),
             edit(transaction) {
-                this.setTransaction(transaction);
+                this.setEditorData(transaction);
                 this.setEditorShowStatus(true)
             },
 
@@ -115,20 +114,5 @@
         color: #0abda4d1;
         font-weight: bold;
         margin-top: 10px;
-    }
-
-    .tran-opps {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-    }
-
-    .editor {
-        margin-top: 15px;
-        padding-top: 5px;
-        padding-bottom: 10px;
-        padding-right: 17px;
-        padding-left: 17px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, .2), 0 0 6px rgba(0, 0, 0, .07);
     }
 </style>

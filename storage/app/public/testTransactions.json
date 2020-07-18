@@ -52,7 +52,7 @@
             "wallet_id_to": null,
             "income_id": null,
             "expense_id": 2,
-            "tag_id": 2,
+            "tag_id": 1,
             "money": 300,
             "comment": "молоко"
         },
@@ -70,7 +70,61 @@
             "comment": "рыбенку шарфик и тапачки"
         },
         {
-            "id": 66,
+            "id": 6,
+            "date": "2012-09-30",
+            "user_id": 1,
+            "type_id": 2,
+            "wallet_id_from": 2,
+            "wallet_id_to": null,
+            "income_id": null,
+            "expense_id": 8,
+            "tag_id": 4,
+            "money": 7000,
+            "comment": "рыбенку шарфик и тапачки"
+        }
+    ],
+    "2040-09-30": [
+        {
+            "id": 7,
+            "date": "2012-09-30",
+            "user_id": 1,
+            "type_id": 2,
+            "wallet_id_from": 2,
+            "wallet_id_to": null,
+            "income_id": null,
+            "expense_id": 2,
+            "tag_id": 1,
+            "money": 300,
+            "comment": "молоко"
+        },
+        {
+            "id": 8,
+            "date": "2012-09-30",
+            "user_id": 1,
+            "type_id": 2,
+            "wallet_id_from": 2,
+            "wallet_id_to": null,
+            "income_id": null,
+            "expense_id": 2,
+            "tag_id": 1,
+            "money": 300,
+            "comment": "молоко"
+        },
+        {
+            "id": 9,
+            "date": "2012-09-30",
+            "user_id": 1,
+            "type_id": 2,
+            "wallet_id_from": 2,
+            "wallet_id_to": null,
+            "income_id": null,
+            "expense_id": 2,
+            "tag_id": 1,
+            "money": 300,
+            "comment": "молоко"
+        },
+        {
+            "id": 10,
             "date": "2012-09-30",
             "user_id": 1,
             "type_id": 2,

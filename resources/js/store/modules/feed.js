@@ -31,8 +31,8 @@ export default {
         setEditorShowStatus(state, data) {
             state.editorShowStatus = data
         },
-        setTransaction(state, data) {
-            state.transaction = data
+        setEditorData(state, data) {
+            state.editorData = Object.assign({}, data)
         },
         setErrorStatus(state, data) {
             state.errorStatus = data
@@ -43,7 +43,7 @@ export default {
     },
     state: {
         transactions: {},
-        transaction: {},
+        editorData: {},
         loadingStatus: false,
         editorShowStatus: false,
         errorStatus: false,
@@ -53,8 +53,8 @@ export default {
         getTransactions(state) {
             return state.transactions
         },
-        getTransaction(state) {
-            return state.transaction
+        getEditorData(state) {
+            return state.editorData
         },
         getLoadingStatus(state) {
             return state.loadingStatus;
