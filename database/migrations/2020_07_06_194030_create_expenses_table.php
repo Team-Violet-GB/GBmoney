@@ -18,7 +18,7 @@ class CreateExpensesTable extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->string('name', 45);
             $table->decimal('amount', 10,2)->default(0);
-            $table->string('description')->nullable();
+            $table->string('description', 255)->nullable();
             $table->decimal('max_limit', 10, 2)->nullable();
             $table->integer('icon_id')->unsigned();
         });

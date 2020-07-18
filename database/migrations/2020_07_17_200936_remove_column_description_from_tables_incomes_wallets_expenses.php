@@ -42,7 +42,7 @@ class RemoveColumnDescriptionFromTablesIncomesWalletsExpenses extends Migration
         });
 
         Schema::table('expenses', function (Blueprint $table) {
-            $table->string('description')->nullable()->after('amount');
+            $table->string('description', 255)->nullable()->after('amount');
         });
     }
 }
