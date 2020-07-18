@@ -1,20 +1,30 @@
-require('./bootstrap');
-window.Vue = require('vue');
-
-import App from './components/App'
-import router from './router'
+window.Vue = require('vue')
 import VueRouter from 'vue-router'
+import router from './router'
 import locale from 'element-ui/lib/locale/lang/ru-RU'
+import 'element-ui/lib/theme-chalk/index.css'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import Vue from 'vue'
-import store from './store'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+import store from "./store"
 
 Vue.use(VueRouter)
 Vue.use(ElementUI, { locale })
+Vue.use(VueAxios, axios)
+
+import App from './components/App'
+
+const token = localStorage.getItem('user-token')
+if (token) {
+  axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+}
 
 new Vue({
-    router,
     store,
-    render: h => h(App)
+    router,
+    render: h => h(App),
 }).$mount('#app')
+
+
