@@ -40,10 +40,16 @@
 
 <script>
     import 'element-theme-dark';
-    import {mapActions, mapGetters} from 'vuex';
+    import {mapActions, mapGetters, mapMutations} from 'vuex';
     import transactionGroup from "./TransactionGroup";
 
     export default {
+        props: {
+            withEditor: {
+                type: Boolean,
+                default: true
+            }
+        },
         computed: {
             ...mapGetters([
                 'getTransactions',
@@ -60,6 +66,9 @@
                 'fetchTags',
                 'requestTransactions'
             ]),
+            ...mapMutations([
+                'setWithEditor'
+            ]),
             getLocalDateString(date) {
                 let days = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
                 let months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
@@ -74,12 +83,13 @@
                 return sum;
             }
         },
-        async mounted() {
-            await this.fetchIncomes()
-            await this.fetchWallets()
-            await this.fetchExpenses()
-            await this.fetchTags()
-            await this.requestTransactions();
+        mounted() {
+            this.fetchIncomes()
+            this.fetchWallets()
+            this.fetchExpenses()
+            this.fetchTags()
+            this.requestTransactions();
+            this.setWithEditor(this.withEditor)
         },
         components: {
             transactionGroup,

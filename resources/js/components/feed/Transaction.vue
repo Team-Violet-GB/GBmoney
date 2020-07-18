@@ -1,24 +1,44 @@
 <template>
     <div>
-        <div class="tran-wrapper" @click="edit(transaction)">
-                <el-row :gutter="10" class="tran-row-data">
-                    <el-col :span="8">
-                        <div>{{ from }}</div>
-                    </el-col>
-                    <el-col :span="8">
-                        <div>{{ transaction.money }} &#8381</div>
-                    </el-col>
-                    <el-col :span="8">
-                        <div>{{ to }}</div>
-                    </el-col>
-                </el-row>
-                <el-row class="editor-comment">
-                    <el-col :span="24" class="tran-comment">
-                        <div>{{ transaction.comment }}</div>
-                    </el-col>
-                </el-row>
-            </div>
+
+<!--        разметка и поведение для ленты-->
+        <div v-if="getWithEditor" class="tran-wrapper" @click="edit(transaction)">
+            <el-row :gutter="10" class="tran-row-data">
+                <el-col :span="8">
+                    <div>{{ from }}</div>
+                </el-col>
+                <el-col :span="8">
+                    <div>{{ transaction.money }} &#8381</div>
+                </el-col>
+                <el-col :span="8">
+                    <div>{{ to }}</div>
+                </el-col>
+            </el-row>
+            <el-row class="editor-comment">
+                <el-col :span="24" class="tran-comment">
+                    <div>{{ transaction.comment }}</div>
+                </el-col>
+            </el-row>
+        </div>
+
+<!--        разметка и поведение для отчетов-->
+        <div v-else>
+            <el-row :gutter="10" class="tran-row-data">
+                <el-col :span="8">
+                    <div>{{ from }}</div>
+                </el-col>
+                <el-col :span="8">
+                    <div>{{ transaction.money }} &#8381</div>
+                </el-col>
+                <el-col :span="8">
+                    <div>{{ to }}</div>
+                </el-col>
+            </el-row>
+        </div>
+
+<!--    подключаемый по условию компонент редактора транзакций    -->
         <transactionEditor
+            v-if="getWithEditor"
             :transactionEditorId="transaction.id"
         />
     </div>
@@ -56,7 +76,8 @@
                 'getEditorShowStatus',
                 'getLoadingStatus',
                 'getErrorStatus',
-                'getErrorInfo'
+                'getErrorInfo',
+                'getWithEditor'
             ]),
             from() {
                 if (this.transaction['type_id'] === this.constants.FROM_INCOME) {

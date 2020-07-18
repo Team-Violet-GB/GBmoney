@@ -39,6 +39,9 @@ export default {
         },
         setErrorInfo(state, data) {
             state.errorInfo = data
+        },
+        setWithEditor(state, data) {
+            state.withEditor = data
         }
     },
     state: {
@@ -47,7 +50,8 @@ export default {
         loadingStatus: false,
         editorShowStatus: false,
         errorStatus: false,
-        errorInfo: 'Нет данных!'
+        errorInfo: 'Нет данных!',
+        withEditor: true
     },
     getters: {
         getTransactions(state) {
@@ -57,7 +61,7 @@ export default {
             return state.editorData
         },
         getLoadingStatus(state) {
-            return state.loadingStatus;
+            return state.loadingStatus
         },
         getEditorShowStatus(state) {
             return state.editorShowStatus
@@ -67,6 +71,9 @@ export default {
         },
         getErrorInfo(state) {
             return state.errorInfo
+        },
+        getWithEditor(state) {
+            return state.withEditor
         }
     }
 }
