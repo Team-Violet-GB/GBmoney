@@ -46,11 +46,11 @@
     export default {
         props: {
             dateFrom: {
-                type: Date,
+                type: String,
                 default: null
             },
             dateTo: {
-                type: Date,
+                type: String,
                 default: null
             },
             withEditor: {

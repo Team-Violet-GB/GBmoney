@@ -5,9 +5,9 @@
             </el-col>
             <el-col :span="12">
                 <feed
-                    :withEditor="false"
-                    :dateFrom="new Date('2020-10-02')"
-                    :dateTo="new Date('2020-11-02')"></feed>
+                    withEditor="false"
+                    dateFrom="2020-10-02"
+                    dateTo="2020-11-02"></feed>
             </el-col>
         </el-row>
     </div>

@@ -7,8 +7,8 @@ export default {
                 'Content-Type': 'application/json'
             }
             const payload = {
-                dateFrom: this.getters.getDateFrom,
-                dateTo: this.getters.getDateTo
+                date_from: this.getters.getDateFrom,
+                date_to: this.getters.getDateTo
             }
             commit('setLoadingStatus', true);
             // axios.post('/api/transactions', payload, {headers: headers})

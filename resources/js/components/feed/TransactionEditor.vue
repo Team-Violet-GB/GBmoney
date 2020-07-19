@@ -7,9 +7,12 @@
                     <el-row :gutter="10" type="flex" justify="space-between">
                         <el-col :span="6">
                             <el-form-item label="когда">
-                                <el-date-picker type="date" format="dd.MM.yyyy"
+                                <el-date-picker type="date"
+                                                format="dd.MM.yyyy"
+                                                firstDayOfWeek="1"
                                                 v-model="getEditorData.date"
-                                                style="margin-top: 0; font-size: 1em; width: 100%;"></el-date-picker>
+                                                style="margin-top: 0; font-size: 1em; width: 100%;"
+                                ></el-date-picker>
                             </el-form-item>
                         </el-col>
                         <el-col :span="18">
