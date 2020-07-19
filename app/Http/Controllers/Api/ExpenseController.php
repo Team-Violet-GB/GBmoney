@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\ExpensesCollection;
 use App\Models\Expense;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -80,6 +80,6 @@ class ExpenseController extends Controller
             ->where('expenses.user_id', Auth::id())
             ->get();
 
-        return new ExpensesCollection($collection);
+        return new ExpensesCollection($collection->keyBy('id'));
     }
 }
