@@ -80,6 +80,6 @@ class ExpenseController extends Controller
             ->where('expenses.user_id', Auth::id())
             ->get();
 
-            return new ExpensesCollection($collection->keyBy('id'));
+        return new ExpensesCollection($collection->keyBy('id'));
     }
 }
