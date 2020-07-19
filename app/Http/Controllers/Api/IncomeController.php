@@ -81,6 +81,6 @@ class IncomeController extends Controller
             ->where('incomes.user_id', Auth::id())
             ->get();
 
-        return new IncomesCollection($collection);
+            return new IncomesCollection($collection->keyBy('id'));
     }
 }

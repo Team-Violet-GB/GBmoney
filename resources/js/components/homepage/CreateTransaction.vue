@@ -129,19 +129,19 @@
         }
       },
       sendTransaction() {
-        console.log( this.transaction ) //отправка формы
+        //console.log( this.transaction ) //отправка формы
       },
       getCategoryNames() {
-        this.pointsFrom.forEach((point) => {
-          if (point.id == this.transaction.fromID) {
-            this.transaction.nameFrom = point.name
+        for (var point in this.pointsFrom) {
+          if (this.pointsFrom[point].id == this.transaction.fromID) {
+            this.transaction.nameFrom = this.pointsFrom[point].name
           }
-        })
-        this.pointsTo.forEach((point) => {
-          if (point.id == this.transaction.toID) {
-            this.transaction.nameTo = point.name
+        }
+        for (var point in this.pointsTo) {
+          if (this.pointsTo[point].id == this.transaction.toID) {
+            this.transaction.nameTo = this.pointsTo[point].name
           }
-        })
+        }
       },
     },
   };
