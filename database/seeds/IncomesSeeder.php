@@ -26,29 +26,37 @@ class IncomesSeeder extends Seeder
             [
                 'user_id' => 1,
                 'name' => 'Зарплата',
-                'amount' => 20000,
-                'description' => null,
+                'amount' => 47524.68,
                 'icon_id' => 35,
             ],
             [
                 'user_id' => 1,
-                'name' => 'Депозит',
-                'amount' => 1000,
-                'description' => null,
+                'name' => 'Пенсия',
+                'amount' => 12300.00,
                 'icon_id' => 1,
             ],
             [
                 'user_id' => 1,
                 'name' => 'Кэшбэк',
-                'amount' => 500,
-                'description' => 'Маленькое такое описание',
+                'amount' => 502.70,
                 'icon_id' => 2,
             ],
             [
-                'user_id' => 1,
-                'name' => 'Подарки',
-                'amount' => 5000,
-                'description' => null,
+                'user_id' => 2,
+                'name' => 'Зарплата',
+                'amount' => 35000.00,
+                'icon_id' => 35,
+            ],
+            [
+                'user_id' => 2,
+                'name' => 'Стипендия',
+                'amount' => 8000.00,
+                'icon_id' => 32,
+            ],
+            [
+                'user_id' => 2,
+                'name' => 'Прочие доходы',
+                'amount' => 84122.48,
                 'icon_id' => 32,
             ]
         ];

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\ExpensesCollection;
 use App\Models\Expense;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class ExpenseController
@@ -26,7 +27,7 @@ class ExpenseController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -37,7 +38,7 @@ class ExpenseController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -48,8 +49,8 @@ class ExpenseController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -60,7 +61,7 @@ class ExpenseController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -69,15 +70,16 @@ class ExpenseController extends Controller
     }
 
     /**
-     * @api {get} /get/expenses
-     *
+     * Метод возвращает список расходов авторизованного пользователя.
      * @return ExpensesCollection
      */
     public function getExpensesWithIconName()
     {
-        $collection = Expense::select('expenses.*', 'i.name as icon_name')->join('icons as i', 'i.id', '=',
-            'expenses.icon_id')->get();
+        $collection = Expense::query()->select('expenses.*', 'i.name as icon_name')
+            ->join('icons as i', 'i.id', '=', 'expenses.icon_id')
+            ->where('expenses.user_id', Auth::id())
+            ->get();
 
-        return new ExpensesCollection($collection);
+        return new ExpensesCollection($collection->keyBy('id'));
     }
 }
