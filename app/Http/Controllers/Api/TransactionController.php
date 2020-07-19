@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class TransactionController extends Controller
 {
@@ -15,12 +16,30 @@ class TransactionController extends Controller
      *
      * @param Request $request
      * @return TransactionCollection
+     * @throws ValidationException
      */
     public function index(Request $request)
     {
+        // Выполняем валидацию данных из запроса.
+        $this->validate($request, [
+            'data_from' => 'nullable|date',
+            'data_to' => 'nullable|date|after:data_from',
+            'page' => 'nullable|int',
+        ]);
+
+        // Получаем данные из запроса.
+        $dataFrom = request('data_from');
+        $dataTo = request('data_to');
+
         $query = Transaction::query();
 
-        $query->where('user_id', Auth::id());
+        $query->where('user_id', Auth::id())
+            ->when($dataFrom, function ($query) use ($dataFrom) {
+                return $query->where('date', '>=', $dataFrom);
+            })
+            ->when($dataTo, function ($query) use ($dataTo) {
+                return $query->where('date', '<=', $dataTo);
+            });
 
         return new TransactionCollection($query->paginate(3));
     }
