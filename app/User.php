@@ -11,9 +11,6 @@ class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
 
-    const TYPE_INCOME = 1;
-    const TYPE_TRANSFER  = 2;
-    const TYPE_EXPENSE = 3;
     /**
      * The attributes that are mass assignable.
      *

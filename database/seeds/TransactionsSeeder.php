@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Transaction;
 use App\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +27,7 @@ class TransactionsSeeder extends Seeder
         return [
             [
                 'user_id' => 1,
-                'type' => User::TYPE_INCOME,
+                'type' => Transaction::TYPE_INCOME,
                 'amount' => 12560.20,
                 'date' => '2020-07-01 10:56:27',
                 'comment' => null,
@@ -38,7 +39,7 @@ class TransactionsSeeder extends Seeder
             ],
             [
                 'user_id' => 1,
-                'type' => User::TYPE_EXPENSE,
+                'type' => Transaction::TYPE_EXPENSE,
                 'amount' => 805.00,
                 'date' => '2020-07-02 12:33:27',
                 'comment' => null,
@@ -50,7 +51,7 @@ class TransactionsSeeder extends Seeder
             ],
             [
                 'user_id' => 2,
-                'type' => User::TYPE_EXPENSE,
+                'type' => Transaction::TYPE_EXPENSE,
                 'amount' => 55.60,
                 'date' => '2020-07-03 08:06:02',
                 'comment' => null,
@@ -62,7 +63,7 @@ class TransactionsSeeder extends Seeder
             ],
             [
                 'user_id' => 2,
-                'type' => User::TYPE_EXPENSE,
+                'type' => Transaction::TYPE_EXPENSE,
                 'amount' => 606.99,
                 'date' => '2020-07-03 08:54:22',
                 'comment' => null,
@@ -74,7 +75,7 @@ class TransactionsSeeder extends Seeder
             ],
             [
                 'user_id' => 2,
-                'type' => User::TYPE_TRANSFER,
+                'type' => Transaction::TYPE_TRANSFER,
                 'amount' => 1000.00,
                 'date' => '2020-07-04 14:32:07',
                 'comment' => null,
@@ -86,7 +87,7 @@ class TransactionsSeeder extends Seeder
             ],
             [
                 'user_id' => 1,
-                'type' => User::TYPE_TRANSFER,
+                'type' => Transaction::TYPE_TRANSFER,
                 'amount' => 5000.00,
                 'date' => '2020-07-05 14:42:17',
                 'comment' => null,
@@ -98,7 +99,7 @@ class TransactionsSeeder extends Seeder
             ],
             [
                 'user_id' => 1,
-                'type' => User::TYPE_EXPENSE,
+                'type' => Transaction::TYPE_EXPENSE,
                 'amount' => 2000.00,
                 'date' => '2020-07-06 20:34:22',
                 'comment' => 'Положил деньги на телефон детям',
@@ -110,7 +111,7 @@ class TransactionsSeeder extends Seeder
             ],
             [
                 'user_id' => 1,
-                'type' => User::TYPE_EXPENSE,
+                'type' => Transaction::TYPE_EXPENSE,
                 'amount' => 333.99,
                 'date' => '2020-07-07 09:01:22',
                 'comment' => null,
@@ -122,7 +123,7 @@ class TransactionsSeeder extends Seeder
             ],
             [
                 'user_id' => 2,
-                'type' => User::TYPE_INCOME,
+                'type' => Transaction::TYPE_INCOME,
                 'amount' => 7822.00,
                 'date' => '2020-07-08 11:21:36',
                 'comment' => 'За прошлый месяц',
@@ -134,7 +135,7 @@ class TransactionsSeeder extends Seeder
             ],
             [
                 'user_id' => 2,
-                'type' => User::TYPE_EXPENSE,
+                'type' => Transaction::TYPE_EXPENSE,
                 'amount' => 1705.21,
                 'date' => '2020-07-08 22:01:22',
                 'comment' => null,
@@ -146,7 +147,7 @@ class TransactionsSeeder extends Seeder
             ],
             [
                 'user_id' => 1,
-                'type' => User::TYPE_INCOME,
+                'type' => Transaction::TYPE_INCOME,
                 'amount' => 12560.20,
                 'date' => '2020-07-11 10:56:27',
                 'comment' => null,
@@ -158,7 +159,7 @@ class TransactionsSeeder extends Seeder
             ],
             [
                 'user_id' => 1,
-                'type' => User::TYPE_EXPENSE,
+                'type' => Transaction::TYPE_EXPENSE,
                 'amount' => 500.00,
                 'date' => '2020-07-12 12:01:22',
                 'comment' => null,
@@ -170,7 +171,7 @@ class TransactionsSeeder extends Seeder
             ],
             [
                 'user_id' => 1,
-                'type' => User::TYPE_EXPENSE,
+                'type' => Transaction::TYPE_EXPENSE,
                 'amount' => 217.00,
                 'date' => '2020-07-12 12:05:02',
                 'comment' => null,
@@ -182,7 +183,7 @@ class TransactionsSeeder extends Seeder
             ],
             [
                 'user_id' => 1,
-                'type' => User::TYPE_EXPENSE,
+                'type' => Transaction::TYPE_EXPENSE,
                 'amount' => 903.54,
                 'date' => '2020-07-12 12:05:02',
                 'comment' => null,
@@ -194,7 +195,7 @@ class TransactionsSeeder extends Seeder
             ],
             [
                 'user_id' => 2,
-                'type' => User::TYPE_INCOME,
+                'type' => Transaction::TYPE_INCOME,
                 'amount' => 22000.00,
                 'date' => '2020-07-19 11:20:36',
                 'comment' => 'Первый транш',
@@ -206,7 +207,7 @@ class TransactionsSeeder extends Seeder
             ],
             [
                 'user_id' => 2,
-                'type' => User::TYPE_INCOME,
+                'type' => Transaction::TYPE_INCOME,
                 'amount' => 24000.00,
                 'date' => '2020-07-19 11:34:56',
                 'comment' => 'Второй транш',
@@ -218,7 +219,7 @@ class TransactionsSeeder extends Seeder
             ],
             [
                 'user_id' => 2,
-                'type' => User::TYPE_EXPENSE,
+                'type' => Transaction::TYPE_EXPENSE,
                 'amount' => 1705.21,
                 'date' => '2020-07-19 12:08:22',
                 'comment' => null,
@@ -230,7 +231,7 @@ class TransactionsSeeder extends Seeder
             ],
             [
                 'user_id' => 2,
-                'type' => User::TYPE_TRANSFER,
+                'type' => Transaction::TYPE_TRANSFER,
                 'amount' => 10000.00,
                 'date' => '2020-07-19 14:32:07',
                 'comment' => null,
@@ -242,7 +243,7 @@ class TransactionsSeeder extends Seeder
             ],
             [
                 'user_id' => 2,
-                'type' => User::TYPE_EXPENSE,
+                'type' => Transaction::TYPE_EXPENSE,
                 'amount' => 1705.21,
                 'date' => '2020-07-19 15:20:01',
                 'comment' => null,
