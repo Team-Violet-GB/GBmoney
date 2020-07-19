@@ -45,6 +45,14 @@
 
     export default {
         props: {
+            dateFrom: {
+                type: Date,
+                default: null
+            },
+            dateTo: {
+                type: Date,
+                default: null
+            },
             withEditor: {
                 type: Boolean,
                 default: true
@@ -67,7 +75,9 @@
                 'requestTransactions'
             ]),
             ...mapMutations([
-                'setWithEditor'
+                'setWithEditor',
+                'setDateFrom',
+                'setDateTo'
             ]),
             getLocalDateString(date) {
                 let days = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
@@ -84,12 +94,14 @@
             }
         },
         mounted() {
-            this.fetchIncomes()
-            this.fetchWallets()
-            this.fetchExpenses()
-            this.fetchTags()
+            this.fetchIncomes();
+            this.fetchWallets();
+            this.fetchExpenses();
+            this.fetchTags();
+            this.setWithEditor(this.withEditor);
+            this.setDateFrom(this.dateFrom);
+            this.setDateTo(this.dateTo);
             this.requestTransactions();
-            this.setWithEditor(this.withEditor)
         },
         components: {
             transactionGroup,

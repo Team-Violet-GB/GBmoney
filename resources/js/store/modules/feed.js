@@ -6,8 +6,12 @@ export default {
             const headers = {
                 'Content-Type': 'application/json'
             }
+            const payload = {
+                dateFrom: this.getters.getDateFrom,
+                dateTo: this.getters.getDateTo
+            }
             commit('setLoadingStatus', true);
-            axios.get('storage/testTransactions.json', {headers: headers})
+            axios.post('/api/transactions', payload,{headers: headers})
                 .then(response => {
                     commit('setTransactions', response.data);
                 })
@@ -42,6 +46,12 @@ export default {
         },
         setWithEditor(state, data) {
             state.withEditor = data
+        },
+        setDateFrom(state, data) {
+            state.dateFrom = data
+        },
+        setDateTo(state, data) {
+            state.dateTo = data
         }
     },
     state: {
@@ -51,7 +61,9 @@ export default {
         editorShowStatus: false,
         errorStatus: false,
         errorInfo: 'Нет данных!',
-        withEditor: true
+        withEditor: true,
+        dateFrom: null,
+        dateTo: null
     },
     getters: {
         getTransactions(state) {
@@ -74,6 +86,12 @@ export default {
         },
         getWithEditor(state) {
             return state.withEditor
+        },
+        getDateFrom(state) {
+            return state.dateFrom
+        },
+        getDateTo(state) {
+            return state.dateTo
         }
     }
 }

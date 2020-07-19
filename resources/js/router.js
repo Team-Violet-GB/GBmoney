@@ -38,7 +38,7 @@ const routes = [
     path: '/monthly-report',
     name: 'monthlyReport',
     meta: { layout: 'main' },
-    component: () => import('./components/reports/monthlyReport.vue')
+    component: () => import('./components/reports/MonthlyReport.vue')
   }
 ]
 
