@@ -11,7 +11,8 @@ export default {
                 dateTo: this.getters.getDateTo
             }
             commit('setLoadingStatus', true);
-            axios.post('/api/transactions', payload,{headers: headers})
+            // axios.post('/api/transactions', payload, {headers: headers})
+            axios.get('storage/testTransactions.json', {headers: headers})
                 .then(response => {
                     commit('setTransactions', response.data);
                 })
