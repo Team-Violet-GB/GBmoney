@@ -39,7 +39,7 @@
             url: '../images/gm-money-logo.jpg',
             ruleForm: {
                 pass: '',
-                email: this.user.email,
+                email: this.$store.getters.user.email,
             },
             rules: {
                 pass: [
@@ -58,8 +58,7 @@
         ]),
         ...mapGetters([
             'user'
-        ])
-        ,
+        ]),
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {

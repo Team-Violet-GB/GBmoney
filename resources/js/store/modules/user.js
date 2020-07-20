@@ -56,9 +56,9 @@ export default {
         }*/
     },
     mutations: {
-        /*setUserData(state, user) {
-            state.email = user.email;
-        },*/
+        setUserEmail(state, email) {
+            state.email = email;
+        },
         login(state, user) {
             state.token = user.token;
             state.email = user.email;
