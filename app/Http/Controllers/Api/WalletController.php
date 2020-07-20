@@ -81,6 +81,6 @@ class WalletController extends Controller
             ->where('wallets.user_id', Auth::id())
             ->get();
 
-        return new WalletsCollection($collection);
+        return new WalletsCollection($collection->keyBy('id'));
     }
 }

@@ -1,39 +1,27 @@
+import axios from 'axios'
+
 export default {
     actions: {
         fetchIncomes({ commit }) {
-            const incomes = [
-                { id: 1, name: "Зарплата", icon: "el-icon-money", money: 20000 },
-                { id: 2, name: "Депозит", icon: "el-icon-s-data", money: 1000 },
-                { id: 3, name: "Кэшбэк", icon: "el-icon-coin", money: 500 },
-                { id: 4, name: "Подарки", icon: "el-icon-present", money: 5000 }
-            ]
-            commit('updateIncomes', incomes)
+            axios.get('/api/get/incomes')
+            .then(response => {
+                const incomes = response.data.data
+                commit('updateIncomes', incomes)
+            })
         },
         fetchWallets({ commit }) {
-            const wallets = [
-                { id: 1, name: "Наличные", icon: "el-icon-wallet", money: 20000 },
-                { id: 2, name: "Карта Такая", icon: "el-icon-bank-card", money: 15000 },
-                { id: 3, name: "Карта Сякая", icon: "el-icon-bank-card", money: 100000 }
-            ]
-            commit('updateWallets', wallets)
+            axios.get('/api/get/wallets')
+            .then(response => {
+                const wallets = response.data.data
+                commit('updateWallets', wallets)
+            })
         },
         fetchExpenses({ commit }) {
-            const expenses = [
-                { id: 1, name: "Бензин", icon: "el-icon-tableware", money: 20000, plan: 5000 },
-                { id: 2, name: "Еда", icon: "el-icon-truck", money: 15000, plan: 5000 },
-                { id: 3, name: "Связь", icon: "el-icon-present", money: 5000, plan: 5000 },
-                { id: 4, name: "Развлечения", icon: "el-icon-tableware", money: 5000, plan: 5000 },
-                { id: 5, name: "Вещи", icon: "el-icon-truck", money: 4000, plan: 5000 },
-                { id: 6, name: "Автомобиль", icon: "el-icon-present", money: 1000, plan: 5000 },
-                { id: 7, name: "Дорога", icon: "el-icon-tableware", money: 500, plan: 5000 },
-                { id: 8, name: "Ребенок", icon: "el-icon-truck", money: 300, plan: 5000 },
-                { id: 9, name: "Другое", icon: "el-icon-present", money: 3300, plan: 5000 },
-                { id: 10, name: "Здоровье", icon: "el-icon-tableware", money: 15000, plan: 5000 },
-                { id: 11, name: "Ипотека", icon: "el-icon-truck", money: 4500, plan: 5000 },
-                { id: 12, name: "Квартира", icon: "el-icon-present", money: 6000, plan: 5000 },
-                { id: 13, name: "Учеба", icon: "el-icon-tableware", money: 15000, plan: 5000 },
-            ]
-            commit('updateExpenses', expenses)
+            axios.get('/api/get/expenses')
+            .then(response => {
+                const expenses = response.data.data
+                commit('updateExpenses', expenses)
+            })
         },
         fetchTags({ commit }) {
             const tags = [
@@ -46,24 +34,43 @@ export default {
         },
     },
     mutations: {
-        updateIncomes(state, point) {
-            state.incomesList = point
+        updateIncomes(state, points) {
+            state.incomesList = points
+            let summ = 0
+            for (let point in points)  summ += Number(points[point].amount)
+            state.incomesSumm = summ
+            console.log()
         },
-        updateWallets(state, point) {
-            state.walletsList = point
+        updateWallets(state, points) {
+            state.walletsList = points
+            let summ = 0
+            for (let point in points)  summ += Number(points[point].amount)
+            state.walletsSumm = summ
         },
-        updateExpenses(state, point) {
-            state.expensesList = point
+        updateExpenses(state, points) {
+            state.expensesList = points
+            let summ = 0
+            for (let point in points)  summ += Number(points[point].amount)
+            state.expensesSumm = summ
+
+            let limit = 0
+            for (let point in points)  limit += Number(points[point].max_limit)
+            state.expensesLimit = limit
         },
-        updateTags(state, point) {
-            state.tagsList = point
-        }
+
+        updateTags(state, points) {
+            state.tagsList = points
+        },
     },
     state: {
         incomesList: [],
         walletsList: [],
         expensesList: [],
-        tagsList: []
+        tagsList: [],
+        incomesSumm: null,
+        walletsSumm: null,
+        expensesSumm: null,
+        expensesLimit: null,
     },
     getters: {
         incomes(state) {
@@ -77,6 +84,18 @@ export default {
         },
         tags(state) {
             return state.tagsList
+        },
+        incomesSumm(state) {
+            return state.incomesSumm
+        },
+        walletsSumm(state) {
+            return state.walletsSumm
+        },
+        expensesSumm(state) {
+            return state.walletsSumm
+        },
+        expensesLimit(state) {
+            return state.expensesLimit
         },
     }
 }

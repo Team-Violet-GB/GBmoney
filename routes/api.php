@@ -1,8 +1,5 @@
 <?php
 
-use App\Http\Resources\IconsCollection;
-use App\Models\Icon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,5 +30,8 @@ Route::middleware('auth:api')->group(function () {
         Route::get('get/wallets', 'WalletController@getWalletsWithIconName');
         Route::get('get/expenses', 'ExpenseController@getExpensesWithIconName');
         Route::get('get/incomes', 'IncomeController@getIncomesWithIconName');
+
+        // Работа с транзакциями.
+        Route::apiResource('transactions', 'TransactionController');
     });
 });
