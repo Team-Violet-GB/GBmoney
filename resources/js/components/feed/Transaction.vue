@@ -9,7 +9,7 @@
                     </el-col>
                     <el-col :span="3"><i class="el-icon-right"></i></el-col>
                     <el-col :span="5">
-                        <div>{{ transaction.money }} &#8381</div>
+                        <div>{{ transaction.amount }} &#8381</div>
                     </el-col>
                     <el-col :span="3"><i class="el-icon-right"></i></el-col>
                     <el-col :span="8">
@@ -35,7 +35,7 @@
                     <div>{{ to }}</div>
                 </el-col>
                 <el-col :span="5">
-                    <div>{{ transaction.money }} &#8381</div>
+                    <div>{{ transaction.amount }} &#8381</div>
                 </el-col>
             </el-row>
         </div>
@@ -87,19 +87,23 @@
             ]),
             from() {
                 if (this.transaction['type_id'] === this.constants.FROM_INCOME) {
-                    return this.incomes.find(item => item.id === this.transaction.income_id).name;
+                    const income = this.incomes[this.transaction.income_id];
+                    return income !== undefined ? income.name : '';
                 } else {
-                    return this.wallets.find(item => item.id === this.transaction.wallet_id_from).name;
+                    const wallet = this.wallets[this.transaction.wallet_id_from];
+                    return wallet !== undefined ? wallet.name : '';
                 }
             },
             to() {
                 if (this.transaction['type_id'] === this.constants.FROM_WALLET) {
-                    let expenseName = this.expenses.find(expense => expense.id === this.transaction.expense_id).name
-                    let tagName = this.tags.find(item => item.id === this.transaction.tag_id).name;
+                    const expense = this.expenses[this.transaction.expense_id];
+                    const expenseName = expense !== undefined ? expense.name : '';
+                    const tag = this.tags[this.transaction.tag_id];
+                    const tagName = tag !== undefined ? tag.name : '';
                     return `${expenseName} (${tagName})`
-
                 } else {
-                    return this.wallets.find(item => item.id === this.transaction.wallet_id_to).name;
+                    const wallet = this.wallets[this.transaction.wallet_id_to];
+                    return wallet !== undefined ? wallet.name : '';
                 }
             },
         },
@@ -117,8 +121,7 @@
             edit(transaction) {
                 this.setEditorData(transaction);
                 this.setEditorShowStatus(true)
-            },
-
+            }
         }
     }
 </script>

@@ -81,20 +81,20 @@
             groupSumCalc(group) {
                 let sum = 0;
                 for (let i = 0; i < group.length; i++) {
-                    sum += group[i].money;
+                    sum += group[i].amount;
                 }
                 return sum;
             }
         },
-        mounted() {
-            this.fetchIncomes();
-            this.fetchWallets();
-            this.fetchExpenses();
-            this.fetchTags();
+        async mounted() {
+            await this.fetchIncomes();
+            await this.fetchWallets();
+            await this.fetchExpenses();
+            await this.fetchTags();
             this.setEditable(this.editable);
             this.setDateFrom(this.dateFrom);
             this.setDateTo(this.dateTo);
-            this.requestTransactions();
+            await this.requestTransactions();
         },
         components: {
             transactionGroup,
@@ -112,6 +112,7 @@
         background-color: #3D3E48;
         color: #b682f9;
     }
+
     .el-card__header {
         background-color: #5F6068 !important;
     }

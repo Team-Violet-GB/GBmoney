@@ -17,7 +17,7 @@
                         </el-col>
                         <el-col :span="5">
                             <el-form-item prop="money" label="₽" class="label">
-                                <el-input clearable v-model.number="getEditorData.money"
+                                <el-input clearable v-model.number="getEditorData.amount"
                                           class="select_option"></el-input>
                             </el-form-item>
                         </el-col>
