@@ -20,4 +20,14 @@ class UserController extends Controller
 
         return response()->json(['message' => 'Пользователь не найден!'], 404);
     }
+
+    public function update(Request $request)
+    {
+
+    }
+
+    public function delete(Request $request)
+    {
+
+    }
 }
