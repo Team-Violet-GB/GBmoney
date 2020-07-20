@@ -26,7 +26,7 @@
               class="cstm-input cstm-mrgn-top-20"
               v-model="comment">
             </el-input>
-            <el-button class="cstm-create-button cstm-mrgn-top-20" type="success" @click="submitTransaction">Записать</el-button>
+            <el-button class="cstm-create-button cstm-mrgn-top-20" type="success" @click="prepareTransaction">Записать</el-button>
           </div>
         </el-drawer>
     </div>
@@ -71,21 +71,14 @@
             return (this.transaction.toType === 'wallet') ? this.wallets : this.expenses
         }, 
     },
-
+    
     mounted() {
-        this.fetchIncomes()
-        this.fetchWallets()
-        this.fetchExpenses()
         this.fetchTags()
     },
 
-    methods: {
-        ...mapActions([
-            'fetchIncomes',
-            'fetchWallets',
-            'fetchExpenses',
-            'fetchTags',
-            ]),
+    methods: 
+    {
+      ...mapActions(['fetchTags']),
 
       handleClose() {
         this.$emit('closeCreateWindow')
@@ -116,13 +109,13 @@
         });
       },
 
-      submitTransaction() {
+      prepareTransaction() {
         this.transaction.tag = this.tag
         this.transaction.amount = this.amount
         this.transaction.comment = this.comment
         this.transaction.date = this.date
         if (this.checkForm()) {
-          console.log( this.transaction )
+          this.sendTransaction(this.transaction)
           this.getCategoryNames()
           this.MessageSuccess('Новая транзакция на сумму ' + this.amount + ' из ' + this.transaction.nameFrom + ' в ' + this.transaction.nameTo)
           this.amount = this.comment = this.tag = null
@@ -135,17 +128,20 @@
             });
         }
       },
+      sendTransaction() {
+        //console.log( this.transaction ) //отправка формы
+      },
       getCategoryNames() {
-        this.pointsFrom.forEach((point) => {
-          if (point.id == this.transaction.fromID) {
-            this.transaction.nameFrom = point.name
+        for (var point in this.pointsFrom) {
+          if (this.pointsFrom[point].id == this.transaction.fromID) {
+            this.transaction.nameFrom = this.pointsFrom[point].name
           }
-        })
-        this.pointsTo.forEach((point) => {
-          if (point.id == this.transaction.toID) {
-            this.transaction.nameTo = point.name
+        }
+        for (var point in this.pointsTo) {
+          if (this.pointsTo[point].id == this.transaction.toID) {
+            this.transaction.nameTo = this.pointsTo[point].name
           }
-        })
+        }
       },
     },
   };
