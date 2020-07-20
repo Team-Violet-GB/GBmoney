@@ -1,3 +1,4 @@
+/*
 export default {
     actions: {
         login({ commit }, data) {
@@ -16,17 +17,17 @@ export default {
                 data.this.$router.push('/')
             })
             .catch((error) => {
-                data.this.$message.error(error.response.data.errors) 
+                data.this.$message.error(error.response.data.errors)
             })
         },
         logout({ commit }, data) {
             data.this.axios.get('/api/logout')
             .then(response => {
-                localStorage.removeItem('user-token') 
+                localStorage.removeItem('user-token')
                 commit('logout')
             })
             .catch((error) => {
-                data.this.$message.error(error.response.data.errors) 
+                data.this.$message.error(error.response.data.errors)
             })
         }
     },
@@ -46,3 +47,4 @@ export default {
         isAuth: (state) => !!state.token,
     }
 }
+*/
