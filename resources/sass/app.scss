@@ -8,7 +8,7 @@
 //@import '~bootstrap/scss/bootstrap';
 
 .el-card {
-    border: 1px solid #ffffff21 !important;
+    border: 0 solid rgba(255, 255, 255, 0) !important;
 }
 
 .el-card__header {
@@ -16,3 +16,27 @@
     padding: 8px !important;
     border: 1px solid #ffffff00 !important;
 }
+
+.el-card__body {
+    padding: 4px 10px !important;
+}
+
+.el-form-item__label {
+    color: #f1cb08d9 !important;
+    font-weight: 500;
+}
+
+.el-message-box {
+    background-color: #000000d6 !important;
+    color: #f1cb08d9 !important;
+}
+
+.el-message-box__content {
+    color: #ffffff !important;
+    font-weight: 500 !important;
+}
+
+.el-message-box__title {
+    color: #0dadec !important;
+    font-weight: 700 !important;
+  }

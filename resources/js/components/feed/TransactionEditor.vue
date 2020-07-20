@@ -16,7 +16,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="5">
-                            <el-form-item prop="money" label="₽" class="label">
+                            <el-form-item prop="amount" label="₽" class="label">
                                 <el-input clearable v-model.number="getEditorData.amount"
                                           class="select_option"></el-input>
                             </el-form-item>
@@ -101,12 +101,12 @@
             return {
                 constants: constants,
                 rules: {
-                    money: [
+                    amount: [
                         {required: true, message: 'Ну, хоть немношко!', trigger: 'blur'},
                         {type: 'number', message: 'Только цыфры!', trigger: 'blur'},
                     ],
                     comment: [
-                        {max: 70, message: 'Хватит!', trigger: 'change'}
+                        {max: 50, message: 'Хватит писать!', trigger: 'change'}
                     ]
                 }
             }
@@ -206,14 +206,12 @@
 <style scoped>
     .editor {
         color: rgb(255, 208, 75) !important;
-        background-color: #2c2e3894;
-        border-radius: 4px;
-        margin-top: 15px;
-        padding-top: 15px;
-        padding-bottom: 1px;
-        padding-right: 17px;
-        padding-left: 17px;
-        box-shadow: 0 0 30px rgba(255, 255, 255, 0.1), 0 0 5px rgba(255, 255, 225, 0.2);
+        background-color: #3d3e48;
+        border-radius: 2px;
+        margin-top: 5px;
+        margin-bottom: 25px;
+        padding: 15px 17px 1px;
+        box-shadow: 0 2px 4px rgba(255, 255, 255, 0.3), 0 0 7px rgba(255, 255, 255, 0.07);
     }
 
     .editor-pointers {

@@ -10,7 +10,7 @@
             "income_id": 1,
             "expense_id": null,
             "tag_id": null,
-            "amount": 1700,
+            "amount": 170078988,
             "comment": "Перевод зряплаты на карту ..."
         }
     ],
@@ -26,7 +26,7 @@
             "expense_id": null,
             "tag_id": null,
             "amount": 2000,
-            "comment": "Снятие с карты и засовывание налички в кошелек ..."
+            "comment": "Снятие с карты и засовывание ..."
         },
         {
             "id": 3,

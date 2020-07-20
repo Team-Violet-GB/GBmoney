@@ -2,22 +2,20 @@
     <div>
         <!--        разметка и поведение для ленты-->
         <div v-if="getEditable" class="tran-wrapper" @click="edit(transaction)">
-            <el-card shadow="hover" class="box-card">
+            <el-card>
                 <el-row :gutter="10" class="tran-row-data">
-                    <el-col :span="5">
+                    <el-col :span="3">
                         <div>{{ from }}</div>
                     </el-col>
-                    <el-col :span="3"><i class="el-icon-right"></i></el-col>
-                    <el-col :span="5">
+                    <el-col :span="2"><i class="el-icon-right"></i></el-col>
+                    <el-col :span="3">
                         <div>{{ transaction.amount }} &#8381</div>
                     </el-col>
-                    <el-col :span="3"><i class="el-icon-right"></i></el-col>
-                    <el-col :span="8">
+                    <el-col :span="2"><i class="el-icon-right"></i></el-col>
+                    <el-col :span="6">
                         <div>{{ to }}</div>
                     </el-col>
-                </el-row>
-                <el-row class="editor-comment">
-                    <el-col :span="24" class="tran-comment">
+                    <el-col :span="8" class="tran-comment">
                         <div>{{ transaction.comment }}</div>
                     </el-col>
                 </el-row>
@@ -128,7 +126,6 @@
 
 <style scoped>
     .el-card {
-        margin-top: 15px;
         background-color: #3D3E48;
     }
 
@@ -145,12 +142,11 @@
     .tran-row-data div {
         color: #ffffff;
         font-size: large;
-        font-weight: 600;
+        font-weight: 400;
     }
 
     .tran-comment div {
         color: rgba(12, 187, 163, 0.82);
-        font-weight: bold;
-        margin-top: 10px;
+        font-weight: 400;
     }
 </style>
