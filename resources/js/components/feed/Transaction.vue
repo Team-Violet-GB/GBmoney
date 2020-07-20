@@ -1,8 +1,7 @@
 <template>
     <div>
-
-<!--        разметка и поведение для ленты-->
-        <div v-if="getWithEditor" class="tran-wrapper" @click="edit(transaction)">
+        <!--        разметка и поведение для ленты-->
+        <div v-if="getEditable" class="tran-wrapper" @click="edit(transaction)">
             <el-row :gutter="10" class="tran-row-data">
                 <el-col :span="8">
                     <div>{{ from }}</div>
@@ -21,7 +20,7 @@
             </el-row>
         </div>
 
-<!--        разметка и поведение для отчетов-->
+        <!--        разметка и поведение для отчетов-->
         <div v-else>
             <el-row :gutter="10" class="tran-row-data">
                 <el-col :span="8">
@@ -36,9 +35,9 @@
             </el-row>
         </div>
 
-<!--    подключаемый по условию компонент редактора транзакций    -->
+        <!--    подключаемый по условию компонент редактора транзакций    -->
         <transactionEditor
-            v-if="getWithEditor"
+            v-if="getEditable"
             :transactionEditorId="transaction.id"
         />
     </div>
@@ -77,7 +76,7 @@
                 'getLoadingStatus',
                 'getErrorStatus',
                 'getErrorInfo',
-                'getWithEditor'
+                'getEditable'
             ]),
             from() {
                 if (this.transaction['type_id'] === this.constants.FROM_INCOME) {
@@ -123,16 +122,23 @@
 
     .tran-wrapper {
         cursor: pointer;
+        outline: none;
+        z-index: 2;
+
+    }
+
+    .hover {
+        box-shadow: #9561e2;
     }
 
     .tran-row-data div {
-        color: #acdaff;
+        color: #ffffff;
         font-size: large;
         font-weight: 600;
     }
 
     .tran-comment div {
-        color: #0abda4d1;
+        color: rgba(12, 187, 163, 0.82);
         font-weight: bold;
         margin-top: 10px;
     }

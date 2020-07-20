@@ -4,15 +4,16 @@ import router from './router'
 import locale from 'element-ui/lib/locale/lang/ru-RU'
 import 'element-ui/lib/theme-chalk/index.css'
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import store from "./store"
+import ScrollLoader from 'vue-scroll-loader'
 
 Vue.use(VueRouter)
 Vue.use(ElementUI, { locale })
 Vue.use(VueAxios, axios)
+Vue.use(ScrollLoader)
 
 import App from './components/App'
 

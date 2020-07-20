@@ -23,23 +23,10 @@
             <!--            группа транзакций-->
             <transaction-group :transactionGroup="transactionGroup" class="tran-group"/>
         </el-card>
-
-        <!--        Пагинация-->
-        <div v-show="!getErrorStatus" class="pagination block">
-            <el-pagination
-                background
-                :page-size="20"
-                :pager-count="11"
-                :total="1000"
-                hide-on-single-page
-                layout="prev, pager, next">
-            </el-pagination>
-        </div>
     </div>
 </template>
 
 <script>
-    import 'element-theme-dark';
     import {mapActions, mapGetters, mapMutations} from 'vuex';
     import transactionGroup from "./TransactionGroup";
 
@@ -53,7 +40,7 @@
                 type: String,
                 default: null
             },
-            withEditor: {
+            editable: {
                 type: Boolean,
                 default: true
             }
@@ -75,7 +62,7 @@
                 'requestTransactions'
             ]),
             ...mapMutations([
-                'setWithEditor',
+                'setEditable',
                 'setDateFrom',
                 'setDateTo'
             ]),
@@ -98,7 +85,7 @@
             this.fetchWallets();
             this.fetchExpenses();
             this.fetchTags();
-            this.setWithEditor(this.withEditor);
+            this.setEditable(this.editable);
             this.setDateFrom(this.dateFrom);
             this.setDateTo(this.dateTo);
             this.requestTransactions();
@@ -114,19 +101,14 @@
         margin: 0;
     }
 
-    .pagination {
-        margin-top: 20px;
-        margin-bottom: 50px;
-        display: flex;
-        justify-content: center;
-    }
-
     .el-card {
         margin-bottom: 30px;
+        background-color: #3D3E48;
+        color: #b682f9;
     }
 
     .tran-group-header {
-        color: #92a226;
+        color: #b3fb2acf;
         font-size: x-large;
         font-weight: 500;
         padding-left: 20px;
@@ -134,7 +116,7 @@
 
     .tran-group-header-sum {
         text-align: right;
-        color: #008ea6ed;
+        color: #b3fb2acf;
         font-size: large;
         font-weight: 500;
         padding-right: 20px;

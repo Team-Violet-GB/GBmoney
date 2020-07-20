@@ -25,5 +25,6 @@
 <style scoped>
     .el-card {
         margin-top: 15px;
+        background-color: #3D3E48;
     }
 </style>

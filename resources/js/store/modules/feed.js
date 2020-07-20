@@ -45,8 +45,8 @@ export default {
         setErrorInfo(state, data) {
             state.errorInfo = data
         },
-        setWithEditor(state, data) {
-            state.withEditor = data
+        setEditable(state, data) {
+            state.editable = data
         },
         setDateFrom(state, data) {
             state.dateFrom = data
@@ -62,7 +62,7 @@ export default {
         editorShowStatus: false,
         errorStatus: false,
         errorInfo: 'Нет данных!',
-        withEditor: true,
+        editable: true,
         dateFrom: null,
         dateTo: null
     },
@@ -85,8 +85,8 @@ export default {
         getErrorInfo(state) {
             return state.errorInfo
         },
-        getWithEditor(state) {
-            return state.withEditor
+        getEditable(state) {
+            return state.editable
         },
         getDateFrom(state) {
             return state.dateFrom

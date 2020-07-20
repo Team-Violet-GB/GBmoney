@@ -5,7 +5,7 @@
             </el-col>
             <el-col :span="12">
                 <feed
-                    withEditor="false"
+                    :editable="false"
                     dateFrom="2020-10-02"
                     dateTo="2020-11-02"></feed>
             </el-col>
