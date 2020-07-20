@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-collapse-transition>
+        <el-collapse-transition >
             <div v-if="getEditorShowStatus && transactionEditorId === getEditorData.id" class="editor">
                 <el-form :model="getEditorData" ref="editorForm" :rules="rules" label-position="right"
                          label-width=" 100px" size="small">
@@ -206,6 +206,8 @@
 <style scoped>
     .editor {
         color: rgb(255, 208, 75) !important;
+        background-color: #2c2e3894;
+        border-radius: 4px;
         margin-top: 15px;
         padding-top: 15px;
         padding-bottom: 1px;
@@ -228,10 +230,6 @@
         font-weight: 400;
         border-radius: 0;
         font-size: 0.95em;
-    }
-
-    .label {
-        color: rgb(255, 208, 75) !important;
     }
 
 </style>
