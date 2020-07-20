@@ -14,19 +14,15 @@ export default {
     ...mapGetters([
       'user',
     ]),
-    
+
     email() {
         return this.user.email
     }
   },
-  mounted() {
-      this.setUserData()
-  },
 
   methods: {
-    ...mapActions([,
+    ...mapActions([
         'logout',
-        'setUserData'
     ]),
 
     out() {

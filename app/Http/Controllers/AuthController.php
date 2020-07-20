@@ -44,6 +44,7 @@ class AuthController extends Controller
             $token = $user->createToken($user->email . '-' . now());
 
             return response()->json([
+                'email' => $user->email,
                 'token' => $token->accessToken
             ]);
         } else {

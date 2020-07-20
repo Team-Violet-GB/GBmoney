@@ -8,13 +8,14 @@ export default {
                 password: data.password
             })
                 .then(response => {
-                    const token = response.data.token
-                    localStorage.setItem('user-token', token)
+                    const user = response.data
+                    localStorage.setItem('user-token', user.token)
+                    localStorage.setItem('user-email', user.email)
                     data.this.$message({
                         message: 'Добро пожаловать!',
                         type: 'success'
                     })
-                    commit('login', token)
+                    commit('login', user)
                     data.this.$router.push('/')
                 })
                 .catch((error) => {
@@ -25,6 +26,7 @@ export default {
             axios.get('/api/logout')
                 .then(response => {
                     localStorage.removeItem('user-token')
+                    localStorage.removeItem('user-email')
                     commit('logout')
                 })
                 .catch((error) => {
@@ -53,20 +55,19 @@ export default {
     },
     mutations: {
         setUserData(state, user) {
-            state.id = user.id;
             state.email = user.email;
         },
-        login(state, token) {
-            state.token = token
+        login(state, user) {
+            state.token = user.token;
+            state.email = user.email;
         },
-
         logout(state) {
-            state.token = ''
+            state.token = '';
+            state.email = '';
         }
     },
     state: {
-        id: '',
-        email: '',
+        email: localStorage.getItem('user-email') || '',
         token: localStorage.getItem('user-token') || '',
     },
     getters: {
