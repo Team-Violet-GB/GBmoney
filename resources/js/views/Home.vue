@@ -10,10 +10,10 @@
       <div slot="header" class="cstm-header-card">
         <div class="clearfix cstm-up-text">
           <span>Доходы</span>
-          <span>50 000,99 &#8381;</span>
+          <span>{{ incomesSumm }} &#8381;</span>
         </div>
         <div class="clearfix cstm-down-text">
-          <span>Июль 2020</span>
+          <span>{{ dateNow }}</span>
           <span>Получено</span>
         </div>
       </div>
@@ -23,10 +23,10 @@
           <div class="cstm-head-point">{{ point.name }}</div>
           <drag :data="{ id: point.id, type: 'income'}">
             <drop :accepts-data="() => false">
-              <el-button type="primary" :icon="point.icon" circle class="cstm-icon-point"></el-button>
+              <el-button type="primary" :icon="point.icon_name" circle class="cstm-icon-point"></el-button>
             </drop>
           </drag>
-          <div class="cstm-money-point cstm-blue">{{ point.money }} &#8381;</div>
+          <div class="cstm-money-point cstm-blue">{{ point.amount }} &#8381;</div>
           <i class="el-icon-edit cstm-edit"></i>
         </div>
         <Addbutton :key="'add'" />
@@ -38,10 +38,10 @@
       <div slot="header" class="cstm-header-card">
         <div class="clearfix cstm-up-text">
           <span>Счета</span>
-          <span type="text">550 000,99 &#8381;</span>
+          <span type="text">{{ walletsSumm }} &#8381;</span>
         </div>
         <div class="clearfix cstm-down-text">
-          <span>Июль 2020</span>
+          <span>{{ dateNow }}</span>
           <span>В наличии</span>
         </div>
       </div>
@@ -54,12 +54,12 @@
               :accepts-data="(data) => (data.type == 'income') || data.type == 'wallet'"
             >
               <drag :data="{ id: point.id, type: 'wallet'}">
-                <el-button type="warning" :icon="point.icon" circle class="cstm-icon-point"></el-button>
+                <el-button type="warning" :icon="point.icon_name" circle class="cstm-icon-point"></el-button>
                 </drag>
             </drop>
-          <div class="cstm-money-point cstm-yellow">{{ point.money }} &#8381;</div>
+          <div class="cstm-money-point cstm-yellow">{{ point.amount }} &#8381;</div>
           <i class="el-icon-edit cstm-edit"></i>
-        </div>
+        </div> 
         <Addbutton :key="'add'" />
       </transition-group>
     </div>
@@ -69,12 +69,12 @@
       <div slot="header" class="cstm-header-card">
         <div class="clearfix cstm-up-text">
           <span>Расходы</span>
-          <span>50 000,99 &#8381;</span>
-          <span>10 000,99 &#8381;</span>
+          <span>{{ expensesSumm }} &#8381;</span>
+          <span>{{ expensesLimit }} &#8381;</span>
         </div>
         <div class="clearfix cstm-down-text">
-          <span>Июль 2020</span>
-          <span>В наличии</span>
+          <span>{{ dateNow }}</span>
+          <span>Потрачено</span>
           <span>В планах</span>
         </div>
       </div>
@@ -84,17 +84,17 @@
           <div class="cstm-head-point">{{ point.name }}</div>
           <drop @drop="transactionExpense" :accepts-data="(data) => (data.type == 'wallet')">
             <el-button
-              :type="(point.money > point.plan)? 'danger' : 'success'"
-              :icon="point.icon"
+              :type="(point.amount > point.max_limit)? 'danger' : 'success'"
+              :icon="point.icon_name"
               circle
               class="cstm-icon-point cstm-expense"
             ></el-button>
           </drop>
           <div
             class="cstm-money-point"
-            :class="(point.money > point.plan)? 'cstm-red' : 'cstm-green'"
-          >{{ point.money }} &#8381;</div>
-          <div class="cstm-plan">{{ point.plan }} &#8381;</div>
+            :class="(point.amount > point.max_limit)? 'cstm-red' : 'cstm-green'"
+          >{{ point.amount }} &#8381;</div>
+          <div  v-if="point.max_limit" class="cstm-plan">{{ point.max_limit }} &#8381;</div>
           <i class="el-icon-edit cstm-edit"></i>
         </div>
         <Addbutton :key="'add'" />
@@ -121,8 +121,16 @@
               'incomes',
               'wallets',
               'expenses',
-              'transaction'
+              'transaction',
+              'incomesSumm',
+              'walletsSumm',
+              'expensesSumm',
+              'expensesLimit'
               ]),
+
+              dateNow() {
+                return new Date().toLocaleString('ru', {month: 'long', year: 'numeric'})
+              }
         },
 
         mounted() {

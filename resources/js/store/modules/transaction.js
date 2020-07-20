@@ -3,7 +3,7 @@ export default {
     mutations: {
         createTransaction(state, newTransaction) {
             state.transactionData = newTransaction
-        }
+        },
     },
     state: {
         transactionData: { state_window: false }
