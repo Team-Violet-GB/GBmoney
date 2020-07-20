@@ -129,5 +129,6 @@
         font-size: large;
         font-weight: 500;
         padding-right: 20px;
+        padding-top: 4px;
     }
 </style>

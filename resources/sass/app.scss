@@ -6,6 +6,13 @@
 
 // Bootstrap
 //@import '~bootstrap/scss/bootstrap';
+
+.el-card {
+    border: 1px solid #a3dd3da3 !important;
+}
+
 .el-card__header {
-    background-color: #5F6068 !important;
+    background-color: #5F6068;
+    padding: 8px !important;
+    border-bottom: 1px solid #a3dd3da3 !important;
 }
