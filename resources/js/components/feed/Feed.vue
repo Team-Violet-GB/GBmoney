@@ -34,15 +34,21 @@
         props: {
             dateFrom: {
                 type: String,
-                default: null
+                default() {
+                    return null;
+                }
             },
             dateTo: {
                 type: String,
-                default: null
+                default() {
+                    return null;
+                }
             },
             editable: {
                 type: Boolean,
-                default: true
+                default() {
+                    return true;
+                }
             }
         },
         computed: {

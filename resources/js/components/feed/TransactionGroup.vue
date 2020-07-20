@@ -1,8 +1,6 @@
 <template>
     <div>
-        <el-card v-for="(transaction, index) in transactionGroup" :key="index" class="box-card">
-            <transaction :transaction="transaction" :transactionsInGroup="transactionGroup.length"/>
-        </el-card>
+        <transaction v-for="(transaction, index) in transactionGroup" :key="index" :transaction="transaction"/>
     </div>
 </template>
 
@@ -21,10 +19,3 @@
         }
     }
 </script>
-
-<style scoped>
-    .el-card {
-        margin-top: 15px;
-        background-color: #3D3E48;
-    }
-</style>
