@@ -4,12 +4,14 @@
         <div v-if="getEditable" class="tran-wrapper" @click="edit(transaction)">
             <el-card shadow="hover" class="box-card">
                 <el-row :gutter="10" class="tran-row-data">
-                    <el-col :span="8">
+                    <el-col :span="5">
                         <div>{{ from }}</div>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="3"><i class="el-icon-right"></i></el-col>
+                    <el-col :span="5">
                         <div>{{ transaction.money }} &#8381</div>
                     </el-col>
+                    <el-col :span="3"><i class="el-icon-right"></i></el-col>
                     <el-col :span="8">
                         <div>{{ to }}</div>
                     </el-col>

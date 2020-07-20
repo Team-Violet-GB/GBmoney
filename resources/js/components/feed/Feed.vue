@@ -112,6 +112,9 @@
         background-color: #3D3E48;
         color: #b682f9;
     }
+    .el-card__header {
+        background-color: #5F6068 !important;
+    }
 
     .tran-group-header {
         color: #b3fb2acf;
