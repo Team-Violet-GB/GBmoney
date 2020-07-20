@@ -10,12 +10,14 @@ export default {
                 .then(response => {
                     const user = response.data
                     localStorage.setItem('user-token', user.token)
+                    let token = localStorage.getItem('user-token')
                     localStorage.setItem('user-email', user.email)
                     data.this.$message({
                         message: 'Добро пожаловать!',
                         type: 'success'
                     })
                     commit('login', user)
+                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
                     data.this.$router.push('/')
                 })
                 .catch((error) => {
@@ -33,7 +35,7 @@ export default {
                     data.this.$message.error(error.response.data.errors)
                 })
         },
-        setUserData({commit}) {
+        /*setUserData({commit}) {
             const token = localStorage.getItem('user-token')
             if (token) {
               axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
@@ -51,12 +53,12 @@ export default {
                 //Проверку на null в данном случае не делаю, т.к. если вернет null - поле останется пустым
                 .catch(error => console.log(error))
                 .finally(() => (console.log('finished')));
-        }
+        }*/
     },
     mutations: {
-        setUserData(state, user) {
+        /*setUserData(state, user) {
             state.email = user.email;
-        },
+        },*/
         login(state, user) {
             state.token = user.token;
             state.email = user.email;

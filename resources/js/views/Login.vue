@@ -22,15 +22,15 @@
                     <el-form-item>
                         <el-button type="success" @click="() => this.$router.push('/registration')">Регистрация</el-button>
                         <el-button type="primary" @click="submitForm('ruleForm')">Войти</el-button>
-                    </el-form-item> 
-                </el-form> 
+                    </el-form-item>
+                </el-form>
         </span>
         </el-dialog>
     </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+    import {mapActions, mapGetters} from 'vuex'
 
   export default {
     data() {
@@ -39,7 +39,7 @@ import { mapActions } from 'vuex'
             url: '../images/gm-money-logo.jpg',
             ruleForm: {
                 pass: '',
-                email: 'money@gb.ru', //TODO вставка имейла текущего пользователя,
+                email: this.user.email,
             },
             rules: {
                 pass: [
@@ -56,6 +56,10 @@ import { mapActions } from 'vuex'
         ...mapActions([
             'login'
         ]),
+        ...mapGetters([
+            'user'
+        ])
+        ,
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
