@@ -2,23 +2,31 @@ import axios from "axios";
 
 export default {
     actions: {
-        requestTransactions({commit}) {
+        fetchTransactions({commit}) {
             const headers = {
                 'Content-Type': 'application/json'
             }
-            const payload = {
-                date_from: this.getters.getDateFrom,
-                date_to: this.getters.getDateTo
+            const params = {
+                page: this.getters.getPage,
+                data_from: this.getters.getDateFrom,
+                data_to: this.getters.getDateTo
             }
             commit('setLoadingStatus', true);
-            // axios.post('/api/transactions', payload, {headers: headers})
-            axios.get('storage/testTransactions.json', {headers: headers})
+            axios.get('/api/transactions', {params: params, headers: headers})
                 .then(response => {
-                    commit('setTransactions', response.data);
+                    console.log(response.data.meta)
+                    console.log(this.getters.getTransactions)
+
+
+                    commit('setTransactions', Object.assign({}, this.getters.getTransactions, response.data.data));
+                    commit('setDisablePagination', response.data.meta.current_page === response.data.meta.last_page);
+                    let next  = this.getters.getPage;
+                    next++;
+                    commit('setPage', next);
                 })
                 .catch(error => {
                     commit('setErrorStatus', true);
-                    commit('setErrorInfo', 'Ошибка во время запроса данных о транзакциях');
+                    commit('setErrorInfo', error);
                     //todo: обработка кодов с сервера
                 })
                 .finally(() => {
@@ -53,6 +61,12 @@ export default {
         },
         setDateTo(state, data) {
             state.dateTo = data
+        },
+        setPage(state, data) {
+            state.page = data
+        },
+        setDisablePagination(state, data) {
+            state.disablePagination = data
         }
     },
     state: {
@@ -63,8 +77,10 @@ export default {
         errorStatus: false,
         errorInfo: 'Нет данных!',
         editable: true,
-        dateFrom: null,
-        dateTo: null
+        dateFrom: '',
+        dateTo: '',
+        page: '',
+        disablePagination: false
     },
     getters: {
         getTransactions(state) {
@@ -93,6 +109,12 @@ export default {
         },
         getDateTo(state) {
             return state.dateTo
+        },
+        getPage(state) {
+            return state.page
+        },
+        getDisablePagination(state) {
+            return state.disablePagination
         }
     }
 }

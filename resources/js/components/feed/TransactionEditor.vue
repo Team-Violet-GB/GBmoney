@@ -25,7 +25,7 @@
                             <div class="editor-pointers">
                                 <el-form-item label="Схема">
                                     <el-select class="selector"
-                                               v-if="getEditorData.type_id === constants.FROM_INCOME"
+                                               v-if="getEditorData.type === constants.FROM_INCOME"
                                                v-model="getEditorData.income_id">
                                         <el-option v-for="income in incomes" :key="income.id" :label="income.name"
                                                    :value="income.id" class="select_option">
@@ -38,28 +38,28 @@
                                         </el-option>
                                     </el-select>&nbsp;<i class="el-icon-caret-right"></i>
                                     <el-select class="selector"
-                                               v-if="getEditorData.type_id === constants.FROM_INCOME"
+                                               v-if="getEditorData.type === constants.FROM_INCOME"
                                                v-model="getEditorData.wallet_id_to">
                                         <el-option v-for="wallet in wallets" :key="wallet.id"
                                                    :label="wallet.name" :value="wallet.id" class="select_option">
                                         </el-option>
                                     </el-select>
                                     <el-select @select="prepareCurrentTags" class="selector"
-                                               v-if="getEditorData.type_id === constants.FROM_WALLET"
+                                               v-if="getEditorData.type === constants.FROM_WALLET"
                                                v-model="getEditorData.expense_id">
                                         <el-option v-for="expense in expenses" :key="expense.id"
                                                    :label="expense.name" :value="expense.id" class="select_option">
                                         </el-option>
                                     </el-select>
                                     <el-select class="selector"
-                                               v-if="getEditorData.type_id === constants.FROM_WALLET"
-                                               v-model="getEditorData.tag_id">
+                                               v-if="getEditorData.type === constants.FROM_WALLET"
+                                               v-model="getEditorData.tag">
                                         <el-option v-for="tag in currentTags" :key="tag.id"
                                                    :label="tag.name" :value="tag.id" class="select_option">
                                         </el-option>
                                     </el-select>
                                     <el-select class="selector"
-                                               v-if="getEditorData.type_id === constants.TRANSFER"
+                                               v-if="getEditorData.type === constants.TRANSFER"
                                                v-model="getEditorData.wallet_id_to">
                                         <el-option v-for="wallet in wallets" :key="wallet.id"
                                                    :label="wallet.name" :value="wallet.id" class="select_option">

@@ -84,7 +84,7 @@
                 'getEditable'
             ]),
             from() {
-                if (this.transaction['type_id'] === this.constants.FROM_INCOME) {
+                if (this.transaction['type'] === this.constants.FROM_INCOME) {
                     const income = this.incomes[this.transaction.income_id];
                     return income !== undefined ? income.name : '';
                 } else {
@@ -93,7 +93,7 @@
                 }
             },
             to() {
-                if (this.transaction['type_id'] === this.constants.FROM_WALLET) {
+                if (this.transaction['type'] === this.constants.FROM_WALLET) {
                     const expense = this.expenses[this.transaction.expense_id];
                     const expenseName = expense !== undefined ? expense.name : '';
                     const tag = this.tags[this.transaction.tag_id];
@@ -107,7 +107,7 @@
         },
         methods: {
             ...mapActions([
-                'requestTransactions'
+                'fetchTransactions'
             ]),
             ...mapMutations([
                 'setEditorShowStatus',
@@ -125,14 +125,6 @@
 </script>
 
 <style scoped>
-    .el-card {
-        background-color: #3D3E48;
-    }
-
-    .el-card:hover {
-        background-color: rgba(88, 89, 106, 0.54);
-    }
-
     .tran-wrapper {
         cursor: pointer;
         outline: none;

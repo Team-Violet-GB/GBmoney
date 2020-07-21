@@ -9,6 +9,12 @@
 
 .el-card {
     border: 0 solid rgba(255, 255, 255, 0) !important;
+    margin-bottom: 30px !important;
+    background-color: #3D3E48 !important;
+    color: #b682f9 !important;
+}
+.el-card:hover {
+    background-color: rgba(88, 89, 106, 0.54) !important;;
 }
 
 .el-card__header {
