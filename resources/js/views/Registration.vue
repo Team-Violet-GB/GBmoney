@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="isNotAuthenticated">
         <el-dialog
         :visible.sync="dialogVisible"
         width="40%"
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-    import {mapMutations} from 'vuex'
+    import {mapGetters, mapMutations} from 'vuex'
   export default {
     data() {
         var accordancePass = (rule, value, callback) => {
@@ -77,6 +77,15 @@
                     { required: true, validator: accordancePass, trigger: ['blur', 'change'] }
                 ],
             },
+        }
+    },
+    computed: {
+        ...mapGetters([
+            'isAuth',
+        ]),
+        isNotAuthenticated() {
+            if (this.isAuth) this.$router.push('/')
+            return true
         }
     },
     methods: {

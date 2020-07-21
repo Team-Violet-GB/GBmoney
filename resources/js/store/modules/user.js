@@ -8,15 +8,15 @@ export default {
                 password: data.password
             })
                 .then(response => {
-                    const user = response.data
-                    localStorage.setItem('user-token', user.token)
+                    const resp = response.data
+                    localStorage.setItem('user-token', resp.token)
                     let token = localStorage.getItem('user-token')
-                    localStorage.setItem('user-email', user.email)
+                    localStorage.setItem('user-email', resp.user.email)
                     data.this.$message({
                         message: 'Добро пожаловать!',
                         type: 'success'
                     })
-                    commit('login', user)
+                    commit('login', resp)
                     axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
                     data.this.$router.push('/')
                 })
@@ -59,9 +59,9 @@ export default {
         setUserEmail(state, email) {
             state.email = email;
         },
-        login(state, user) {
-            state.token = user.token;
-            state.email = user.email;
+        login(state, data) {
+            state.token = data.token;
+            state.email = data.user.email;
         },
         logout(state) {
             state.token = '';

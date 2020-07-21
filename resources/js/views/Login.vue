@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="isNotAuthenticated">
         <el-dialog
         :visible.sync="dialogVisible"
         width="40%"
@@ -52,12 +52,19 @@
             },
         }
     },
+    computed: {
+        isNotAuthenticated() {
+            if (this.isAuth) this.$router.push('/')
+            return true
+        }
+    },
     methods: {
         ...mapActions([
             'login'
         ]),
         ...mapGetters([
-            'user'
+            'user',
+            'isAuth',
         ]),
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
