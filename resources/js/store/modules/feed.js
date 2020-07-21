@@ -14,7 +14,15 @@ export default {
             commit('setLoadingStatus', true);
             axios.get('/api/transactions', {params: params, headers: headers})
                 .then(response => {
-                    commit('setTransactions', response.data.data);
+                    console.log(response.data.meta)
+                    console.log(this.getters.getTransactions)
+
+
+                    commit('setTransactions', Object.assign({}, this.getters.getTransactions, response.data.data));
+                    commit('setDisablePagination', response.data.meta.current_page === response.data.meta.last_page);
+                    let next  = this.getters.getPage;
+                    next++;
+                    commit('setPage', next);
                 })
                 .catch(error => {
                     commit('setErrorStatus', true);
@@ -56,6 +64,9 @@ export default {
         },
         setPage(state, data) {
             state.page = data
+        },
+        setDisablePagination(state, data) {
+            state.disablePagination = data
         }
     },
     state: {
@@ -68,7 +79,8 @@ export default {
         editable: true,
         dateFrom: '',
         dateTo: '',
-        page: 1
+        page: '',
+        disablePagination: false
     },
     getters: {
         getTransactions(state) {
@@ -100,6 +112,9 @@ export default {
         },
         getPage(state) {
             return state.page
+        },
+        getDisablePagination(state) {
+            return state.disablePagination
         }
     }
 }

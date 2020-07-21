@@ -7,32 +7,39 @@
             effect="dark">
         </el-alert>
 
-        <!--        заголовок группы транзакций-->
-        <el-card v-show="!getErrorStatus" v-for="(transactionGroup, index) in getTransactions" :key="index"
-                 v-loading="getLoadingStatus" element-loading-text="Загрузка..." element-loading-spinner="el-icon"
-                 element-loading-background="rgba(0, 0, 0, 0.8)" class="box-card">
-            <el-row :gutter="10" slot="header" class="clearfix tran-group-header">
-                <el-col :span="14">
-                    <div>{{ getLocalDateString(index) }}</div>
-                </el-col>
-                <el-col :span="10">
-                    <div class="tran-group-header-sum">{{ groupSumCalc(transactionGroup) }} &#8381</div>
-                </el-col>
-            </el-row>
+            <!--        заголовок группы транзакций-->
+            <el-card v-show="!getErrorStatus" v-for="(transactionGroup, index) in getTransactions" :key="index"
+                     v-loading="getLoadingStatus" element-loading-text="Загрузка..." element-loading-spinner="el-icon"
+                     element-loading-background="rgba(0, 0, 0, 0.8)" class="box-card">
+                <el-row :gutter="10" slot="header" class="clearfix tran-group-header">
+                    <el-col :span="14">
+                        <div>{{ getLocalDateString(index) }}</div>
+                    </el-col>
+                    <el-col :span="10">
+                        <div class="tran-group-header-sum">{{ groupSumCalc(transactionGroup) }} &#8381</div>
+                    </el-col>
+                </el-row>
 
-            <!--            группа транзакций-->
-            <transaction-group :transactionGroup="transactionGroup" class="tran-group"/>
-        </el-card>
+                <!--            группа транзакций-->
+                <transaction-group :transactionGroup="transactionGroup" class="tran-group"/>
+            </el-card>
+        <scroll-loader :loader-method="getTranList" :loader-disable="getDisablePagination"/>
     </div>
 </template>
 
 <script>
+    // import scrollLoader from 'vue-scroll-loader'
     import {mapActions, mapGetters, mapMutations} from 'vuex';
     import transactionGroup from "./TransactionGroup";
 
     export default {
         props: {
-            dateFrom: {
+            page: {
+                type: Number,
+                default() {
+                    return 1;
+                }
+            }, dateFrom: {
                 type: String,
                 default() {
                     return '';
@@ -56,7 +63,9 @@
                 'getTransactions',
                 'getLoadingStatus',
                 'getErrorStatus',
-                'getErrorInfo'
+                'getErrorInfo',
+                'getPage',
+                'getDisablePagination'
             ]),
         },
         methods: {
@@ -70,8 +79,28 @@
             ...mapMutations([
                 'setEditable',
                 'setDateFrom',
-                'setDateTo'
+                'setDateTo',
+                'setPage'
             ]),
+            getTranList() {
+                this.fetchTransactions()
+
+                // axios.get('https://api.example.com/', {
+                //     params: {
+                //         page: this.page++,
+                //         pageSize: this.pageSize,
+                //     }
+                // })
+                //     .then(res => {
+                //         this.images = [...this.images, ...res.data]
+                //
+                //         // Stop scroll loading...
+                //         this.disable = res.data.length < this.pageSize
+                //     })
+                //     .catch(error => {
+                //         console.log(error);
+                //     })
+            },
             getLocalDateString(date) {
                 let days = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
                 let months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
@@ -92,9 +121,9 @@
             await this.fetchExpenses();
             await this.fetchTags();
             this.setEditable(this.editable);
+            this.setPage(this.page);
             this.setDateFrom(this.dateFrom);
             this.setDateTo(this.dateTo);
-            await this.fetchTransactions();
         },
         components: {
             transactionGroup,
