@@ -11,16 +11,11 @@ export default {
                 data_from: this.getters.getDateFrom,
                 data_to: this.getters.getDateTo
             }
-            commit('setLoadingStatus', true);
             axios.get('/api/transactions', {params: params, headers: headers})
                 .then(response => {
-                    console.log(response.data.meta)
-                    console.log(this.getters.getTransactions)
-
-
                     commit('setTransactions', Object.assign({}, this.getters.getTransactions, response.data.data));
                     commit('setDisablePagination', response.data.meta.current_page === response.data.meta.last_page);
-                    let next  = this.getters.getPage;
+                    let next = this.getters.getPage;
                     next++;
                     commit('setPage', next);
                 })
@@ -30,16 +25,12 @@ export default {
                     //todo: обработка кодов с сервера
                 })
                 .finally(() => {
-                    commit('setLoadingStatus', false);
                 });
         }
     },
     mutations: {
         setTransactions(state, data) {
             state.transactions = data;
-        },
-        setLoadingStatus(state, data) {
-            state.loadingStatus = data
         },
         setEditorShowStatus(state, data) {
             state.editorShowStatus = data
@@ -72,7 +63,6 @@ export default {
     state: {
         transactions: {},
         editorData: {},
-        loadingStatus: false,
         editorShowStatus: false,
         errorStatus: false,
         errorInfo: 'Нет данных!',
@@ -88,9 +78,6 @@ export default {
         },
         getEditorData(state) {
             return state.editorData
-        },
-        getLoadingStatus(state) {
-            return state.loadingStatus
         },
         getEditorShowStatus(state) {
             return state.editorShowStatus

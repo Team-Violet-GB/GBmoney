@@ -25,15 +25,15 @@
         <!--        разметка и поведение для отчетов-->
         <div v-else>
             <el-row :gutter="10" class="tran-row-data">
-                <el-col :span="5">
+                <el-col :span="6">
                     <div>{{ from }}</div>
                 </el-col>
                 <el-col :span="2"><i class="el-icon-right"></i></el-col>
-                <el-col :span="12">
+                <el-col :span="11">
                     <div>{{ to }}</div>
                 </el-col>
                 <el-col :span="5">
-                    <div>{{ transaction.amount }} &#8381</div>
+                    <div style="display: flex;justify-content: flex-end">{{ transaction.amount }} &#8381</div>
                 </el-col>
             </el-row>
         </div>
@@ -78,7 +78,6 @@
                 'expenses',
                 'tags',
                 'getEditorShowStatus',
-                'getLoadingStatus',
                 'getErrorStatus',
                 'getErrorInfo',
                 'getEditable'
@@ -112,7 +111,6 @@
             ...mapMutations([
                 'setEditorShowStatus',
                 'setEditorData',
-                'setLoadingStatus',
                 'setErrorStatus',
                 'setErrorInfo'
             ]),
@@ -125,6 +123,16 @@
 </script>
 
 <style scoped>
+    .el-card {
+        border: 0 solid rgba(255, 255, 255, 0);
+        background-color: #3D3E48;
+        color: #b682f9 ;
+    }
+
+    .el-card:hover {
+        background-color: rgba(88, 89, 106, 0.54) !important;;
+    }
+
     .tran-wrapper {
         cursor: pointer;
         outline: none;
