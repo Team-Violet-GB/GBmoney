@@ -6,8 +6,8 @@
             <el-col :span="12">
                 <feed
                     :editable="false"
-                    dateFrom="2020-10-02"
-                    dateTo="2020-11-02"></feed>
+                    dateFrom="2020-07-06"
+                    dateTo="2020-07-18"></feed>
             </el-col>
         </el-row>
     </div>

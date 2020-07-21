@@ -35,13 +35,13 @@
             dateFrom: {
                 type: String,
                 default() {
-                    return null;
+                    return '';
                 }
             },
             dateTo: {
                 type: String,
                 default() {
-                    return null;
+                    return '';
                 }
             },
             editable: {
@@ -65,7 +65,7 @@
                 'fetchIncomes',
                 'fetchExpenses',
                 'fetchTags',
-                'requestTransactions'
+                'fetchTransactions'
             ]),
             ...mapMutations([
                 'setEditable',
@@ -94,7 +94,7 @@
             this.setEditable(this.editable);
             this.setDateFrom(this.dateFrom);
             this.setDateTo(this.dateTo);
-            await this.requestTransactions();
+            await this.fetchTransactions();
         },
         components: {
             transactionGroup,
@@ -105,16 +105,6 @@
 <style scoped>
     body {
         margin: 0;
-    }
-
-    .el-card {
-        margin-bottom: 30px;
-        background-color: #3D3E48;
-        color: #b682f9;
-    }
-
-    .el-card__header {
-        background-color: #5F6068 !important;
     }
 
     .tran-group-header {
