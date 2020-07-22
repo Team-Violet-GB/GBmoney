@@ -64,6 +64,14 @@
         drawer() {
             return this.transaction.state_window
         },
+
+        type() {
+          // const TYPE_INCOME = 1; const TYPE_TRANSFER = 2; const TYPE_EXPENSE = 3;
+          if (this.transaction.fromType === 'income') return 1
+          if (this.transaction.toType === 'expense') return 3
+          return 2
+        },
+
         pointsFrom() {
             return (this.transaction.fromType === 'income') ? this.incomes : this.wallets
         }, 
@@ -111,7 +119,7 @@
 
       prepareTransaction() {
         this.transaction.tag = this.tag
-        this.transaction.amount = this.amount
+        this.transaction.amount = parseFloat(this.amount)
         this.transaction.comment = this.comment
         this.transaction.date = this.date
         if (this.checkForm()) {
@@ -128,9 +136,26 @@
             });
         }
       },
+
       sendTransaction() {
-        //console.log( this.transaction ) //отправка формы
+        console.log( this.transaction ) //отправка формы
+        this.axios.post('/api/transactions' , {
+          "from_id": this.transaction.fromID,
+          "to_id": this.transaction.toID,
+          "type": this.type,
+          "amount": this.transaction.amount,
+          "date": this.data,
+          "comment": this.transaction.comment, 
+          "tag_id": this.transaction.tag
+        })
+        .then(response => {
+          console.log(response)
+        })
+        // .catch((error) => {
+        //     data.this.$message.error(error.response.data.errors) 
+        // })
       },
+
       getCategoryNames() {
         for (var point in this.pointsFrom) {
           if (this.pointsFrom[point].id == this.transaction.fromID) {
