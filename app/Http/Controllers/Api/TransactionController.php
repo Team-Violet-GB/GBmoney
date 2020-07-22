@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TransactionFormRequest;
 use App\Http\Resources\Transaction as TransactionResource;
 use App\Http\Resources\TransactionCollection;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
@@ -42,18 +44,27 @@ class TransactionController extends Controller
                 return $query->where('date', '<=', $dataTo);
             });
 
-        return new TransactionCollection($query->paginate(3));
+        return new TransactionCollection($query->paginate(10));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param TransactionFormRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(TransactionFormRequest $request)
     {
-        //
+        // Создаем новый объект транзакции.
+        $transaction = new Transaction();
+
+        // Заполняем модель поступившими из запроса значениями.
+        $transaction->fillTransaction($request);
+
+        // Сохраняем новую транзакцию.
+        $transaction->save();
+
+        return response()->json(['data' => $transaction]);
     }
 
     /**
@@ -72,9 +83,9 @@ class TransactionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, $id)
     {
@@ -85,7 +96,7 @@ class TransactionController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {
