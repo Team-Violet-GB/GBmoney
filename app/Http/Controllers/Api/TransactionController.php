@@ -44,7 +44,7 @@ class TransactionController extends Controller
                 return $query->where('date', '<=', $dataTo);
             });
 
-        return new TransactionCollection($query->paginate(3));
+        return new TransactionCollection($query->paginate(10));
     }
 
     /**
