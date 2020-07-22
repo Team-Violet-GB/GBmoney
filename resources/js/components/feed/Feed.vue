@@ -7,22 +7,23 @@
             effect="dark">
         </el-alert>
 
-            <!--        заголовок группы транзакций-->
-            <el-card v-show="!getErrorStatus" v-for="(transactionGroup, index) in getTransactions" :key="index" class="box-card">
-                <el-row :gutter="10" slot="header" class="clearfix tran-group-header">
-                    <el-col :span="14">
-                        <div>{{ getLocalDateString(index) }}</div>
-                    </el-col>
-                    <el-col :span="10">
-                        <div class="tran-group-header-sum">{{ groupSumCalc(transactionGroup) }} &#8381</div>
-                    </el-col>
-                </el-row>
+        <!--        заголовок группы транзакций-->
+        <el-card v-show="!getErrorStatus" v-for="(transactionGroup, index) in getTransactions" :key="index"
+                 class="box-card">
+            <el-row :gutter="10" slot="header" class="clearfix tran-group-header">
+                <el-col :span="14">
+                    <div>{{ getLocalDateString(index) }}</div>
+                </el-col>
+                <el-col :span="10">
+                    <div v-if="groupSumCalc(transactionGroup) != 0" class="tran-group-header-sum">{{ groupSumCalc(transactionGroup) }} &#8381</div>
+                </el-col>
+            </el-row>
 
-                <!--            группа транзакций-->
-                <transaction-group :transactionGroup="transactionGroup" class="tran-group"/>
-            </el-card>
+            <!--            группа транзакций-->
+            <transaction-group :transactionGroup="transactionGroup" class="tran-group"/>
+        </el-card>
         <scroll-loader :loader-method="fetchTransactions" :loader-disable="getDisablePagination"/>
-<!--        <scroll-loader :loader-method="getTranList" :loader-disable="getDisablePagination"/>-->
+        <!--        <scroll-loader :loader-method="getTranList" :loader-disable="getDisablePagination"/>-->
     </div>
 </template>
 
@@ -79,9 +80,6 @@
                 'setDateTo',
                 'setPage'
             ]),
-            // getTranList() {
-            //     this.fetchTransactions()
-            // },
             getLocalDateString(date) {
                 let days = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
                 let months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
@@ -91,22 +89,30 @@
             groupSumCalc(group) {
                 let sum = 0;
                 for (let i = 0; i < group.length; i++) {
-                    sum += Number(group[i].amount);
+                    switch (group[i].type) {
+                        case 1:
+                            sum += Number(group[i].amount);
+                            break;
+                        case 3:
+                            sum -= Number(group[i].amount);
+                            break;
+                    }
                 }
                 sum = Math.round(sum) * 100;
                 sum = sum / 100
                 return sum.toFixed(0);
             }
         },
-        async mounted() {
-            await this.fetchIncomes();
-            await this.fetchWallets();
-            await this.fetchExpenses();
-            await this.fetchTags();
+        mounted() {
+            this.fetchIncomes();
+            this.fetchWallets();
+            this.fetchExpenses();
+            this.fetchTags();
             this.setEditable(this.editable);
             this.setPage(this.page);
             this.setDateFrom(this.dateFrom);
             this.setDateTo(this.dateTo);
+
         },
         components: {
             transactionGroup,
@@ -123,12 +129,12 @@
         border: 0 solid rgba(255, 255, 255, 0);
         margin-bottom: 30px;
         background-color: #3D3E48;
-        color: #b682f9 ;
+        color: #b682f9;
     }
 
     .tran-group-header {
         color: #b3fb2acf;
-        font-size: x-large;
+        font-size: large;
         font-weight: 500;
         padding-left: 5px;
     }

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-collapse-transition >
+        <el-collapse-transition>
             <div v-if="getEditorShowStatus && transactionEditorId === getEditorData.id" class="editor">
                 <el-form :model="getEditorData" ref="editorForm" :rules="rules" label-position="right"
                          label-width=" 100px" size="small">
@@ -23,7 +23,7 @@
                         </el-col>
                         <el-col :span="14">
                             <div class="editor-pointers">
-                                <el-form-item label="Схема">
+                                <el-form-item :label="type">
                                     <el-select class="selector"
                                                v-if="getEditorData.type === constants.FROM_INCOME"
                                                v-model="getEditorData.income_id">
@@ -127,6 +127,28 @@
             currentTags() {
                 return this.tags.filter(tag => tag.expense_id === this.getEditorData.expense_id)
             },
+            type() {
+                let type = ''
+                switch (this.getEditorData.type) {
+                    case 1: {
+                        type = 'Доход'
+                    }
+                        break;
+
+                    case 2: {
+                        type = 'Перевод'
+                    }
+                        break;
+
+                    case 3: {
+                        type = 'Расход'
+                    }
+                        break;
+                    default:
+                        type = 'Сперли'
+                }
+                return type;
+            }
         },
         methods: {
             ...mapMutations([
