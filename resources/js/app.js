@@ -12,6 +12,7 @@ Vue.use(VueRouter)
 Vue.use(ElementUI)
 Vue.use(VueAxios, axios)
 
+
 import App from './components/App'
 
 const token = localStorage.getItem('user-token')

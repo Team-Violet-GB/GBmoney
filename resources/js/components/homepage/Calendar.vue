@@ -5,6 +5,7 @@
       v-model="date"
       @change="$emit('changeDate',date)"
       type="date"
+      format="dd-MM-yyyy"
       placeholder="Дата">
     </el-date-picker>
   </div>

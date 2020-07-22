@@ -8,7 +8,7 @@
         size="40%"
         :before-close="handleClose">
           <div class="cstm-body-window">
-            <Calendar @changeDate="(newDate) => { date = newDate }" />
+            <Calendar @changeDate="(newDate) => { date = new Date(newDate.getTime() - (newDate.getTimezoneOffset() * 60000)).toISOString().slice(0, 10) }" />
             <div class="cstm-select-box cstm-mrgn-top-20">
               <SelectCustom :points="pointsFrom" :id="transaction.fromID" @changeSelect="(fromID) => { transaction.fromID = fromID }" />
               <i class="el-icon-right"></i>
@@ -46,7 +46,7 @@
         amount: null,
         comment: null,
         tag: null,
-        date: Date.now(),
+        date: this.dateNow(), 
         direction: 'rtl',
         errors: [],
       };
@@ -60,6 +60,7 @@
             'tags',
             'transaction'
         ]),
+
 
         drawer() {
             return this.transaction.state_window
@@ -92,14 +93,20 @@
         this.$emit('closeCreateWindow')
       },
 
+      dateNow() {
+        let date = new Date()
+        return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+      },
+
       checkForm() {
         if (this.amount && this.date) return true;
+
+        if (this.amount) return true;
         this.errors = []
 
         if (!this.amount) {
           this.errors.push('Не указана сумма');
         }
-        
         if (!this.date) {
           this.errors.push('Не указана дата');
         }
@@ -122,11 +129,12 @@
         this.transaction.amount = parseFloat(this.amount)
         this.transaction.comment = this.comment
         this.transaction.date = this.date
+        this.transaction.type = this.type
         if (this.checkForm()) {
           this.sendTransaction(this.transaction)
           this.getCategoryNames()
           this.MessageSuccess('Новая транзакция на сумму ' + this.amount + ' из ' + this.transaction.nameFrom + ' в ' + this.transaction.nameTo)
-          this.amount = this.comment = this.tag = null
+          this.amount = this.comment = this.tag = this.date =  null
           this.handleClose()
         } else {
            this.errors.forEach((error, i) => {
@@ -142,9 +150,9 @@
         this.axios.post('/api/transactions' , {
           "from_id": this.transaction.fromID,
           "to_id": this.transaction.toID,
-          "type": this.type,
+          "type": this.transaction.type,
           "amount": this.transaction.amount,
-          "date": this.data,
+          "date": this.transaction.date,
           "comment": this.transaction.comment, 
           "tag_id": this.transaction.tag
         })
