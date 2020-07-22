@@ -231,7 +231,9 @@
         background-color: #3d3e48;
         border-radius: 2px;
         margin-top: 5px;
-        margin-bottom: 25px;
+        margin-bottom: 7px;
+        margin-left: 4px;
+        margin-right: 4px;
         padding: 15px 17px 1px;
         box-shadow: 0 2px 4px rgba(255, 255, 255, 0.3), 0 0 7px rgba(255, 255, 255, 0.07);
     }
