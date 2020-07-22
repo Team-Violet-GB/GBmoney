@@ -42,7 +42,6 @@ class Transaction extends Model
         $this->type = $request->type;
         $this->amount = $request->amount;
         $this->date = $request->date ?? now()->toDateString();
-        $this->time = $request->time ?? now()->toTimeString();
         $this->comment = $request->comment;
 
         // Определяем значения внешних ключей в зависимости от типа операции (type).

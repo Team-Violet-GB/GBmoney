@@ -29,7 +29,6 @@ class TransactionFormRequest extends FormRequest
             'type' => 'required|in:1,2,3',
             'amount' => 'required|numeric',
             'date' => 'nullable|date',
-            'time' => 'nullable|date_format:H:i',
             'comment' => 'nullable',
             'tag_id' => 'nullable|int',
         ];
