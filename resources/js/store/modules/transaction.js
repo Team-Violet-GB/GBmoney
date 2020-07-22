@@ -1,5 +1,17 @@
 export default {
-    actions: {},
+    actions: {
+        // createTransact({ commit }, data) {
+        //     data.this.axios.post('/api/transactions' , {
+
+        //     })
+        //     .then(response => {
+
+        //     })
+        //     // .catch((error) => {
+        //     //     data.this.$message.error(error.response.data.errors) 
+        //     // })
+        // },
+    },
     mutations: {
         createTransaction(state, newTransaction) {
             state.transactionData = newTransaction
