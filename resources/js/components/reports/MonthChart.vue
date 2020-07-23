@@ -1,9 +1,9 @@
 <script>
-    import {Line} from 'vue-chartjs'
+    import {Bar} from 'vue-chartjs'
 
     export default {
         name: "monthChart",
-        extends: Line,
+        extends: Bar,
         props: {
             chartdata: {
                 type: Object,

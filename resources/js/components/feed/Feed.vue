@@ -22,8 +22,7 @@
             <!--            группа транзакций-->
             <transaction-group :transactionGroup="transactionGroup" class="tran-group"/>
         </el-card>
-        <scroll-loader :loader-method="fetchTransactions" :loader-disable="getDisablePagination"/>
-        <!--        <scroll-loader :loader-method="getTranList" :loader-disable="getDisablePagination"/>-->
+        <scroll-loader v-if="getEditable" :loader-method="paginate()" :loader-disable="getDisablePagination"/>
     </div>
 </template>
 
@@ -63,7 +62,8 @@
                 'getErrorStatus',
                 'getErrorInfo',
                 'getPage',
-                'getDisablePagination'
+                'getDisablePagination',,
+                'getEditable'
             ]),
         },
         methods: {
@@ -101,6 +101,9 @@
                 sum = Math.round(sum) * 100;
                 sum = sum / 100
                 return sum.toFixed(0);
+            },
+            paginate() {
+                this.fetchTransactions()
             }
         },
         mounted() {
@@ -112,7 +115,9 @@
             this.setPage(this.page);
             this.setDateFrom(this.dateFrom);
             this.setDateTo(this.dateTo);
-
+            if (this.getEditable()) {
+                this.fetchTransaction()
+            }
         },
         components: {
             transactionGroup,
