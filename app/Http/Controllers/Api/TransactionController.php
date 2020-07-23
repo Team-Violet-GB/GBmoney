@@ -42,7 +42,8 @@ class TransactionController extends Controller
             })
             ->when($dataTo, function ($query) use ($dataTo) {
                 return $query->where('date', '<=', $dataTo);
-            });
+            })
+            ->orderBy('date');
 
         return new TransactionCollection($query->paginate(10));
     }
