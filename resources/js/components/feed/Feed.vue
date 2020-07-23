@@ -22,7 +22,7 @@
             <!--            группа транзакций-->
             <transaction-group :transactionGroup="transactionGroup" class="tran-group"/>
         </el-card>
-        <scroll-loader v-if="getEditable" :loader-method="paginate()" :loader-disable="getDisablePagination"/>
+        <scroll-loader :loader-method="paginate" :loader-disable="getDisablePagination"/>
     </div>
 </template>
 
@@ -62,7 +62,7 @@
                 'getErrorStatus',
                 'getErrorInfo',
                 'getPage',
-                'getDisablePagination',,
+                'getDisablePagination',
                 'getEditable'
             ]),
         },
@@ -115,9 +115,9 @@
             this.setPage(this.page);
             this.setDateFrom(this.dateFrom);
             this.setDateTo(this.dateTo);
-            if (this.getEditable()) {
-                this.fetchTransaction()
-            }
+            // if (this.getEditable()) {
+            //     this.fetchTransaction()
+            // }
         },
         components: {
             transactionGroup,

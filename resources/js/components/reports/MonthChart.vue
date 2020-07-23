@@ -1,9 +1,9 @@
 <script>
-    import {Bar} from 'vue-chartjs'
+    import {Doughnut} from 'vue-chartjs'
 
     export default {
         name: "monthChart",
-        extends: Bar,
+        extends: Doughnut,
         props: {
             chartdata: {
                 type: Object,
