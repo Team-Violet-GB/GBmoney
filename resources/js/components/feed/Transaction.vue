@@ -114,7 +114,11 @@
                 'setErrorInfo'
             ]),
             edit(transaction) {
-                this.setEditorData(transaction);
+
+
+
+                let editorData = Object.assign({}, transaction)
+                this.setEditorData(editorData);
                 this.setEditorShowStatus(true)
             }
         }

@@ -2,7 +2,7 @@
     <div>
         <el-collapse-transition>
             <div v-if="getEditorShowStatus && transactionEditorId === getEditorData.data.id" class="editor">
-                <el-form :model="getEditorData" ref="editorForm" :rules="rules" label-position="right"
+                <el-form :model="getEditorData.data" ref="editorForm" :rules="rules" label-position="right"
                          label-width=" 100px" size="small">
                     <el-row :gutter="10" type="flex" justify="space-between">
                         <el-col :span="5">
@@ -77,10 +77,10 @@
                         </el-col>
                         <el-col :span="3">
                             <el-button-group style="width: 100px; padding-top: 2px">
-                                <el-button @click="updateTransaction('editorForm')" type="success" size="mini"
+                                <el-button @click="updateTransaction('editorForm')" type="success" size="small"
                                            icon="el-icon-check"></el-button>
                                 <el-button @click="deleteTransaction(getEditorData)" type="danger"
-                                           size="mini"
+                                           size="small"
                                            icon="el-icon-delete"></el-button>
                             </el-button-group>
                         </el-col>
@@ -163,35 +163,27 @@
             updateTransaction(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        // для теста, убрать потом
-                        this.$message({
-                            showClose: true,
-                            dangerouslyUseHTMLString: true,
-                            message: `<h4>axios.put('/api/update/', this.getEditorData())</h4>`,
-                            duration: 10000,
-                            type: 'warning'
-                        });
+                        // this.getTransactions[editorData.transactionGroupName][editorData.transactionIndex] = Object.assign({}, getEditorData.data)
+
+                        // axios
+                        //     .put(`/api/transactions/${getEditorData.data.id}`)
+                        //     .then(response => {
+                        //         if (response.status === 200) {
+                        //             // let transactionsCopy = Object.assign({}, this.getTransactions)
+                        //             this.getTransactions[editorData.transactionGroupName][editorData.transactionIndex] = Object.assign({}, getEditorData.data)
+                        //         }
+                        //     })
+                        //     .catch(error => {
+                        //         this.setErrorStatus(true);
+                        //         this.setErrorInfo('Ошибка во время запроса на обновление данных');
+                        //         //todo: обработка кодов с сервера
+                        //     });
                         this.setEditorShowStatus(false);
                     } else {
                         return false;
                     }
                 });
 
-                // this.setLoadingStatus(true);
-                // axios
-                //     .put(`/api/update/`, this.getEditorData())
-                //     .then(response => {
-                //         if (response.status === 200) {
-                //             this.requestTransactions();
-                //         }
-                //     })
-                //     .catch(error => {
-                //         this.setErrorStatus(true);
-                //         this.setErrorInfo('Ошибка во время запроса на обновление данных');
-                //         //todo: обработка кодов с сервера
-                //     });
-                // this.setLoadingStatus(false);
-                // this.setEditorShowStatus(false);
             },
             deleteTransaction(editorData) {
                 this.$confirm('Подтверждение удаления транзакции', 'Внимание!', {

@@ -36,7 +36,7 @@ export default {
             state.editorShowStatus = data
         },
         setEditorData(state, data) {
-            state.editorData = Object.assign({}, data)
+            state.editorData = data
         },
         setErrorStatus(state, data) {
             state.errorStatus = data
