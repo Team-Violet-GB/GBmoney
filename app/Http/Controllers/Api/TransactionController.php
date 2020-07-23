@@ -110,10 +110,13 @@ class TransactionController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return Response
+     * @return JsonResponse
      */
     public function destroy($id)
     {
-        //
+        // Удаляем транзакцию по ID.
+        Transaction::destroy($id);
+
+        return response()->json(['message' => 'ok'], 200);
     }
 }
