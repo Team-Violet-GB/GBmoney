@@ -20,7 +20,7 @@
             </el-row>
 
             <!--            группа транзакций-->
-            <transaction-group :transactionGroup="transactionGroup" class="tran-group"/>
+            <transaction-group :transactionGroup="transactionGroup" :transactionGroupName="index" class="tran-group"/>
         </el-card>
         <scroll-loader :loader-method="paginate" :loader-disable="getDisablePagination"/>
     </div>

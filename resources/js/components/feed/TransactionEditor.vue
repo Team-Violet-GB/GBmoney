@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-collapse-transition>
-            <div v-if="getEditorShowStatus && transactionEditorId === getEditorData.id" class="editor">
+            <div v-if="getEditorShowStatus && transactionEditorId === getEditorData.data.id" class="editor">
                 <el-form :model="getEditorData" ref="editorForm" :rules="rules" label-position="right"
                          label-width=" 100px" size="small">
                     <el-row :gutter="10" type="flex" justify="space-between">
@@ -10,14 +10,14 @@
                                 <el-date-picker type="date"
                                                 format="dd.MM.yyyy"
                                                 firstDayOfWeek="1"
-                                                v-model="getEditorData.date"
+                                                v-model="getEditorData.data.date"
                                                 style="margin-top: 0; font-size: 1em; width: 100%;"
                                 ></el-date-picker>
                             </el-form-item>
                         </el-col>
                         <el-col :span="5">
                             <el-form-item prop="amount" label="₽" class="label">
-                                <el-input clearable v-model.number="getEditorData.amount"
+                                <el-input clearable v-model.number="getEditorData.data.amount"
                                           class="select_option"></el-input>
                             </el-form-item>
                         </el-col>
@@ -25,42 +25,42 @@
                             <div class="editor-pointers">
                                 <el-form-item :label="type">
                                     <el-select class="selector"
-                                               v-if="getEditorData.type === constants.FROM_INCOME"
-                                               v-model="getEditorData.income_id">
+                                               v-if="getEditorData.data.type === constants.FROM_INCOME"
+                                               v-model="getEditorData.data.income_id">
                                         <el-option v-for="income in incomes" :key="income.id" :label="income.name"
                                                    :value="income.id" class="select_option">
                                         </el-option>
                                     </el-select>
                                     <el-select class="selector" v-else
-                                               v-model="getEditorData.wallet_id_from">
+                                               v-model="getEditorData.data.wallet_id_from">
                                         <el-option v-for="wallet in wallets" :key="wallet.id" :label="wallet.name"
                                                    :value="wallet.id" class="select_option"> {{ wallet.name }}
                                         </el-option>
                                     </el-select>&nbsp;<i class="el-icon-caret-right"></i>
                                     <el-select class="selector"
-                                               v-if="getEditorData.type === constants.FROM_INCOME"
-                                               v-model="getEditorData.wallet_id_to">
+                                               v-if="getEditorData.data.type === constants.FROM_INCOME"
+                                               v-model="getEditorData.data.wallet_id_to">
                                         <el-option v-for="wallet in wallets" :key="wallet.id"
                                                    :label="wallet.name" :value="wallet.id" class="select_option">
                                         </el-option>
                                     </el-select>
                                     <el-select @select="prepareCurrentTags" class="selector"
-                                               v-if="getEditorData.type === constants.FROM_WALLET"
-                                               v-model="getEditorData.expense_id">
+                                               v-if="getEditorData.data.type === constants.FROM_WALLET"
+                                               v-model="getEditorData.data.expense_id">
                                         <el-option v-for="expense in expenses" :key="expense.id"
                                                    :label="expense.name" :value="expense.id" class="select_option">
                                         </el-option>
                                     </el-select>
                                     <el-select class="selector"
-                                               v-if="getEditorData.type === constants.FROM_WALLET"
-                                               v-model="getEditorData.tag">
+                                               v-if="getEditorData.data.type === constants.FROM_WALLET"
+                                               v-model="getEditorData.data.tag">
                                         <el-option v-for="tag in currentTags" :key="tag.id"
                                                    :label="tag.name" :value="tag.id" class="select_option">
                                         </el-option>
                                     </el-select>
                                     <el-select class="selector"
-                                               v-if="getEditorData.type === constants.TRANSFER"
-                                               v-model="getEditorData.wallet_id_to">
+                                               v-if="getEditorData.data.type === constants.TRANSFER"
+                                               v-model="getEditorData.data.wallet_id_to">
                                         <el-option v-for="wallet in wallets" :key="wallet.id"
                                                    :label="wallet.name" :value="wallet.id" class="select_option">
                                         </el-option>
@@ -72,14 +72,14 @@
                     <el-row :gutter="20">
                         <el-col :span="18">
                             <el-form-item prop="comment" label="Коментарий">
-                                <el-input v-model="getEditorData.comment" clearable></el-input>
+                                <el-input v-model="getEditorData.data.comment" clearable></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="3">
                             <el-button-group style="width: 100px; padding-top: 2px">
                                 <el-button @click="updateTransaction('editorForm')" type="success" size="mini"
                                            icon="el-icon-check"></el-button>
-                                <el-button @click="deleteTransaction(getEditorData.id)" type="danger"
+                                <el-button @click="deleteTransaction(getEditorData)" type="danger"
                                            size="mini"
                                            icon="el-icon-delete"></el-button>
                             </el-button-group>
@@ -93,7 +93,8 @@
 
 <script>
     import constants from '../../constants';
-    import {mapGetters, mapMutations} from 'vuex'
+    import {mapGetters, mapMutations} from 'vuex';
+    import axios from "axios";
 
     export default {
         name: "transactionEditor",
@@ -121,15 +122,15 @@
                 'expenses',
                 'tags',
                 'getEditorShowStatus',
-                // 'getTransaction',
-                'getEditorData'
+                'getEditorData',
+                'getTransactions'
             ]),
             currentTags() {
-                return this.tags.filter(tag => tag.expense_id === this.getEditorData.expense_id)
+                return this.tags.filter(tag => tag.expense_id === this.getEditorData.data.expense_id)
             },
             type() {
                 let type = ''
-                switch (this.getEditorData.type) {
+                switch (this.getEditorData.data.type) {
                     case 1: {
                         type = 'Доход'
                     }
@@ -152,6 +153,7 @@
         },
         methods: {
             ...mapMutations([
+                'setTransactions',
                 'setEditorShowStatus',
                 'setErrorStatus'
             ]),
@@ -191,7 +193,7 @@
                 // this.setLoadingStatus(false);
                 // this.setEditorShowStatus(false);
             },
-            deleteTransaction(id) {
+            deleteTransaction(editorData) {
                 this.$confirm('Подтверждение удаления транзакции', 'Внимание!', {
                     confirmButtonText: 'Удалить',
                     confirmButtonClass: 'primary',
@@ -199,26 +201,33 @@
                     iconClass: 'el-icon-delete',
                     type: 'warning',
                 }).then(() => {
-                    this.setEditorShowStatus(false);
-
-                    // axios
-                    //     .delete(`/api/del/${id}`)
-                    //     .then(response => {
-                    //         if (response.status === 200) {
-                    //             this.requestTransactions();
-                    //         }
-                    //     })
-                    //     .catch(error => {
-                    //         this.setErrorStatus(true);
-                    //         this.setErrorInfo('Ошибка во время запроса на удаление данных');
-                    //         //todo: обработка кодов с сервера
-                    //     });
-
-                    this.$message({
-                        type: 'error',
-                        message: `Запрос на удаление транзакции: axios.delete('/api/delete/${id}')`
-
-                    });
+                    axios.delete(`/api/transactions/${editorData.data.id}`)
+                        .then(response => {
+                            if (response.status === 200) {
+                                if (editorData.transactionGrouplength > 1) {
+                                    this.getTransactions[editorData.transactionGroupName].splice(editorData.transactionIndex, 1)
+                                } else {
+                                    let transactionsCopy = Object.assign({}, this.getTransactions)
+                                    delete transactionsCopy[editorData.transactionGroupName]
+                                    this.setTransactions(transactionsCopy)
+                                }
+                                this.$message({
+                                    showClose: true,
+                                    message: `Транзакция от ${new Date(editorData.data.date).toLocaleDateString()} была успешно удалена`,
+                                    duration: 3000,
+                                    type: 'success'
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            this.$message({
+                                showClose: true,
+                                message: `Попытка удаления транзакции от ${new Date(editorData.data.date).toLocaleDateString()} не удалась`,
+                                duration: 3000,
+                                type: 'error'
+                            });
+                            //todo: обработка кодов с сервера
+                        });
                 })
             }
         }

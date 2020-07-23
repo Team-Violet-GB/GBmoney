@@ -7,8 +7,8 @@
                     <el-col :span="3"><div>{{ from.name }}</div></el-col>
                     <el-col :span="3"><span style="color: #8e8e8e">{{ from.type }}</span></el-col>
                     <el-col :span="6"><div>{{ to }}</div></el-col>
-                    <el-col :span="8"><span class="tran-comment">{{ transaction.comment }} &nbsp;</span></el-col>
-                    <el-col :span="4"><div style="display: flex; justify-content: flex-end">{{ transaction.amount }} &#8381</div></el-col>
+                    <el-col :span="8"><span class="tran-comment">{{ transaction.data.comment }} &nbsp;</span></el-col>
+                    <el-col :span="4"><div style="display: flex; justify-content: flex-end">{{ transaction.data.amount }} &#8381</div></el-col>
                 </el-row>
             </el-card>
         </div>
@@ -20,14 +20,14 @@
                 <el-col :span="3"><span style="color: #8e8e8e">{{ from.type }}</span></el-col>
                 <!--                <el-col :span="2"><i class="el-icon-right"></i></el-col>-->
                 <el-col :span="10"><div>{{ to }}</div></el-col>
-                <el-col :span="5"><div style="display: flex;justify-content: flex-end">{{ transaction.amount }} &#8381</div></el-col>
+                <el-col :span="5"><div style="display: flex;justify-content: flex-end">{{ transaction.data.amount }} &#8381</div></el-col>
             </el-row>
         </div>
 
         <!--    подключаемый по условию компонент редактора транзакций    -->
         <transactionEditor
             v-if="getEditable"
-            :transactionEditorId="transaction.id"
+            :transactionEditorId="transaction.data.id"
         />
     </div>
 </template>
@@ -53,9 +53,9 @@
                     return Object;
                 }
             },
-            transactionsInGroup: {
-                type: Number
-            }
+            // transactionsInGroup: {
+            //     type: Number
+            // }
         },
         computed: {
             ...mapGetters([
@@ -70,10 +70,10 @@
             ]),
             from() {
                 let from = {};
-                const income = this.incomes[this.transaction.income_id];
-                const wallet = this.wallets[this.transaction.wallet_id_from];
+                const income = this.incomes[this.transaction.data.income_id];
+                const wallet = this.wallets[this.transaction.data.wallet_id_from];
 
-                switch (this.transaction['type']) {
+                switch (this.transaction.data['type']) {
                     case this.constants.FROM_INCOME:
                         from.name = income.name;
                         from.type = 'Доход'
@@ -91,14 +91,14 @@
                 }
             },
             to() {
-                if (this.transaction['type'] === this.constants.FROM_WALLET) {
-                    const expense = this.expenses[this.transaction.expense_id];
+                if (this.transaction.data['type'] === this.constants.FROM_WALLET) {
+                    const expense = this.expenses[this.transaction.data.expense_id];
                     const expenseName = expense !== undefined ? expense.name : '';
-                    const tag = this.tags[this.transaction.tag_id];
+                    const tag = this.tags[this.transaction.data.tag_id];
                     const tagName = tag !== undefined ? tag.name : '';
                     return `${expenseName} (${tagName})`
                 } else {
-                    const wallet = this.wallets[this.transaction.wallet_id_to];
+                    const wallet = this.wallets[this.transaction.data.wallet_id_to];
                     return wallet !== undefined ? wallet.name : '';
                 }
             },
