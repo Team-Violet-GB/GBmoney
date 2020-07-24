@@ -8,8 +8,9 @@
                         <el-col :span="5">
                             <el-form-item label="Дата">
                                 <el-date-picker type="date"
-                                                format="dd.MM.yyyy"
                                                 firstDayOfWeek="1"
+                                                format="dd.MM.yyyy"
+                                                value-format="yyyy-MM-dd"
                                                 v-model="editorData.edata.date"
                                                 style="margin-top: 0; font-size: 1em; width: 100%;"
                                 ></el-date-picker>
@@ -24,7 +25,7 @@
                         </el-col>
                         <el-col :span="14">
                             <div class="editor-pointers">
-                                <el-form-item :label="type">
+                                <el-form-item :label="typeData.typeDescription">
                                     <el-select class="selector"
                                                v-if="editorData.edata.type === constants.FROM_INCOME"
                                                v-model="editorData.edata.income_id">
@@ -131,27 +132,44 @@
             currentTags() {
                 return this.tags.filter(tag => tag.expense_id === this.editorData.edata.expense_id)
             },
-            type() {
-                let type = ''
+            typeData() {
+                let data = {}
                 switch (this.editorData.edata.type) {
                     case 1: {
-                        type = 'Доход'
+                        data.type = 1
+                        data.typeDescription = 'Доход'
+                        data.fromId = this.editorData.edata.income_id
+                        data.fromDescription = this.wallets[data.fromId].name
+                        data.toId = this.editorData.edata.wallet_id_to
+                        data.toDescription = this.wallets[data.toId].name
                     }
                         break;
 
                     case 2: {
-                        type = 'Перевод'
+                        data.type = 2
+                        data.typeDescription = 'Перевод'
+                        data.fromId = this.editorData.edata.wallet_id_from
+                        data.fromDescription = this.wallets[data.fromId].name
+                        data.toId = this.editorData.edata.wallet_id_to
+                        data.toDescription = this.wallets[data.toId].name
                     }
                         break;
 
                     case 3: {
-                        type = 'Расход'
+                        data.type = 3
+                        data.typeDescription = 'Расход'
+                        data.fromId = this.editorData.edata.wallet_id_from
+                        data.fromDescription = this.wallets[data.fromId].name
+                        data.toId = this.editorData.edata.expense_id
+                        data.toDescription = this.expenses[data.toId].name
+                        data.tagId = this.editorData.edata.tag_id
+                        data.tagDescription = this.tags[data.tagId].name
+                        data.expenseIdOfTag = this.tags[data.tagId].expense_id
+                        data.expenseNameOfTag = this.tags[data.tagId].expense_id
                     }
                         break;
-                    default:
-                        type = 'Сперли'
                 }
-                return type;
+                return data;
             }
         },
         methods: {
@@ -169,14 +187,19 @@
             updateTransaction(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.setTransactionUpdate(this.editorData)
-
-                        axios
-                            .put(`/api/transactions/${this.editorData.edata.id}`)
+                        axios.put(`/api/transactions/${this.editorData.edata.id}`,
+                            {
+                                from_id: this.typeData.fromId,
+                                to_id: this.typeData.toId,
+                                type: this.typeData.type,
+                                amount: this.editorData.edata.amount,
+                                date: this.editorData.edata.date,
+                                comment: this.editorData.edata.comment,
+                                tag_id: this.editorData.edata.tag_id
+                            })
                             .then(response => {
                                 if (response.status === 200) {
-                                    // let transactionsCopy = Object.assign({}, this.getTransactions)
-                                    this.getTransactions[this.editorData.transactionGroupName][this.editorData.transactionIndex] = Object.assign({}, this.editorData.data)
+                                    this.setTransactionUpdate(this.editorData)
                                 }
                             })
                             .catch(error => {
@@ -255,6 +278,11 @@
         font-weight: 400;
         border-radius: 0;
         font-size: 0.95em;
+    }
+
+    .hover {
+        color: rgb(255, 208, 75);
+        background-color: rgb(49, 50, 58);
     }
 
 </style>

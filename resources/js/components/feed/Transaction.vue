@@ -101,8 +101,8 @@
                     const expense = this.expenses[this.transaction.data.expense_id];
                     const expenseName = expense !== undefined ? expense.name : '';
                     const tag = this.tags[this.transaction.data.tag_id];
-                    const tagName = tag !== undefined ? tag.name : '';
-                    return `${expenseName} (${tagName})`
+                    const tagName = tag !== undefined ? `(${tag.name})` : '';
+                    return `${expenseName}  ${tagName}`
                 } else {
                     const wallet = this.wallets[this.transaction.data.wallet_id_to];
                     return wallet !== undefined ? wallet.name : '';
