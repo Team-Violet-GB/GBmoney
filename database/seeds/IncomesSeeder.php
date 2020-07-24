@@ -28,36 +28,48 @@ class IncomesSeeder extends Seeder
                 'name' => 'Зарплата',
                 'amount' => 47524.68,
                 'icon_id' => 35,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 1,
                 'name' => 'Пенсия',
                 'amount' => 12300.00,
                 'icon_id' => 1,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 1,
                 'name' => 'Кэшбэк',
                 'amount' => 502.70,
                 'icon_id' => 2,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 2,
                 'name' => 'Зарплата',
                 'amount' => 35000.00,
                 'icon_id' => 35,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 2,
                 'name' => 'Стипендия',
                 'amount' => 8000.00,
                 'icon_id' => 32,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 2,
                 'name' => 'Прочие доходы',
                 'amount' => 84122.48,
                 'icon_id' => 32,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ]
         ];
     }

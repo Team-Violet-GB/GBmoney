@@ -27,26 +27,36 @@ class TagsSeeder extends Seeder
                 'user_id' => 1,
                 'name' => 'Мясо',
                 'expense_id' => 2,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 1,
                 'name' => 'Фрукты',
                 'expense_id' => 2,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 2,
                 'name' => 'Мясо',
                 'expense_id' => 4,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 2,
                 'name' => 'Крупы',
                 'expense_id' => 4,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 2,
                 'name' => 'Овощи',
                 'expense_id' => 4,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ]
         ];
     }

@@ -33,5 +33,7 @@ Route::middleware('auth:api')->group(function () {
 
         // Работа с транзакциями.
         Route::apiResource('transactions', 'TransactionController');
+        // Работа с доходами.
+        Route::apiResource('incomes', 'IncomeController');
     });
 });
