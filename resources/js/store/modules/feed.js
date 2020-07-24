@@ -33,13 +33,12 @@ export default {
             state.transactions = data;
         },
         setTransaction(state, data) {
-            state.transactions[data.transactionGroupName][data.transactionIndex] = Object.assign({}, data.edata)
+            state.transactions[data.transactionGroupName].splice(data.transactionIndex, 1,  data.edata)
         },
         setEditorShowStatus(state, data) {
             state.editorShowStatus = data
         },
         setEditorData(state, data) {
-            // state.editorData = JSON.stringify(data)
             state.editorData = data
         },
         setErrorStatus(state, data) {
