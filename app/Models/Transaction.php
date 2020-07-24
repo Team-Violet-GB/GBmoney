@@ -48,15 +48,23 @@ class Transaction extends Model
         if ($this->type == Transaction::TYPE_INCOME) {
             $this->income_id = $request->from_id;
             $this->wallet_id_to = $request->to_id;
+            $this->wallet_id_from = null;
+            $this->expense_id = null;
+            $this->tag_id =null;
         }
         if ($this->type == Transaction::TYPE_TRANSFER) {
             $this->wallet_id_from = $request->from_id;
             $this->wallet_id_to = $request->to_id;
+            $this->expense_id = null;
+            $this->tag_id =null;
+            $this->income_id = null;
         }
         if ($this->type == Transaction::TYPE_EXPENSE) {
             $this->wallet_id_from = $request->from_id;
             $this->expense_id = $request->to_id;
             $this->tag_id = $request->tag_id;
+            $this->income_id = null;
+            $this->wallet_id_to = null;
         }
 
         return $this;

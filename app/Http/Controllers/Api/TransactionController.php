@@ -7,6 +7,7 @@ use App\Http\Requests\TransactionFormRequest;
 use App\Http\Resources\Transaction as TransactionResource;
 use App\Http\Resources\TransactionCollection;
 use App\Models\Transaction;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -42,7 +43,8 @@ class TransactionController extends Controller
             })
             ->when($dataTo, function ($query) use ($dataTo) {
                 return $query->where('date', '<=', $dataTo);
-            });
+            })
+            ->orderBy('date');
 
         return new TransactionCollection($query->paginate(10));
     }
@@ -51,7 +53,7 @@ class TransactionController extends Controller
      * Store a newly created resource in storage.
      *
      * @param TransactionFormRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(TransactionFormRequest $request)
     {
@@ -83,23 +85,38 @@ class TransactionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param TransactionFormRequest $request
      * @param int $id
-     * @return Response
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(TransactionFormRequest $request, $id)
     {
-        //
+        /**
+         * Получаем объект транзакции по ID.
+         * @var Transaction $transaction
+         */
+        $transaction = Transaction::query()->find($id);
+
+        // Заполняем модель поступившими из запроса значениями.
+        $transaction->fillTransaction($request);
+
+        // Сохраняем новую транзакцию.
+        $transaction->save();
+
+        return response()->json(['message' => 'ok'], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return Response
+     * @return JsonResponse
      */
     public function destroy($id)
     {
-        //
+        // Удаляем транзакцию по ID.
+        Transaction::destroy($id);
+
+        return response()->json(['message' => 'ok'], 200);
     }
 }
