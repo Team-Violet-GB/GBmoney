@@ -154,7 +154,6 @@
             transactionWallet (event) {
                 let fromID = Number(event.data.id)
                 let toID = Number(event.top.$el.parentElement.id)
-                console.log(event.top.$el.parentElement)
                 if ((fromID == toID) && (event.data.type == 'wallet')) {
                     return
                 }
@@ -167,7 +166,7 @@
                     date: this.dateNow(), 
                 }
             },
-            transactionExpense (event) { // drag & drop  работает через раз если указать одинаковые имена функций у разных групп
+            transactionExpense (event) { // drag & drop  работает через раз, если указать одинаковые имена функций у разных групп
                 this.newTransaction = {
                     state_window: true,
                     fromID: Number(event.data.id),
