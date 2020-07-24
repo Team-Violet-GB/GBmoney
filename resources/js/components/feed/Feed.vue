@@ -129,7 +129,7 @@
 
     .el-card {
         border: 0 solid rgba(255, 255, 255, 0);
-        margin-bottom: 30px;
+        margin-bottom: 40px;
         background-color: #3D3E48;
         color: #b682f9;
     }
