@@ -32,8 +32,19 @@ export default {
         setTransactions(state, data) {
             state.transactions = data;
         },
-        setTransaction(state, data) {
-            state.transactions[data.transactionGroupName].splice(data.transactionIndex, 1,  data.edata)
+        setTransactionUpdate(state, data) {
+            state.transactions[data.transactionGroupName].splice(data.transactionIndex, 1, data.edata)
+        },
+        setTransactionDelete(state, data) {
+            if (data.transactionGroupLength > 1) {
+                let newLength = state.transactions[data.transactionGroupName].length - 1
+                state.transactions[data.transactionGroupName].splice(data.transactionIndex, 1)
+                state.transactions[data.transactionGroupName].splice(newLength)
+            } else {
+                let transactions = Object.assign({}, this.getters.getTransactions)
+                delete transactions[data.transactionGroupName]
+                state.transactions = transactions
+            }
         },
         setEditorShowStatus(state, data) {
             state.editorShowStatus = data

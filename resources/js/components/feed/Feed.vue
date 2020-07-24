@@ -8,7 +8,7 @@
         </el-alert>
 
         <!--        заголовок группы транзакций-->
-        <el-card v-show="!getErrorStatus" v-for="(transactionGroup, index) in getTransactions" :key="index"
+        <el-card v-if="!getErrorStatus" v-for="(transactionGroup, index) in getTransactions" :key="index"
                  class="box-card">
             <el-row :gutter="10" slot="header" class="clearfix tran-group-header">
                 <el-col :span="14">
@@ -115,9 +115,6 @@
             this.setPage(this.page);
             this.setDateFrom(this.dateFrom);
             this.setDateTo(this.dateTo);
-            // if (this.getEditable()) {
-            //     this.fetchTransaction()
-            // }
         },
         components: {
             transactionGroup,

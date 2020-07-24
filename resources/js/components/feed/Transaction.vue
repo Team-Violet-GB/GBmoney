@@ -18,7 +18,6 @@
             <el-row :gutter="10" class="tran-row-data">
                 <el-col :span="6"><div>{{ from.name }}</div></el-col>
                 <el-col :span="3"><span style="color: #8e8e8e">{{ from.type }}</span></el-col>
-                <!--                <el-col :span="2"><i class="el-icon-right"></i></el-col>-->
                 <el-col :span="10"><div>{{ to }}</div></el-col>
                 <el-col :span="5"><div style="display: flex;justify-content: flex-end">{{ transaction.data.amount }} &#8381</div></el-col>
             </el-row>
