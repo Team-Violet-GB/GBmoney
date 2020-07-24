@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TransactionFormRequest;
 use App\Http\Resources\Transaction as TransactionResource;
 use App\Http\Resources\TransactionCollection;
 use App\Models\Transaction;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
@@ -40,20 +43,30 @@ class TransactionController extends Controller
             })
             ->when($dataTo, function ($query) use ($dataTo) {
                 return $query->where('date', '<=', $dataTo);
-            });
+            })
+            ->orderBy('date');
 
-        return new TransactionCollection($query->paginate(3));
+        return new TransactionCollection($query->paginate(10));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param TransactionFormRequest $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(TransactionFormRequest $request)
     {
-        //
+        // Создаем новый объект транзакции.
+        $transaction = new Transaction();
+
+        // Заполняем модель поступившими из запроса значениями.
+        $transaction->fillTransaction($request);
+
+        // Сохраняем новую транзакцию.
+        $transaction->save();
+
+        return response()->json(['data' => $transaction]);
     }
 
     /**
@@ -72,23 +85,38 @@ class TransactionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param TransactionFormRequest $request
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(TransactionFormRequest $request, $id)
     {
-        //
+        /**
+         * Получаем объект транзакции по ID.
+         * @var Transaction $transaction
+         */
+        $transaction = Transaction::query()->find($id);
+
+        // Заполняем модель поступившими из запроса значениями.
+        $transaction->fillTransaction($request);
+
+        // Сохраняем новую транзакцию.
+        $transaction->save();
+
+        return response()->json(['message' => 'ok'], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function destroy($id)
     {
-        //
+        // Удаляем транзакцию по ID.
+        Transaction::destroy($id);
+
+        return response()->json(['message' => 'ok'], 200);
     }
 }
