@@ -27,8 +27,6 @@ class Transaction extends Model
     const TYPE_TRANSFER = 2;
     const TYPE_EXPENSE = 3;
 
-    public $timestamps = false;
-
     /**
      * Метод заполняет модель значениями поступившими из запроса в соответствии с типом операции.
      * @param TransactionFormRequest $request

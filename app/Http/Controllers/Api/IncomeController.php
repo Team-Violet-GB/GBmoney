@@ -41,7 +41,7 @@ class IncomeController extends Controller
         // Создаем новый объект доходов.
         $income = new Income();
 
-        // Заполняем объект
+        // Заполняем объект данными из запроса.
         $income->user_id = Auth::id();
         $income->name = $request->name;
         $income->icon_id = $request->icon_id;
@@ -69,20 +69,30 @@ class IncomeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param IncomeFormRequest $request
      * @param int $id
-     * @return Response
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(IncomeFormRequest $request, $id)
     {
-        //
+        /** @var Income $income */
+        $income = Income::query()->find($id);
+
+        // Заполняем объект данными из запроса.
+        $income->name = $request->name;
+        $income->icon_id = $request->icon_id;
+
+        // Сохраняем измененный объект доходов.
+        $income->save();
+
+        return response()->json(['message' => 'ok'], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return void
+     * @return JsonResponse
      */
     public function destroy($id)
     {
@@ -94,6 +104,8 @@ class IncomeController extends Controller
 
         // Сохраняем изменения.
         $income->save();
+
+        return response()->json(['message' => 'ok'], 200);
     }
 
     /**

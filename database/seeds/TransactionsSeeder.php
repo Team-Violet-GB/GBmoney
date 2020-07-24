@@ -35,6 +35,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => 1,
                 'expense_id' => null,
                 'tag_id' => null,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 1,
@@ -47,6 +49,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => null,
                 'expense_id' => 2,
                 'tag_id' => 2,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 2,
@@ -59,6 +63,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => null,
                 'expense_id' => 5,
                 'tag_id' => null,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 2,
@@ -71,6 +77,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => null,
                 'expense_id' => 4,
                 'tag_id' => 3,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 2,
@@ -83,6 +91,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => null,
                 'expense_id' => null,
                 'tag_id' => null,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 1,
@@ -95,6 +105,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => null,
                 'expense_id' => null,
                 'tag_id' => null,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 1,
@@ -107,6 +119,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => null,
                 'expense_id' => 3,
                 'tag_id' => null,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 1,
@@ -119,6 +133,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => null,
                 'expense_id' => 2,
                 'tag_id' => 2,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 2,
@@ -131,6 +147,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => 5,
                 'expense_id' => null,
                 'tag_id' => null,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 2,
@@ -143,6 +161,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => null,
                 'expense_id' => 6,
                 'tag_id' => null,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 1,
@@ -155,6 +175,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => 2,
                 'expense_id' => null,
                 'tag_id' => null,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 1,
@@ -167,6 +189,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => null,
                 'expense_id' => 3,
                 'tag_id' => null,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 1,
@@ -179,6 +203,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => null,
                 'expense_id' => 2,
                 'tag_id' => null,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 1,
@@ -191,6 +217,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => null,
                 'expense_id' => 2,
                 'tag_id' => 1,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 2,
@@ -203,6 +231,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => 4,
                 'expense_id' => null,
                 'tag_id' => null,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 2,
@@ -215,6 +245,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => 4,
                 'expense_id' => null,
                 'tag_id' => null,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 2,
@@ -227,6 +259,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => null,
                 'expense_id' => 4,
                 'tag_id' => null,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 2,
@@ -239,6 +273,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => null,
                 'expense_id' => null,
                 'tag_id' => null,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 2,
@@ -251,6 +287,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => null,
                 'expense_id' => 5,
                 'tag_id' => null,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 1,
@@ -263,6 +301,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => null,
                 'expense_id' => 2,
                 'tag_id' => 1,
+                "updated_at" => "2020-06-24 10:14:48",
+                "created_at" => "2020-06-24 10:14:48",
             ],
             [
                 'user_id' => 1,
@@ -275,6 +315,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => null,
                 'expense_id' => 2,
                 'tag_id' => 1,
+                "updated_at" => "2020-06-24 10:14:48",
+                "created_at" => "2020-06-24 10:14:48",
             ],
             [
                 'user_id' => 1,
@@ -287,6 +329,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => null,
                 'expense_id' => 2,
                 'tag_id' => 2,
+                "updated_at" => "2020-06-24 10:14:48",
+                "created_at" => "2020-06-24 10:14:48",
             ],
             [
                 'user_id' => 1,
@@ -299,6 +343,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => null,
                 'expense_id' => 2,
                 'tag_id' => 1,
+                "updated_at" => "2020-06-24 10:14:48",
+                "created_at" => "2020-06-24 10:14:48",
             ],
             [
                 'user_id' => 1,
@@ -311,6 +357,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => null,
                 'expense_id' => 2,
                 'tag_id' => null,
+                "updated_at" => "2020-06-24 10:14:48",
+                "created_at" => "2020-06-24 10:14:48",
             ],
             [
                 'user_id' => 1,
@@ -323,6 +371,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => null,
                 'expense_id' => 3,
                 'tag_id' => null,
+                "updated_at" => "2020-06-24 10:14:48",
+                "created_at" => "2020-06-24 10:14:48",
             ],
             [
                 'user_id' => 1,
@@ -335,6 +385,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => null,
                 'expense_id' => 3,
                 'tag_id' => null,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 1,
@@ -347,6 +399,8 @@ class TransactionsSeeder extends Seeder
                 'income_id' => null,
                 'expense_id' => 1,
                 'tag_id' => null,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
         ];
     }
