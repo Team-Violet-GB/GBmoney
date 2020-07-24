@@ -1,7 +1,7 @@
 <template>
     <div>
         <!--        разметка и поведение для ленты-->
-        <div v-if="getEditable" class="tran-wrapper" @click="edit(transaction)">
+        <div v-if="getEditable" class="tran-wrapper" @click="edit()">
             <el-card>
                 <el-row :gutter="10" class="tran-row-data">
                     <el-col :span="3"><div>{{ from.name }}</div></el-col>
@@ -28,6 +28,7 @@
         <transactionEditor
             v-if="getEditable"
             :transactionEditorId="transaction.data.id"
+            :editorData="editorData"
         />
     </div>
 </template>
@@ -45,6 +46,7 @@
         data() {
             return {
                 constants: constants,
+                editorData: {}
             }
         },
         props: {
@@ -66,7 +68,9 @@
                 'getEditorShowStatus',
                 'getErrorStatus',
                 'getErrorInfo',
-                'getEditable'
+                'getEditable',
+                'getEditorData',
+                'getTransactions'
             ]),
             from() {
                 let from = {};
@@ -104,6 +108,12 @@
             },
         },
         methods: {
+            edit() {
+                this.transaction.edata = Object.assign({}, this.transaction.data)
+                this.editorData = this.transaction.data
+                this.setEditorData(this.transaction);
+                this.setEditorShowStatus(true)
+            },
             ...mapActions([
                 'fetchTransactions'
             ]),
@@ -113,14 +123,6 @@
                 'setErrorStatus',
                 'setErrorInfo'
             ]),
-            edit(transaction) {
-
-
-
-                let editorData = Object.assign({}, transaction)
-                this.setEditorData(editorData);
-                this.setEditorShowStatus(true)
-            }
         }
     }
 </script>

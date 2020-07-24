@@ -32,10 +32,14 @@ export default {
         setTransactions(state, data) {
             state.transactions = data;
         },
+        setTransaction(state, data) {
+            state.transactions[data.transactionGroupName][data.transactionIndex] = Object.assign({}, data.edata)
+        },
         setEditorShowStatus(state, data) {
             state.editorShowStatus = data
         },
         setEditorData(state, data) {
+            // state.editorData = JSON.stringify(data)
             state.editorData = data
         },
         setErrorStatus(state, data) {
@@ -62,7 +66,7 @@ export default {
     },
     state: {
         transactions: {},
-        editorData: {},
+        editorData: '',
         editorShowStatus: false,
         errorStatus: false,
         errorInfo: 'Нет данных!',

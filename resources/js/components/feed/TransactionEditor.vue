@@ -1,8 +1,8 @@
 <template>
     <div>
         <el-collapse-transition>
-            <div v-if="getEditorShowStatus && transactionEditorId === getEditorData.data.id" class="editor">
-                <el-form :model="getEditorData.data" ref="editorForm" :rules="rules" label-position="right"
+            <div v-if="getEditorShowStatus && transactionEditorId === getEditorData.edata.id" class="editor">
+                <el-form :model="getEditorData.edata" ref="editorForm" :rules="rules" label-position="right"
                          label-width=" 100px" size="small">
                     <el-row :gutter="10" type="flex" justify="space-between">
                         <el-col :span="5">
@@ -10,14 +10,14 @@
                                 <el-date-picker type="date"
                                                 format="dd.MM.yyyy"
                                                 firstDayOfWeek="1"
-                                                v-model="getEditorData.data.date"
+                                                v-model="getEditorData.edata.date"
                                                 style="margin-top: 0; font-size: 1em; width: 100%;"
                                 ></el-date-picker>
                             </el-form-item>
                         </el-col>
                         <el-col :span="5">
                             <el-form-item prop="amount" label="₽" class="label">
-                                <el-input clearable v-model.number="getEditorData.data.amount"
+                                <el-input clearable v-model.number="getEditorData.edata.amount"
                                           class="select_option"></el-input>
                             </el-form-item>
                         </el-col>
@@ -25,42 +25,42 @@
                             <div class="editor-pointers">
                                 <el-form-item :label="type">
                                     <el-select class="selector"
-                                               v-if="getEditorData.data.type === constants.FROM_INCOME"
-                                               v-model="getEditorData.data.income_id">
+                                               v-if="getEditorData.edata.type === constants.FROM_INCOME"
+                                               v-model="getEditorData.edata.income_id">
                                         <el-option v-for="income in incomes" :key="income.id" :label="income.name"
                                                    :value="income.id" class="select_option">
                                         </el-option>
                                     </el-select>
                                     <el-select class="selector" v-else
-                                               v-model="getEditorData.data.wallet_id_from">
+                                               v-model="getEditorData.edata.wallet_id_from">
                                         <el-option v-for="wallet in wallets" :key="wallet.id" :label="wallet.name"
                                                    :value="wallet.id" class="select_option"> {{ wallet.name }}
                                         </el-option>
                                     </el-select>&nbsp;<i class="el-icon-caret-right"></i>
                                     <el-select class="selector"
-                                               v-if="getEditorData.data.type === constants.FROM_INCOME"
-                                               v-model="getEditorData.data.wallet_id_to">
+                                               v-if="getEditorData.edata.type === constants.FROM_INCOME"
+                                               v-model="getEditorData.edata.wallet_id_to">
                                         <el-option v-for="wallet in wallets" :key="wallet.id"
                                                    :label="wallet.name" :value="wallet.id" class="select_option">
                                         </el-option>
                                     </el-select>
                                     <el-select @select="prepareCurrentTags" class="selector"
-                                               v-if="getEditorData.data.type === constants.FROM_WALLET"
-                                               v-model="getEditorData.data.expense_id">
+                                               v-if="getEditorData.edata.type === constants.FROM_WALLET"
+                                               v-model="getEditorData.edata.expense_id">
                                         <el-option v-for="expense in expenses" :key="expense.id"
                                                    :label="expense.name" :value="expense.id" class="select_option">
                                         </el-option>
                                     </el-select>
                                     <el-select class="selector"
-                                               v-if="getEditorData.data.type === constants.FROM_WALLET"
-                                               v-model="getEditorData.data.tag">
+                                               v-if="getEditorData.edata.type === constants.FROM_WALLET"
+                                               v-model="getEditorData.edata.tag">
                                         <el-option v-for="tag in currentTags" :key="tag.id"
                                                    :label="tag.name" :value="tag.id" class="select_option">
                                         </el-option>
                                     </el-select>
                                     <el-select class="selector"
-                                               v-if="getEditorData.data.type === constants.TRANSFER"
-                                               v-model="getEditorData.data.wallet_id_to">
+                                               v-if="getEditorData.edata.type === constants.TRANSFER"
+                                               v-model="getEditorData.edata.wallet_id_to">
                                         <el-option v-for="wallet in wallets" :key="wallet.id"
                                                    :label="wallet.name" :value="wallet.id" class="select_option">
                                         </el-option>
@@ -72,7 +72,7 @@
                     <el-row :gutter="20">
                         <el-col :span="18">
                             <el-form-item prop="comment" label="Коментарий">
-                                <el-input v-model="getEditorData.data.comment" clearable></el-input>
+                                <el-input v-model="getEditorData.edata.comment" clearable></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="3">
@@ -109,11 +109,15 @@
                     comment: [
                         {max: 50, message: 'Хватит писать!', trigger: 'change'}
                     ]
-                }
+                },
+                editordata: {}
             }
         },
         props: {
-            transactionEditorId: ''
+            transactionEditorId: '',
+            editorData: {
+                type: Object
+            }
         },
         computed: {
             ...mapGetters([
@@ -126,11 +130,11 @@
                 'getTransactions'
             ]),
             currentTags() {
-                return this.tags.filter(tag => tag.expense_id === this.getEditorData.data.expense_id)
+                return this.tags.filter(tag => tag.expense_id === this.getEditorData.edata.expense_id)
             },
             type() {
                 let type = ''
-                switch (this.getEditorData.data.type) {
+                switch (this.getEditorData.edata.type) {
                     case 1: {
                         type = 'Доход'
                     }
@@ -154,8 +158,10 @@
         methods: {
             ...mapMutations([
                 'setTransactions',
+                'setTransaction',
                 'setEditorShowStatus',
-                'setErrorStatus'
+                'setErrorStatus',
+                'setEditorData'
             ]),
             prepareCurrentTags() {
                 return this.currentTags();
@@ -163,10 +169,13 @@
             updateTransaction(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        // this.getTransactions[editorData.transactionGroupName][editorData.transactionIndex] = Object.assign({}, getEditorData.data)
+
+                        // let transactions = this.getTransactions
+                        // transactions[this.getEditorData.transactionGroupName][this.getEditorData.transactionIndex] = this.getEditorData.edata
+                        this.setTransaction(this.getEditorData)
 
                         // axios
-                        //     .put(`/api/transactions/${getEditorData.data.id}`)
+                        //     .put(`/api/transactions/${getEditorData.edata.id}`)
                         //     .then(response => {
                         //         if (response.status === 200) {
                         //             // let transactionsCopy = Object.assign({}, this.getTransactions)
