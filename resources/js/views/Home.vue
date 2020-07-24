@@ -2,7 +2,8 @@
   <div>
     <!-- Модальное окно  -->
     <CreateTransaction
-      @closeCreateWindow="transaction.state_window = false"  
+      :newTransaction="newTransaction"
+      @closeCreateWindow="newTransaction.state_window = false"  
     />
     <!-- ДОХОДЫ -->
     <div class="cstm-box-card">
@@ -13,7 +14,7 @@
           <span>{{ incomesSumm }} &#8381;</span>
         </div>
         <div class="clearfix cstm-down-text">
-          <span>{{ dateNow }}</span>
+          <span>{{ dateNowString }}</span>
           <span>Получено</span>
         </div>
       </div>
@@ -41,7 +42,7 @@
           <span type="text">{{ walletsSumm }} &#8381;</span>
         </div>
         <div class="clearfix cstm-down-text">
-          <span>{{ dateNow }}</span>
+          <span>{{ dateNowString }}</span>
           <span>В наличии</span>
         </div>
       </div>
@@ -73,7 +74,7 @@
           <span>{{ expensesLimit }} &#8381;</span>
         </div>
         <div class="clearfix cstm-down-text">
-          <span>{{ dateNow }}</span>
+          <span>{{ dateNowString }}</span>
           <span>Потрачено</span>
           <span>В планах</span>
         </div>
@@ -116,19 +117,23 @@
             Addbutton,
             CreateTransaction,
         },
+        data() {
+          return {
+            newTransaction: { state_window: false },
+          }
+        },
         computed: {
           ...mapGetters([
               'incomes',
               'wallets',
               'expenses',
-              'transaction',
               'incomesSumm',
               'walletsSumm',
               'expensesSumm',
               'expensesLimit'
               ]),
 
-              dateNow() {
+              dateNowString() {
                 return new Date().toLocaleString('ru', {month: 'long', year: 'numeric'})
               }
         },
@@ -145,32 +150,36 @@
               'fetchWallets',
               'fetchExpenses',
             ]),
-            ...mapMutations([
-              'createTransaction'
-            ]),
 
             transactionWallet (event) {
                 let fromID = Number(event.data.id)
                 let toID = Number(event.top.$el.parentElement.id)
+                console.log(event.top.$el.parentElement)
                 if ((fromID == toID) && (event.data.type == 'wallet')) {
                     return
                 }
-                this.createTransaction({
+                this.newTransaction = {
                     state_window: true,
                     fromID: fromID,
                     toID: toID,
-                    fromType: event.data.type,
-                    toType: 'wallet',
-                })
+                    type: (event.data.type == 'income') ? 1 : 2,
+                    tag: null,
+                    date: this.dateNow(), 
+                }
             },
-            transactionExpense (event) {
-                this.createTransaction({
+            transactionExpense (event) { // drag & drop  работает через раз если указать одинаковые имена функций у разных групп
+                this.newTransaction = {
                     state_window: true,
                     fromID: Number(event.data.id),
                     toID: Number(event.top.$el.parentElement.id),
-                    fromType: event.data.type,
-                    toType: 'expense',
-                })
+                    type: 3,
+                    tag: null,
+                    date: this.dateNow(), 
+                }
+            },
+            dateNow() {
+              let date = new Date()
+              return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
             },
         },
     };

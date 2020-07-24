@@ -2,8 +2,8 @@
   <div class="block">
     <span class="demonstration"></span>
     <el-date-picker
-      v-model="date"
-      @change="$emit('changeDate',date)"
+      v-model="dateSelect"
+      @change="$emit('changeDate', dateSelect)"
       type="date"
       format="dd-MM-yyyy"
       placeholder="Дата">
@@ -13,10 +13,17 @@
 
 <script>
   export default {
+    props: ['date'],
     data() {
       return {
-        date: Date.now(),
-      };
+        dateSelect: this.date,
+      }
+    },
+
+    watch: {
+      date(newDate) {
+        this.dateSelect = newDate
+      }
     }
-  };
+  }
 </script>
