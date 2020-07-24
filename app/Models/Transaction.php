@@ -11,10 +11,9 @@ use Illuminate\Support\Facades\Auth;
  * @property-read int id
  * @property int user_id
  * @property int type
- * @property int amount
- * @property int date
- * @property int time
- * @property int comment
+ * @property float amount
+ * @property string date
+ * @property string comment
  * @property int wallet_id_from
  * @property int wallet_id_to
  * @property int income_id
