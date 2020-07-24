@@ -29,6 +29,8 @@ class WalletsSeeder extends Seeder
                 'amount' => 3700.00,
                 'include' => 1,
                 'icon_id' => 36,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 1,
@@ -36,6 +38,8 @@ class WalletsSeeder extends Seeder
                 'amount' => 39821.77,
                 'include' => 1,
                 'icon_id' => 34,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 1,
@@ -43,6 +47,8 @@ class WalletsSeeder extends Seeder
                 'amount' => 235655.90,
                 'include' => 1,
                 'icon_id' => 34,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 2,
@@ -50,6 +56,8 @@ class WalletsSeeder extends Seeder
                 'amount' => 20.00,
                 'include' => 1,
                 'icon_id' => 36,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 2,
@@ -57,6 +65,8 @@ class WalletsSeeder extends Seeder
                 'amount' => 15360.21,
                 'include' => 0,
                 'icon_id' => 34,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 2,
@@ -64,6 +74,8 @@ class WalletsSeeder extends Seeder
                 'amount' => 98200.00,
                 'include' => 1,
                 'icon_id' => 34,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ]
         ];
     }
