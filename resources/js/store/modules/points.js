@@ -5,7 +5,7 @@ export default {
         addIncomes({commit}, data) {
             axios.post('/api/incomes' , data)
                 .then(response => {
-                    console.log('success')
+                    console.log('success', response)
                 })
                 .catch((error) => {
                     console.log('error')
