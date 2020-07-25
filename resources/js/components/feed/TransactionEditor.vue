@@ -3,29 +3,33 @@
         <el-collapse-transition>
             <div v-if="getEditorShowStatus & transactionEditorId === getEditorData.edata.id" class="editor">
                 <el-form :model="editorData.edata" ref="editorForm" :rules="rules" label-position="right"
-                         label-width=" 100px" size="small">
-                    <el-row :gutter="10" type="flex" justify="space-between">
-                        <el-col :span="5">
-                            <el-form-item label="Дата">
-                                <el-date-picker type="date"
-                                                firstDayOfWeek="1"
-                                                format="dd.MM.yyyy"
-                                                value-format="yyyy-MM-dd"
-                                                v-model="editorData.edata.date"
-                                                style="margin-top: 0; font-size: 1em; width: 100%;"
-                                ></el-date-picker>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="5">
-                            <el-form-item prop="amount" label="₽" class="label">
-                                <el-input clearable :precision="2" type="number"
-                                          v-model.number="editorData.edata.amount"
-                                          class="select_option"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="14">
+                         label-width=" 5px" size="small">
+                        <el-row :gutter="10" type="flex">
+<!--                            <el-col :span="10">-->
+<!--                                -->
+<!--                            </el-col>-->
+<!--                            <el-col :span="5">-->
+
+<!--                            </el-col>-->
+                        <el-col :span="24">
                             <div class="editor-pointers">
-                                <el-form-item :label="typeData.typeDescription">
+                                <el-form-item>
+                                    <el-date-picker type="date"
+                                                    firstDayOfWeek="1"
+                                                    format="dd.MM.yyyy"
+                                                    value-format="yyyy-MM-dd"
+                                                    v-model="editorData.edata.date"
+                                                    style="margin-top: 0; font-size: 1em; width: 150px"
+                                    ></el-date-picker>
+                                </el-form-item>
+                                <!--                                <el-form-item prop="amount" label="Сумма (₽)" class="label">-->
+                                <el-form-item prop="amount" class="label">
+                                    <el-input clearable :precision="2" type="number"
+                                              v-model.number="editorData.edata.amount"
+                                              class="select_option"></el-input>
+                                </el-form-item>
+<!--                                <el-form-item :label="typeData.typeDescription">-->
+                                <el-form-item >
                                     <el-select class="selector"
                                                v-if="editorData.edata.type === constants.FROM_INCOME"
                                                v-model="editorData.edata.income_id">
@@ -73,8 +77,9 @@
                     </el-row>
                     <el-row :gutter="20">
                         <el-col :span="18">
-                            <el-form-item prop="comment" label="Коментарий">
-                                <el-input v-model="editorData.edata.comment" clearable></el-input>
+                            <el-form-item prop="comment">
+<!--                            <el-form-item prop="comment" label="Коментарий">-->
+                                <el-input v-model="editorData.edata.comment" clearable placeholder="Коментарий"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="3">
@@ -206,10 +211,6 @@
                             })
                             .then(response => {
                                 if (response.status === 200) {
-                                    // this.setTransactionUpdate(this.editorData)
-                                    // this.setPage(page - 1)
-
-                                    console.log('страница из ответа на запрос обновления',this.getPage)
                                     this.fetchTransactions()
                                 }
                             })
@@ -221,7 +222,6 @@
                                     type: 'error'
                                 });
                             });
-                        // this.setEditorShowStatus(false);
                     } else {
                         return false;
                     }
@@ -289,6 +289,8 @@
         font-weight: 400;
         border-radius: 0;
         font-size: 0.95em;
+        font-size: 1em;
+        width: 150px;
     }
 
     .hover {
