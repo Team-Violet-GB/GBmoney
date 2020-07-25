@@ -90,7 +90,7 @@
             ...mapActions(['fetchIcons', 'addIncomes']),
 
             submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
+                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.isBalance();
                         if (this.ruleForm.category === 'Доход'){

@@ -2,13 +2,14 @@ import axios from 'axios'
 
 export default {
     actions: {
-        addIncomes({commit}, data) {
+        addIncomes({commit, dispatch}, data) {
             axios.post('/api/incomes' , data)
                 .then(response => {
                     console.log('success', response)
+                    dispatch('fetchIncomes')
                 })
                 .catch((error) => {
-                    console.log('error')
+                    console.log(error)
                 })
         },
         fetchIncomes({ commit }) {
