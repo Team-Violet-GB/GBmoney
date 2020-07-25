@@ -114,18 +114,10 @@
                 return sum.toFixed(0);
             },
             paginate(page) {
-                // let page = this.getPage;
                 console.log('из пагинации: ', page)
                 this.setPage(page);
                 this.fetchTransactions()
-
             }
-            // paginate() {
-            //     let page = this.getPage;
-            //     this.fetchTransactions()
-            //     page++;
-            //     this.setPage(page);
-            // }
         },
         mounted() {
             this.fetchIncomes();

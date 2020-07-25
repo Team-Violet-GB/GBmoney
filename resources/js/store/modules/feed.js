@@ -20,7 +20,6 @@ export default {
 
                     commit('setTotal', response.data.meta.total);
                     commit('setTransactions', response.data.data);
-                    // commit('setDisablePagination', response.data.meta.current_page > response.data.meta.last_page);
                 })
                 .catch(error => {
                     commit('setErrorStatus', true);
@@ -33,61 +32,7 @@ export default {
     },
     mutations: {
         setTransactions(state, data) {
-
             state.transactions = data
-            // state.transactions = Object.assign({}, this.getters.getTransactions, data)
-        },
-        setTransactionUpdate(state, data) {
-
-
-            let existGroups = Object.keys(this.getters.getTransactions)
-            let lastExistGroups = existGroups[existGroups.length - 1]
-
-
-                if (existGroups.includes(data.edata.date)) {
-                    let groupArray = state.transactions[data.edata.date]
-                    let newLength = groupArray.length + 1
-                    groupArray.splice(groupArray.lastIndex, 0, data.edata)
-                    groupArray.splice(newLength)
-                    state.transactions[data.edata.date] = groupArray
-
-                    if (data.transactionGroupLength > 1) {
-                        let newLength = state.transactions[data.transactionGroupName].length - 1
-                        state.transactions[data.transactionGroupName].splice(data.transactionIndex, 1)
-                        state.transactions[data.transactionGroupName].splice(newLength)
-                    } else {
-                        let transactions = Object.assign({}, this.getters.getTransactions)
-                        delete transactions[data.transactionGroupName]
-                        state.transactions = transactions
-                    }
-                } else {
-                    if (new Date(data.edata.date) < new Date(lastExistGroups)) {
-                        state.transactions[data.transactionGroupName].splice(data.transactionIndex, 1, data.edata)
-                    } else {
-                        let newLength = state.transactions[data.transactionGroupName].length - 1
-                        state.transactions[data.transactionGroupName].splice(data.transactionIndex, 1)
-                        state.transactions[data.transactionGroupName].splice(newLength)
-                        // this.setTransactionDelete(data)
-                    }
-
-                }
-
-
-
-            // console.log(lastExistGroups)
-
-
-        },
-        setTransactionDelete(state, data) {
-            if (data.transactionGroupLength > 1) {
-                let newLength = state.transactions[data.transactionGroupName].length - 1
-                state.transactions[data.transactionGroupName].splice(data.transactionIndex, 1)
-                state.transactions[data.transactionGroupName].splice(newLength)
-            } else {
-                let transactions = Object.assign({}, this.getters.getTransactions)
-                delete transactions[data.transactionGroupName]
-                state.transactions = transactions
-            }
         },
         setEditorShowStatus(state, data) {
             state.editorShowStatus = data
