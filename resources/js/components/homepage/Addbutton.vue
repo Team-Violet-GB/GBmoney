@@ -36,7 +36,7 @@
                         <el-radio-group v-model="ruleForm.choose">
                             <el-radio-button
                                 class="cstm-radio-gap"
-                                :label="elem.name"
+                                :label="elem.id"
                                 v-for="elem in allIcons"
                                 :key="elem.id"
                             >
@@ -88,6 +88,7 @@
         },
         methods: {
             ...mapActions(['fetchIcons']),
+
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
