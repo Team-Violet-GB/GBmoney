@@ -29,6 +29,8 @@ class ExpensesSeeder extends Seeder
                 'amount' => 5755.26,
                 'max_limit' => 5000.00,
                 'icon_id' => 33,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 1,
@@ -36,6 +38,8 @@ class ExpensesSeeder extends Seeder
                 'amount' => 15003.55,
                 'max_limit' => 10000.00,
                 'icon_id' => 47,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 1,
@@ -43,6 +47,8 @@ class ExpensesSeeder extends Seeder
                 'amount' => 620.00,
                 'max_limit' => 1000.00,
                 'icon_id' => 48,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 2,
@@ -50,6 +56,8 @@ class ExpensesSeeder extends Seeder
                 'amount' => 4950.37,
                 'max_limit' => 12000.00,
                 'icon_id' => 47,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 2,
@@ -57,6 +65,8 @@ class ExpensesSeeder extends Seeder
                 'amount' => 29500.80,
                 'max_limit' => 5000.00,
                 'icon_id' => 37,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ],
             [
                 'user_id' => 2,
@@ -64,6 +74,8 @@ class ExpensesSeeder extends Seeder
                 'amount' => 1001.01,
                 'max_limit' => 5000.00,
                 'icon_id' => 38,
+                "updated_at" => "2020-07-24 10:14:48",
+                "created_at" => "2020-07-24 10:14:48",
             ]
         ];
     }
