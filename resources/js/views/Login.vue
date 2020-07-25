@@ -49,12 +49,12 @@
                     { required: true, message: 'Введите e-mail', trigger: 'blur' },
                     { type: 'email', message: 'Введен некорректрный e-mail  ', trigger: 'blur'}
                 ],
-            },
+            }
         }
     },
     computed: {
         isNotAuthenticated() {
-            if (this.isAuth) this.$router.push('/')
+            //if (this.isAuth) this.$router.push('/')
             return true
         }
     },

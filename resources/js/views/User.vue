@@ -23,6 +23,7 @@
     </el-form>
 </template>
 <script>
+    import {mapMutations, mapGetters} from 'vuex'
     export default {
         data() {
             var checkEmail = (rule, value, callback) => {
@@ -44,20 +45,15 @@
                 }
             };
             var validateNewPass = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('Введите новый пароль, пожалуйста'));
-                } else {
-                    if (this.ruleForm.checkPass !== '') {
-                        this.$refs.ruleForm.validateField('checkPass');
-                    }
+                if (this.ruleForm.checkPass !== '') {
+                    this.$refs.ruleForm.validateField('checkPass');
                     //TODO реализовать проверку корректности пароля в бэке (callback())
                     callback();
                 }
+                callback();
             };
             var validatePass2 = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('Введите пароль повторно, пожалуйста'));
-                } else if (value !== this.ruleForm.newpass) {
+                if (value !== this.ruleForm.newpass) {
                     callback(new Error('Пароли не совпадают!'));
                 } else {
                     callback();
@@ -87,15 +83,52 @@
             };
         },
         methods: {
+            ...mapMutations([
+                'setUserEmail',
+            ]),
+            ...mapGetters([
+                'user',
+                'isAuth',
+            ]),
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        alert('submit!');
+                        this.axios.post('/api/user/user' , {
+                            _method: "PATCH",
+                            email: this.ruleForm.email,
+                            password: this.ruleForm.pass,
+                            newpass: this.ruleForm.newpass,
+                        })
+                            .then(response => {
+                                let email = response.data.email
+                                this.MessageSuccess('Пользователь ' + email + ' успешно изменен')
+                                this.$store.commit('setUserEmail', email)
+                            })
+                            .catch((error) => {
+                                var errors = error.response.data.errors
+                                for (var err in errors) {
+                                    errors[err].forEach((e, i) => {
+                                        setTimeout(() => {
+                                            this.MessageError(e)
+                                        }, 100 * ++i)
+                                    });
+                                }
+                            })
                     } else {
-                        console.log('error submit!!');
-                        return false;
+                        this.MessageError('Проверьте правильность заполнения полей')
+                        return false
                     }
                 });
+            },
+            MessageError(message) {
+                this.$message.error(message)
+            },
+
+            MessageSuccess(message) {
+                this.$message({
+                    message: message,
+                    type: 'success'
+                })
             },
         }
     }

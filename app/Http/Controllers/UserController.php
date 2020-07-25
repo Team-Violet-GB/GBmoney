@@ -24,18 +24,18 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
-        $id = Auth::id();
-        $user = User::find($id);
+        $user = User::find(Auth::id());
         if ($user) {
             $user->email = $request->email;
             if ($request->newpass)
                 $user->password = Hash::make($request->newpass);
-            return response()->json(['message' => 'Пользователь успешно изменён'], 200);
+            $user->save();
+            return response()->json($user);
         }
         return response()->json(['message' => 'Упс, что-то пошло не так'], 404);
     }
 
-    public function delete(Request $request)
+    public function destroy(Request $request)
     {
 
     }

@@ -84,7 +84,7 @@
             'isAuth',
         ]),
         isNotAuthenticated() {
-            if (this.isAuth) this.$router.push('/')
+            //if (this.isAuth) this.$router.push('/')
             return true
         }
     },
@@ -95,7 +95,7 @@
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    this.axios.post('/api/register' , {
+                    this.axios.post('/registration' , {
                         email: this.ruleForm.email,
                         password: this.ruleForm.pass
                     })
