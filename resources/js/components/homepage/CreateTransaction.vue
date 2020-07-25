@@ -14,13 +14,18 @@
               newDate ? (transaction.date = new Date(newDate.getTime() - (newDate.getTimezoneOffset() * 60000)).toISOString().slice(0, 10)): transaction.date = null 
               }" />
             <div class="cstm-select-box cstm-mrgn-top-20">
-              <SelectCustom :points="pointsFrom" :id="transaction.fromID" @changeSelect="(fromID) => { transaction.fromID = fromID }" />
+              <SelectCustom :list="pointsFrom" :idSelected="transaction.fromID" @changeSelect="(fromID) => { transaction.fromID = fromID }" />
               <i class="el-icon-right"></i>
-              <SelectCustom :points="pointsTo" :id="transaction.toID" @changeSelect="(toID) => { transaction.toID = toID }"/>
+              <SelectCustom :list="pointsTo" :idSelected="transaction.toID" @changeSelect="(toID) =>  { changePointsTo(toID) }"/>
             </div>
             <div  v-if="transaction.type == 3" class="cstm-select-box cstm-mrgn-top-20">
                 <span class="cstm-label">Подкатегория:</span> 
-                <SelectCustom :points="tags" :id="transaction.tag" @changeSelect="(tagID)  => { transaction.tag = tagID }"/>
+                <SelectCustom 
+                  :list="tagsFromCategory" 
+                  :idSelected="transaction.tag" 
+                  :withEmptySelect="true" 
+                  @changeSelect="(tagID) => { transaction.tag = tagID }
+                "/>
             </div>
             <el-input placeholder="Сумма" class="cstm-input cstm-mrgn-top-20" type="number" v-model="amount"></el-input>
             <el-input
@@ -70,15 +75,25 @@
             'tags',
         ]),
 
+        tagsFromCategory() {
+          var tags = []
+          for (var tag in this.tags){
+              if (this.tags[tag].expense_id == this.transaction.toID) {
+                tags.push(this.tags[tag])
+            }
+          }
+          return tags
+        },
+
         drawer() {
-            return this.transaction.state_window
+          return this.transaction.state_window
         },
 
         pointsFrom() {
-            return (this.transaction.type == 1) ? this.incomes : this.wallets
+          return (this.transaction.type == 1) ? this.incomes : this.wallets
         }, 
         pointsTo() {
-            return (this.transaction.type == 3) ? this.expenses : this.wallets
+          return (this.transaction.type == 3) ? this.expenses : this.wallets
         }, 
     },
     
@@ -100,6 +115,11 @@
         if (!this.amount) this.errors.push('Не указана сумма')
         if (!this.transaction.date) this.errors.push('Не указана дата')
         return false;
+      },
+
+      changePointsTo(toID){
+         this.transaction.toID = toID
+         this.transaction.tag = null
       },
 
       MessageError(message) {

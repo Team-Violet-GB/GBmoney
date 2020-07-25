@@ -1,5 +1,11 @@
 <template>
-  <el-select v-model="selectedID" placeholder="Подкатегория" @change="$emit('changeSelect', Number(selectedID))">
+  <el-select v-model="selectedID" @change="$emit('changeSelect', Number(selectedID))">
+    <el-option
+      v-if="withEmptySelect"
+      label="Нет"
+      :value="null"
+      class = "cstm-select-item">
+    </el-option>
     <el-option
       v-for="item in poinList"
       :key="item.id"
@@ -12,18 +18,18 @@
 
 <script>
   export default {
-    props: ['points', 'id'],
+    props: ['list', 'idSelected', 'withEmptySelect'],
     data() {
       return {
-        selectedID: this.id,
-        poinList: this.points
+        selectedID: this.idSelected,
+        poinList: this.list
       }
     },
     watch: {
-      id(id) {
+      idSelected(id) {
         this.selectedID = id
       },
-      points(list) {
+      list(list) {
         this.poinList = list
       }
     },
