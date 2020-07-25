@@ -36,11 +36,11 @@
                         <el-radio-group v-model="ruleForm.choose">
                             <el-radio-button
                                 class="cstm-radio-gap"
-                                :label="elem"
-                                v-for="elem in element"
-                                :key="elem"
+                                :label="elem.name"
+                                v-for="elem in allIcons"
+                                :key="elem.id"
                             >
-                                <i :class="elem" class="cstm-icon-size"></i>
+                                <i :class="elem.name" class="cstm-icon-size"></i>
                             </el-radio-button>
                         </el-radio-group>
                     </el-form-item>
@@ -58,6 +58,7 @@
 
 
 <script>
+    import { mapGetters, mapActions } from 'vuex'
     export default {
         props: ['category'],
         data() {
@@ -70,58 +71,6 @@
                     balance: true,
                     amount: 0
                 },
-                element: [
-                    'el-icon-phone-outline',
-                    'el-icon-star-off',
-                    'el-icon-goods',
-                    'el-icon-camera',
-                    'el-icon-s-order',
-                    'el-icon-s-platform',
-                    'el-icon-s-promotion',
-                    'el-icon-s-home',
-                    'el-icon-s-ticket',
-                    'el-icon-s-open',
-                    'el-icon-s-shop',
-                    'el-icon-s-marketing',
-                    'el-icon-s-comment',
-                    'el-icon-s-finance',
-                    'el-icon-s-custom',
-                    'el-icon-s-opportunity',
-                    'el-icon-date',
-                    'el-icon-edit',
-                    'el-icon-tickets',
-                    'el-icon-printer',
-                    'el-icon-paperclip',
-                    'el-icon-monitor',
-                    'el-icon-mobile',
-                    'el-icon-mouse',
-                    'el-icon-collection',
-                    'el-icon-notebook-1',
-                    'el-icon-school',
-                    'el-icon-table-lamp',
-                    'el-icon-house',
-                    'el-icon-shopping-cart-full',
-                    'el-icon-sell',
-                    'el-icon-present',
-                    'el-icon-box',
-                    'el-icon-bank-card',
-                    'el-icon-money',
-                    'el-icon-wallet',
-                    'el-icon-discount',
-                    'el-icon-bangzhu',
-                    'el-icon-first-aid-kit',
-                    'el-icon-discover',
-                    'el-icon-watch',
-                    'el-icon-service',
-                    'el-icon-mobile-phone',
-                    'el-icon-bicycle',
-                    'el-icon-basketball',
-                    'el-icon-food',
-                    'el-icon-chicken',
-                    'el-icon-knife-fork',
-                    'el-icon-coffee',
-                    'el-icon-ice-tea'
-                ],
                 rules: {
                     name: [
                         {required: true, message: 'Введите название', trigger: 'blur'},
@@ -132,7 +81,13 @@
                 }
             };
         },
+        computed:
+          mapGetters(['allIcons']),
+        mounted() {
+            this.fetchIcons()
+        },
         methods: {
+            ...mapActions(['fetchIcons']),
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {

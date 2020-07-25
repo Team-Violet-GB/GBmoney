@@ -1,6 +1,20 @@
+import axios from 'axios'
+
 export default {
-    actions: {},
-    mutation: {},
+    actions: {
+        fetchIcons({ commit }) {
+            axios.get('/api/get/icons')
+                .then(response => {
+                    const icons = response.data.data;
+                    commit('updateIcons', icons)
+                })
+        }
+    },
+    mutations: {
+        updateIcons (state, icons) {
+            state.icons = icons
+        }
+    },
     state: {
         icons: []
     },
