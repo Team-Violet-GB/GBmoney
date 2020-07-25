@@ -79,10 +79,10 @@
                         </el-col>
                         <el-col :span="3">
                             <el-button-group style="width: 100px; padding-top: 2px">
-                                <el-button @click="updateTransaction('editorForm')" type="success" size="small"
+                                <el-button @click="updateTransaction('editorForm')" type="success" size="mini"
                                            icon="el-icon-check"></el-button>
                                 <el-button @click="deleteTransaction(editorData)" type="danger"
-                                           size="small"
+                                           size="mini"
                                            icon="el-icon-delete"></el-button>
                             </el-button-group>
                         </el-col>
