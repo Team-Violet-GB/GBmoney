@@ -18,22 +18,27 @@
               <i class="el-icon-right"></i>
               <SelectCustom :list="pointsTo" :idSelected="transaction.toID" @changeSelect="(toID) =>  { changePointsTo(toID) }"/>
             </div>
-            <div  v-if="transaction.type == 3" class="cstm-select-box cstm-mrgn-top-20">
-                <span class="cstm-label">Подкатегория:</span> 
+            <div  v-if="transaction.type == 3" class="cstm-select-box cstm-tags cstm-mrgn-top-20">
+                <span class="cstm-label">Подкатегория: </span> 
                 <SelectCustom 
                   :list="tagsFromCategory" 
                   :idSelected="transaction.tag" 
                   :withEmptySelect="true" 
                   @changeSelect="(tagID) => { transaction.tag = tagID }
                 "/>
+                <div class="cstm-buttons-tags">                
+                  <i class="el-icon-plus cstm-edit"></i>
+                  <i class="el-icon-edit cstm-edit"></i>
+                  <i class="el-icon-delete cstm-edit"></i>
+                </div>
             </div>
-            <el-input placeholder="Сумма" class="cstm-input cstm-mrgn-top-20" type="number" v-model="amount"></el-input>
+            <el-input placeholder="Сумма" class="cstm-input cstm-mrgn-top-20" type="number" v-model="transaction.amount"></el-input>
             <el-input
               type="textarea"
               :rows="2"
               placeholder="Комментарий"
               class="cstm-input cstm-mrgn-top-20"
-              v-model="comment">
+              v-model="transaction.comment">
             </el-input>
             <el-button class="cstm-create-button cstm-mrgn-top-20" type="success" @click="checkTransaction">Записать</el-button>
           </div>
@@ -54,8 +59,6 @@
     data() {
       return {
         transaction: this.newTransaction,
-        amount: null,
-        comment: null,
         direction: 'rtl',
         errors: [],
       };
@@ -110,9 +113,9 @@
       },
       
       checkForm() {
-        if (this.amount && this.transaction.date) return true;
+        if (this.transaction.amount && this.transaction.date) return true;
         this.errors = []
-        if (!this.amount) this.errors.push('Не указана сумма')
+        if (!this.transaction.amount) this.errors.push('Не указана сумма')
         if (!this.transaction.date) this.errors.push('Не указана дата')
         return false;
       },
@@ -152,13 +155,13 @@
           "date": this.transaction.date,
           "tag_id": this.transaction.tag,
           "type": this.transaction.type,
-          "amount": this.amount,
-          "comment": this.comment, 
+          "amount": this.transaction.amount,
+          "comment": this.transaction.comment, 
         })
         .then(response => {
           let pointsNames = this.getPointsNames(response.data.data)
           this.MessageSuccess('Новая транзакция на сумму ' + response.data.data.amount + ' из ' + pointsNames.nameFrom + ' в ' + pointsNames.nameTo)
-          this.amount = this.comment =  null
+          this.transaction.amount = this.transaction.comment =  null
           this.handleClose()
         })
         .catch((error) => {
@@ -210,14 +213,28 @@
   align-items: center;
 }
 
+.cstm-tags {
+  justify-content: space-around;
+}
+.cstm-buttons-tags{
+  display: flex;
+
+}
+
 .cstm-input {
   width: 90%;
 }
 
 .cstm-label {
-  width: 50%;
-  text-align: right;
+
+  color: #ffffff;
+  
+}
+
+.cstm-edit {
+  font-size: 20px;
   color: #ffffff;
 }
+
 
 </style>

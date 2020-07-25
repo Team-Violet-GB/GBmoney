@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Модальное окно  -->
-    <CreateTransaction
+    <Transaction
       :newTransaction="newTransaction"
       @closeCreateWindow="newTransaction.state_window = false"  
     />
@@ -107,7 +107,7 @@
     import { Drag, Drop } from "vue-easy-dnd"
     import { mapGetters, mapActions, mapMutations } from "vuex"
     import Addbutton from "../components/homepage/Addbutton"
-    import CreateTransaction from "../components/homepage/CreateTransaction"
+    import Transaction from "../components/homepage/Transaction"
 
     export default {
         name: "App",
@@ -115,7 +115,7 @@
             Drag,
             Drop,
             Addbutton,
-            CreateTransaction,
+            Transaction,
         },
         data() {
           return {
@@ -164,6 +164,8 @@
                     type: (event.data.type == 'income') ? 1 : 2,
                     tag: null,
                     date: this.dateNow(), 
+                    amount: null,
+                    comment: null,
                 }
             },
             transactionExpense (event) { // drag & drop  работает через раз, если указать одинаковые имена функций у разных групп
@@ -174,6 +176,8 @@
                     type: 3,
                     tag: null,
                     date: this.dateNow(), 
+                    amount: null,
+                    comment: null,
                 }
             },
             dateNow() {
