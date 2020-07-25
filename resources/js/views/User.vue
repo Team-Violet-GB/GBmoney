@@ -25,15 +25,6 @@
 <script>
     export default {
         data() {
-            var checkName = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('Введите Ваш e-mail, пожалуйста'));
-                } else {
-                    this.$refs.ruleForm.validateField('checkEmail');
-                    //TODO реализовать проверку e-mail из БД (callback())
-                    callback();
-                }
-            };
             var checkEmail = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('Введите Ваш e-mail, пожалуйста'));
