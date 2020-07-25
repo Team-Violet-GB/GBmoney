@@ -100,16 +100,21 @@
                                 }
                             );
                         }
-                        this.dialogVisible = false;
+                        this.dialogVisible = false
+                        this.isSuccessSubmit()
+
                     } else {
                         console.log('error submit!!');
                         return false;
                     }
                 });
             },
-            isBalance: function () {
+            isBalance () {
                 if (this.ruleForm.category !== 'Счета')
                     this.ruleForm.balance = true
+            },
+            isSuccessSubmit () {
+                this.ruleForm.name = this.ruleForm.choose = ''
             }
         },
     };
