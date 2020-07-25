@@ -26,6 +26,9 @@ class UserController extends Controller
     {
         $user = User::find(Auth::id());
         if ($user) {
+            if (!Hash::check($request->password, Auth::user()->getAuthPassword()))
+                return response()->json(['message' => 'Неверный пароль'], 403);
+            $this->validate($request, User::rulesUserUpdateDelete($request->password), [], User::attributeNames());
             $user->email = $request->email;
             if ($request->newpass)
                 $user->password = Hash::make($request->newpass);
@@ -40,7 +43,9 @@ class UserController extends Controller
         $id = Auth::id();
         $user = User::find($id);
         if ($user) {
-
+            if (!Hash::check($request->password, Auth::user()->getAuthPassword()))
+                return response()->json(['message' => 'Неверный пароль'], 403);
+            $this->validate($request, User::rulesUserUpdateDelete($request->password), [], User::attributeNames());
             $user->forceDelete();
             return response()->json(['message' => 'Пользователь удалён'], 200);
         }
