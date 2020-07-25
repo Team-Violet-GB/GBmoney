@@ -95,7 +95,7 @@
 
 <script>
     import constants from '../../constants';
-    import {mapGetters, mapMutations} from 'vuex';
+    import {mapActions, mapGetters, mapMutations} from 'vuex';
     import axios from "axios";
 
     export default {
@@ -127,7 +127,8 @@
                 'tags',
                 'getEditorShowStatus',
                 'getEditorData',
-                'getTransactions'
+                'getTransactions',
+                'getPage'
             ]),
             currentTags() {
                 return this.tags.filter(tag => tag.expense_id === this.editorData.edata.expense_id)
@@ -173,7 +174,11 @@
             }
         },
         methods: {
+            ...mapActions([
+                'fetchTransactions'
+            ]),
             ...mapMutations([
+                'setPage',
                 'setTransactions',
                 'setTransactionUpdate',
                 'setTransactionDelete',
@@ -187,31 +192,36 @@
             updateTransaction(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.setTransactionUpdate(this.editorData)
-                        // axios.put(`/api/transactions/${this.editorData.edata.id}`,
-                        //     {
-                        //         from_id: this.typeData.fromId,
-                        //         to_id: this.typeData.toId,
-                        //         type: this.typeData.type,
-                        //         amount: this.editorData.edata.amount,
-                        //         date: this.editorData.edata.date,
-                        //         comment: this.editorData.edata.comment,
-                        //         tag_id: this.editorData.edata.tag_id
-                        //     })
-                        //     .then(response => {
-                        //         if (response.status === 200) {
-                        //             this.setTransactionUpdate(this.editorData)
-                        //         }
-                        //     })
-                        //     .catch(error => {
-                        //         this.$message({
-                        //             showClose: true,
-                        //             message: `Попытка обновления транзакции от ${new Date(this.editorData.data.date).toLocaleDateString()} не удалась \n ${error}`,
-                        //             duration: 3000,
-                        //             type: 'error'
-                        //         });
-                        //     });
-                        this.setEditorShowStatus(false);
+                        // this.setTransactionUpdate(this.editorData)
+                        // let page = this.getPage
+                        axios.put(`/api/transactions/${this.editorData.edata.id}`,
+                            {
+                                from_id: this.typeData.fromId,
+                                to_id: this.typeData.toId,
+                                type: this.typeData.type,
+                                amount: this.editorData.edata.amount,
+                                date: this.editorData.edata.date,
+                                comment: this.editorData.edata.comment,
+                                tag_id: this.editorData.edata.tag_id
+                            })
+                            .then(response => {
+                                if (response.status === 200) {
+                                    // this.setTransactionUpdate(this.editorData)
+                                    // this.setPage(page - 1)
+
+                                    console.log('страница из ответа на запрос обновления',this.getPage)
+                                    this.fetchTransactions()
+                                }
+                            })
+                            .catch(error => {
+                                this.$message({
+                                    showClose: true,
+                                    message: `Попытка обновления транзакции от ${new Date(this.editorData.data.date).toLocaleDateString()} не удалась \n ${error}`,
+                                    duration: 3000,
+                                    type: 'error'
+                                });
+                            });
+                        // this.setEditorShowStatus(false);
                     } else {
                         return false;
                     }
@@ -221,7 +231,7 @@
             deleteTransaction() {
                 this.$confirm('Подтверждение удаления транзакции', 'Внимание!', {
                     confirmButtonText: 'Удалить',
-                    confirmButtonClass: 'primary',
+                    confirmButtonClass: 'danger',
                     showCancelButton: false,
                     iconClass: 'el-icon-delete',
                     type: 'warning',

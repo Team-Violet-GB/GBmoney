@@ -1,9 +1,9 @@
 <template>
     <div>
         <!--        разметка и поведение для ленты-->
-        <div v-if="getEditable" class="tran-wrapper" @click="edit()">
+        <div ref="div" v-if="getEditable" class="tran-wrapper" @click="edit($event)" :id="transaction.data.id">
             <el-card>
-                <el-row :gutter="10" class="tran-row-data">
+                <el-row :gutter="10" :class="{edit: active}" class="tran-row-data">
                     <el-col :span="3"><div>{{ from.name }}</div></el-col>
                     <el-col :span="3"><span style="color: #8e8e8e">{{ from.type }}</span></el-col>
                     <el-col :span="6"><div>{{ to }}</div></el-col>
@@ -45,7 +45,8 @@
         data() {
             return {
                 constants: constants,
-                transactionEditorId: null
+                transactionEditorId: null,
+                active: false
             }
         },
         props: {
@@ -108,7 +109,10 @@
             },
         },
         methods: {
-            edit() {
+            edit(e) {
+                // console.log(e.data.id)
+                // console.log(e)
+                // console.log(this.transaction.data.id)
 
                 this.setEditorData(this.transaction);
                 this.transactionEditorId = this.transaction.data.id
@@ -144,10 +148,13 @@
         z-index: 99999;
     }
 
-    .tran-row-data div {
+    .tran-row-data {
         color: #ffffff;
         font-size: large;
         font-weight: 400;
+    }
+    .edit {
+        color: #8468ff
     }
 
     .tran-comment {

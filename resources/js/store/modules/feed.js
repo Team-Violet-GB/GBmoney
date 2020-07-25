@@ -13,11 +13,14 @@ export default {
             }
             axios.get('/api/transactions', {params: params, headers: headers})
                 .then(response => {
-                    commit('setTransactions', Object.assign({}, this.getters.getTransactions, response.data.data));
-                    commit('setDisablePagination', response.data.meta.current_page === response.data.meta.last_page);
-                    let next = this.getters.getPage;
-                    next++;
-                    commit('setPage', next);
+                    console.log(response.data.meta)
+                    console.log('страница из ответа current_page : ', response.data.meta.current_page)
+                    console.log('страница из ответа last_page : ', response.data.meta.last_page)
+                    console.log('страница из store.page: ', this.getters.getPage)
+
+                    commit('setTotal', response.data.meta.total);
+                    commit('setTransactions', response.data.data);
+                    // commit('setDisablePagination', response.data.meta.current_page > response.data.meta.last_page);
                 })
                 .catch(error => {
                     commit('setErrorStatus', true);
@@ -30,7 +33,9 @@ export default {
     },
     mutations: {
         setTransactions(state, data) {
-            state.transactions = data;
+
+            state.transactions = data
+            // state.transactions = Object.assign({}, this.getters.getTransactions, data)
         },
         setTransactionUpdate(state, data) {
 
@@ -69,7 +74,7 @@ export default {
 
 
 
-            console.log(lastExistGroups)
+            // console.log(lastExistGroups)
 
 
         },
@@ -110,6 +115,9 @@ export default {
         },
         setDisablePagination(state, data) {
             state.disablePagination = data
+        },
+        setTotal(state, data) {
+            state.total = data
         }
     },
     state: {
@@ -122,6 +130,7 @@ export default {
         dateFrom: '',
         dateTo: '',
         page: '',
+        total: '',
         disablePagination: false
     },
     getters: {
@@ -154,6 +163,9 @@ export default {
         },
         getDisablePagination(state) {
             return state.disablePagination
+        },
+        getTotal(state) {
+            return Number(state.total)
         }
     }
 }

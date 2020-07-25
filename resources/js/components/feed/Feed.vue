@@ -22,7 +22,16 @@
             <!--            группа транзакций-->
             <transaction-group :transactionGroup="transactionGroup" :transactionGroupName="index" class="tran-group"/>
         </el-card>
-        <scroll-loader :loader-method="paginate" :loader-disable="getDisablePagination"/>
+        <div class="pagination">
+            <el-pagination
+                background
+                :hide-on-single-page="true"
+                layout="prev, pager, next, jumper, slot"
+                @current-change="paginate"
+                :total="getTotal">
+            </el-pagination>
+        </div>
+
     </div>
 </template>
 
@@ -63,7 +72,8 @@
                 'getErrorInfo',
                 'getPage',
                 'getDisablePagination',
-                'getEditable'
+                'getEditable',
+                'getTotal'
             ]),
         },
         methods: {
@@ -78,7 +88,8 @@
                 'setEditable',
                 'setDateFrom',
                 'setDateTo',
-                'setPage'
+                'setPage',
+                'setTotal'
             ]),
             getLocalDateString(date) {
                 let days = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
@@ -102,9 +113,19 @@
                 sum = sum / 100
                 return sum.toFixed(0);
             },
-            paginate() {
+            paginate(page) {
+                // let page = this.getPage;
+                console.log('из пагинации: ', page)
+                this.setPage(page);
                 this.fetchTransactions()
+
             }
+            // paginate() {
+            //     let page = this.getPage;
+            //     this.fetchTransactions()
+            //     page++;
+            //     this.setPage(page);
+            // }
         },
         mounted() {
             this.fetchIncomes();
@@ -115,6 +136,7 @@
             this.setPage(this.page);
             this.setDateFrom(this.dateFrom);
             this.setDateTo(this.dateTo);
+            this.fetchTransactions()
         },
         components: {
             transactionGroup,
@@ -148,5 +170,9 @@
         font-weight: 500;
         padding-right: 5px;
         padding-top: 4px;
+    }
+    .el-pagination {
+        display: flex;
+        justify-content: center;
     }
 </style>
