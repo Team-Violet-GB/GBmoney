@@ -120,7 +120,7 @@
     };
 </script>
 
-<style scoped>
+<style lang="scss">
     .cstm-header {
         display: block;
         font-size: 25px;
@@ -159,7 +159,7 @@
 
     .cstm-radio-gap {
         margin: 2px;
-        border-left: 1px solid #e6e6e6;
+        border-radius: 50%;
     }
 
     .cstm-radio-gap:first-child {
@@ -184,4 +184,28 @@
     .cstm-icon-size {
         font-size: 30px;
     }
+
+    .cstm-radio-gap {
+        .el-radio-button__inner {
+            border-radius: 50%;
+            border: none;
+            height: 72px;
+        }
+    }
+    .el-radio-button:first-child {
+        border-radius: 50%;
+        .el-radio-button__inner {
+            border-radius: 50%;
+        }
+    }
+    .el-radio-button:last-child {
+        border-radius: 50%;
+        .el-radio-button__inner {
+            border-radius: 50%;
+        }
+    }
+    .el-radio-button__inner [class*=el-icon-] {
+        line-height: 1.6;
+    }
+
 </style>
