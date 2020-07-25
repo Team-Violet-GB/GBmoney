@@ -37,6 +37,14 @@ class UserController extends Controller
 
     public function destroy(Request $request)
     {
+        $id = Auth::id();
+        $user = User::find($id);
+        if ($user) {
+
+            $user->forceDelete();
+            return response()->json(['message' => 'Пользователь удалён'], 200);
+        }
+        return response()->json(['message' => 'Упс, что-то пошло не так'], 404);
 
     }
 }

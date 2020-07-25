@@ -26,34 +26,13 @@ export default {
         },
         logout({ commit }, data) {
             axios.get('/api/logout')
-                .then(response => {
-                    localStorage.removeItem('user-token')
-                    localStorage.removeItem('user-email')
-                    commit('logout')
+                .then(() => {
+                    commit('clearUserData')
                 })
                 .catch((error) => {
                     data.this.$message.error(error.response.data.errors)
                 })
         },
-        /*setUserData({commit}) {
-            const token = localStorage.getItem('user-token')
-            if (token) {
-              axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-            }
-
-            axios
-                .get('/api/user/show')
-                .then(response => {
-                    if (typeof (response.data) == 'object') {
-                        let userData = response.data;
-                        commit('setUserData', userData);
-                    } else
-                        console.log('Неверные данные')
-                })
-                //Проверку на null в данном случае не делаю, т.к. если вернет null - поле останется пустым
-                .catch(error => console.log(error))
-                .finally(() => (console.log('finished')));
-        }*/
     },
     mutations: {
         setUserEmail(state, email) {
@@ -63,9 +42,11 @@ export default {
             state.token = data.token;
             state.email = data.user.email;
         },
-        logout(state) {
-            state.token = '';
-            state.email = '';
+        clearUserData(state) {
+            localStorage.removeItem('user-token');
+            localStorage.removeItem('user-email');
+            state.token = null;
+            state.email = null;
         }
     },
     state: {
@@ -76,6 +57,6 @@ export default {
         user(state) {
             return state
         },
-        isAuth: (state) => !!state.token,
+        isAuth() {return !!localStorage.getItem('user-token')},
     },
 }

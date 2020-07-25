@@ -13,20 +13,26 @@ export default {
   computed: {
     ...mapGetters([
       'user',
+        'isAuth'
     ]),
+
+      isAuthenticated () {
+          if (!this.isAuth) this.$router.push('/login')
+          return true
+      },
 
     email() {
         return this.user.email
     }
   },
-
-  methods: {
+    methods: {
     ...mapActions([
         'logout',
     ]),
 
     out() {
       this.logout({this: this})
+        this.$router.push('/login')
     },
   }
 }

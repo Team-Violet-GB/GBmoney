@@ -54,17 +54,17 @@
     },
     computed: {
         isNotAuthenticated() {
-            //if (this.isAuth) this.$router.push('/')
+            if (this.isAuth) this.$router.push('/')
             return true
-        }
+        },
+        ...mapGetters([
+            'isAuth',
+            'user',
+        ])
     },
     methods: {
         ...mapActions([
             'login'
-        ]),
-        ...mapGetters([
-            'user',
-            'isAuth',
         ]),
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
