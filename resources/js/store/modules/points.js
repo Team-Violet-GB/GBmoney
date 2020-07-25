@@ -2,6 +2,15 @@ import axios from 'axios'
 
 export default {
     actions: {
+        addIncomes({commit}, data) {
+            axios.post('/api/incomes' , data)
+                .then(response => {
+                    console.log('success')
+                })
+                .catch((error) => {
+                    console.log('error')
+                })
+        },
         fetchIncomes({ commit }) {
             axios.get('/api/get/incomes')
             .then(response => {

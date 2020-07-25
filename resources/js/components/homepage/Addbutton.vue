@@ -87,24 +87,30 @@
             this.fetchIcons()
         },
         methods: {
-            ...mapActions(['fetchIcons']),
+            ...mapActions(['fetchIcons', 'addIncomes']),
 
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.isBalance();
-                        alert(
-                            'Форма отправлена. Название - '
-                            + this.ruleForm.name
-                            + ', картинка - '
-                            + this.ruleForm.choose
-                            + ', выбрана категория - '
-                            + this.ruleForm.category
-                            + ', учитывать в балансе - '
-                            + this.ruleForm.balance
-                            + ', планирую потратить - '
-                            + this.ruleForm.amount
+                        this.addIncomes({
+                            name: this.ruleForm.name,
+                            amount: this.ruleForm.amount,
+                            icon_id: this.ruleForm.choose
+                            }
                         );
+                        // alert(
+                        //     'Форма отправлена. Название - '
+                        //     + this.ruleForm.name
+                        //     + ', картинка - '
+                        //     + this.ruleForm.choose
+                        //     + ', выбрана категория - '
+                        //     + this.ruleForm.category
+                        //     + ', учитывать в балансе - '
+                        //     + this.ruleForm.balance
+                        //     + ', планирую потратить - '
+                        //     + this.ruleForm.amount
+                        // );
                         this.dialogVisible = false;
                     } else {
                         console.log('error submit!!');
