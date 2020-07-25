@@ -19,7 +19,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        $tags = Tag::query()->where('user_id', Auth::id())->get();
+        $tags = Tag::query()->where('user_id', Auth::id())->get()->keyBy('id');
 
         return response()->json(['data' => $tags]);
     }

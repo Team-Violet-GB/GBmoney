@@ -149,4 +149,16 @@ input::-webkit-inner-spin-button {
   font-size: 20px;
 }
 
+.el-message-box {
+  background-color: #3d3e48;
+}
+
+.el-message-box__content {
+  color: #ffffff
+}
+
+.el-button--small {
+  border-radius: 0;
+}
+
 </style>

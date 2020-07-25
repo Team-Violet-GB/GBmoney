@@ -8,31 +8,49 @@
         size="40%"
         :before-close="handleClose">
           <div class="cstm-body-window">
+            <!-- Календарь -->
             <Calendar 
               :date="transaction.date"
               @changeDate="(newDate) => { 
               newDate ? (transaction.date = new Date(newDate.getTime() - (newDate.getTimezoneOffset() * 60000)).toISOString().slice(0, 10)): transaction.date = null 
               }" />
+            <!-- Блок Откуда -> Куда  будет производиться транзакция -->
             <div class="cstm-select-box cstm-mrgn-top-20">
               <SelectCustom :list="pointsFrom" :idSelected="transaction.fromID" @changeSelect="(fromID) => { transaction.fromID = fromID }" />
               <i class="el-icon-right"></i>
               <SelectCustom :list="pointsTo" :idSelected="transaction.toID" @changeSelect="(toID) =>  { changePointsTo(toID) }"/>
             </div>
-            <div  v-if="transaction.type == 3" class="cstm-select-box cstm-tags cstm-mrgn-top-20">
+            <!-- Выбор подкатегории -->
+            <div v-if="transaction.type == 3" class="cstm-select-box cstm-tags cstm-mrgn-top-20">
                 <span class="cstm-label">Подкатегория: </span> 
                 <SelectCustom 
+                  v-if="!isAddingTag && !isEditingTag"
                   :list="tagsFromCategory" 
                   :idSelected="transaction.tag" 
                   :withEmptySelect="true" 
                   @changeSelect="(tagID) => { transaction.tag = tagID }
                 "/>
-                <div class="cstm-buttons-tags">                
-                  <i class="el-icon-plus cstm-edit"></i>
-                  <i class="el-icon-edit cstm-edit"></i>
-                  <i class="el-icon-delete cstm-edit"></i>
+                <!-- Редактирование/Создание подкатегорий -->
+                <el-input 
+                  v-if="isAddingTag || isEditingTag" 
+                  type=text 
+                  class="cstm-input-tag" 
+                  :placeholder="placeholderTag"
+                  v-model="changeTag" >
+                </el-input>
+                <div class="cstm-buttons-tags">
+                  <!-- Кнопки Подтвердить или отменить изменинея/создание подкатегории -->
+                  <i v-if="isAddingTag || isEditingTag" @click="() => { approveTag() } " class="el-icon-check cstm-button"></i>
+                  <i v-if="isAddingTag || isEditingTag" @click="() => { cancelTag() } " class="el-icon-close cstm-button"></i>
+                  <!-- Кнопки Редактировать, Добавить, Удалить Подкатегорию -->
+                  <i v-if="!isAddingTag && !isEditingTag" @click="() => { addTag() } " class="el-icon-plus cstm-button"></i>
+                  <i v-if="!isAddingTag && !isEditingTag && transaction.tag" @click="() => { editTag() } " class="el-icon-edit cstm-button"></i>        
+                  <i v-if="!isAddingTag && !isEditingTag && transaction.tag" @click="() => { deleteTag() } " class="el-icon-delete cstm-button"></i>
                 </div>
             </div>
+            <!-- Введите сумму -->
             <el-input placeholder="Сумма" class="cstm-input cstm-mrgn-top-20" type="number" v-model="transaction.amount"></el-input>
+            <!-- Введите комментарий -->
             <el-input
               type="textarea"
               :rows="2"
@@ -40,6 +58,7 @@
               class="cstm-input cstm-mrgn-top-20"
               v-model="transaction.comment">
             </el-input>
+            <!-- Кнопка Записать -->
             <el-button class="cstm-create-button cstm-mrgn-top-20" type="success" @click="checkTransaction">Записать</el-button>
           </div>
         </el-drawer>
@@ -61,6 +80,10 @@
         transaction: this.newTransaction,
         direction: 'rtl',
         errors: [],
+        isAddingTag: false,
+        isEditingTag: false,
+        placeholderTag: null,
+        changeTag: null
       };
     },
 
@@ -81,7 +104,7 @@
         tagsFromCategory() {
           var tags = []
           for (var tag in this.tags){
-              if (this.tags[tag].expense_id == this.transaction.toID) {
+              if (this.tags[tag].expense_id == this.transaction.toID && !this.tags[tag].deleted) {
                 tags.push(this.tags[tag])
             }
           }
@@ -136,6 +159,59 @@
         });
       },
 
+      addTag() {
+        this.isAddingTag = true
+        this.isEditingTag = false
+        this.placeholderTag = 'Добавить подкатегорию'
+        this.changeTag = null
+      },
+
+      editTag() {
+        if (this.transaction.tag) {
+          this.isEditingTag = true
+          this.isAddingTag = false
+          this.placeholderTag = 'Изменить подкатегорию'
+          this.changeTag = this.tags[this.transaction.tag].name
+        }
+      },
+
+      deleteTag() {
+        this.$confirm(`Хотите удалить подкатегорию ${this.tags[this.transaction.tag].name}? Она останется видна старых отчётах, но её нельзя будет использовать в дальнейшем.`, {
+          confirmButtonText: 'Удалить',
+          cancelButtonText: 'Отмена',
+          type: 'error',
+        })
+        .then(() => {
+          this.axios.delete(`api/tags/${this.transaction.tag}`)
+          .then(response => {
+            if (response.status == 200) {
+                this.MessageSuccess(`Подкатегория ${this.tags[this.transaction.tag].name} удалена`)
+                this.fetchTags()
+                this.transaction.tag = null
+            }
+          })
+        })
+        .catch(() => {});
+      },
+
+      approveTag() {
+        if (this.checkChangeTag()) {
+          this.isEditingTag  = false
+          this.isAddingTag  = false
+        } else return false
+      },
+
+      cancelTag() {
+        this.isEditingTag  = false
+        this.isAddingTag  = false
+      },
+
+      checkChangeTag() {
+        if (this.changeTag) return true
+        this.MessageError('Не указано имя покатегории')
+        return false;
+      },
+
       checkTransaction() {
         if (this.checkForm()) {
           this.sendTransaction()
@@ -186,7 +262,7 @@
   };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .cstm-create-button{
   border-radius: 0;
   width: 90%;
@@ -214,11 +290,10 @@
 }
 
 .cstm-tags {
-  justify-content: space-around;
+  justify-content: space-between;
 }
 .cstm-buttons-tags{
   display: flex;
-
 }
 
 .cstm-input {
@@ -226,15 +301,37 @@
 }
 
 .cstm-label {
-
   color: #ffffff;
   
 }
 
-.cstm-edit {
-  font-size: 20px;
-  color: #ffffff;
+.cstm-input-tag {
+  width: 45%;
 }
 
+.cstm-button {
+  font-size: 20px;
+  color: #ffffff;
+  margin: 0 7px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.el-icon-plus:hover {
+  color: #0a93d1;
+}
+
+.el-icon-edit:hover {
+  color: #e6a23c;
+}
+
+.el-icon-delete:hover,
+.el-icon-close:hover {
+  color: #f56c6c;
+}
+
+.el-icon-check:hover {
+  color: #67c23a;
+}
 
 </style>
