@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,13 +13,29 @@ use Illuminate\Http\Request;
 |
 */
 
-
 # Регистрация
 Route::post('register', 'AuthController@register');
 # Вход
 Route::post('login', 'AuthController@login');
-# получение своих данных пользователем
-Route::middleware('auth:api')->group(function() {
 
+Route::middleware('auth:api')->group(function () {
+    # получение своих данных пользователем
     Route::get('user/show', 'UserController@show');
+    # Выход
+    Route::get('logout', 'AuthController@logout');
+
+    Route::group(['namespace' => 'Api'], function () {
+        // Получение коллекции иконок, кошельков, расходов, доходов.
+        Route::get('get/icons', 'IconController');
+        Route::get('get/wallets', 'WalletController@getWalletsWithIconName');
+        Route::get('get/expenses', 'ExpenseController@getExpensesWithIconName');
+        Route::get('get/incomes', 'IncomeController@getIncomesWithIconName');
+
+        // Работа с транзакциями.
+        Route::apiResource('transactions', 'TransactionController');
+        // Работа с доходами.
+        Route::apiResource('incomes', 'IncomeController');
+        // Работа с тегами.
+        Route::apiResource('tags', 'TagController');
+    });
 });

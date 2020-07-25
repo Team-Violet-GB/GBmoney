@@ -8,15 +8,19 @@
         size="40%"
         :before-close="handleClose">
           <div class="cstm-body-window">
-            <Calendar @changeDate="(newDate) => { date = newDate }" />
+            <Calendar 
+              :date="transaction.date"
+              @changeDate="(newDate) => { 
+              newDate ? (transaction.date = new Date(newDate.getTime() - (newDate.getTimezoneOffset() * 60000)).toISOString().slice(0, 10)): transaction.date = null 
+              }" />
             <div class="cstm-select-box cstm-mrgn-top-20">
               <SelectCustom :points="pointsFrom" :id="transaction.fromID" @changeSelect="(fromID) => { transaction.fromID = fromID }" />
               <i class="el-icon-right"></i>
-              <SelectCustom :points="pointsTo" :id="transaction.toID"  @changeSelect="(toID) => { transaction.toID = toID }"/>
+              <SelectCustom :points="pointsTo" :id="transaction.toID" @changeSelect="(toID) => { transaction.toID = toID }"/>
             </div>
-            <div  v-if="transaction.toType == 'expense'" class="cstm-select-box cstm-mrgn-top-20">
+            <div  v-if="transaction.type == 3" class="cstm-select-box cstm-mrgn-top-20">
                 <span class="cstm-label">Подкатегория:</span> 
-                <SelectCustom :points="tags" :id="1"  @changeSelect="(tagID) => { tag = tagID }"/>
+                <SelectCustom :points="tags" :id="transaction.tag" @changeSelect="(tagID)  => { transaction.tag = tagID }"/>
             </div>
             <el-input placeholder="Сумма" class="cstm-input cstm-mrgn-top-20" type="number" v-model="amount"></el-input>
             <el-input
@@ -26,82 +30,75 @@
               class="cstm-input cstm-mrgn-top-20"
               v-model="comment">
             </el-input>
-            <el-button class="cstm-create-button cstm-mrgn-top-20" type="success" @click="submitTransaction">Записать</el-button>
+            <el-button class="cstm-create-button cstm-mrgn-top-20" type="success" @click="checkTransaction">Записать</el-button>
           </div>
         </el-drawer>
     </div>
 </template>
 
 <script>
-import SelectCustom from "../homepage/SelectCustom"
-import Calendar from "../homepage/Calendar"
+  import SelectCustom from "../homepage/SelectCustom"
+  import Calendar from "../homepage/Calendar"
+  import { mapGetters, mapActions } from "vuex"
 
   export default {
-    props: ['transactionData', 'incomesData', 'walletsData', 'expensesData'],
     components: {
       SelectCustom, Calendar
     },
+    props: ['newTransaction'],
     data() {
       return {
-        transaction: this.transactionData,
+        transaction: this.newTransaction,
         amount: null,
         comment: null,
-        tag: null,
-        date: Date.now(),
         direction: 'rtl',
         errors: [],
-        tags: [
-          { id: 1, name: "Подкатегория1" },
-          { id: 2, name: "Подкатегория2" },
-          { id: 3, name: "Подкатегория3" },
-          { id: 4, name: "Подкатегория4" }
-        ]
       };
     },
-    // validations: {
-    //   amount:
-    // },
-    computed: {
-        drawer() {
-              return this.transaction.state_window
-        },
-        incomes() {
-              return this.incomesData
-        },
-        wallets() {
-              return this.walletsData
-        },
-        expenses() {
-              return this.expensesData
-        },
-        pointsFrom() {
-            return (this.transaction.fromType === 'income') ? this.incomes : this.wallets
-        }, 
-        pointsTo() {
-            return (this.transaction.toType === 'wallet') ? this.wallets : this.expenses
-        }, 
-    },
+
     watch: {
-      transactionData(newValue) {
+      newTransaction(newValue) {
         this.transaction = newValue
       },
     },
-    methods: {
+
+    computed: {
+        ...mapGetters([
+            'incomes',
+            'wallets',
+            'expenses',
+            'tags',
+        ]),
+
+        drawer() {
+            return this.transaction.state_window
+        },
+
+        pointsFrom() {
+            return (this.transaction.type == 1) ? this.incomes : this.wallets
+        }, 
+        pointsTo() {
+            return (this.transaction.type == 3) ? this.expenses : this.wallets
+        }, 
+    },
+    
+    mounted() {
+        this.fetchTags()
+    },
+
+    methods: 
+    {
+      ...mapActions(['fetchTags']),
+      
       handleClose() {
         this.$emit('closeCreateWindow')
       },
-
+      
       checkForm() {
-        if (this.amount && this.date) return true;
+        if (this.amount && this.transaction.date) return true;
         this.errors = []
-
-        if (!this.amount) {
-          this.errors.push('Не указана сумма');
-        }
-        
-        if (!this.date) {
-          this.errors.push('Не указана дата');
-        }
+        if (!this.amount) this.errors.push('Не указана сумма')
+        if (!this.transaction.date) this.errors.push('Не указана дата')
         return false;
       },
 
@@ -116,17 +113,9 @@ import Calendar from "../homepage/Calendar"
         });
       },
 
-      submitTransaction() {
-        this.transaction.tag = this.tag
-        this.transaction.amount = this.amount
-        this.transaction.comment = this.comment
-        this.transaction.date = this.date
+      checkTransaction() {
         if (this.checkForm()) {
-          console.log( this.transaction )
-          this.getCategoryNames()
-          this.MessageSuccess('Новая транзакция на сумму ' + this.amount + ' из ' + this.transaction.nameFrom + ' в ' + this.transaction.nameTo)
-          this.amount = this.comment = this.tag = null
-          this.handleClose()
+          this.sendTransaction()
         } else {
            this.errors.forEach((error, i) => {
               setTimeout(() => {
@@ -135,17 +124,40 @@ import Calendar from "../homepage/Calendar"
             });
         }
       },
-      getCategoryNames() {
-        this.pointsFrom.forEach((point) => {
-          if (point.id == this.transaction.fromID) {
-            this.transaction.nameFrom = point.name
-          }
+
+      sendTransaction() {
+        this.axios.post('/api/transactions' , {
+          "from_id": this.transaction.fromID,
+          "to_id": this.transaction.toID,
+          "date": this.transaction.date,
+          "tag_id": this.transaction.tag,
+          "type": this.transaction.type,
+          "amount": this.amount,
+          "comment": this.comment, 
         })
-        this.pointsTo.forEach((point) => {
-          if (point.id == this.transaction.toID) {
-            this.transaction.nameTo = point.name
-          }
+        .then(response => {
+          let pointsNames = this.getPointsNames(response.data.data)
+          this.MessageSuccess('Новая транзакция на сумму ' + response.data.data.amount + ' из ' + pointsNames.nameFrom + ' в ' + pointsNames.nameTo)
+          this.amount = this.comment =  null
+          this.handleClose()
         })
+        .catch((error) => {
+          this.MessageError(error.response.data.errors) 
+        })
+      },
+
+      getPointsNames(response) {
+          if (response.type == 1) {
+            var nameFrom = this.incomes[response.income_id].name
+            var nameTo = this.wallets[response.wallet_id_to].name
+          } else if (response.type == 2) {
+            var nameFrom = this.wallets[response.wallet_id_from].name
+            var nameTo = this.wallets[response.wallet_id_to].name
+          } else {
+            var nameFrom = this.wallets[response.wallet_id_from].name
+            var nameTo = this.expenses[response.expense_id].name
+          }
+          return {nameFrom, nameTo}
       },
     },
   };
