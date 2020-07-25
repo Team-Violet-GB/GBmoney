@@ -13,7 +13,6 @@ export default {
   computed: {
     ...mapGetters([
       'user',
-        'isAuth'
     ]),
 
       isAuthenticated () {

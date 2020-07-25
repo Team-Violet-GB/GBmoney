@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isNotAuthenticated">
+    <div v-if="isNotAuth">
         <el-dialog
         :visible.sync="dialogVisible"
         width="40%"
@@ -82,10 +82,10 @@
     computed: {
         ...mapGetters([
             'isAuth',
+            'isNotAuth',
         ]),
-        isNotAuthenticated() {
-            if (this.isAuth) this.$router.push('/')
-            return true
+        isNotAuth() {
+            return false
         }
     },
     methods: {
