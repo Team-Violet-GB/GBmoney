@@ -93,24 +93,13 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.isBalance();
-                        this.addIncomes({
-                            name: this.ruleForm.name,
-                            amount: this.ruleForm.amount,
-                            icon_id: this.ruleForm.choose
-                            }
-                        );
-                        // alert(
-                        //     'Форма отправлена. Название - '
-                        //     + this.ruleForm.name
-                        //     + ', картинка - '
-                        //     + this.ruleForm.choose
-                        //     + ', выбрана категория - '
-                        //     + this.ruleForm.category
-                        //     + ', учитывать в балансе - '
-                        //     + this.ruleForm.balance
-                        //     + ', планирую потратить - '
-                        //     + this.ruleForm.amount
-                        // );
+                        if (this.ruleForm.category === 'Доход'){
+                            this.addIncomes({
+                                    name: this.ruleForm.name,
+                                    icon_id: this.ruleForm.choose
+                                }
+                            );
+                        }
                         this.dialogVisible = false;
                     } else {
                         console.log('error submit!!');
