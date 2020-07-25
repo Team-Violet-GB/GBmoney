@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-collapse-transition>
-            <div v-if="getEditorShowStatus && transactionEditorId === getEditorData.edata.id" class="editor">
+            <div v-if="getEditorShowStatus & transactionEditorId === getEditorData.edata.id" class="editor">
                 <el-form :model="editorData.edata" ref="editorForm" :rules="rules" label-position="right"
                          label-width=" 100px" size="small">
                     <el-row :gutter="10" type="flex" justify="space-between">
@@ -81,7 +81,7 @@
                             <el-button-group style="width: 100px; padding-top: 2px">
                                 <el-button @click="updateTransaction('editorForm')" type="success" size="small"
                                            icon="el-icon-check"></el-button>
-                                <el-button @click="deleteTransaction(getEditorData)" type="danger"
+                                <el-button @click="deleteTransaction(editorData)" type="danger"
                                            size="small"
                                            icon="el-icon-delete"></el-button>
                             </el-button-group>
@@ -162,10 +162,10 @@
                         data.fromDescription = this.wallets[data.fromId].name
                         data.toId = this.editorData.edata.expense_id
                         data.toDescription = this.expenses[data.toId].name
-                        data.tagId = this.editorData.edata.tag_id
-                        data.tagDescription = this.tags[data.tagId].name
-                        data.expenseIdOfTag = this.tags[data.tagId].expense_id
-                        data.expenseNameOfTag = this.tags[data.tagId].expense_id
+                        // data.tagId = this.editorData.edata.tag_id
+                        // data.tagDescription = this.tags[data.tagId].name
+                        // data.expenseIdOfTag = this.tags[data.tagId].expense_id
+                        // data.expenseNameOfTag = this.tags[data.tagId].name
                     }
                         break;
                 }
@@ -187,29 +187,30 @@
             updateTransaction(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        axios.put(`/api/transactions/${this.editorData.edata.id}`,
-                            {
-                                from_id: this.typeData.fromId,
-                                to_id: this.typeData.toId,
-                                type: this.typeData.type,
-                                amount: this.editorData.edata.amount,
-                                date: this.editorData.edata.date,
-                                comment: this.editorData.edata.comment,
-                                tag_id: this.editorData.edata.tag_id
-                            })
-                            .then(response => {
-                                if (response.status === 200) {
-                                    this.setTransactionUpdate(this.editorData)
-                                }
-                            })
-                            .catch(error => {
-                                this.$message({
-                                    showClose: true,
-                                    message: `Попытка обновления транзакции от ${new Date(this.editorData.data.date).toLocaleDateString()} не удалась \n ${error}`,
-                                    duration: 3000,
-                                    type: 'error'
-                                });
-                            });
+                        this.setTransactionUpdate(this.editorData)
+                        // axios.put(`/api/transactions/${this.editorData.edata.id}`,
+                        //     {
+                        //         from_id: this.typeData.fromId,
+                        //         to_id: this.typeData.toId,
+                        //         type: this.typeData.type,
+                        //         amount: this.editorData.edata.amount,
+                        //         date: this.editorData.edata.date,
+                        //         comment: this.editorData.edata.comment,
+                        //         tag_id: this.editorData.edata.tag_id
+                        //     })
+                        //     .then(response => {
+                        //         if (response.status === 200) {
+                        //             this.setTransactionUpdate(this.editorData)
+                        //         }
+                        //     })
+                        //     .catch(error => {
+                        //         this.$message({
+                        //             showClose: true,
+                        //             message: `Попытка обновления транзакции от ${new Date(this.editorData.data.date).toLocaleDateString()} не удалась \n ${error}`,
+                        //             duration: 3000,
+                        //             type: 'error'
+                        //         });
+                        //     });
                         this.setEditorShowStatus(false);
                     } else {
                         return false;

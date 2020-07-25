@@ -26,7 +26,7 @@
         <!--    подключаемый по условию компонент редактора транзакций    -->
         <transactionEditor
             v-if="getEditable && getEditorShowStatus"
-            :transactionEditorId="transaction.data.id"
+            :transactionEditorId="transactionEditorId"
             :editorData="editorData"
         />
     </div>
@@ -45,6 +45,7 @@
         data() {
             return {
                 constants: constants,
+                transactionEditorId: null
             }
         },
         props: {
@@ -52,10 +53,7 @@
                 default() {
                     return Object;
                 }
-            },
-            // transactionsInGroup: {
-            //     type: Number
-            // }
+            }
         },
         computed: {
             editorData() {
@@ -113,6 +111,7 @@
             edit() {
 
                 this.setEditorData(this.transaction);
+                this.transactionEditorId = this.transaction.data.id
                 this.setEditorShowStatus(true)
             },
             ...mapActions([

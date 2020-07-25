@@ -26,9 +26,9 @@ export default {
         fetchTags({ commit }) {
             const tags = [
                 { id: 1, name: "Подкатегория1", expense_id: 2 },
-                { id: 2, name: "Подкатегория2", expense_id: 6 },
-                { id: 3, name: "Подкатегория3", expense_id: 8 },
-                { id: 4, name: "Подкатегория4", expense_id: 8 }
+                { id: 2, name: "Подкатегория2", expense_id: 1 },
+                { id: 3, name: "Подкатегория3", expense_id: 2 },
+                { id: 4, name: "Подкатегория4", expense_id: 3 }
             ]
             commit('updateTags', tags)
         },
