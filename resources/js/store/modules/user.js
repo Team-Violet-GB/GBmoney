@@ -19,7 +19,7 @@ export default {
                 })
                 //Проверку на null в данном случае не делаю, т.к. если вернет null - поле останется пустым
                 .catch(error => console.log(error))
-                .finally(() => (console.log('finished')));
+                // .finally(() => (console.log('finished')));
         }
     },
     mutations: {
