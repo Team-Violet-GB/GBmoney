@@ -13,20 +13,23 @@ export default {
             }
             axios.get('/api/transactions', {params: params, headers: headers})
                 .then(response => {
-                    console.log(response.data.meta)
-                    console.log('страница из ответа current_page : ', response.data.meta.current_page)
-                    console.log('страница из ответа last_page : ', response.data.meta.last_page)
-                    console.log('страница из store.page: ', this.getters.getPage)
+                    // if (Object.keys(response.data.data).length === 0) {
+                    //     this.setErrorInfo('Транзакций пока нет')
+                    //     this.setErrorStatus(true)
+                    // } else {
+                        commit('setTotal', response.data.meta.total);
+                        commit('setTransactions', response.data.data);
+                    // }
 
-                    commit('setTotal', response.data.meta.total);
-                    commit('setTransactions', response.data.data);
                 })
                 .catch(error => {
                     commit('setErrorStatus', true);
-                    commit('setErrorInfo', error);
-                    //todo: обработка кодов с сервера
+                    commit('setErrorInfo', `Транзакции отсутствуют: (${error})`);
                 })
                 .finally(() => {
+                    if (Object.keys(this.getters.getTransactions).length === 0) {
+                        commit('setErrorStatus', true);
+                    }
                 });
         }
     },
@@ -70,7 +73,7 @@ export default {
         editorData: '',
         editorShowStatus: false,
         errorStatus: false,
-        errorInfo: 'Нет данных!',
+        errorInfo: 'Список транзакций пуст',
         editable: true,
         dateFrom: '',
         dateTo: '',

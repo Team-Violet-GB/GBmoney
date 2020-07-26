@@ -4,11 +4,16 @@
         <div ref="div" v-if="getEditable" class="tran-wrapper" @click="edit($event)" :id="transaction.data.id">
             <el-card>
                 <el-row :gutter="10" :class="{edit: active}" class="tran-row-data">
-                    <el-col :span="3"><div>{{ from.name }}</div></el-col>
-                    <el-col :span="3"><span style="color: #8e8e8e">{{ from.type }}</span></el-col>
-                    <el-col :span="6"><div>{{ to }}</div></el-col>
+                    <el-col :span="3">
+                        <div>{{ from.name }}</div>
+                    </el-col>
+                    <el-col :span="3"><span style="color: #8e8e8e">{{ from.typeName }}</span></el-col>
+                    <el-col :span="6"><span>{{ to.to }}</span><span class="tran-tag-name">{{ to.tagName }}</span>
+                    </el-col>
                     <el-col :span="8"><span class="tran-comment">{{ transaction.data.comment }} &nbsp;</span></el-col>
-                    <el-col :span="4"><div style="display: flex; justify-content: flex-end">{{ transaction.data.amount }} &#8381</div></el-col>
+                    <el-col :span="4">
+                        <div style="display: flex; justify-content: flex-end">{{ transaction.data.amount }} &#8381</div>
+                    </el-col>
                 </el-row>
             </el-card>
         </div>
@@ -16,10 +21,16 @@
         <!--        разметка и поведение для отчетов-->
         <div v-else>
             <el-row :gutter="10" class="tran-row-data">
-                <el-col :span="6"><div>{{ from.name }}</div></el-col>
+                <el-col :span="6">
+                    <div>{{ from.name }}</div>
+                </el-col>
                 <el-col :span="3"><span style="color: #8e8e8e">{{ from.type }}</span></el-col>
-                <el-col :span="10"><div>{{ to }}</div></el-col>
-                <el-col :span="5"><div style="display: flex;justify-content: flex-end">{{ transaction.data.amount }} &#8381</div></el-col>
+                <el-col :span="10">
+                    <div>{{ to }}</div>
+                </el-col>
+                <el-col :span="5">
+                    <div style="display: flex;justify-content: flex-end">{{ transaction.data.amount }} &#8381</div>
+                </el-col>
             </el-row>
         </div>
 
@@ -33,18 +44,18 @@
 </template>
 
 <script>
-    import constants from '../../constants';
+    import type from './TypeMixin';
     import transactionEditor from './TransactionEditor';
     import {mapGetters, mapMutations, mapActions} from 'vuex'
 
     export default {
         name: "transaction",
+        mixins: [type],
         components: {
             transactionEditor
         },
         data() {
             return {
-                constants: constants,
                 transactionEditorId: null,
                 active: false
             }
@@ -75,45 +86,43 @@
             ]),
             from() {
                 let from = {};
+                from.typeName = this.typeData(this.transaction.data.type).typeDescription
                 const income = this.incomes[this.transaction.data.income_id];
                 const wallet = this.wallets[this.transaction.data.wallet_id_from];
 
-                switch (this.transaction.data['type']) {
-                    case this.constants.FROM_INCOME:
+                switch (this.typeData(this.transaction.data.type).typeDescription) {
+                    case 'Доход':
                         from.name = income.name;
-                        from.type = 'Доход'
-                        return income !== undefined ? from : '';
+                        break;
 
-                    case this.constants.FROM_WALLET:
+                    case 'Расход':
                         from.name = wallet.name;
-                        from.type = 'Расход'
-                        return wallet !== undefined ? from : '';
+                        break;
 
-                    case this.constants.TRANSFER:
+                    case 'Перевод':
                         from.name = wallet.name;
-                        from.type = 'Перевод'
-                        return wallet !== undefined ? from : '';
+                        break
                 }
+                return from;
             },
             to() {
-                if (this.transaction.data['type'] === this.constants.FROM_WALLET) {
+                let data = {};
+                if (this.typeData(this.transaction.data.type).typeDescription === 'Расход') {
                     const expense = this.expenses[this.transaction.data.expense_id];
-                    const expenseName = expense !== undefined ? expense.name : '';
+                    const to = expense !== undefined ? expense.name : 'не определен';
                     const tag = this.tags[this.transaction.data.tag_id];
-                    const tagName = tag !== undefined ? `(${tag.name})` : '';
-                    return `${expenseName}  ${tagName}`
+                    let tagName = tag !== undefined ? `(${tag.name})` : '';
+                    data = {to, tagName}
                 } else {
                     const wallet = this.wallets[this.transaction.data.wallet_id_to];
-                    return wallet !== undefined ? wallet.name : '';
+                    let to = wallet !== undefined ? wallet.name : 'не определен';
+                    data = {to, tagName: ''}
                 }
+                return data
             },
         },
         methods: {
             edit(e) {
-                // console.log(e.data.id)
-                // console.log(e)
-                // console.log(this.transaction.data.id)
-
                 this.setEditorData(this.transaction);
                 this.transactionEditorId = this.transaction.data.id
                 this.setEditorShowStatus(true)
@@ -153,12 +162,20 @@
         font-size: large;
         font-weight: 400;
     }
+
     .edit {
         color: #8468ff
     }
 
     .tran-comment {
-        color: rgba(12, 187, 163, 0.82);
+        color: #ffffff;
         font-weight: 400;
+    }
+
+    .tran-tag-name {
+        color: #8e8e8e;
+        font-size: 0.97em;
+        margin-left: 20px;
+        text-transform: lowercase;
     }
 </style>

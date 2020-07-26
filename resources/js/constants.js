@@ -1,9 +1,0 @@
-const FROM_INCOME = 1
-const FROM_WALLET = 3
-const TRANSFER = 2
-
-export default {
-    FROM_INCOME: FROM_INCOME,
-    FROM_WALLET: FROM_WALLET,
-    TRANSFER: TRANSFER
-}

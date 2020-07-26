@@ -26,7 +26,7 @@
                                         </el-form-item>
                                         <el-form-item>
                                             <el-select class="selector"
-                                                       v-if="editorData.edata.type === constants.FROM_INCOME"
+                                                       v-if="typeData(editorData.edata.type).typeDescription === 'Доход'"
                                                        v-model="editorData.edata.income_id">
                                                 <el-option v-for="income in incomes" :key="income.id"
                                                            :label="income.name"
@@ -37,11 +37,11 @@
                                                        v-model="editorData.edata.wallet_id_from">
                                                 <el-option v-for="wallet in wallets" :key="wallet.id"
                                                            :label="wallet.name"
-                                                           :value="wallet.id" class="select_option"> {{ wallet.name }}
+                                                           :value="wallet.id" class="select_option">
                                                 </el-option>
                                             </el-select>&nbsp;<i class="el-icon-caret-right"></i>
                                             <el-select class="selector"
-                                                       v-if="editorData.edata.type === constants.FROM_INCOME"
+                                                       v-if="typeData(editorData.edata.type).typeDescription === 'Доход'"
                                                        v-model="editorData.edata.wallet_id_to">
                                                 <el-option v-for="wallet in wallets" :key="wallet.id"
                                                            :label="wallet.name" :value="wallet.id"
@@ -49,7 +49,7 @@
                                                 </el-option>
                                             </el-select>
                                             <el-select @select="prepareCurrentTags" class="selector"
-                                                       v-if="editorData.edata.type === constants.FROM_WALLET"
+                                                       v-if="typeData(editorData.edata.type).typeDescription === 'Расход'"
                                                        v-model="editorData.edata.expense_id">
                                                 <el-option v-for="expense in expenses" :key="expense.id"
                                                            :label="expense.name" :value="expense.id"
@@ -57,14 +57,14 @@
                                                 </el-option>
                                             </el-select>
                                             <el-select class="selector"
-                                                       v-if="editorData.edata.type === constants.FROM_WALLET"
-                                                       v-model="editorData.edata.tag">
+                                                       v-if="typeData(editorData.edata.type).typeDescription === 'Расход'"
+                                                       v-model="editorData.edata.tag_id">
                                                 <el-option v-for="tag in currentTags" :key="tag.id"
                                                            :label="tag.name" :value="tag.id" class="select_option">
                                                 </el-option>
                                             </el-select>
                                             <el-select class="selector"
-                                                       v-if="editorData.edata.type === constants.TRANSFER"
+                                                       v-if="typeData(editorData.edata.type).typeDescription === 'Перевод'"
                                                        v-model="editorData.edata.wallet_id_to">
                                                 <el-option v-for="wallet in wallets" :key="wallet.id"
                                                            :label="wallet.name" :value="wallet.id"
@@ -87,13 +87,13 @@
                         </el-col>
                         <el-col :span="2">
                             <div class="button-group">
-                            <el-button-group>
-                                <el-button @click="updateTransaction('editorForm')" type="success" size="small"
-                                           icon="el-icon-check"></el-button>
-                                <el-button @click="deleteTransaction(editorData)" type="danger"
-                                           size="small"
-                                           icon="el-icon-delete"></el-button>
-                            </el-button-group>
+                                <el-button-group>
+                                    <el-button @click="updateTransaction('editorForm')" type="success" size="small"
+                                               icon="el-icon-check"></el-button>
+                                    <el-button @click="deleteTransaction(editorData)" type="danger"
+                                               size="small"
+                                               icon="el-icon-delete"></el-button>
+                                </el-button-group>
                             </div>
                         </el-col>
                     </el-row>
@@ -104,15 +104,15 @@
 </template>
 
 <script>
-    import constants from '../../constants';
+    import type from './TypeMixin';
     import {mapActions, mapGetters, mapMutations} from 'vuex';
     import axios from "axios";
 
     export default {
         name: "transactionEditor",
+        mixins: [type],
         data() {
             return {
-                constants: constants,
                 rules: {
                     amount: [
                         {required: true, message: 'Ну, хоть немношко!', trigger: 'blur'},
@@ -142,45 +142,6 @@
             ]),
             currentTags() {
                 return this.tags.filter(tag => tag.expense_id === this.editorData.edata.expense_id)
-            },
-            typeData() {
-                let data = {}
-                switch (this.editorData.edata.type) {
-                    case 1: {
-                        data.type = 1
-                        data.typeDescription = 'Доход'
-                        data.fromId = this.editorData.edata.income_id
-                        data.fromDescription = this.wallets[data.fromId].name
-                        data.toId = this.editorData.edata.wallet_id_to
-                        data.toDescription = this.wallets[data.toId].name
-                    }
-                        break;
-
-                    case 2: {
-                        data.type = 2
-                        data.typeDescription = 'Перевод'
-                        data.fromId = this.editorData.edata.wallet_id_from
-                        data.fromDescription = this.wallets[data.fromId].name
-                        data.toId = this.editorData.edata.wallet_id_to
-                        data.toDescription = this.wallets[data.toId].name
-                    }
-                        break;
-
-                    case 3: {
-                        data.type = 3
-                        data.typeDescription = 'Расход'
-                        data.fromId = this.editorData.edata.wallet_id_from
-                        data.fromDescription = this.wallets[data.fromId].name
-                        data.toId = this.editorData.edata.expense_id
-                        data.toDescription = this.expenses[data.toId].name
-                        // data.tagId = this.editorData.edata.tag_id
-                        // data.tagDescription = this.tags[data.tagId].name
-                        // data.expenseIdOfTag = this.tags[data.tagId].expense_id
-                        // data.expenseNameOfTag = this.tags[data.tagId].name
-                    }
-                        break;
-                }
-                return data;
             }
         },
         methods: {
@@ -190,8 +151,6 @@
             ...mapMutations([
                 'setPage',
                 'setTransactions',
-                'setTransactionUpdate',
-                'setTransactionDelete',
                 'setEditorShowStatus',
                 'setErrorStatus',
                 'setEditorData'
@@ -204,9 +163,9 @@
                     if (valid) {
                         axios.put(`/api/transactions/${this.editorData.edata.id}`,
                             {
-                                from_id: this.typeData.fromId,
-                                to_id: this.typeData.toId,
-                                type: this.typeData.type,
+                                from_id: this.typeData(this.editorData.edata.type).fromId,
+                                to_id: this.typeData(this.editorData.edata.type).toId,
+                                type: this.typeData(this.editorData.edata.type).type,
                                 amount: this.editorData.edata.amount,
                                 date: this.editorData.edata.date,
                                 comment: this.editorData.edata.comment,
@@ -215,6 +174,7 @@
                             .then(response => {
                                 if (response.status === 200) {
                                     this.fetchTransactions()
+                                    this.setEditorShowStatus(false)
                                 }
                             })
                             .catch(error => {
@@ -243,13 +203,7 @@
                         .then(response => {
                             if (response.status === 200) {
                                 this.fetchTransactions()
-                                // this.setTransactionDelete(this.editorData)
-                                // this.$message({
-                                //     showClose: true,
-                                //     message: `Транзакция от ${new Date(this.editorData.data.date).toLocaleDateString()} была успешно удалена`,
-                                //     duration: 3000,
-                                //     type: 'success'
-                                // });
+
                             }
                         })
                         .catch(error => {

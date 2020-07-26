@@ -1,12 +1,5 @@
 <template>
     <div>
-        <el-alert
-            v-show="getErrorStatus"
-            :title="getErrorInfo"
-            type="error"
-            effect="dark">
-        </el-alert>
-
         <!--        заголовок группы транзакций-->
         <el-card v-if="!getErrorStatus" v-for="(transactionGroup, index) in getTransactions" :key="index"
                  class="box-card">
@@ -15,7 +8,9 @@
                     <div>{{ getLocalDateString(index) }}</div>
                 </el-col>
                 <el-col :span="10">
-                    <div v-if="groupSumCalc(transactionGroup) != 0" class="tran-group-header-sum">{{ groupSumCalc(transactionGroup) }} &#8381</div>
+                    <div v-if="groupSumCalc(transactionGroup) != 0" class="tran-group-header-sum">{{
+                        groupSumCalc(transactionGroup) }} &#8381
+                    </div>
                 </el-col>
             </el-row>
 
@@ -163,6 +158,7 @@
         padding-right: 5px;
         padding-top: 4px;
     }
+
     .el-pagination {
         display: flex;
         justify-content: center;
