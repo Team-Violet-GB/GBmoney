@@ -40,8 +40,7 @@ class UserController extends Controller
 
     public function destroy(Request $request)
     {
-        $id = Auth::id();
-        $user = User::find($id);
+        $user = User::find(Auth::id());
         if ($user) {
             if (!Hash::check($request->password, Auth::user()->getAuthPassword()))
                 return response()->json(['message' => 'Неверный пароль'], 403);

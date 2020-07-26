@@ -46,8 +46,8 @@ class User extends Authenticatable
         return [
             'email' => ['required', 'email', 'max:255',
                 Rule::unique('users')->ignore(Auth::id())],
-            'password' => ['required', 'alpha_dash', 'min:6'],
-            'newpass' => ['nullable', 'alpha_dash', 'min:6'],
+            'password' => ['required', 'min:6'],
+            'newpass' => ['nullable', 'min:6'],
         ];
     }
 
