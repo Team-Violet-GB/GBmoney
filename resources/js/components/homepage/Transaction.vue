@@ -213,10 +213,14 @@ import LoginVue from '../../views/Login.vue';
                 if (response.status == 200) {
                     this.MessageSuccess(`Создана новая подкатегория ${response.data.data.name}`)
                     this.fetchTags()
-                    this.transaction.tag = response.data.data.id
-                    this.isAddingTag  = false
+                    return response.data.data.id
                 }
-            })    
+            })
+            .then((id) => {
+              this.transaction.tag = id
+              this.isAddingTag  = false
+            })
+            
           } else if (this.isEditingTag) {
             this.axios.put(`api/tags/${this.transaction.tag}`, {
               "name": this.changeTag,
