@@ -102,7 +102,7 @@
                             newpass: this.ruleForm.newpass,
                         })
                             .then(response => {
-                                let email = response.data.email
+                                let email = response.data.user.email
                                 this.MessageSuccess('Пользователь ' + email + ' успешно изменен')
                                 this.$store.commit('setUserEmail', email)
                             })
