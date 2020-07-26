@@ -54,6 +54,22 @@ body {
   color: #ffffff;
 }
 
+.cstm-blue {
+  color: #0a93d1;
+}
+.cstm-yellow {
+  color: #e6a23c;
+}
+.cstm-green {
+  color: #67c23a;
+}
+.cstm-red {
+  color: #f56c6c;
+}
+.cstm-grey {
+  color: #909399;
+}
+
 .cstm-container {
   height: 100vh;
 }
@@ -160,5 +176,7 @@ input::-webkit-inner-spin-button {
 .el-button--small {
   border-radius: 0;
 }
+
+
 
 </style>

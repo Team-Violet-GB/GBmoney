@@ -286,21 +286,7 @@
 .cstm-edit:hover {
   color: #67c23a;
 }
-.cstm-blue {
-  color: #0a93d1;
-}
-.cstm-yellow {
-  color: #e6a23c;
-}
-.cstm-green {
-  color: #67c23a;
-}
-.cstm-red {
-  color: #f56c6c;
-}
-.cstm-grey {
-  color: #909399;
-}
+
 /* при наведении взятого элемента на ячейку */
 .drop-in button {
   background: grey;

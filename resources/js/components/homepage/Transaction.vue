@@ -69,6 +69,7 @@
   import SelectCustom from "../homepage/SelectCustom"
   import Calendar from "../homepage/Calendar"
   import { mapGetters, mapActions } from "vuex"
+import LoginVue from '../../views/Login.vue';
 
   export default {
     components: {
@@ -196,8 +197,34 @@
 
       approveTag() {
         if (this.checkChangeTag()) {
-          this.isEditingTag  = false
-          this.isAddingTag  = false
+          if (this.isAddingTag) {
+            this.axios.post('api/tags', {
+              "name": this.changeTag,
+              "expense_id": this.transaction.toID
+            })
+            .then(response => {
+                if (response.status == 200) {
+                    this.MessageSuccess(`Создана новая подкатегория ${response.data.data.name}`)
+                    this.fetchTags()
+                    console.log
+                    this.transaction.tag = response.data.data.id
+                    this.isAddingTag  = false
+                }
+            })    
+          } else if (this.isEditingTag) {
+            this.axios.put(`api/tags/${this.transaction.tag}`, {
+              "name": this.changeTag,
+              "expense_id": this.transaction.toID
+            })
+            .then(response => {
+                if (response.status == 200) {
+                    this.MessageSuccess(`Подкатегория переименована на ${response.data.data.name}`)
+                    this.fetchTags()
+                    this.transaction.tag = this.tags[response.data.data.id].id
+                    this.isEditingTag  = false
+                }
+            })
+          }
         } else return false
       },
 
