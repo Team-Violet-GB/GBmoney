@@ -79,6 +79,7 @@ class WalletController extends Controller
         $collection = Wallet::query()->select('wallets.*', 'i.name as icon_name')
             ->join('icons as i', 'i.id', '=', 'wallets.icon_id')
             ->where('wallets.user_id', Auth::id())
+            ->where('wallets.deleted', false)
             ->get();
 
         return new WalletsCollection($collection->keyBy('id'));

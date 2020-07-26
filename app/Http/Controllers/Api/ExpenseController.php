@@ -78,6 +78,7 @@ class ExpenseController extends Controller
         $collection = Expense::query()->select('expenses.*', 'i.name as icon_name')
             ->join('icons as i', 'i.id', '=', 'expenses.icon_id')
             ->where('expenses.user_id', Auth::id())
+            ->where('expenses.deleted', false)
             ->get();
 
         return new ExpensesCollection($collection->keyBy('id'));
