@@ -4,6 +4,7 @@
       v-if="withEmptySelect"
       label="Нет"
       :value="null"
+      
       class = "cstm-select-item">
     </el-option>
     <el-option

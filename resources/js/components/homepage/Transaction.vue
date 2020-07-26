@@ -28,7 +28,7 @@
                   :list="tagsFromCategory" 
                   :idSelected="transaction.tag" 
                   :withEmptySelect="true" 
-                  @changeSelect="(tagID) => { transaction.tag = tagID }
+                  @changeSelect="(id) =>  { changeTags(id) }
                 "/>
                 <!-- Редактирование/Создание подкатегорий -->
                 <el-input 
@@ -147,6 +147,13 @@ import LoginVue from '../../views/Login.vue';
       changePointsTo(toID){
          this.transaction.toID = toID
          this.transaction.tag = null
+         this.isAddingTag = false
+         this.isEditingTag = false
+      },
+
+      changeTags(id){
+        if (id) this.transaction.tag = id
+        else this.transaction.tag = null
       },
 
       MessageError(message) {
@@ -206,7 +213,6 @@ import LoginVue from '../../views/Login.vue';
                 if (response.status == 200) {
                     this.MessageSuccess(`Создана новая подкатегория ${response.data.data.name}`)
                     this.fetchTags()
-                    console.log
                     this.transaction.tag = response.data.data.id
                     this.isAddingTag  = false
                 }
