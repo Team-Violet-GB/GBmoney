@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="isAuthenticated">
     <el-container class="cstm-container">
       <el-container class="is-vertical">
         <el-main class="cstm-main">
