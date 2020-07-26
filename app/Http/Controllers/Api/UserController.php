@@ -33,7 +33,7 @@ class UserController extends Controller
             if ($request->newpass)
                 $user->password = Hash::make($request->newpass);
             $user->save();
-            return response()->json($user);
+            return response()->json(['user' => $user]);
         }
         return response()->json(['message' => 'Упс, что-то пошло не так'], 404);
     }
