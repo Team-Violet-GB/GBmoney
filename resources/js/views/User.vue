@@ -32,7 +32,6 @@
                     callback(new Error('Введите Ваш e-mail, пожалуйста'));
                 } else {
                     this.$refs.ruleForm.validateField('checkEmail');
-                    //TODO реализовать проверку e-mail из БД (callback())
                     callback();
                 }
             };
@@ -41,14 +40,12 @@
                     callback(new Error('Введите пароль, пожалуйста'));
                 } else {
                     this.$refs.ruleForm.validateField('checkPass');
-                    //TODO реализовать проверку пароля из БД (callback())
                     callback();
                 }
             };
             var validateNewPass = (rule, value, callback) => {
                 if (this.ruleForm.checkPass !== '') {
                     this.$refs.ruleForm.validateField('checkPass');
-                    //TODO реализовать проверку корректности пароля в бэке (callback())
                     callback();
                 }
                 callback();

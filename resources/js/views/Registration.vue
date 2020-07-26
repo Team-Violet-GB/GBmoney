@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isNotAuth">
+    <div>
         <el-dialog
         :visible.sync="dialogVisible"
         width="40%"
@@ -82,15 +82,12 @@
     computed: {
         ...mapGetters([
             'isAuth',
-            'isNotAuth',
         ]),
-        isNotAuth() {
-            return false
-        }
+
     },
     methods: {
         ...mapMutations([
-            'setUserEmail'
+            'setUserEmail',
         ]),
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {

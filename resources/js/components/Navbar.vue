@@ -15,11 +15,6 @@ export default {
       'user',
     ]),
 
-      isAuthenticated () {
-          if (!this.isAuth) this.$router.push('/login')
-          return true
-      },
-
     email() {
         return this.user.email
     }

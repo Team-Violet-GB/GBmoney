@@ -48,23 +48,15 @@ export default {
             state.token = null;
             state.email = null;
         },
-        isNotAuthenticated(state) {
-            if (this.isAuth)
-                this.$router.push('/')
-            else
-                state.isNotAuth = false;
-        },
     },
     state: {
         email: localStorage.getItem('user-email') || '',
         token: localStorage.getItem('user-token') || '',
-        isNotAuth: true,
     },
     getters: {
         user(state) {
             return state
         },
         isAuth() {return !!localStorage.getItem('user-token')},
-        isNotAuth(state) {return state.isNotAuth}
     },
 }

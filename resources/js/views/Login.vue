@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isNotAuth">
+    <div>
         <el-dialog
         :visible.sync="dialogVisible"
         width="40%"
@@ -53,13 +53,9 @@
         }
     },
     computed: {
-        isNotAuthenticated() {
-            return this.isNotAuthenticated()
-        },
         ...mapGetters([
             'isAuth',
             'user',
-            'isNotAuth',
         ])
     },
     methods: {
