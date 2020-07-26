@@ -8,8 +8,8 @@
                     <div>{{ getLocalDateString(index) }}</div>
                 </el-col>
                 <el-col :span="10">
-                    <div v-if="groupSumCalc(transactionGroup) != 0" class="tran-group-header-sum">{{
-                        groupSumCalc(transactionGroup) }} &#8381
+                    <div v-if="groupSumCalc(transactionGroup) != 0" class="tran-group-header-sum">
+<!--                        {{ groupSumCalc(transactionGroup) }} &#8381-->
                     </div>
                 </el-col>
             </el-row>
@@ -21,7 +21,7 @@
             <el-pagination
                 background
                 :hide-on-single-page="true"
-                layout="prev, pager, next, jumper, slot"
+                layout="prev, pager, next"
                 @current-change="paginate"
                 :total="getTotal">
             </el-pagination>
@@ -109,7 +109,6 @@
                 return sum.toFixed(0);
             },
             paginate(page) {
-                console.log('из пагинации: ', page)
                 this.setPage(page);
                 this.fetchTransactions()
             }
