@@ -26,14 +26,15 @@
                     <el-form-item>
                         <el-button type="success" @click="() => this.$router.push('/login')">У меня есть аккаунт</el-button>
                         <el-button type="primary" @click="submitForm('ruleForm')">Регистрация</el-button>
-                    </el-form-item> 
-                </el-form> 
+                    </el-form-item>
+                </el-form>
         </span>
         </el-dialog>
     </div>
 </template>
 
 <script>
+    import {mapMutations} from 'vuex'
   export default {
     data() {
         var accordancePass = (rule, value, callback) => {
@@ -79,18 +80,24 @@
         }
     },
     methods: {
+        ...mapMutations([
+            'setUserEmail',
+        ]),
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    this.axios.post('/api/register' , {
+                    this.axios.post('api/register' , {
                         email: this.ruleForm.email,
                         password: this.ruleForm.pass
                     })
                     .then(response => {
-                        this.MessageSuccess('Пользователь ' + response.data.email + ' успешно зарегистрирован')
+                        let email = response.data.user.email
+                        this.MessageSuccess('Пользователь ' + email + ' успешно зарегистрирован')
+                        this.$store.commit('setUserEmail', email)
                         this.$router.push('/login')
                     })
                     .catch((error) => {
+                        console.log(error)
                         var errors = error.response.data.errors
                         for (var err in errors) {
                             errors[err].forEach((e, i) => {

@@ -25,9 +25,12 @@ class IncomeController extends Controller
     public function index()
     {
         /** @var Income $incomes */
-        $incomes = Income::query()->where('user_id', Auth::id())->get();
+        $incomes = Income::query()
+            ->where('user_id', Auth::id())
+            ->where('incomes.deleted', false)
+            ->get();
 
-        return response()->json(['data' => $incomes]);
+        return response()->json(['data' => collect($incomes)->keyBy('id')]);
     }
 
     /**
@@ -117,6 +120,7 @@ class IncomeController extends Controller
         $collection = Income::query()->select('incomes.*', 'i.name as icon_name')
             ->join('icons as i', 'i.id', '=', 'incomes.icon_id')
             ->where('incomes.user_id', Auth::id())
+            ->where('incomes.deleted', false)
             ->get();
 
         return new IncomesCollection($collection->keyBy('id'));

@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export default {
     actions: {
         login({ commit }, data) {
@@ -5,32 +7,37 @@ export default {
                 email: data.email,
                 password: data.password
             })
-            .then(response => {
-                const token = response.data.token
-                localStorage.setItem('user-token', token)
-                data.this.$message({
-                    message: 'Добро пожаловать!',
-                    type: 'success'
+                .then(response => {
+                    const token = response.data.token
+                    const user = response.data.user
+                    localStorage.setItem('user-token', token)
+                    data.this.$message({
+                        message: 'Добро пожаловать!',
+                        type: 'success'
+                    })
+                    commit('setUserData', user)
+                    commit('login', token)
+                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+                    data.this.$router.push('/')
                 })
-                commit('login', token)
-                data.this.$router.push('/')
-            })
-            .catch((error) => {
-                data.this.$message.error(error.response.data.errors) 
-            })
+                .catch((error) => {
+                    data.this.$message.error(error.response.data.errors)
+                })
         },
-        logout({ commit }, data) {
+        logout(state, data) {
             data.this.axios.get('/api/logout')
-            .then(response => {
-                localStorage.removeItem('user-token') 
-                commit('logout')
-            })
-            .catch((error) => {
-                data.this.$message.error(error.response.data.errors) 
-            })
+                .then(() => {
+                    localStorage.removeItem('user-token')
+                    state.commit('logout')
+                    state.commit('clearUserData')
+                })
+                .catch((error) => {
+                    console.log(error)
+                    data.this.$message.error(error.response.data.errors)
+                })
         }
     },
-    mutations: {
+    mutations:{
         login(state, token) {
             state.token = token
         },

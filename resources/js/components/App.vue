@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <component v-if="isAuthenticated" :is="layout">
+    <component :is="layout">
       <router-view/>
     </component>
   </div>
@@ -9,21 +9,14 @@
 <script>
 import MainLayout from '../views/layouts/MainLayout'
 import EmptyLayout from '../views/layouts/EmptyLayout'
-import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters([
-      'isAuth',
-    ]),
     layout () {
       return (this.$route.meta.layout || 'main') + '-layout'
     },
-    isAuthenticated() {
-      if (!this.isAuth) this.$router.push('/login')
-      return true
-    }
   },
+
   components: {
     MainLayout, EmptyLayout
   }
@@ -84,8 +77,8 @@ body {
 }
 
 /* все инпуты в одном стиле */
-.el-input__inner, 
-.el-scrollbar, 
+.el-input__inner,
+.el-scrollbar,
 .el-textarea__inner {
   @extend %cstm-color-background-dark;
   @extend %cstm-color-text;
@@ -98,7 +91,7 @@ body {
 /* заменить синюю рамку при фокусе */
 .el-input__inner:focus,
 textarea:focus {
-  border-color: #ffffff !important; 
+  border-color: #ffffff !important;
 }
 
 .el-scrollbar,
@@ -121,7 +114,7 @@ input::-webkit-inner-spin-button {
   margin-top: 20px;
   position: relative;
 }
-.el-date-picker {  
+.el-date-picker {
   @extend %cstm-color-background-dark;
   @extend %cstm-color-text;
   border: none;

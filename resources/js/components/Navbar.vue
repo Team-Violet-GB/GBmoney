@@ -12,21 +12,12 @@ import { mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters([
-      'user',
+      'email',
     ]),
-    
-    email() {
-        return this.user.email
-    }
   },
-  mounted() {
-      this.setUserData()
-  },
-
-  methods: {
-    ...mapActions([,
+    methods: {
+    ...mapActions([
         'logout',
-        'setUserData'
     ]),
 
     out() {
