@@ -4,8 +4,12 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Laravel\Passport\HasApiTokens;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -37,5 +41,23 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public static function rulesUserUpdateDelete($password) {
+        return [
+            'email' => ['required', 'email', 'max:255',
+                Rule::unique('users')->ignore(Auth::id())],
+            'password' => ['required', 'min:6'],
+            'newpass' => ['nullable', 'min:6'],
+        ];
+    }
+
+    public static function attributeNames()
+    {
+        return [
+            'email' => 'E-mail',
+            'password' => 'Пароль',
+            'newpass' => 'Новый пароль'
+        ];
+    }
 
 }

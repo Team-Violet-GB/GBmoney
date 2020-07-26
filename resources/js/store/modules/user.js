@@ -1,40 +1,26 @@
-import axios from "axios";
-
 export default {
-    actions: {
-        setUserData({commit}) {
-            const token = localStorage.getItem('user-token')
-            if (token) {
-              axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-            }
-                
-            axios
-                .get('/api/user/show')
-                .then(response => {
-                    if (typeof (response.data) == 'object') {
-                        let userData = response.data;
-                        commit('setUserData', userData);
-                    } else
-                        console.log('Неверные данные')
-                })
-                //Проверку на null в данном случае не делаю, т.к. если вернет null - поле останется пустым
-                .catch(error => console.log(error))
-                .finally(() => (console.log('finished')));
-        }
-    },
     mutations: {
+        setUserEmail(state, email) {
+            state.email = email
+            let user = JSON.parse(localStorage.getItem('user')) || {};
+            user.email = email
+            localStorage.setItem('user', JSON.stringify(user))
+        },
+        clearUserData(state) {
+            localStorage.removeItem('user')
+            state.email = ''
+        },
         setUserData(state, user) {
-            state.id = user.id;
-            state.email = user.email;
+            localStorage.setItem('user', JSON.stringify(user))
+            state.email = user.email
         },
     },
     state: {
-        id: '',
-        email: '',
+        email: JSON.parse(localStorage.getItem('user')) ? (JSON.parse(localStorage.getItem('user'))).email : '',
     },
     getters: {
-        user(state) {
-            return state
-        }
+        email(state) {
+            return state.email
+        },
     },
 }
