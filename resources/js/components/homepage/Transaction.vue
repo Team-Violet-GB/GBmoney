@@ -220,7 +220,10 @@ import LoginVue from '../../views/Login.vue';
               this.transaction.tag = id
               this.isAddingTag  = false
             })
-            
+            .catch((error) => {
+              this.MessageError(error.response.data.errors.name[0])
+            })
+
           } else if (this.isEditingTag) {
             this.axios.put(`api/tags/${this.transaction.tag}`, {
               "name": this.changeTag,
@@ -233,6 +236,9 @@ import LoginVue from '../../views/Login.vue';
                     this.transaction.tag = this.tags[response.data.data.id].id
                     this.isEditingTag  = false
                 }
+            })
+            .catch((error) => {
+              this.MessageError(error.response.data.errors.name[0])
             })
           }
         } else return false
