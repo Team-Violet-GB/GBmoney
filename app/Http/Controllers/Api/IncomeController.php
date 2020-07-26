@@ -27,7 +27,7 @@ class IncomeController extends Controller
         /** @var Income $incomes */
         $incomes = Income::query()->where('user_id', Auth::id())->get();
 
-        return response()->json(['data' => $incomes]);
+        return response()->json(['data' => collect($incomes)->keyBy('id')]);
     }
 
     /**
