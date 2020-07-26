@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class IncomeFormRequest extends FormRequest
 {
@@ -24,7 +26,11 @@ class IncomeFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:45',
+            'name' => [
+                'required',
+                'max:45',
+                Rule::unique('incomes')->ignore($this->route('income'), 'id')->where('user_id', Auth::id()),
+            ],
             'icon_id' => 'required|int',
         ];
     }
