@@ -4,10 +4,10 @@
             <div v-if="getEditorShowStatus & transactionEditorId === getEditorData.edata.id" class="editor">
                 <el-form :model="editorData.edata" ref="editorForm" :rules="rules" label-position="right"
                          label-width=" 5px" size="small">
-                    <el-row :gutter="5" type="flex">
+                    <el-row>
                         <el-col :span="22">
                             <el-row>
-                                <el-col :span="22">
+                                <el-col :span="10">
                                     <div class="editor-pointers">
                                         <el-form-item>
                                             <el-date-picker type="date"
@@ -15,8 +15,8 @@
                                                             format="dd.MM.yyyy"
                                                             value-format="yyyy-MM-dd"
                                                             v-model="editorData.edata.date"
-                                                            style="margin-top: 0; font-size: 1em; width: 160px"
-                                            ></el-date-picker>
+                                                            style="margin-top: 0;font-size: 1em; width: 200px">
+                                            </el-date-picker>
                                         </el-form-item>
                                         <el-form-item prop="amount">
                                             <el-input type="number" class="right-sum"
@@ -24,22 +24,31 @@
                                                       style="margin-top: 0; font-size: 1em; width: 200px"
                                             ><strong slot="suffix">₽&nbsp;&nbsp;&nbsp;</strong></el-input>
                                         </el-form-item>
+                                    </div>
+                                </el-col>
+                            </el-row>
+
+                            <el-row>
+                                <el-col :span="16">
+                                    <div class="editor-pointers">
                                         <el-form-item>
-                                            <el-select class="selector"
-                                                       v-if="typeData(editorData.edata.type).typeDescription === 'Доход'"
-                                                       v-model="editorData.edata.income_id">
+                                            <el-select
+                                                style="margin-top: 0; margin-right: 2px; font-size: 1em; width: 200px"
+                                                v-if="typeData(editorData.edata.type).typeDescription === 'Доход'"
+                                                v-model="editorData.edata.income_id">
                                                 <el-option v-for="income in incomes" :key="income.id"
                                                            :label="income.name"
                                                            :value="income.id" class="select_option">
                                                 </el-option>
                                             </el-select>
-                                            <el-select class="selector" v-else
+                                            <el-select v-else
+                                                       style="margin-top: 0; margin-right: 2px; font-size: 1em; width: 200px"
                                                        v-model="editorData.edata.wallet_id_from">
                                                 <el-option v-for="wallet in wallets" :key="wallet.id"
                                                            :label="wallet.name"
                                                            :value="wallet.id" class="select_option">
                                                 </el-option>
-                                            </el-select>&nbsp;<i class="el-icon-caret-right"></i>
+                                            </el-select>
                                             <el-select class="selector"
                                                        v-if="typeData(editorData.edata.type).typeDescription === 'Доход'"
                                                        v-model="editorData.edata.wallet_id_to">
@@ -75,26 +84,26 @@
                                     </div>
                                 </el-col>
                             </el-row>
+
                             <el-row>
-                                <el-col :span="20">
+                                <el-col :span="16">
                                     <el-form-item prop="comment">
                                         <el-input v-model="editorData.edata.comment" clearable placeholder="Коментарий"
                                                   maxlength="100" show-word-limit></el-input>
                                     </el-form-item>
                                 </el-col>
-
                             </el-row>
-                        </el-col>
-                        <el-col :span="2">
-                            <div class="button-group">
-                                <el-button-group>
-                                    <el-button @click="updateTransaction('editorForm')" type="success" size="small"
-                                               icon="el-icon-check"></el-button>
-                                    <el-button @click="deleteTransaction(editorData)" type="danger"
-                                               size="small"
-                                               icon="el-icon-delete"></el-button>
-                                </el-button-group>
-                            </div>
+                            <el-row :gutter="10">
+                                <el-col :span="6">
+                                    <div class="button-group">
+                                        <el-button @click="updateTransaction('editorForm')" type="success" size="small"
+                                                   icon="el-icon-check"></el-button>
+                                        <el-button @click="deleteTransaction(editorData)" type="danger"
+                                                   size="small"
+                                                   icon="el-icon-delete"></el-button>
+                                    </div>
+                                </el-col>
+                            </el-row>
                         </el-col>
                     </el-row>
                 </el-form>
@@ -195,7 +204,7 @@
                 this.$confirm('Подтверждение удаления транзакции', 'Внимание!', {
                     confirmButtonText: 'Удалить',
                     confirmButtonClass: 'danger',
-                    showCancelButton: false,
+                    showCancelButton: true,
                     iconClass: 'el-icon-delete',
                     type: 'warning',
                 }).then(() => {
@@ -203,7 +212,10 @@
                         .then(response => {
                             if (response.status === 200) {
                                 this.fetchTransactions()
-
+                                this.$message({
+                                    type: 'info',
+                                    message: `Транзакции от ${new Date(this.editorData.data.date).toLocaleDateString()} была удалена`
+                                });
                             }
                         })
                         .catch(error => {
@@ -214,7 +226,12 @@
                                 type: 'error'
                             });
                         });
-                })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: `Отмена удаления транзакции от ${new Date(this.editorData.data.date).toLocaleDateString()}`
+                    });
+                });
             }
         }
     }
@@ -240,6 +257,8 @@
     }
 
     .selector {
+        margin-top: 0;
+        font-size: 1em;
         width: 200px;
     }
 
@@ -258,7 +277,7 @@
     .button-group {
         width: 100px;
         display: flex;
-        align-items: center;
-        height: 77%;
+        margin-left: 10px;
+        margin-bottom: 15px;
     }
 </style>
