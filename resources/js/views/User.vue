@@ -25,6 +25,7 @@
 </template>
 <script>
     import {mapMutations, mapGetters, mapActions} from 'vuex'
+
     export default {
         data() {
             var checkEmail = (rule, value, callback) => {
@@ -62,7 +63,7 @@
                     pass: '',
                     newpass: '',
                     checkPass: '',
-                    email: this.$store.getters.user.email,
+                    email: this.$store.getters.email,
                 },
                 rules: {
                     pass: [
@@ -86,16 +87,16 @@
         },
         methods: {
             ...mapGetters([
-                'user',
+                'email',
                 'isAuth',
             ]),
             ...mapActions([
-               'logout'
+                'logout'
             ]),
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.axios.post('/api/user/user' , {
+                        this.axios.post('/api/user/user', {
                             _method: "PATCH",
                             email: this.ruleForm.email,
                             password: this.ruleForm.pass,
@@ -107,15 +108,21 @@
                                 this.$store.commit('setUserEmail', email)
                             })
                             .catch((error) => {
-                                var errors = error.response.data.errors
-                                for (var err in errors) {
-                                    errors[err].forEach((e, i) => {
-                                        setTimeout(() => {
-                                            this.MessageError(e)
-                                        }, 100 * ++i)
-                                    });
+                                if (error.response.data.errors) {
+                                    let errors = error.response.data.errors
+                                    for (var err in errors) {
+                                        errors[err].forEach((e, i) => {
+                                            setTimeout(() => {
+                                                this.MessageError(e)
+                                            }, 100 * ++i)
+                                        });
+                                    }
+                                } else {
+                                    let err = error.response.data.message
+                                    this.MessageError(err)
                                 }
                             })
+
                     } else {
                         this.MessageError('Проверьте правильность заполнения полей')
                         return false
@@ -126,7 +133,7 @@
             submitFormDelete(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.axios.post('/api/user/user' , {
+                        this.axios.post('/api/user/user', {
                             _method: "DELETE",
                             email: this.ruleForm.email,
                             password: this.ruleForm.pass,
@@ -134,18 +141,23 @@
                             .then(() => {
                                 this.MessageSuccess('Пользователь успешно удалён')
                                 localStorage.removeItem('user-token');
-                                localStorage.removeItem('user-email');
+                                localStorage.removeItem('user');
                                 this.$store.commit('clearUserData')
                                 this.$router.push('/login')
                             })
                             .catch((error) => {
-                                let errors = error.response.data.errors
-                                for (var err in errors) {
-                                    errors[err].forEach((e, i) => {
-                                        setTimeout(() => {
-                                            this.MessageError(e)
-                                        }, 100 * ++i)
-                                    });
+                                if (error.response.data.errors) {
+                                    let errors = error.response.data.errors
+                                    for (var err in errors) {
+                                        errors[err].forEach((e, i) => {
+                                            setTimeout(() => {
+                                                this.MessageError(e)
+                                            }, 100 * ++i)
+                                        });
+                                    }
+                                } else {
+                                    let err = error.response.data.message
+                                    this.MessageError(err)
                                 }
                             })
                     } else {
@@ -187,29 +199,34 @@
     .cstm-ruleForm {
         margin: 0 auto;
         max-width: 600px;
+
         label {
             color: white;
         }
+
         .el-form-item:hover, .el-form-item:focus-within {
             label {
                 color: rgb(255, 208, 75);
             }
         }
+
         input {
             background-color: #4b4c55;
             color: white;
+
             &:hover, &:focus {
                 color: rgb(255, 208, 75);
             }
         }
     }
+
     .el-message-box {
         background-color: #5f6068;
         border: 1px solid white;
         color: white;
 
         .el-message-box__title,
-        .el-message-box__message{
+        .el-message-box__message {
             color: white;
         }
     }
@@ -223,6 +240,7 @@
         font-size: 25px;
         font-weight: 700;
     }
+
     .el-button--default {
         background-color: #f56c6c;
         color: white;

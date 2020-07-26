@@ -39,7 +39,7 @@
             url: '../images/gm-money-logo.jpg',
             ruleForm: {
                 pass: '',
-                email: this.$store.getters.user.email,
+                email: this.$store.getters.email,
             },
             rules: {
                 pass: [
@@ -53,10 +53,9 @@
         }
     },
     computed: {
-        ...mapGetters([
-            'isAuth',
-            'user',
-        ])
+      ...mapGetters([
+        'email',
+      ])
     },
     methods: {
         ...mapActions([

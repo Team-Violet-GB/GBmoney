@@ -3,20 +3,20 @@ import axios from "axios";
 export default {
     actions: {
         login({ commit }, data) {
-            axios.post('/api/login' , {
+            data.this.axios.post('/api/login' , {
                 email: data.email,
                 password: data.password
             })
                 .then(response => {
-                    const resp = response.data
-                    localStorage.setItem('user-token', resp.token)
-                    let token = localStorage.getItem('user-token')
-                    localStorage.setItem('user-email', resp.user.email)
+                    const token = response.data.token
+                    const user = response.data.user
+                    localStorage.setItem('user-token', token)
                     data.this.$message({
                         message: 'Добро пожаловать!',
                         type: 'success'
                     })
-                    commit('setUserData', resp)
+                    commit('setUserData', user)
+                    commit('login', token)
                     axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
                     data.this.$router.push('/')
                 })
@@ -24,18 +24,32 @@ export default {
                     data.this.$message.error(error.response.data.errors)
                 })
         },
-        logout({ commit }, data) {
-            axios.get('/api/logout')
+        logout(state, data) {
+            data.this.axios.get('/api/logout')
                 .then(() => {
-                    commit('clearUserData')
+                    localStorage.removeItem('user-token')
+                    state.commit('logout')
+                    state.commit('clearUserData')
                 })
                 .catch((error) => {
+                    console.log(error)
                     data.this.$message.error(error.response.data.errors)
                 })
+        }
+    },
+    mutations:{
+        login(state, token) {
+            state.token = token
         },
+
+        logout(state) {
+            state.token = ''
+        }
+    },
+    state: {
+        token: localStorage.getItem('user-token') || '',
     },
     getters: {
-        isAuth() {return !!localStorage.getItem('user-token')},
-    },
-
+        isAuth: (state) => !!state.token,
+    }
 }

@@ -1,28 +1,26 @@
-import axios from "axios";
-
 export default {
     mutations: {
         setUserEmail(state, email) {
-            state.email = email;
+            state.email = email
+            let user = JSON.parse(localStorage.getItem('user')) || {};
+            user.email = email
+            localStorage.setItem('user', JSON.stringify(user))
         },
         clearUserData(state) {
-            localStorage.removeItem('user-token');
-            localStorage.removeItem('user-email');
-            state.token = '';
-            state.email = '';
+            localStorage.removeItem('user')
+            state.email = ''
         },
-        setUserData(state, data) {
-            state.token = data.token;
-            state.email = data.user.email;
+        setUserData(state, user) {
+            localStorage.setItem('user', JSON.stringify(user))
+            state.email = user.email
         },
     },
     state: {
-        email: localStorage.getItem('user-email') || '',
-        token: localStorage.getItem('user-token') || '',
+        email: JSON.parse(localStorage.getItem('user')) ? (JSON.parse(localStorage.getItem('user'))).email : '',
     },
     getters: {
-        user(state) {
-            return state
+        email(state) {
+            return state.email
         },
     },
 }

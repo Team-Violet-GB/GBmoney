@@ -12,12 +12,22 @@
 
 <script>
 import Navbar from '../../components/Navbar'
+import {mapGetters} from "vuex";
 
 export default {
   name: 'empty-layout',
   components: {
     Navbar
-  }
+  },
+    computed: {
+        ...mapGetters([
+            'isAuth'
+        ]),
+        isAuthenticated() {
+            if (this.isAuth) this.$router.push('/')
+            return true
+        }
+    }
 }
 </script>
 

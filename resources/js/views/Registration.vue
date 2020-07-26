@@ -34,7 +34,7 @@
 </template>
 
 <script>
-    import {mapGetters, mapMutations} from 'vuex'
+    import {mapMutations} from 'vuex'
   export default {
     data() {
         var accordancePass = (rule, value, callback) => {
@@ -79,12 +79,6 @@
             },
         }
     },
-    computed: {
-        ...mapGetters([
-            'isAuth',
-        ]),
-
-    },
     methods: {
         ...mapMutations([
             'setUserEmail',
@@ -97,12 +91,13 @@
                         password: this.ruleForm.pass
                     })
                     .then(response => {
-                        let email = response.data.email
+                        let email = response.data.user.email
                         this.MessageSuccess('Пользователь ' + email + ' успешно зарегистрирован')
                         this.$store.commit('setUserEmail', email)
                         this.$router.push('/login')
                     })
                     .catch((error) => {
+                        console.log(error)
                         var errors = error.response.data.errors
                         for (var err in errors) {
                             errors[err].forEach((e, i) => {

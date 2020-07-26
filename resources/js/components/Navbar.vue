@@ -12,12 +12,8 @@ import { mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters([
-      'user',
+      'email',
     ]),
-
-    email() {
-        return this.user.email
-    }
   },
     methods: {
     ...mapActions([
@@ -26,7 +22,6 @@ export default {
 
     out() {
       this.logout({this: this})
-        this.$router.push('/login')
     },
   }
 }

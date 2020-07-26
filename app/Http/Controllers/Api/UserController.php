@@ -13,8 +13,7 @@ class UserController extends Controller
 
     public function show(Request $request)
     {
-        $id = Auth::id();
-        $user = User::find($id);
+        $user = User::find(Auth::id());
 
         if ($user) {
             return response()->json($user);
@@ -28,7 +27,7 @@ class UserController extends Controller
         $user = User::find(Auth::id());
         if ($user) {
             if (!Hash::check($request->password, Auth::user()->getAuthPassword()))
-                return response()->json(['message' => 'Неверный пароль'], 403);
+                abort(403, 'Неверный пароль');
             $this->validate($request, User::rulesUserUpdateDelete($request->password), [], User::attributeNames());
             $user->email = $request->email;
             if ($request->newpass)
@@ -36,7 +35,7 @@ class UserController extends Controller
             $user->save();
             return response()->json(['user' => $user]);
         }
-        return response()->json(['message' => 'Упс, что-то пошло не так'], 404);
+        abort(404, 'Упс, что-то пошло не так');
     }
 
     public function destroy(Request $request)
@@ -44,12 +43,12 @@ class UserController extends Controller
         $user = User::find(Auth::id());
         if ($user) {
             if (!Hash::check($request->password, Auth::user()->getAuthPassword()))
-                return response()->json(['message' => 'Неверный пароль'], 403);
+                abort(403, 'Неверный пароль');
             $this->validate($request, User::rulesUserUpdateDelete($request->password), [], User::attributeNames());
-            $user->forceDelete();
+            $user->delete();
             return response()->json(['message' => 'Пользователь удалён'], 200);
         }
-        return response()->json(['message' => 'Упс, что-то пошло не так'], 404);
+        abort(404, 'Упс, что-то пошло не так');
 
     }
 }
