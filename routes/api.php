@@ -39,5 +39,7 @@ Route::middleware('auth:api')->group(function () {
         Route::apiResource('incomes', 'IncomeController');
         // Работа с тегами.
         Route::apiResource('tags', 'TagController');
+        //Работа с кошельками.
+        Route::apiResource('wallets', 'WalletController');
     });
 });
