@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ExpenseFormRequest;
-use App\Http\Requests\IncomeFormRequest;
 use App\Http\Resources\ExpensesCollection;
 use App\Models\Expense;
-use App\Models\Income;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
