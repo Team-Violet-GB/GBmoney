@@ -1,7 +1,7 @@
 <template>
     <div>
         <!--        разметка и поведение для ленты-->
-        <div ref="div" v-if="getEditable" class="tran-wrapper" @click="edit"  @dblclick="closeEditor">
+        <div ref="div" v-if="getEditable" class="tran-wrapper" @click="openEditor" @dblclick="closeEditor">
             <el-card>
                 <el-row :gutter="10" class="tran-row-data">
                     <el-col :span="3">
@@ -86,11 +86,11 @@
             ]),
             from() {
                 let from = {};
-                from.typeName = this.typeData(this.transaction.data.type).typeDescription
+                from.typeName = this.getTypeData(this.transaction.data).typeName
                 const income = this.incomes[this.transaction.data.income_id];
                 const wallet = this.wallets[this.transaction.data.wallet_id_from];
 
-                switch (this.typeData(this.transaction.data.type).typeDescription) {
+                switch (this.getTypeData(this.transaction.data).typeName) {
                     case 'Доход':
                         from.name = income.name;
                         break;
@@ -107,7 +107,7 @@
             },
             to() {
                 let data = {};
-                if (this.typeData(this.transaction.data.type).typeDescription === 'Расход') {
+                if (this.getTypeData(this.transaction.data).typeName === 'Расход') {
                     const expense = this.expenses[this.transaction.data.expense_id];
                     const to = expense !== undefined ? expense.name : 'не определен';
                     const tag = this.tags[this.transaction.data.tag_id];
@@ -122,7 +122,7 @@
             },
         },
         methods: {
-            edit() {
+            openEditor() {
                 this.setEditorData(this.transaction);
                 this.transactionEditorId = this.transaction.data.id;
                 this.setEditorShowStatus(true);

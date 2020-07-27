@@ -22,18 +22,18 @@
     font-weight: 500;
 }
 
-.el-message-box {
+.feed-msg-box .el-message-box {
     background-color: rgba(61, 62, 72, 0.9) !important;
     border: 1px solid #3badec7d !important;
-    color: #f1cb08d9 !important;
 }
 
-.el-message-box__content {
+.feed-msg-box-content .el-message-box__content {
     color: #ffffff !important;
     font-weight: 500 !important;
+    font-size: 0.97em  !important;
 }
 
-.el-message-box__title {
+.feed-msg-box-title .el-message-box__title {
     color: #0dadec !important;
     font-weight: 700 !important;
 }

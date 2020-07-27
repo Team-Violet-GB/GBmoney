@@ -6,13 +6,13 @@
                          label-width=" 5px" size="small">
                     <el-row>
 
-<!--                        первая сторока редактора-->
+                        <!--                        первая сторока редактора-->
                         <el-row>
                             <div class="editor-pointers">
                                 <el-form-item>
                                     <el-select
                                         style="margin-top: 0; font-size: 1em; width: 200px"
-                                        v-if="typeData(editorData.edata.type).typeDescription === 'Доход'"
+                                        v-if="getTypeData(editorData.edata).typeName === 'Доход'"
                                         v-model="editorData.edata.income_id">
                                         <el-option v-for="income in incomes" :key="income.id"
                                                    :label="income.name"
@@ -37,7 +37,7 @@
                                 </el-form-item>
                                 <el-form-item>
                                     <el-select class="selector"
-                                               v-if="typeData(editorData.edata.type).typeDescription === 'Доход'"
+                                               v-if="getTypeData(editorData.edata).typeName === 'Доход'"
                                                v-model="editorData.edata.wallet_id_to">
                                         <el-option v-for="wallet in wallets" :key="wallet.id"
                                                    :label="wallet.name" :value="wallet.id"
@@ -45,7 +45,7 @@
                                         </el-option>
                                     </el-select>
                                     <el-select @change="setCurrentTagOfSelectedExpense" class="selector"
-                                               v-if="typeData(editorData.edata.type).typeDescription === 'Расход'"
+                                               v-if="getTypeData(editorData.edata).typeName === 'Расход'"
                                                v-model="editorData.edata.expense_id">
                                         <el-option v-for="expense in expenses" :key="expense.id"
                                                    :label="expense.name" :value="expense.id"
@@ -53,14 +53,14 @@
                                         </el-option>
                                     </el-select>
                                     <el-select class="selector"
-                                               v-if="typeData(editorData.edata.type).typeDescription === 'Расход'"
+                                               v-if="getTypeData(editorData.edata).typeName === 'Расход'"
                                                v-model="editorData.edata.tag_id">
                                         <el-option v-for="tag in getTagsOfExpense" :key="tag.id"
                                                    :label="tag.name" :value="tag.id" class="select_option">
                                         </el-option>
                                     </el-select>
                                     <el-select class="selector"
-                                               v-if="typeData(editorData.edata.type).typeDescription === 'Перевод'"
+                                               v-if="getTypeData(editorData.edata).typeName === 'Перевод'"
                                                v-model="editorData.edata.wallet_id_to">
                                         <el-option v-for="wallet in wallets" :key="wallet.id"
                                                    :label="wallet.name" :value="wallet.id"
@@ -71,7 +71,7 @@
                             </div>
                         </el-row>
 
-<!--                        вторая строка редактора-->
+                        <!--                        вторая строка редактора-->
                         <el-row>
                             <div class="editor-pointers">
                                 <el-form-item>
@@ -91,7 +91,7 @@
                             </div>
                         </el-row>
 
-<!--                        кнопки-->
+                        <!--                        кнопки-->
                         <el-row :gutter="10">
                             <el-col :span="6">
                                 <div class="button-group">
@@ -173,9 +173,9 @@
                     if (valid) {
                         axios.put(`/api/transactions/${this.editorData.edata.id}`,
                             {
-                                from_id: this.typeData(this.editorData.edata.type).fromId,
-                                to_id: this.typeData(this.editorData.edata.type).toId,
-                                type: this.typeData(this.editorData.edata.type).type,
+                                from_id: this.getTypeData(this.editorData.edata).fromId,
+                                to_id: this.getTypeData(this.editorData.edata).toId,
+                                type: this.getTypeData(this.editorData.edata).type,
                                 amount: this.editorData.edata.amount,
                                 date: this.editorData.edata.date,
                                 comment: this.editorData.edata.comment,
@@ -202,12 +202,14 @@
 
             },
             deleteTransaction() {
-                this.$confirm('Подтверждение удаления транзакции', `Транзакция от ${new Date(this.editorData.data.date).toLocaleDateString()}`, {
+                this.$confirm('Подтверждение удаления?',
+                    `Транзакция от ${new Date(this.editorData.data.date).toLocaleDateString()}  (${this.editorData.data.amount})`, {
                     confirmButtonText: 'Удалить',
-                    confirmButtonClass: 'danger',
                     showCancelButton: false,
                     iconClass: 'el-icon-delete',
                     type: 'warning',
+                    closeOnClickModal: true,
+                    customClass: 'feed-msg-box-title feed-msg-box feed-msg-box-content'
                 }).then(() => {
                     axios.delete(`/api/transactions/${this.editorData.edata.id}`)
                         .then(response => {
