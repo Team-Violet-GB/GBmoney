@@ -1,7 +1,7 @@
 <template>
     <div>
         <!--        разметка и поведение для ленты-->
-        <div ref="div" v-if="getEditable" class="tran-wrapper" @click="edit($event)" :id="transaction.data.id">
+        <div ref="div" v-if="getEditable" class="tran-wrapper" @click="edit"  @dblclick="closeEditor">
             <el-card>
                 <el-row :gutter="10" class="tran-row-data">
                     <el-col :span="3">
@@ -10,7 +10,7 @@
                     <el-col :span="3"><span style="color: #8e8e8e">{{ from.typeName }}</span></el-col>
                     <el-col :span="6"><span>{{ to.to }}</span><span class="tran-tag-name">{{ to.tagName }}</span>
                     </el-col>
-                    <el-col :span="8"><span class="tran-comment">{{ transaction.data.comment }} &nbsp;</span></el-col>
+                    <el-col :span="8"><div class="tran-comment">{{ transaction.data.comment }} &nbsp;</div></el-col>
                     <el-col :span="4">
                         <div style="display: flex; justify-content: flex-end">{{ transaction.data.amount }} &#8381</div>
                     </el-col>
@@ -18,18 +18,18 @@
             </el-card>
         </div>
 
-        <!--        разметка и поведение для отчетов-->
+        <!--        разметка для отчетов-->
         <div v-else>
             <el-row :gutter="10" class="tran-row-data">
                 <el-col :span="6">
                     <div>{{ from.name }}</div>
                 </el-col>
-                <el-col :span="3"><span style="color: #8e8e8e">{{ from.type }}</span></el-col>
-                <el-col :span="10">
-                    <div>{{ to }}</div>
+                <el-col :span="5"><span style="color: #8e8e8e">{{ from.typeName }}</span></el-col>
+                <el-col :span="8">
+                    <span>{{ to.to }}</span><span class="tran-tag-name">{{ to.tagName }}</span>
                 </el-col>
                 <el-col :span="5">
-                    <div style="display: flex;justify-content: flex-end">{{ transaction.data.amount }} &#8381</div>
+                    <span style="display: flex;justify-content: flex-end">{{ transaction.data.amount }} &#8381</span>
                 </el-col>
             </el-row>
         </div>
@@ -122,10 +122,13 @@
             },
         },
         methods: {
-            edit(e) {
+            edit() {
                 this.setEditorData(this.transaction);
-                this.transactionEditorId = this.transaction.data.id
-                this.setEditorShowStatus(true)
+                this.transactionEditorId = this.transaction.data.id;
+                this.setEditorShowStatus(true);
+            },
+            closeEditor() {
+                this.setEditorShowStatus(false);
             },
             ...mapActions([
                 'fetchTransactions'
@@ -163,13 +166,13 @@
         font-weight: 400;
     }
 
-    .edit {
-        color: #8468ff
-    }
-
     .tran-comment {
-        color: #ffffff;
+        color: #886ebb;
         font-weight: 400;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 0 5px;
     }
 
     .tran-tag-name {

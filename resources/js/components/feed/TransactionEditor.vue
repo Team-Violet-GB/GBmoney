@@ -44,7 +44,7 @@
                                                    class="select_option">
                                         </el-option>
                                     </el-select>
-                                    <el-select @select="prepareCurrentTags" class="selector"
+                                    <el-select @change="setCurrentTagOfSelectedExpense" class="selector"
                                                v-if="typeData(editorData.edata.type).typeDescription === 'Расход'"
                                                v-model="editorData.edata.expense_id">
                                         <el-option v-for="expense in expenses" :key="expense.id"
@@ -55,7 +55,7 @@
                                     <el-select class="selector"
                                                v-if="typeData(editorData.edata.type).typeDescription === 'Расход'"
                                                v-model="editorData.edata.tag_id">
-                                        <el-option v-for="tag in currentTags" :key="tag.id"
+                                        <el-option v-for="tag in getTagsOfExpense" :key="tag.id"
                                                    :label="tag.name" :value="tag.id" class="select_option">
                                         </el-option>
                                     </el-select>
@@ -86,7 +86,7 @@
                                 <el-form-item :class="{comment_long: editorData.edata.type == 3 }"
                                               class="comment_short">
                                     <el-input v-model="editorData.edata.comment" clearable placeholder="Коментарий"
-                                              maxlength="100" show-word-limit></el-input>
+                                              maxlength="44" show-word-limit></el-input>
                                 </el-form-item>
                             </div>
                         </el-row>
@@ -144,8 +144,14 @@
                 'getTransactions',
                 'getPage'
             ]),
-            currentTags() {
-                return this.tags.filter(tag => tag.expense_id === this.editorData.edata.expense_id)
+            getTagsOfExpense() {
+                let tagsOfExpense = [];
+                for (let tag in this.tags) {
+                    if (this.tags[tag].expense_id === this.editorData.edata.expense_id) {
+                        tagsOfExpense.push(this.tags[tag])
+                    }
+                }
+                return tagsOfExpense
             }
         },
         methods: {
@@ -159,8 +165,8 @@
                 'setErrorStatus',
                 'setEditorData'
             ]),
-            prepareCurrentTags() {
-                return this.currentTags();
+            setCurrentTagOfSelectedExpense() {
+                this.editorData.edata.tag_id = null;
             },
             updateTransaction(formName) {
                 this.$refs[formName].validate((valid) => {
