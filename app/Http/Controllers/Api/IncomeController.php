@@ -63,7 +63,7 @@ class IncomeController extends Controller
      */
     public function show($id)
     {
-        /** @var Income $incomes */
+        /** @var Income $income */
         $income = Income::query()->where('user_id', Auth::id())->find($id);
 
         return response()->json(['data' => $income]);
