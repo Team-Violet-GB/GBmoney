@@ -83,6 +83,10 @@ class ExpenseController extends Controller
         // Заполняем объект данными из запроса.
         $expense->name = $request->name;
         $expense->icon_id = $request->icon_id;
+        if(isset($request->max_limit)) {
+            $expense->max_limit = $request->max_limit;
+        }
+
 
         // Сохраняем измененный объект расходов.
         $expense->save();
