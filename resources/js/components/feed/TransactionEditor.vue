@@ -5,35 +5,13 @@
                 <el-form :model="editorData.edata" ref="editorForm" :rules="rules" label-position="right"
                          label-width=" 5px" size="small">
                     <el-row>
-                        <el-col :span="22">
+                        <el-col :span="24">
                             <el-row>
-                                <el-col :span="10">
-                                    <div class="editor-pointers">
-                                        <el-form-item>
-                                            <el-date-picker type="date"
-                                                            firstDayOfWeek="1"
-                                                            format="dd.MM.yyyy"
-                                                            value-format="yyyy-MM-dd"
-                                                            v-model="editorData.edata.date"
-                                                            style="margin-top: 0;font-size: 1em; width: 200px">
-                                            </el-date-picker>
-                                        </el-form-item>
-                                        <el-form-item prop="amount">
-                                            <el-input type="number" class="right-sum"
-                                                      v-model.number="editorData.edata.amount"
-                                                      style="margin-top: 0; font-size: 1em; width: 200px"
-                                            ><strong slot="suffix">₽&nbsp;&nbsp;&nbsp;</strong></el-input>
-                                        </el-form-item>
-                                    </div>
-                                </el-col>
-                            </el-row>
-
-                            <el-row>
-                                <el-col :span="16">
+                                <el-col :span="24">
                                     <div class="editor-pointers">
                                         <el-form-item>
                                             <el-select
-                                                style="margin-top: 0; margin-right: 2px; font-size: 1em; width: 200px"
+                                                style="margin-top: 0; font-size: 1em; width: 200px"
                                                 v-if="typeData(editorData.edata.type).typeDescription === 'Доход'"
                                                 v-model="editorData.edata.income_id">
                                                 <el-option v-for="income in incomes" :key="income.id"
@@ -42,13 +20,24 @@
                                                 </el-option>
                                             </el-select>
                                             <el-select v-else
-                                                       style="margin-top: 0; margin-right: 2px; font-size: 1em; width: 200px"
+                                                       style="margin-top: 0; font-size: 1em; width: 200px"
                                                        v-model="editorData.edata.wallet_id_from">
                                                 <el-option v-for="wallet in wallets" :key="wallet.id"
                                                            :label="wallet.name"
                                                            :value="wallet.id" class="select_option">
                                                 </el-option>
-                                            </el-select>
+                                            </el-select>&nbsp;&nbsp;<i class="el-icon-d-arrow-right"></i>
+                                            </el-form-item>
+                                            <el-form-item prop="amount">
+                                                <el-input type="number" class="right-sum"
+                                                          v-model.number="editorData.edata.amount"
+                                                          style="margin-top: 0; font-size: 1em; width: 200px"
+                                                ><strong slot="suffix">₽&nbsp;&nbsp;&nbsp;</strong></el-input>
+                                                &nbsp;<i class="el-icon-d-arrow-right"></i>
+                                            </el-form-item>
+
+
+                                        <el-form-item>
                                             <el-select class="selector"
                                                        v-if="typeData(editorData.edata.type).typeDescription === 'Доход'"
                                                        v-model="editorData.edata.wallet_id_to">
@@ -86,20 +75,29 @@
                             </el-row>
 
                             <el-row>
-                                <el-col :span="16">
-                                    <el-form-item prop="comment">
-                                        <el-input v-model="editorData.edata.comment" clearable placeholder="Коментарий"
-                                                  maxlength="100" show-word-limit></el-input>
-                                    </el-form-item>
-                                </el-col>
+                                    <div class="editor-pointers">
+                                        <el-form-item>
+                                    <el-date-picker type="date"
+                                                    firstDayOfWeek="1"
+                                                    format="dd.MM.yyyy"
+                                                    value-format="yyyy-MM-dd"
+                                                    v-model="editorData.edata.date"
+                                                    style="margin-top: 0;font-size: 1em; width: 200px">
+                                    </el-date-picker>
+                                            </el-form-item>
+                                        <el-form-item class="editor-comment">
+                                            <el-input v-model="editorData.edata.comment" clearable placeholder="Коментарий"
+                                                      maxlength="100" show-word-limit></el-input>
+                                        </el-form-item>
+                                    </div>
                             </el-row>
                             <el-row :gutter="10">
                                 <el-col :span="6">
                                     <div class="button-group">
-                                        <el-button @click="updateTransaction('editorForm')" type="success" size="small"
+                                        <el-button @click="updateTransaction('editorForm')" type="success" size="mini"
                                                    icon="el-icon-check"></el-button>
                                         <el-button @click="deleteTransaction(editorData)" type="danger"
-                                                   size="small"
+                                                   size="mini"
                                                    icon="el-icon-delete"></el-button>
                                     </div>
                                 </el-col>
@@ -125,10 +123,7 @@
                 rules: {
                     amount: [
                         {required: true, message: 'Ну, хоть немношко!', trigger: 'blur'},
-                    ],
-                    // comment: [
-                    //     {max: 40, message: 'Хватит писать!', trigger: 'change'}
-                    // ]
+                    ]
                 }
             }
         },
@@ -201,10 +196,10 @@
 
             },
             deleteTransaction() {
-                this.$confirm('Подтверждение удаления транзакции', 'Внимание!', {
+                this.$confirm('Подтверждение удаления транзакции', `Транзакция от ${new Date(this.editorData.data.date).toLocaleDateString()}`, {
                     confirmButtonText: 'Удалить',
                     confirmButtonClass: 'danger',
-                    showCancelButton: true,
+                    showCancelButton: false,
                     iconClass: 'el-icon-delete',
                     type: 'warning',
                 }).then(() => {
@@ -243,17 +238,20 @@
         background-color: #3d3e48;
         border-radius: 2px;
         margin-top: 5px;
-        margin-bottom: 7px;
         margin-left: 4px;
         margin-right: 4px;
         padding: 15px 17px 1px;
-        box-shadow: 0 2px 3px rgba(255, 255, 255, 0.4), 0 0 7px rgba(255, 255, 255, 0.07);
     }
 
     .editor-pointers {
         display: flex;
         justify-content: flex-start;
         margin-bottom: -14px;
+    }
+
+    .editor-comment {
+        margin-left: 21px;
+        width: 633px;
     }
 
     .selector {
@@ -277,7 +275,8 @@
     .button-group {
         width: 100px;
         display: flex;
-        margin-left: 10px;
+        margin-top: 15px;
+        margin-left: 5px;
         margin-bottom: 15px;
     }
 </style>
