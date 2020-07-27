@@ -3,7 +3,7 @@
         <!--        разметка и поведение для ленты-->
         <div ref="div" v-if="getEditable" class="tran-wrapper" @click="edit($event)" :id="transaction.data.id">
             <el-card>
-                <el-row :gutter="10" :class="{edit: active}" class="tran-row-data">
+                <el-row :gutter="10" class="tran-row-data">
                     <el-col :span="3">
                         <div>{{ from.name }}</div>
                     </el-col>

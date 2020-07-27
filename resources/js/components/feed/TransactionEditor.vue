@@ -5,78 +5,76 @@
                 <el-form :model="editorData.edata" ref="editorForm" :rules="rules" label-position="right"
                          label-width=" 5px" size="small">
                     <el-row>
-                        <el-col :span="24">
-                            <el-row>
-                                <el-col :span="24">
-                                    <div class="editor-pointers">
-                                        <el-form-item>
-                                            <el-select
-                                                style="margin-top: 0; font-size: 1em; width: 200px"
-                                                v-if="typeData(editorData.edata.type).typeDescription === 'Доход'"
-                                                v-model="editorData.edata.income_id">
-                                                <el-option v-for="income in incomes" :key="income.id"
-                                                           :label="income.name"
-                                                           :value="income.id" class="select_option">
-                                                </el-option>
-                                            </el-select>
-                                            <el-select v-else
-                                                       style="margin-top: 0; font-size: 1em; width: 200px"
-                                                       v-model="editorData.edata.wallet_id_from">
-                                                <el-option v-for="wallet in wallets" :key="wallet.id"
-                                                           :label="wallet.name"
-                                                           :value="wallet.id" class="select_option">
-                                                </el-option>
-                                            </el-select>&nbsp;&nbsp;<i class="el-icon-d-arrow-right"></i>
-                                            </el-form-item>
-                                            <el-form-item prop="amount">
-                                                <el-input type="number" class="right-sum"
-                                                          v-model.number="editorData.edata.amount"
-                                                          style="margin-top: 0; font-size: 1em; width: 200px"
-                                                ><strong slot="suffix">₽&nbsp;&nbsp;&nbsp;</strong></el-input>
-                                                &nbsp;<i class="el-icon-d-arrow-right"></i>
-                                            </el-form-item>
 
+<!--                        первая сторока редактора-->
+                        <el-row>
+                            <div class="editor-pointers">
+                                <el-form-item>
+                                    <el-select
+                                        style="margin-top: 0; font-size: 1em; width: 200px"
+                                        v-if="typeData(editorData.edata.type).typeDescription === 'Доход'"
+                                        v-model="editorData.edata.income_id">
+                                        <el-option v-for="income in incomes" :key="income.id"
+                                                   :label="income.name"
+                                                   :value="income.id" class="select_option">
+                                        </el-option>
+                                    </el-select>
+                                    <el-select v-else
+                                               style="margin-top: 0; font-size: 1em; width: 200px"
+                                               v-model="editorData.edata.wallet_id_from">
+                                        <el-option v-for="wallet in wallets" :key="wallet.id"
+                                                   :label="wallet.name"
+                                                   :value="wallet.id" class="select_option">
+                                        </el-option>
+                                    </el-select>&nbsp;&nbsp;<i class="el-icon-d-arrow-right"></i>
+                                </el-form-item>
+                                <el-form-item prop="amount">
+                                    <el-input type="number" class="right-sum"
+                                              v-model.number="editorData.edata.amount"
+                                              style="margin-top: 0; font-size: 1em; width: 200px"
+                                    ><strong slot="suffix">₽&nbsp;&nbsp;&nbsp;</strong></el-input>
+                                    &nbsp;<i class="el-icon-d-arrow-right"></i>
+                                </el-form-item>
+                                <el-form-item>
+                                    <el-select class="selector"
+                                               v-if="typeData(editorData.edata.type).typeDescription === 'Доход'"
+                                               v-model="editorData.edata.wallet_id_to">
+                                        <el-option v-for="wallet in wallets" :key="wallet.id"
+                                                   :label="wallet.name" :value="wallet.id"
+                                                   class="select_option">
+                                        </el-option>
+                                    </el-select>
+                                    <el-select @select="prepareCurrentTags" class="selector"
+                                               v-if="typeData(editorData.edata.type).typeDescription === 'Расход'"
+                                               v-model="editorData.edata.expense_id">
+                                        <el-option v-for="expense in expenses" :key="expense.id"
+                                                   :label="expense.name" :value="expense.id"
+                                                   class="select_option">
+                                        </el-option>
+                                    </el-select>
+                                    <el-select class="selector"
+                                               v-if="typeData(editorData.edata.type).typeDescription === 'Расход'"
+                                               v-model="editorData.edata.tag_id">
+                                        <el-option v-for="tag in currentTags" :key="tag.id"
+                                                   :label="tag.name" :value="tag.id" class="select_option">
+                                        </el-option>
+                                    </el-select>
+                                    <el-select class="selector"
+                                               v-if="typeData(editorData.edata.type).typeDescription === 'Перевод'"
+                                               v-model="editorData.edata.wallet_id_to">
+                                        <el-option v-for="wallet in wallets" :key="wallet.id"
+                                                   :label="wallet.name" :value="wallet.id"
+                                                   class="select_option">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </div>
+                        </el-row>
 
-                                        <el-form-item>
-                                            <el-select class="selector"
-                                                       v-if="typeData(editorData.edata.type).typeDescription === 'Доход'"
-                                                       v-model="editorData.edata.wallet_id_to">
-                                                <el-option v-for="wallet in wallets" :key="wallet.id"
-                                                           :label="wallet.name" :value="wallet.id"
-                                                           class="select_option">
-                                                </el-option>
-                                            </el-select>
-                                            <el-select @select="prepareCurrentTags" class="selector"
-                                                       v-if="typeData(editorData.edata.type).typeDescription === 'Расход'"
-                                                       v-model="editorData.edata.expense_id">
-                                                <el-option v-for="expense in expenses" :key="expense.id"
-                                                           :label="expense.name" :value="expense.id"
-                                                           class="select_option">
-                                                </el-option>
-                                            </el-select>
-                                            <el-select class="selector"
-                                                       v-if="typeData(editorData.edata.type).typeDescription === 'Расход'"
-                                                       v-model="editorData.edata.tag_id">
-                                                <el-option v-for="tag in currentTags" :key="tag.id"
-                                                           :label="tag.name" :value="tag.id" class="select_option">
-                                                </el-option>
-                                            </el-select>
-                                            <el-select class="selector"
-                                                       v-if="typeData(editorData.edata.type).typeDescription === 'Перевод'"
-                                                       v-model="editorData.edata.wallet_id_to">
-                                                <el-option v-for="wallet in wallets" :key="wallet.id"
-                                                           :label="wallet.name" :value="wallet.id"
-                                                           class="select_option">
-                                                </el-option>
-                                            </el-select>
-                                        </el-form-item>
-                                    </div>
-                                </el-col>
-                            </el-row>
-
-                            <el-row>
-                                    <div class="editor-pointers">
-                                        <el-form-item>
+<!--                        вторая строка редактора-->
+                        <el-row>
+                            <div class="editor-pointers">
+                                <el-form-item>
                                     <el-date-picker type="date"
                                                     firstDayOfWeek="1"
                                                     format="dd.MM.yyyy"
@@ -84,25 +82,27 @@
                                                     v-model="editorData.edata.date"
                                                     style="margin-top: 0;font-size: 1em; width: 200px">
                                     </el-date-picker>
-                                            </el-form-item>
-                                        <el-form-item class="editor-comment">
-                                            <el-input v-model="editorData.edata.comment" clearable placeholder="Коментарий"
-                                                      maxlength="100" show-word-limit></el-input>
-                                        </el-form-item>
-                                    </div>
-                            </el-row>
-                            <el-row :gutter="10">
-                                <el-col :span="6">
-                                    <div class="button-group">
-                                        <el-button @click="updateTransaction('editorForm')" type="success" size="mini"
-                                                   icon="el-icon-check"></el-button>
-                                        <el-button @click="deleteTransaction(editorData)" type="danger"
-                                                   size="mini"
-                                                   icon="el-icon-delete"></el-button>
-                                    </div>
-                                </el-col>
-                            </el-row>
-                        </el-col>
+                                </el-form-item>
+                                <el-form-item :class="{comment_long: editorData.edata.type == 3 }"
+                                              class="comment_short">
+                                    <el-input v-model="editorData.edata.comment" clearable placeholder="Коментарий"
+                                              maxlength="100" show-word-limit></el-input>
+                                </el-form-item>
+                            </div>
+                        </el-row>
+
+<!--                        кнопки-->
+                        <el-row :gutter="10">
+                            <el-col :span="6">
+                                <div class="button-group">
+                                    <el-button @click="updateTransaction('editorForm')" type="success" size="mini"
+                                               icon="el-icon-check"></el-button>
+                                    <el-button @click="deleteTransaction(editorData)" type="danger"
+                                               size="mini"
+                                               icon="el-icon-delete"></el-button>
+                                </div>
+                            </el-col>
+                        </el-row>
                     </el-row>
                 </el-form>
             </div>
@@ -247,9 +247,15 @@
         display: flex;
         justify-content: flex-start;
         margin-bottom: -14px;
+        width: 870px;
     }
 
-    .editor-comment {
+    .comment_short {
+        margin-left: 21px;
+        width: 430px;
+    }
+
+    .comment_long {
         margin-left: 21px;
         width: 633px;
     }
