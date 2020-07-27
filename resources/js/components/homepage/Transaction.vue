@@ -59,7 +59,7 @@
               v-model="transaction.comment">
             </el-input>
             <!-- Кнопка Записать -->
-            <el-button class="cstm-create-button cstm-mrgn-top-20" type="success" @click="checkTransaction">Записать</el-button>
+            <el-button v-if="!isAddingTag && !isEditingTag" class="cstm-create-button cstm-mrgn-top-20" type="success" @click="checkTransaction">Записать</el-button>
           </div>
         </el-drawer>
     </div>
@@ -134,6 +134,8 @@ import LoginVue from '../../views/Login.vue';
       
       handleClose() {
         this.$emit('closeCreateWindow')
+        this.isAddingTag = false
+        this.isEditingTag = false
       },
       
       checkForm() {
@@ -154,17 +156,6 @@ import LoginVue from '../../views/Login.vue';
       changeTags(id){
         if (id) this.transaction.tag = id
         else this.transaction.tag = null
-      },
-
-      MessageError(message) {
-        this.$message.error(message);
-      },
-
-      MessageSuccess(message) {
-        this.$message({
-          message: message,
-          type: 'success'
-        });
       },
 
       addTag() {
@@ -216,13 +207,11 @@ import LoginVue from '../../views/Login.vue';
                     return response.data.data.id
                 }
             })
-            .then((id) => {
+            .then(id => {
               this.transaction.tag = id
               this.isAddingTag  = false
             })
-            .catch((error) => {
-              this.MessageError(error.response.data.errors.name[0])
-            })
+            .catch(errors => this.MessageArrayErrors(errors.response.data.errors.name))
 
           } else if (this.isEditingTag) {
             this.axios.put(`api/tags/${this.transaction.tag}`, {
@@ -237,9 +226,7 @@ import LoginVue from '../../views/Login.vue';
                     this.isEditingTag  = false
                 }
             })
-            .catch((error) => {
-              this.MessageError(error.response.data.errors.name[0])
-            })
+            .catch(error => this.MessageError(error.response.data.errors.name))
           }
         } else return false
       },
@@ -256,15 +243,8 @@ import LoginVue from '../../views/Login.vue';
       },
 
       checkTransaction() {
-        if (this.checkForm()) {
-          this.sendTransaction()
-        } else {
-           this.errors.forEach((error, i) => {
-              setTimeout(() => {
-                  this.MessageError(error);
-              }, 100 * ++i)
-            });
-        }
+        if (this.checkForm()) this.sendTransaction()
+        else this.MessageArrayErrors(this.errors)
       },
 
       sendTransaction() {
@@ -300,6 +280,25 @@ import LoginVue from '../../views/Login.vue';
             var nameTo = this.expenses[response.expense_id].name
           }
           return {nameFrom, nameTo}
+      },
+
+      MessageError(message) {
+        this.$message.error(message);
+      },
+
+      MessageArrayErrors(errors) {
+        errors.forEach((error, i) => {
+          setTimeout(() => {
+              this.$message.error(error);
+          }, 100 * ++i)
+        });
+      },
+
+      MessageSuccess(message) {
+        this.$message({
+          message: message,
+          type: 'success'
+        });
       },
     },
   };

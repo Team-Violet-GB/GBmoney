@@ -97,15 +97,8 @@
                         this.$router.push('/login')
                     })
                     .catch((error) => {
-                        console.log(error)
                         var errors = error.response.data.errors
-                        for (var err in errors) {
-                            errors[err].forEach((e, i) => {
-                                setTimeout(() => {
-                                    this.MessageError(e)
-                                }, 100 * ++i)
-                            });
-                        }
+                        for (var err in errors) this.MessageArrayErrors(errors[err])
                     })
                 } else {
                     this.MessageError('Проверьте правильность заполнения полей')
@@ -123,6 +116,15 @@
                 type: 'success'
             })
         },
+
+        MessageArrayErrors(errors) {
+            errors.forEach((error, i) => {
+            setTimeout(() => {
+                this.$message.error(error);
+            }, 100 * ++i)
+            });
+        },
+
     }
   }
 </script>
