@@ -32,7 +32,6 @@ export default {
                     state.commit('clearUserData')
                 })
                 .catch((error) => {
-                    console.log(error)
                     data.this.$message.error(error.response.data.errors)
                 })
         }

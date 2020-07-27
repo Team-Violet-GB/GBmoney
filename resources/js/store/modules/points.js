@@ -24,13 +24,11 @@ export default {
             })
         },
         fetchTags({ commit }) {
-            const tags = [
-                { id: 1, name: "Подкатегория1", expense_id: 2 },
-                { id: 2, name: "Подкатегория2", expense_id: 2 },
-                { id: 3, name: "Подкатегория3", expense_id: 4 },
-                { id: 4, name: "Подкатегория4", expense_id: 4 }
-            ]
-            commit('updateTags', tags)
+            axios.get('/api/tags')
+            .then(response => {
+                const tags = response.data.data
+                commit('updateTags', tags)
+            })
         },
     },
     mutations: {
