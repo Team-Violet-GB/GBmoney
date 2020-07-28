@@ -66,7 +66,6 @@
                 'getErrorStatus',
                 'getErrorInfo',
                 'getPage',
-                'getDisablePagination',
                 'getEditable',
                 'getTotal'
             ]),

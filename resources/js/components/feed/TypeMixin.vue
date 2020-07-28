@@ -47,8 +47,6 @@
                         data.toName = this.expenses[data.toId].name
                         data.tagId = transaction.tag_id
                         data.tagName = data.tagId !== null ? this.tags[data.tagId].name : ''
-                        data.expenseIdOfTag = data.tagId !== null ? this.tags[data.tagId].expense_id : null
-                        data.expenseNameOfTag = data.tagId !== null ? this.tags[data.tagId].name : ''
                         data.color = 'cstm-red'
                         data.symbol = '-'
                     }

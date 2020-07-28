@@ -3,7 +3,7 @@
     <!-- Модальное окно  -->
     <Transaction
       :newTransaction="newTransaction"
-      @closeCreateWindow="newTransaction.state_window = false"  
+      @closeCreateWindow="newTransaction.state_window = false"
     />
     <!-- ДОХОДЫ -->
     <div class="cstm-box-card">
@@ -60,7 +60,7 @@
             </drop>
           <div class="cstm-money-point cstm-yellow">{{ point.amount }} &#8381;</div>
           <i class="el-icon-edit cstm-edit"></i>
-        </div> 
+        </div>
         <Addbutton :key="'add'" />
       </transition-group>
     </div>
@@ -163,7 +163,7 @@
                     toID: toID,
                     type: (event.data.type == 'income') ? 1 : 2,
                     tag: null,
-                    date: this.dateNow(), 
+                    date: this.dateNow(),
                     amount: null,
                     comment: null,
                 }
@@ -175,7 +175,7 @@
                     toID: Number(event.top.$el.parentElement.id),
                     type: 3,
                     tag: null,
-                    date: this.dateNow(), 
+                    date: this.dateNow(),
                     amount: null,
                     comment: null,
                 }
@@ -199,7 +199,7 @@
   color: #ffffff;
 }
 .cstm-box-card {
-  border-radius: 0%;
+  border-radius: 0;
   border: none;
   margin-bottom: 30px;
 }
@@ -300,7 +300,7 @@
   filter: brightness(130%);
   transition: 0.15s;
 }
-  
+
 /* элементы, НЕдоступные для транзакции */
 .drop-forbidden button {
   filter: brightness(60%);
