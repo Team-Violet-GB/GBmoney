@@ -8,8 +8,8 @@
                     <div>{{ getLocalDateString(index) }}</div>
                 </el-col>
                 <el-col :span="10">
-                    <div v-if="groupSumCalc(transactionGroup) != 0" class="tran-group-header-sum">
-                        {{ groupSumCalc(transactionGroup) }} &#8381
+                    <div class="tran-group-header-sum" :class="groupSumCalc(transactionGroup).color">
+                        {{ groupSumCalc(transactionGroup).symbol }}{{ groupSumCalc(transactionGroup).sum }} &#8381;
                     </div>
                 </el-col>
             </el-row>
@@ -105,7 +105,9 @@
                 }
                 sum = Math.round(sum) * 100;
                 sum = sum / 100
-                return sum.toFixed(0);
+                let color = (sum > 0)? 'cstm-green' : (sum < 0)? 'cstm-red': 'cstm-yellow'
+                let symbol = (sum > 0)? '+' : ''
+                return {sum: sum.toFixed(0), color, symbol };
             },
             paginate(page) {
                 this.setPage(page);
@@ -143,15 +145,14 @@
 
     .tran-group-header {
         color: #b3fb2acf;
-        font-size: large;
+        font-size: 20px;
         font-weight: 500;
         padding-left: 5px;
     }
 
     .tran-group-header-sum {
         text-align: right;
-        color: #b3fb2acf;
-        font-size: large;
+        font-size: 20px;
         font-weight: 500;
         padding-right: 5px;
         padding-top: 4px;
@@ -161,4 +162,15 @@
         display: flex;
         justify-content: center;
     }
+
+    .cstm-yellow {
+    color: #e6a23c;
+    }
+    .cstm-green {
+    color: #67c23a;
+    }
+    .cstm-red {
+    color: #f56c6c;
+    }
+    
 </style>

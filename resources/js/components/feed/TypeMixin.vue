@@ -21,6 +21,8 @@
                         data.fromName = this.incomes[data.fromId].name
                         data.toId = transaction.wallet_id_to
                         data.toName = this.wallets[data.toId].name
+                        data.color = 'cstm-green'
+                        data.symbol = '+'
                     }
                         break;
 
@@ -31,6 +33,8 @@
                         data.fromName = this.wallets[data.fromId].name
                         data.toId = transaction.wallet_id_to
                         data.toName = this.wallets[data.toId].name
+                        data.color = 'cstm-yellow'
+                        data.symbol = ''
                     }
                         break;
 
@@ -43,6 +47,8 @@
                         data.toName = this.expenses[data.toId].name
                         data.tagId = transaction.tag_id
                         data.tagName = data.tagId !== null ? this.tags[data.tagId].name : ''
+                        data.color = 'cstm-red'
+                        data.symbol = '-'
                     }
                         break;
                 }
