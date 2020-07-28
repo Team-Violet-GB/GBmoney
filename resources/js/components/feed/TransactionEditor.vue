@@ -210,6 +210,7 @@
                             })
                             .then(response => {
                                 if (response.status === 200) {
+                                    this.editorData.isEdit = false
                                     this.fetchTransactions()
                                     this.setEditorShowStatus(false)
                                 }
