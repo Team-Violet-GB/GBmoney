@@ -11,7 +11,7 @@ import store from "./store"
 import VueCharts from 'vue-chartjs'
 
 Vue.use(VueRouter)
-Vue.use(ElementUI, { locale })
+Vue.use(ElementUI, {locale})
 Vue.use(VueAxios, axios)
 Vue.use(VueCharts)
 
@@ -19,7 +19,7 @@ import App from './components/App'
 
 const token = localStorage.getItem('user-token')
 if (token) {
-  axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 }
 
 new Vue({

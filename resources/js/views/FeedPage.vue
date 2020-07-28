@@ -1,6 +1,6 @@
 <template>
     <div>
-<!--        <div class="header">Лента транзакций</div>-->
+        <!--        <div class="header">Лента транзакций</div>-->
         <el-alert
             v-show="getErrorStatus"
             :title="getErrorInfo"
@@ -15,6 +15,7 @@
 <script>
     import {mapActions, mapGetters, mapMutations} from 'vuex';
     import feed from "../components/feed/Feed";
+
     export default {
         name: "FeedPage",
         components: {

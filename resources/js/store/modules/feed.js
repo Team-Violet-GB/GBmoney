@@ -13,14 +13,8 @@ export default {
             }
             axios.get('/api/transactions', {params: params, headers: headers})
                 .then(response => {
-                    // if (Object.keys(response.data.data).length === 0) {
-                    //     this.setErrorInfo('Транзакций пока нет')
-                    //     this.setErrorStatus(true)
-                    // } else {
                         commit('setTotal', response.data.meta.total);
                         commit('setTransactions', response.data.data);
-                    // }
-
                 })
                 .catch(error => {
                     commit('setErrorStatus', true);

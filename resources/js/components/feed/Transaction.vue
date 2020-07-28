@@ -68,10 +68,6 @@
             }
         },
         computed: {
-            // editorData() {
-            //     this.transaction.edata = Object.assign({}, this.transaction.data)
-            //     return this.transaction
-            // },
             ...mapGetters([
                 'wallets',
                 'incomes',
@@ -81,7 +77,7 @@
                 'getErrorStatus',
                 'getErrorInfo',
                 'getEditable',
-                'getEditorData',
+                // 'getEditorData',
                 'getTransactions'
             ]),
             from() {
@@ -123,10 +119,8 @@
         },
         methods: {
             openEditor() {
-                // this.setEditorData(this.transaction);
                 this.transactionEditorId = this.transaction.data.id;
-                // this.setEditorShowStatus(true);
-
+                this.setEditorShowStatus(true);
                 this.transaction.edata = Object.assign({}, this.transaction.data)
                 this.transaction.isEdit = !this.transaction.isEdit
                 this.editorData = this.transaction
