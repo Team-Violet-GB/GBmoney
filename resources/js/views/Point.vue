@@ -5,7 +5,7 @@
         <div class="grid-content bg-purple-dark">
           <LineChart
             :chartData="lineChartData"
-            :height="100"
+            :height="70"
             :options="{responsive: true, maintainAspectRation: true}"
           ></LineChart>
         </div>
@@ -16,13 +16,14 @@
         <div class="grid-content bg-purple">
           <PieChart
             :chartData="pieChartData"
-            :height="100"
             :options="{responsive: true, maintainAspectRation: true}"
           ></PieChart>
         </div>
       </el-col>
       <el-col :span="12">
-        <div class="grid-content bg-purple-light"></div>
+        <div class="grid-content bg-purple-light">
+          <Feed />
+        </div>
       </el-col>
     </el-row>
   </div>
@@ -31,6 +32,7 @@
 <script>
 import LineChart from "../components/chart/LineChart";
 import PieChart from "../components/chart/PieChart";
+import Feed from "../components/feed/Feed";
 
 export default {
   data() {
@@ -66,6 +68,7 @@ export default {
   components: {
     LineChart,
     PieChart,
+    Feed
   },
 };
 </script>
