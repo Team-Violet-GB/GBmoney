@@ -1,3 +1,11 @@
+.el-card {
+    border-radius: 0 !important;
+}
+
+.el-card.is-always-shadow {
+    box-shadow: none !important;
+}
+
 .el-card__header {
     background-color: #5F6068;
     padding: 2px !important;
@@ -36,4 +44,17 @@
 
 .right-sum .el-input__inner{
     text-align: right;
+}
+
+.el-form-item--small .el-form-item__error {
+    color: #ffffff;
+    background-color: #f56c6c;
+    padding: 10px 5px 5px;
+    font-weight: 500;
+    z-index: 9999;
+    width: 190px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
+
 }

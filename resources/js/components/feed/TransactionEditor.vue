@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-collapse-transition>
-            <div v-if="getEditorShowStatus & transactionEditorId === getEditorData.edata.id" class="editor">
+            <div v-if="editorData.isEdit" class="editor">
                 <el-form :model="editorData.edata" ref="editorForm" :rules="rules" label-position="right"
                          label-width=" 5px" size="small">
                     <el-row>
@@ -32,6 +32,7 @@
                                     <el-input type="number" class="right-sum"
                                               v-model.number="editorData.edata.amount"
                                               style="margin-top: 0; font-size: 1em; width: 200px"
+
                                     ><strong slot="suffix">₽&nbsp;&nbsp;&nbsp;</strong></el-input>
                                     &nbsp;<i class="el-icon-d-arrow-right"></i>
                                 </el-form-item>
@@ -97,9 +98,24 @@
                                 <div class="button-group">
                                     <el-button @click="updateTransaction('editorForm')" type="success" size="mini"
                                                icon="el-icon-check"></el-button>
-                                    <el-button @click="deleteTransaction(editorData)" type="danger"
-                                               size="mini"
-                                               icon="el-icon-delete"></el-button>
+                                    <el-popover
+                                        placement="top"
+                                        width="170">
+                                        <p style="margin-top: 0; font-size: large; font-weight: bold">Подтверждение!</p>
+                                        <p style="margin-bottom: 5px">Транзакция от <strong>{{ new
+                                            Date(this.editorData.data.date).toLocaleDateString()
+                                            }}</strong></p>
+                                        <p style="text-align: right; margin-top: 0">{{ this.editorData.data.amount }} ₽</p>
+                                        <div style="text-align: right; margin: 0">
+                                            <el-button style="margin-top: 10px" type="danger" size="mini"
+                                                       @click="deleteTransaction(editorData)">
+                                                Удалить
+                                            </el-button>
+                                        </div>
+                                        <el-button slot="reference" type="danger"
+                                                   size="mini"
+                                                   icon="el-icon-delete"></el-button>
+                                    </el-popover>
                                 </div>
                             </el-col>
                         </el-row>
@@ -119,12 +135,23 @@
         name: "transactionEditor",
         mixins: [type],
         data() {
+            var checkAmount = (rule, value, callback) => {
+                if (!value) {
+                    return callback(new Error('Введите цифры...'));
+                }
+                if (value > 999999999999.99) {
+                    callback(new Error('Не более 14 цифр!'));
+                } else {
+                    callback();
+                }
+            };
             return {
                 rules: {
                     amount: [
-                        {required: true, message: 'Ну, хоть немношко!', trigger: 'blur'},
+                        {validator: checkAmount, trigger: 'blur'}
                     ]
-                }
+                },
+
             }
         },
         props: {
@@ -202,39 +229,24 @@
 
             },
             deleteTransaction() {
-                this.$confirm('Подтверждение удаления?',
-                    `Транзакция от ${new Date(this.editorData.data.date).toLocaleDateString()}  (${this.editorData.data.amount})`, {
-                    confirmButtonText: 'Удалить',
-                    showCancelButton: false,
-                    iconClass: 'el-icon-delete',
-                    type: 'warning',
-                    closeOnClickModal: true,
-                    customClass: 'feed-msg-box-title feed-msg-box feed-msg-box-content'
-                }).then(() => {
-                    axios.delete(`/api/transactions/${this.editorData.edata.id}`)
-                        .then(response => {
-                            if (response.status === 200) {
-                                this.fetchTransactions()
-                                this.$message({
-                                    type: 'info',
-                                    message: `Транзакции от ${new Date(this.editorData.data.date).toLocaleDateString()} была удалена`
-                                });
-                            }
-                        })
-                        .catch(error => {
+                axios.delete(`/api/transactions/${this.editorData.edata.id}`)
+                    .then(response => {
+                        if (response.status === 200) {
+                            this.fetchTransactions()
                             this.$message({
-                                showClose: true,
-                                message: `Попытка удаления транзакции от ${new Date(this.editorData.data.date).toLocaleDateString()} не удалась \n ${error}`,
-                                duration: 3000,
-                                type: 'error'
+                                type: 'info',
+                                message: `Транзакции от ${new Date(this.editorData.data.date).toLocaleDateString()} была удалена`
                             });
+                        }
+                    })
+                    .catch(error => {
+                        this.$message({
+                            showClose: true,
+                            message: `Попытка удаления транзакции от ${new Date(this.editorData.data.date).toLocaleDateString()} не удалась \n ${error}`,
+                            duration: 3000,
+                            type: 'error'
                         });
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: `Отмена удаления транзакции от ${new Date(this.editorData.data.date).toLocaleDateString()}`
                     });
-                });
             }
         }
     }

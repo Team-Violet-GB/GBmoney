@@ -4,7 +4,7 @@
                      :key="transaction.id" :id="transaction.id"
                      :transaction="{transactionGroupName: transactionGroupName,
                      transactionGroupLength: transactionGroup.length,
-                     transactionIndex: index, data: transaction, edata: {}}"/>
+                     transactionIndex: index, data: transaction, edata: {},isEdit: false}"/>
     </div>
 </template>
 

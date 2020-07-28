@@ -1,8 +1,8 @@
 <template>
     <div>
         <!--        разметка и поведение для ленты-->
-        <div ref="div" v-if="getEditable" class="tran-wrapper" @click="openEditor" @dblclick="closeEditor">
-            <el-card>
+        <div ref="div" v-if="getEditable" class="tran-wrapper" @click="openEditor">
+            <el-card :class="{active: editorData.isEdit && editorData.transactionGroupLength > 1}">
                 <el-row :gutter="10" class="tran-row-data">
                     <el-col :span="3">
                         <div>{{ from.name }}</div>
@@ -36,7 +36,7 @@
 
         <!--    подключаемый по условию компонент редактора транзакций    -->
         <transactionEditor
-            v-if="getEditable && getEditorShowStatus"
+            v-if="getEditable && editorData.isEdit"
             :transactionEditorId="transactionEditorId"
             :editorData="editorData"
         />
@@ -57,7 +57,7 @@
         data() {
             return {
                 transactionEditorId: null,
-                active: false
+                editorData: {}
             }
         },
         props: {
@@ -68,10 +68,10 @@
             }
         },
         computed: {
-            editorData() {
-                this.transaction.edata = Object.assign({}, this.transaction.data)
-                return this.transaction
-            },
+            // editorData() {
+            //     this.transaction.edata = Object.assign({}, this.transaction.data)
+            //     return this.transaction
+            // },
             ...mapGetters([
                 'wallets',
                 'incomes',
@@ -123,9 +123,13 @@
         },
         methods: {
             openEditor() {
-                this.setEditorData(this.transaction);
+                // this.setEditorData(this.transaction);
                 this.transactionEditorId = this.transaction.data.id;
-                this.setEditorShowStatus(true);
+                // this.setEditorShowStatus(true);
+
+                this.transaction.edata = Object.assign({}, this.transaction.data)
+                this.transaction.isEdit = !this.transaction.isEdit
+                this.editorData = this.transaction
             },
             closeEditor() {
                 this.setEditorShowStatus(false);
@@ -151,7 +155,11 @@
     }
 
     .el-card:hover {
-        background-color: rgba(88, 89, 106, 0.54) !important;;
+        background-color: rgba(88, 89, 106, 0.54);
+    }
+
+    .active {
+        background-color: rgba(88, 89, 106, 0.30);
     }
 
     .tran-wrapper {
