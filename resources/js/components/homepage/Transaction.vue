@@ -66,10 +66,10 @@
 </template>
 
 <script>
-  import SelectCustom from "../homepage/SelectCustom"
-  import Calendar from "../homepage/Calendar"
-  import { mapGetters, mapActions } from "vuex"
-import LoginVue from '../../views/Login.vue';
+import SelectCustom from "../homepage/SelectCustom"
+import Calendar from "../homepage/Calendar"
+import { mapGetters, mapActions } from "vuex"
+import LoginVue from '../../views/Login.vue'
 
   export default {
     components: {
@@ -139,11 +139,12 @@ import LoginVue from '../../views/Login.vue';
       },
       
       checkForm() {
-        if (this.transaction.amount && this.transaction.date) return true;
         this.errors = []
         if (!this.transaction.amount) this.errors.push('Не указана сумма')
         if (!this.transaction.date) this.errors.push('Не указана дата')
-        return false;
+        if (parseFloat(this.transaction.amount) > 999999999999.99) this.errors.push('Сумма транзакции в нашем приложении ограничена максимальным пределом 999 999 999 999.99')
+        if (this.errors.length) return false;
+        return true;
       },
 
       changePointsTo(toID){
