@@ -13,8 +13,8 @@ export default {
             }
             axios.get('/api/transactions', {params: params, headers: headers})
                 .then(response => {
-                        commit('setTotal', response.data.meta.total);
-                        commit('setTransactions', response.data.data);
+                    commit('setTotal', response.data.meta.total);
+                    commit('setTransactions', response.data.data);
                 })
                 .catch(error => {
                     commit('setErrorStatus', true);
@@ -30,12 +30,6 @@ export default {
     mutations: {
         setTransactions(state, data) {
             state.transactions = data
-        },
-        setEditorShowStatus(state, data) {
-            state.editorShowStatus = data
-        },
-        setEditorData(state, data) {
-            state.editorData = data
         },
         setErrorStatus(state, data) {
             state.errorStatus = data
@@ -55,17 +49,12 @@ export default {
         setPage(state, data) {
             state.page = data
         },
-        setDisablePagination(state, data) {
-            state.disablePagination = data
-        },
         setTotal(state, data) {
             state.total = data
         }
     },
     state: {
         transactions: {},
-        editorData: '',
-        editorShowStatus: false,
         errorStatus: false,
         errorInfo: 'Список транзакций пуст',
         editable: true,
@@ -73,17 +62,10 @@ export default {
         dateTo: '',
         page: '',
         total: '',
-        disablePagination: false
     },
     getters: {
         getTransactions(state) {
             return state.transactions
-        },
-        getEditorData(state) {
-            return state.editorData
-        },
-        getEditorShowStatus(state) {
-            return state.editorShowStatus
         },
         getErrorStatus(state) {
             return state.errorStatus
@@ -102,9 +84,6 @@ export default {
         },
         getPage(state) {
             return state.page
-        },
-        getDisablePagination(state) {
-            return state.disablePagination
         },
         getTotal(state) {
             return Number(state.total)

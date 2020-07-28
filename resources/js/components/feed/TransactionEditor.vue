@@ -166,9 +166,6 @@
                 'incomes',
                 'expenses',
                 'tags',
-                'getEditorShowStatus',
-                'getEditorData',
-                'getTransactions',
                 'getPage'
             ]),
             getTagsOfExpense() {
@@ -188,8 +185,6 @@
             ]),
             ...mapMutations([
                 'setPage',
-                'setTransactions',
-                'setEditorShowStatus',
                 'setErrorStatus',
                 'setEditorData'
             ]),
@@ -213,7 +208,6 @@
                                 if (response.status === 200) {
                                     this.editorData.isEdit = false
                                     this.fetchTransactions()
-                                    this.setEditorShowStatus(false)
                                 }
                             })
                             .catch(error => {

@@ -37,7 +37,6 @@
         <!--    подключаемый по условию компонент редактора транзакций    -->
         <transactionEditor
             v-if="getEditable && editorData.isEdit"
-            :transactionEditorId="transactionEditorId"
             :editorData="editorData"
         />
     </div>
@@ -56,7 +55,6 @@
         },
         data() {
             return {
-                transactionEditorId: null,
                 editorData: {}
             }
         },
@@ -73,11 +71,9 @@
                 'incomes',
                 'expenses',
                 'tags',
-                'getEditorShowStatus',
                 'getErrorStatus',
                 'getErrorInfo',
                 'getEditable',
-                // 'getEditorData',
                 'getTransactions'
             ]),
             from() {
@@ -119,21 +115,14 @@
         },
         methods: {
             openEditor() {
-                this.transactionEditorId = this.transaction.data.id;
-                this.setEditorShowStatus(true);
                 this.transaction.edata = Object.assign({}, this.transaction.data)
                 this.transaction.isEdit = !this.transaction.isEdit
                 this.editorData = this.transaction
-            },
-            closeEditor() {
-                this.setEditorShowStatus(false);
             },
             ...mapActions([
                 'fetchTransactions'
             ]),
             ...mapMutations([
-                'setEditorShowStatus',
-                'setEditorData',
                 'setErrorStatus',
                 'setErrorInfo'
             ]),
