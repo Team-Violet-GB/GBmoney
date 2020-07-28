@@ -33,6 +33,18 @@ const routes = [
     name: 'Registration',
     meta: { layout: 'empty' },
     component: () => import('./views/Registration.vue')
+  },
+  {
+    path: '/feed',
+    name: 'Feed',
+    meta: { layout: 'main' },
+    component: () => import('./views/FeedPage.vue')
+  },
+  {
+    path: '/monthly-report',
+    name: 'monthlyReport',
+    meta: { layout: 'main' },
+    component: () => import('./components/reports/MonthlyReport.vue')
   }
 ]
 
