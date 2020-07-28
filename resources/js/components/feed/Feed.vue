@@ -9,7 +9,7 @@
                 </el-col>
                 <el-col :span="10">
                     <div v-if="groupSumCalc(transactionGroup) != 0" class="tran-group-header-sum">
-<!--                        {{ groupSumCalc(transactionGroup) }} &#8381-->
+                        {{ groupSumCalc(transactionGroup) }} &#8381
                     </div>
                 </el-col>
             </el-row>
