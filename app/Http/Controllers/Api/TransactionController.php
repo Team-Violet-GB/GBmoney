@@ -9,7 +9,6 @@ use App\Http\Resources\TransactionCollection;
 use App\Models\Transaction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
@@ -37,13 +36,15 @@ class TransactionController extends Controller
 
         $query = Transaction::query();
 
-        $query->where('user_id', Auth::id())
+        $query->select('date')
+            ->where('user_id', Auth::id())
             ->when($dataFrom, function ($query) use ($dataFrom) {
                 return $query->where('date', '>=', $dataFrom);
             })
             ->when($dataTo, function ($query) use ($dataTo) {
                 return $query->where('date', '<=', $dataTo);
             })
+            ->groupBy(['date'])
             ->orderByDesc('date');
 
         return new TransactionCollection($query->paginate(10));
