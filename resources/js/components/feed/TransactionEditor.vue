@@ -173,13 +173,12 @@
             ]),
             getTagsOfExpense() {
                 let tagsOfExpense = [];
-                tagsOfExpense.push({name: "нет", id: null});
+                tagsOfExpense.push({name: "Нет", id: null});
                 for (let tag in this.tags) {
                     if (this.tags[tag].expense_id === this.editorData.edata.expense_id) {
                         tagsOfExpense.push(this.tags[tag])
                     }
                 }
-                console.log(tagsOfExpense)
                 return tagsOfExpense
             }
         },

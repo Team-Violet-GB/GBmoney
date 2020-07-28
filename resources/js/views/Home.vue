@@ -24,10 +24,10 @@
           <div class="cstm-head-point">{{ point.name }}</div>
           <drag :data="{ id: point.id, type: 'income'}">
             <drop :accepts-data="() => false">
-              <el-button type="primary" :icon="point.icon_name" circle class="cstm-icon-point"></el-button>
+              <el-button type="success" :icon="point.icon_name" circle class="cstm-icon-point"></el-button>
             </drop>
           </drag>
-          <div class="cstm-money-point cstm-blue">{{ point.amount }} &#8381;</div>
+          <div class="cstm-money-point cstm-green">{{ point.amount }} &#8381;</div>
           <i class="el-icon-edit cstm-edit"></i>
         </div>
         <Addbutton :key="'add'" />
