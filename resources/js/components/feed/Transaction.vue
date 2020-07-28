@@ -12,8 +12,8 @@
                     </el-col>
                     <el-col :span="8"><div class="tran-comment">{{ transaction.data.comment }} &nbsp;</div></el-col>
                     <el-col :span="4">
-                        <div 
-                        :class="getTypeData(this.transaction.data).color" 
+                        <div
+                        :class="getTypeData(this.transaction.data).color"
                         style="display: flex; justify-content: flex-end">
                             {{ getTypeData(this.transaction.data).symbol}}{{ transaction.data.amount }} &#8381;
                         </div>
@@ -41,7 +41,6 @@
         <!--    подключаемый по условию компонент редактора транзакций    -->
         <transactionEditor
             v-if="getEditable && editorData.isEdit"
-            :transactionEditorId="transactionEditorId"
             :editorData="editorData"
         />
     </div>
@@ -60,9 +59,7 @@
         },
         data() {
             return {
-                transactionEditorId: null,
-                editorData: {},
-
+                editorData: {}
             }
         },
         props: {
@@ -78,11 +75,9 @@
                 'incomes',
                 'expenses',
                 'tags',
-                'getEditorShowStatus',
                 'getErrorStatus',
                 'getErrorInfo',
                 'getEditable',
-                // 'getEditorData',
                 'getTransactions'
             ]),
             from() {
@@ -124,21 +119,14 @@
         },
         methods: {
             openEditor() {
-                this.transactionEditorId = this.transaction.data.id;
-                this.setEditorShowStatus(true);
                 this.transaction.edata = Object.assign({}, this.transaction.data)
                 this.transaction.isEdit = !this.transaction.isEdit
                 this.editorData = this.transaction
-            },
-            closeEditor() {
-                this.setEditorShowStatus(false);
             },
             ...mapActions([
                 'fetchTransactions'
             ]),
             ...mapMutations([
-                'setEditorShowStatus',
-                'setEditorData',
                 'setErrorStatus',
                 'setErrorInfo'
             ]),

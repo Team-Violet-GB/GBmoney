@@ -1,10 +1,9 @@
 <template>
     <div>
         <transaction v-for="(transaction, index) in transactionGroup"
-                     :key="transaction.id" :id="transaction.id"
-                     :transaction="{transactionGroupName: transactionGroupName,
+                     :key="transaction.id" :transaction="{transactionGroupName: transactionGroupName,
                      transactionGroupLength: transactionGroup.length,
-                     transactionIndex: index, data: transaction, edata: {},isEdit: false}"/>
+                     transactionIndex: index, data: transaction, edata: {}, isEdit: false}"/>
     </div>
 </template>
 
