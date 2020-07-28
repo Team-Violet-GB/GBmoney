@@ -1,0 +1,39 @@
+.el-card__header {
+    background-color: #5F6068;
+    padding: 2px !important;
+    border: 1px solid #ffffff00 !important;
+}
+
+.el-card__body {
+    padding: 4px 5px !important;
+}
+
+.el-form-item__label {
+    color: #efefef9c !important;
+    font-weight: 500;
+}
+
+.feed-msg-box .el-message-box {
+    background-color: rgba(61, 62, 72, 0.9) !important;
+    border: 1px solid #3badec7d !important;
+}
+
+.feed-msg-box-content .el-message-box__content {
+    color: #ffffff !important;
+    font-weight: 500 !important;
+    font-size: 0.97em  !important;
+}
+
+.feed-msg-box-title .el-message-box__title {
+    color: #0dadec !important;
+    font-weight: 700 !important;
+}
+
+.el-input .el-input__count .el-input__count-inner {
+    background-color: rgba(44, 46, 56, 0) !important;
+    font-size: 15px !important;
+}
+
+.right-sum .el-input__inner{
+    text-align: right;
+}
