@@ -128,7 +128,7 @@
 
 <script>
     import type from './TypeMixin';
-    import {mapActions, mapGetters, mapMutations} from 'vuex';
+    import {mapActions, mapGetters} from 'vuex';
     import axios from "axios";
 
     export default {
@@ -137,7 +137,7 @@
         data() {
             var checkAmount = (rule, value, callback) => {
                 if (!value) {
-                    return callback(new Error('Введите цифры...'));
+                    return callback(new Error('Введите цифры ...'));
                 }
                 if (value > 999999999999.99) {
                     callback(new Error('Не более 14 цифр!'));
@@ -155,7 +155,6 @@
             }
         },
         props: {
-            transactionEditorId: '',
             editorData: {
                 type: Object
             }
@@ -165,8 +164,7 @@
                 'wallets',
                 'incomes',
                 'expenses',
-                'tags',
-                'getPage'
+                'tags'
             ]),
             getTagsOfExpense() {
                 let tagsOfExpense = [];
@@ -183,17 +181,13 @@
             ...mapActions([
                 'fetchTransactions'
             ]),
-            ...mapMutations([
-                'setPage',
-                'setErrorStatus',
-                'setEditorData'
-            ]),
             setCurrentTagOfSelectedExpense() {
                 this.editorData.edata.tag_id = null;
             },
             updateTransaction(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+                        this.editorData.isEdit = false
                         axios.put(`/api/transactions/${this.editorData.edata.id}`,
                             {
                                 from_id: this.getTypeData(this.editorData.edata).fromId,
@@ -206,7 +200,6 @@
                             })
                             .then(response => {
                                 if (response.status === 200) {
-                                    this.editorData.isEdit = false
                                     this.fetchTransactions()
                                 }
                             })
@@ -225,6 +218,7 @@
 
             },
             deleteTransaction() {
+                this.editorData.isEdit = false
                 axios.delete(`/api/transactions/${this.editorData.edata.id}`)
                     .then(response => {
                         if (response.status === 200) {

@@ -119,8 +119,8 @@
         },
         methods: {
             openEditor() {
+                this.transaction.isEdit = !this.editorData.isEdit
                 this.transaction.edata = Object.assign({}, this.transaction.data)
-                this.transaction.isEdit = !this.transaction.isEdit
                 this.editorData = this.transaction
             },
             ...mapActions([
