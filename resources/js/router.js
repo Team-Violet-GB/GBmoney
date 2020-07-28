@@ -17,6 +17,12 @@ const routes = [
     component: () => import('./views/User.vue')
   },
   {
+    path: '/point',
+    name: 'Point',
+    meta: { layout: 'main' },
+    component: () => import('./views/Point.vue')
+  },
+  {
     path: '/login',
     name: 'Login',
     meta: { layout: 'empty' },
