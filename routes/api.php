@@ -41,5 +41,7 @@ Route::middleware('auth:api')->group(function () {
         Route::apiResource('expenses', 'ExpenseController');
         // Работа с тегами.
         Route::apiResource('tags', 'TagController');
+        //Работа с кошельками.
+        Route::apiResource('wallets', 'WalletController');
     });
 });
