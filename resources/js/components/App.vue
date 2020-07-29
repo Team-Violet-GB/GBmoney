@@ -69,7 +69,7 @@ body {
 
 .cstm-main {
   @extend %cstm-color-background-dark;
-  padding: 15px 25px;
+  padding: 30px 50px;
 }
 
 .cstm-mrgn-top-20 {

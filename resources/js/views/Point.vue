@@ -94,11 +94,8 @@ export default {
 };
 </script>
 
-
 <style lang="scss" scoped>
-  .cstm-main {
-    padding: 30px 0 !important;
-  }
+
   .cstm-col-left {
     display: flex;
     flex-direction: column;
