@@ -233,5 +233,8 @@
     .el-radio-button__inner [class*=el-icon-] {
         line-height: 1.6;
     }
+    .el-select-dropdown__item:hover {
+        background-color: #3d3e48;
+    }
 
 </style>
