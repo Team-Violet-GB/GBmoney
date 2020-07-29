@@ -6,23 +6,40 @@
           <LineChart
             :chartData="lineChartData"
             :height="70"
-            :options="lineChartData.options"
           ></LineChart>
         </div>
       </el-col>
     </el-row>
     <el-row>
       <el-col :span="12">
-        <div class="grid-content bg-purple">
-          <PieChart
-            :chartData="pieChartData"
-            :options="{responsive: true, maintainAspectRation: true}"
-          ></PieChart>
+        <div class="grid-content bg-purple cstm-col-left">
+          <CalendarMonth /> 
+          <div class="cstm-pie-chart">
+            <PieChart
+              :chartData="pieChartData"
+              :height="350"
+            ></PieChart>
+          </div>
+          <el-card class="box-card">
+              <el-row  slot="header" class="clearfix tran-group-header">
+                  <el-col :span="10">{{ 'name' }}</el-col>
+                  <el-col class="cstm-percent" :span="7">{{ 'percent' }}</el-col>
+                  <el-col class="cstm-amount" :span="7">{{ 'amount' }}</el-col>
+              </el-row>
+              <el-row class="tran-row-data">
+                  <el-col :span="10">{{ 'name' }}</el-col>
+                  <el-col class="cstm-percent" :span="7">{{ 'percent' }}</el-col>
+                  <el-col class="cstm-amount" :span="7">{{ 'amount' }}</el-col>
+              </el-row>
+          </el-card>
         </div>
       </el-col>
       <el-col :span="12">
-        <div class="grid-content bg-purple-light">
-          <!-- <Feed /> -->
+        <div class="grid-content bg-purple-light cstm-feed">
+            <Feed
+                :editable="false"
+                page="1"
+            ></Feed>
         </div>
       </el-col>
     </el-row>
@@ -30,11 +47,18 @@
 </template>
 
 <script>
-import LineChart from "../components/chart/LineChart";
-import PieChart from "../components/chart/PieChart";
-import Feed from "../components/feed/Feed";
+import LineChart from "../components/chart/LineChart"
+import PieChart from "../components/chart/PieChart"
+import Feed from "../components/feed/Feed"
+import CalendarMonth from "../components/CalendarMonth" 
 
 export default {
+  components: {
+    LineChart,
+    PieChart,
+    Feed,
+    CalendarMonth,
+  },
   data() {
     return {
       lineChartData: {
@@ -52,34 +76,7 @@ export default {
         //     data: [5000, 15000, 10000, 30000],
         //   },
         ],
-        options: {
-            responsive: true, 
-            maintainAspectRation: true,
-            legend: {
-                display: false,
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        maxTicksLimit: 5,
-                        fontColor: '#ffffff'
-                    },
-                    gridLines: {
-                        color: "#4b4c55",
-                        zeroLineColor: '#e6a23c'
-                        
-                    }
-                }],
-                xAxes: [{
-                    ticks: {
-                        fontColor: '#ffffff'
-                    },
-                    gridLines: {
-                        color: "#4b4c55",
-                    }
-                }]
-            }
-        }
+
       },
 
       pieChartData: {
@@ -94,16 +91,24 @@ export default {
       },
     };
   },
-  components: {
-    LineChart,
-    PieChart,
-    Feed
-  },
 };
 </script>
 
 
 <style lang="scss" scoped>
+  .cstm-main {
+    padding: 30px 0 !important;
+  }
+  .cstm-col-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .cstm-pie-chart,
+  .cstm-feed {
+    margin-top: 20px;
+  }
+
   .cstm-blue {
     color: #0a93d1;
   }
@@ -118,5 +123,36 @@ export default {
   }
   .cstm-grey {
     color: #909399;
+  }
+  .cstm-amount {
+    text-align: right;
+    padding-right: 10px;
+  }
+  .cstm-percent {
+    text-align: center;
+  }
+
+
+  body {
+      margin: 0;
+  }
+  .el-card {
+      border: none;
+      background-color: #3D3E48;
+      color: #b682f9;
+      width: 90%;
+  }
+  .tran-group-header {
+      color: #b3fb2acf;
+      font-size: 20px;
+      font-weight: 500;
+      padding-left: 5px;
+  }
+  .tran-group-header-sum {
+      text-align: right;
+      font-size: 20px;
+      font-weight: 500;
+      padding-right: 5px;
+      padding-top: 4px;
   }
 </style>

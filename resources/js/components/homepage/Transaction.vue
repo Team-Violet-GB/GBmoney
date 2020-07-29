@@ -67,7 +67,7 @@
 
 <script>
 import SelectCustom from "../homepage/SelectCustom"
-import Calendar from "../homepage/Calendar"
+import Calendar from "../Calendar"
 import { mapGetters, mapActions } from "vuex"
 import LoginVue from '../../views/Login.vue'
 

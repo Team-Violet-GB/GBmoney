@@ -14,12 +14,13 @@
 
 <script>
     import {mapActions, mapGetters, mapMutations} from 'vuex';
-    import feed from "../components/feed/Feed";
+    import Feed from "../components/feed/Feed";
+
 
     export default {
         name: "FeedPage",
         components: {
-            feed
+            Feed,
         },
         computed: {
             ...mapGetters([
