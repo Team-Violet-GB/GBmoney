@@ -24,7 +24,7 @@
           <div class="cstm-head-point">{{ point.name }}</div>
           <drag :data="{ id: point.id, type: 'income'}">
             <drop :accepts-data="() => false">
-              <el-button type="primary" :icon="point.icon_name" circle class="cstm-icon-point"></el-button>
+              <el-button type="primary" :icon="point.icon_name" circle class="cstm-icon-point" @click="$router.push('/point')"></el-button>
             </drop>
           </drag>
           <div class="cstm-money-point cstm-blue">{{ point.amount }} &#8381;</div>
@@ -55,7 +55,7 @@
               :accepts-data="(data) => (data.type == 'income') || data.type == 'wallet'"
             >
               <drag :data="{ id: point.id, type: 'wallet'}">
-                <el-button type="warning" :icon="point.icon_name" circle class="cstm-icon-point"></el-button>
+                <el-button type="warning" :icon="point.icon_name" circle class="cstm-icon-point" @click="$router.push('/point')"></el-button>
                 </drag>
             </drop>
           <div class="cstm-money-point cstm-yellow">{{ point.amount }} &#8381;</div>
@@ -89,6 +89,7 @@
               :icon="point.icon_name"
               circle
               class="cstm-icon-point cstm-expense"
+              @click="$router.push('/point')"
             ></el-button>
           </drop>
           <div
@@ -189,6 +190,7 @@
 </script>
 
 <style lang="scss" scoped>
+
 %cstm-color-background-body {
   background-color: #3d3e48;
 }
@@ -198,6 +200,7 @@
 %cstm-color-text {
   color: #ffffff;
 }
+
 .cstm-box-card {
   border-radius: 0;
   border: none;

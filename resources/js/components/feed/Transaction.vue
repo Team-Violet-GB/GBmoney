@@ -157,8 +157,8 @@
 
     .tran-row-data {
         color: #ffffff;
-        font-size: large;
-        font-weight: 400;
+        font-size: 16px;
+        font-weight: 100;
     }
 
     .tran-comment {

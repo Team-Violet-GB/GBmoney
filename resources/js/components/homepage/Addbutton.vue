@@ -67,6 +67,7 @@
         props: ['category'],
         data() {
             return {
+                errors: [],
                 dialogVisible: false,
                 ruleForm: {
                     category: this.category,
@@ -129,9 +130,9 @@
                         this.$message.success(this.ruleForm.name + ' успешно добавлен')
                         this.isSuccessSubmit()
                     } else {
-                        if (!this.ruleForm.name) this.$message.error('Введите название')
-                        if (!this.ruleForm.choose) this.$message.error('Выберите картинку')
-                        console.log('error submit!!');
+                        if (!this.ruleForm.name) this.errors.push('Введите название')
+                        if (!this.ruleForm.choose) this.errors.push('Выберите картинку')
+                        this.MessageArrayErrors(this.errors)
                         return false;
                     }
                 });
@@ -143,7 +144,14 @@
             isSuccessSubmit () {
                 this.ruleForm.name = this.ruleForm.choose = ''
                 this.ruleForm.amount = 0
-            }
+            },
+            MessageArrayErrors(errors) {
+                errors.forEach((error, i) => {
+                setTimeout(() => {
+                    this.$message.error(error);
+                }, 100 * ++i)
+                });
+            },
         },
     };
 </script>

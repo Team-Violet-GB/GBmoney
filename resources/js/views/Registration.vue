@@ -34,7 +34,8 @@
 </template>
 
 <script>
-    import {mapMutations} from 'vuex'
+  import {mapMutations} from 'vuex'
+
   export default {
     data() {
         var accordancePass = (rule, value, callback) => {
