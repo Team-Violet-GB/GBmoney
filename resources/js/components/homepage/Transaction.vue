@@ -128,9 +128,14 @@ import LoginVue from '../../views/Login.vue'
         this.fetchTags()
     },
 
-    methods: 
-    {
-      ...mapActions(['fetchTags']),
+    methods: {
+      ...mapActions([
+        'fetchTags',
+        'fetchIncomes',
+        'fetchWallets',
+        'fetchExpenses',
+      ]),
+
       
       handleClose() {
         this.$emit('closeCreateWindow')
@@ -261,12 +266,25 @@ import LoginVue from '../../views/Login.vue'
         .then(response => {
           let pointsNames = this.getPointsNames(response.data.data)
           this.MessageSuccess('Новая транзакция на сумму ' + response.data.data.amount + ' из ' + pointsNames.nameFrom + ' в ' + pointsNames.nameTo)
+          this.getNewPoints(this.transaction.type)
           this.transaction.amount = this.transaction.comment =  null
           this.handleClose()
         })
         .catch((error) => {
           this.MessageError(error.response.data.errors) 
         })
+      },
+
+      getNewPoints(type) {
+        if (type == 1) {
+          this.fetchIncomes()
+          this.fetchWallets()
+        } else if (type == 3) {
+          this.fetchWallets()
+          this.fetchExpenses()
+        } else {
+          this.fetchWallets()
+        }
       },
 
       getPointsNames(response) {
