@@ -79,7 +79,7 @@ class ExpenseController extends Controller
     public function update(ExpenseFormRequest $request, $id)
     {
         /** @var Expense $expense */
-        $expense = Expense::query()->find($id);
+        $expense = Expense::query()->where('user_id', Auth::id())->find($id);
 
         // Заполняем объект данными из запроса.
         $expense->name = $request->name;
@@ -102,7 +102,7 @@ class ExpenseController extends Controller
     public function destroy($id)
     {
         /** @var Expense $expense */
-        $expense = Expense::query()->find($id);
+        $expense = Expense::query()->where('user_id', Auth::id())->find($id);
 
         // Удаляем объект.
         $expense->deleted = true;
