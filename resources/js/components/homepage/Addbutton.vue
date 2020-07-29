@@ -10,7 +10,7 @@
         ></el-button>
         <el-dialog
             :visible.sync="dialogVisible"
-            width="40%"
+            width="60%"
         >
             <el-form :rules="rules" :model="ruleForm" status-icon ref="ruleForm">
                 <span class="cstm-header">Добавление карточки</span>
