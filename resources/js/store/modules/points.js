@@ -2,6 +2,36 @@ import axios from 'axios'
 
 export default {
     actions: {
+        addIncomes({commit, dispatch}, data) {
+            axios.post('/api/incomes' , data)
+                .then(response => {
+                    console.log('success', response)
+                    dispatch('fetchIncomes')
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        },
+        addWallets({commit, dispatch}, data) {
+            axios.post('/api/wallets' , data)
+                .then(response => {
+                    console.log('success', response)
+                    dispatch('fetchWallets')
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        },
+        addExpenses({commit, dispatch}, data) {
+            axios.post('/api/expenses' , data)
+                .then(response => {
+                    console.log('success', response)
+                    dispatch('fetchExpenses')
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        },
         fetchIncomes({ commit }) {
             axios.get('/api/get/incomes')
             .then(response => {
