@@ -28,11 +28,11 @@
                 </el-form-item>
                 <span v-if="(ruleForm.category === 'Расход')" class="cstm-amount">Планирую потратить</span>
                 <el-form-item v-if="(ruleForm.category === 'Расход')">
-                    <el-input-number v-model="ruleForm.amount" :min="ruleForm.amount" :step="500"></el-input-number>
+                    <el-input-number v-model="ruleForm.amount" :min="0" :step="500"></el-input-number>
                 </el-form-item>
                 <span v-if="(ruleForm.category === 'Счета')" class="cstm-amount">Баланс</span>
                 <el-form-item v-if="(ruleForm.category === 'Счета')">
-                    <el-input-number v-model="ruleForm.amount" :min="ruleForm.amount" :step="500"></el-input-number>
+                    <el-input-number v-model="ruleForm.amount" :min="0" :step="500"></el-input-number>
                 </el-form-item>
                 <br>
                 <div align="center">
