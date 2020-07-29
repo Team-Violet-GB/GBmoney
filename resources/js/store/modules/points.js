@@ -12,6 +12,16 @@ export default {
                     console.log(error)
                 })
         },
+        addWallets({commit, dispatch}, data) {
+            axios.post('/api/wallets' , data)
+                .then(response => {
+                    console.log('success', response)
+                    dispatch('fetchWallets')
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        },
         fetchIncomes({ commit }) {
             axios.get('/api/get/incomes')
             .then(response => {

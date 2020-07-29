@@ -30,6 +30,10 @@
                 <el-form-item v-if="(ruleForm.category === 'Расход')">
                     <el-input-number v-model="ruleForm.amount" :min="ruleForm.amount" :step="500"></el-input-number>
                 </el-form-item>
+                <span v-if="(ruleForm.category === 'Счета')" class="cstm-amount">Баланс</span>
+                <el-form-item v-if="(ruleForm.category === 'Счета')">
+                    <el-input-number v-model="ruleForm.amount" :min="ruleForm.amount" :step="500"></el-input-number>
+                </el-form-item>
                 <br>
                 <div align="center">
                     <el-form-item prop="choose">
@@ -87,12 +91,13 @@
             this.fetchIcons()
         },
         methods: {
-            ...mapActions(['fetchIcons', 'addIncomes']),
+            ...mapActions(['fetchIcons', 'addIncomes', 'addWallets']),
 
             submitForm(formName) {
                  this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.isBalance();
+                        // Incomes
                         if (this.ruleForm.category === 'Доход'){
                             this.addIncomes({
                                     name: this.ruleForm.name,
@@ -100,6 +105,18 @@
                                 }
                             );
                         }
+                        // Wallets
+                        if (this.ruleForm.category === 'Счета'){
+                            this.addWallets({
+                                    name: this.ruleForm.name,
+                                    amount: this.ruleForm.amount,
+                                    include: this.ruleForm.balance,
+                                    icon_id: this.ruleForm.choose
+                                }
+                            );
+                        }
+
+                        // End works
                         this.dialogVisible = false
                         this.isSuccessSubmit()
 
@@ -115,6 +132,7 @@
             },
             isSuccessSubmit () {
                 this.ruleForm.name = this.ruleForm.choose = ''
+                this.ruleForm.amount = 0
             }
         },
     };

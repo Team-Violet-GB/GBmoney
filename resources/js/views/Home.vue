@@ -164,11 +164,8 @@
                     type: (event.data.type == 'income') ? 1 : 2,
                     tag: null,
                     date: this.dateNow(),
-<<<<<<< HEAD
-=======
                     amount: null,
                     comment: null,
->>>>>>> develop
                 }
             },
             transactionExpense (event) { // drag & drop  работает через раз, если указать одинаковые имена функций у разных групп
@@ -179,11 +176,8 @@
                     type: 3,
                     tag: null,
                     date: this.dateNow(),
-<<<<<<< HEAD
-=======
                     amount: null,
                     comment: null,
->>>>>>> develop
                 }
             },
             dateNow() {
