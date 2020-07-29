@@ -189,6 +189,7 @@
 </script>
 
 <style lang="scss" scoped>
+
 %cstm-color-background-body {
   background-color: #3d3e48;
 }
@@ -198,6 +199,7 @@
 %cstm-color-text {
   color: #ffffff;
 }
+
 .cstm-box-card {
   border-radius: 0;
   border: none;
