@@ -48,6 +48,8 @@ class WalletController extends Controller
         // Заполняем объект данными из запроса.
         $wallet->user_id = Auth::id();
         $wallet->name = $request->name;
+        $wallet->amount = $request->amount;
+        $wallet->include = $request->include;
         $wallet->icon_id = $request->icon_id;
 
         // Сохраняем новый кошелек.
@@ -64,7 +66,7 @@ class WalletController extends Controller
      */
     public function show($id)
     {
-        /** @var Wallet $wallets */
+        /** @var Wallet $wallet */
         $wallet = Wallet::query()->where('user_id', Auth::id())->find($id);
 
         return response()->json(['data' => $wallet]);
@@ -80,10 +82,12 @@ class WalletController extends Controller
     public function update(WalletFormRequest $request, $id)
     {
         /** @var Wallet $wallet */
-        $wallet = Wallet::query()->find($id);
+        $wallet = Wallet::query()->where('user_id', Auth::id())->find($id);
 
         // Заполняем объект данными из запроса.
         $wallet->name = $request->name;
+        $wallet->amount = $request->amount;
+        $wallet->include = $request->include;
         $wallet->icon_id = $request->icon_id;
 
         // Сохраняем измененный объект кошелька.
@@ -101,7 +105,7 @@ class WalletController extends Controller
     public function destroy($id)
     {
         /** @var Wallet $wallet */
-        $wallet = Wallet::query()->find($id);
+        $wallet = Wallet::query()->where('user_id', Auth::id())->find($id);
 
         // Удаляем объект.
         $wallet->deleted = true;

@@ -15,7 +15,7 @@ class WalletFormRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -31,7 +31,9 @@ class WalletFormRequest extends FormRequest
                 'max:45',
                 Rule::unique('wallets')->ignore($this->route('wallet'), 'id')->where('user_id', Auth::id()),
             ],
-            'icon_id' => 'required|int',
+            'amount' => 'required|numeric',
+            'include' => 'required|boolean',
+            'icon_id' => 'required|int'
         ];
     }
 }
