@@ -63,7 +63,7 @@ class IncomeController extends Controller
      */
     public function show($id)
     {
-        /** @var Income $incomes */
+        /** @var Income $income */
         $income = Income::query()->where('user_id', Auth::id())->find($id);
 
         return response()->json(['data' => $income]);
@@ -79,7 +79,7 @@ class IncomeController extends Controller
     public function update(IncomeFormRequest $request, $id)
     {
         /** @var Income $income */
-        $income = Income::query()->find($id);
+        $income = Income::query()->where('user_id', Auth::id())->find($id);
 
         // Заполняем объект данными из запроса.
         $income->name = $request->name;
@@ -100,7 +100,7 @@ class IncomeController extends Controller
     public function destroy($id)
     {
         /** @var Income $income */
-        $income = Income::query()->find($id);
+        $income = Income::query()->where('user_id', Auth::id())->find($id);
 
         // Удаляем объект.
         $income->deleted = true;
