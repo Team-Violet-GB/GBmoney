@@ -91,7 +91,7 @@
             this.fetchIcons()
         },
         methods: {
-            ...mapActions(['fetchIcons', 'addIncomes', 'addWallets']),
+            ...mapActions(['fetchIcons', 'addIncomes', 'addWallets', 'addExpenses']),
 
             submitForm(formName) {
                  this.$refs[formName].validate((valid) => {
@@ -115,7 +115,15 @@
                                 }
                             );
                         }
-
+                        // Expenses
+                        if (this.ruleForm.category === 'Расход'){
+                            this.addExpenses({
+                                    name: this.ruleForm.name,
+                                    max_limit: this.ruleForm.amount,
+                                    icon_id: this.ruleForm.choose
+                                }
+                            );
+                        }
                         // End works
                         this.dialogVisible = false
                         this.isSuccessSubmit()

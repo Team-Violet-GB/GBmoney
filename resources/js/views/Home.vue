@@ -61,7 +61,7 @@
           <div class="cstm-money-point cstm-yellow">{{ point.amount }} &#8381;</div>
           <i class="el-icon-edit cstm-edit"></i>
         </div>
-        <Addbutton :key="'add'" />
+        <Addbutton :key="'add'" category="Счета"/>
       </transition-group>
     </div>
     <!-- Расходы -->

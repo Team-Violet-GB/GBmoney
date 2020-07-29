@@ -22,6 +22,16 @@ export default {
                     console.log(error)
                 })
         },
+        addExpenses({commit, dispatch}, data) {
+            axios.post('/api/expenses' , data)
+                .then(response => {
+                    console.log('success', response)
+                    dispatch('fetchExpenses')
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        },
         fetchIncomes({ commit }) {
             axios.get('/api/get/incomes')
             .then(response => {
