@@ -10,7 +10,7 @@
         ></el-button>
         <el-dialog
             :visible.sync="dialogVisible"
-            width="60%"
+            width="40%"
         >
             <el-form :rules="rules" :model="ruleForm" status-icon ref="ruleForm">
                 <span class="cstm-header">Добавление карточки</span>
@@ -126,9 +126,11 @@
                         }
                         // End works
                         this.dialogVisible = false
+                        this.$message.success(this.ruleForm.name + ' успешно добавлен')
                         this.isSuccessSubmit()
-
                     } else {
+                        if (!this.ruleForm.name) this.$message.error('Введите название')
+                        if (!this.ruleForm.choose) this.$message.error('Выберите картинку')
                         console.log('error submit!!');
                         return false;
                     }
