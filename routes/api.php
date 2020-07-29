@@ -19,8 +19,7 @@ Route::post('register', 'AuthController@register');
 Route::post('login', 'AuthController@login');
 
 Route::middleware('auth:api')->group(function () {
-    # получение своих данных пользователем
-    Route::get('user/show', 'UserController@show');
+
     # Выход
     Route::get('logout', 'AuthController@logout');
 
@@ -31,11 +30,18 @@ Route::middleware('auth:api')->group(function () {
         Route::get('get/expenses', 'ExpenseController@getExpensesWithIconName');
         Route::get('get/incomes', 'IncomeController@getIncomesWithIconName');
 
+        // Работа с user
+        Route::apiResource('user', 'UserController')
+            ->only('update', 'destroy');
         // Работа с транзакциями.
         Route::apiResource('transactions', 'TransactionController');
         // Работа с доходами.
         Route::apiResource('incomes', 'IncomeController');
+        // Работа с расходами.
+        Route::apiResource('expenses', 'ExpenseController');
         // Работа с тегами.
         Route::apiResource('tags', 'TagController');
+        // Работа с кошельками.
+        Route::apiResource('wallets', 'WalletController');
     });
 });

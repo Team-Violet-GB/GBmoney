@@ -25,9 +25,12 @@ class IncomeController extends Controller
     public function index()
     {
         /** @var Income $incomes */
-        $incomes = Income::query()->where('user_id', Auth::id())->get();
+        $incomes = Income::query()
+            ->where('user_id', Auth::id())
+            ->where('incomes.deleted', false)
+            ->get();
 
-        return response()->json(['data' => $incomes]);
+        return response()->json(['data' => collect($incomes)->keyBy('id')]);
     }
 
     /**
@@ -60,7 +63,7 @@ class IncomeController extends Controller
      */
     public function show($id)
     {
-        /** @var Income $incomes */
+        /** @var Income $income */
         $income = Income::query()->where('user_id', Auth::id())->find($id);
 
         return response()->json(['data' => $income]);
@@ -76,7 +79,7 @@ class IncomeController extends Controller
     public function update(IncomeFormRequest $request, $id)
     {
         /** @var Income $income */
-        $income = Income::query()->find($id);
+        $income = Income::query()->where('user_id', Auth::id())->find($id);
 
         // Заполняем объект данными из запроса.
         $income->name = $request->name;
@@ -97,7 +100,7 @@ class IncomeController extends Controller
     public function destroy($id)
     {
         /** @var Income $income */
-        $income = Income::query()->find($id);
+        $income = Income::query()->where('user_id', Auth::id())->find($id);
 
         // Удаляем объект.
         $income->deleted = true;
@@ -117,6 +120,7 @@ class IncomeController extends Controller
         $collection = Income::query()->select('incomes.*', 'i.name as icon_name')
             ->join('icons as i', 'i.id', '=', 'incomes.icon_id')
             ->where('incomes.user_id', Auth::id())
+            ->where('incomes.deleted', false)
             ->get();
 
         return new IncomesCollection($collection->keyBy('id'));

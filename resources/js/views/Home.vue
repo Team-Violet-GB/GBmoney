@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Модальное окно  -->
-    <CreateTransaction
+    <Transaction
       :newTransaction="newTransaction"
       @closeCreateWindow="newTransaction.state_window = false"
     />
@@ -24,10 +24,10 @@
           <div class="cstm-head-point">{{ point.name }}</div>
           <drag :data="{ id: point.id, type: 'income'}">
             <drop :accepts-data="() => false">
-              <el-button type="primary" :icon="point.icon_name" circle class="cstm-icon-point"></el-button>
+              <el-button type="success" :icon="point.icon_name" circle class="cstm-icon-point"></el-button>
             </drop>
           </drag>
-          <div class="cstm-money-point cstm-blue">{{ point.amount }} &#8381;</div>
+          <div class="cstm-money-point cstm-green">{{ point.amount }} &#8381;</div>
           <i class="el-icon-edit cstm-edit"></i>
         </div>
         <Addbutton :key="'add'" category="Доход"/>
@@ -107,7 +107,7 @@
     import { Drag, Drop } from "vue-easy-dnd"
     import { mapGetters, mapActions, mapMutations } from "vuex"
     import Addbutton from "../components/homepage/Addbutton"
-    import CreateTransaction from "../components/homepage/CreateTransaction"
+    import Transaction from "../components/homepage/Transaction"
 
     export default {
         name: "App",
@@ -115,7 +115,7 @@
             Drag,
             Drop,
             Addbutton,
-            CreateTransaction,
+            Transaction,
         },
         data() {
           return {
@@ -164,6 +164,11 @@
                     type: (event.data.type == 'income') ? 1 : 2,
                     tag: null,
                     date: this.dateNow(),
+<<<<<<< HEAD
+=======
+                    amount: null,
+                    comment: null,
+>>>>>>> develop
                 }
             },
             transactionExpense (event) { // drag & drop  работает через раз, если указать одинаковые имена функций у разных групп
@@ -174,6 +179,11 @@
                     type: 3,
                     tag: null,
                     date: this.dateNow(),
+<<<<<<< HEAD
+=======
+                    amount: null,
+                    comment: null,
+>>>>>>> develop
                 }
             },
             dateNow() {
@@ -195,7 +205,7 @@
   color: #ffffff;
 }
 .cstm-box-card {
-  border-radius: 0%;
+  border-radius: 0;
   border: none;
   margin-bottom: 30px;
 }
@@ -282,21 +292,7 @@
 .cstm-edit:hover {
   color: #67c23a;
 }
-.cstm-blue {
-  color: #0a93d1;
-}
-.cstm-yellow {
-  color: #e6a23c;
-}
-.cstm-green {
-  color: #67c23a;
-}
-.cstm-red {
-  color: #f56c6c;
-}
-.cstm-grey {
-  color: #909399;
-}
+
 /* при наведении взятого элемента на ячейку */
 .drop-in button {
   background: grey;

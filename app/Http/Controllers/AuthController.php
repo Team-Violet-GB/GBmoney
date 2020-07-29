@@ -32,7 +32,7 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return response()->json($user);
+        return response()->json(['user' => $user]);
     }
 
     public function login(Request $request)
@@ -44,6 +44,7 @@ class AuthController extends Controller
             $token = $user->createToken($user->email . '-' . now());
 
             return response()->json([
+                'user' => $user,
                 'token' => $token->accessToken
             ]);
         } else {

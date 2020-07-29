@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <component v-if="isAuthenticated" :is="layout">
+    <component :is="layout">
       <router-view/>
     </component>
   </div>
@@ -9,21 +9,14 @@
 <script>
 import MainLayout from '../views/layouts/MainLayout'
 import EmptyLayout from '../views/layouts/EmptyLayout'
-import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters([
-      'isAuth',
-    ]),
     layout () {
       return (this.$route.meta.layout || 'main') + '-layout'
     },
-    isAuthenticated() {
-      if (!this.isAuth) this.$router.push('/login')
-      return true
-    }
   },
+
   components: {
     MainLayout, EmptyLayout
   }
@@ -54,6 +47,22 @@ body {
   color: #ffffff;
 }
 
+.cstm-blue {
+  color: #0a93d1;
+}
+.cstm-yellow {
+  color: #e6a23c;
+}
+.cstm-green {
+  color: #67c23a;
+}
+.cstm-red {
+  color: #f56c6c;
+}
+.cstm-grey {
+  color: #909399;
+}
+
 .cstm-container {
   height: 100vh;
 }
@@ -68,8 +77,8 @@ body {
 }
 
 /* все инпуты в одном стиле */
-.el-input__inner, 
-.el-scrollbar, 
+.el-input__inner,
+.el-scrollbar,
 .el-textarea__inner {
   @extend %cstm-color-background-dark;
   @extend %cstm-color-text;
@@ -82,7 +91,7 @@ body {
 /* заменить синюю рамку при фокусе */
 .el-input__inner:focus,
 textarea:focus {
-  border-color: #ffffff !important; 
+  border-color: #ffffff !important;
 }
 
 .el-scrollbar,
@@ -105,7 +114,7 @@ input::-webkit-inner-spin-button {
   margin-top: 20px;
   position: relative;
 }
-.el-date-picker {  
+.el-date-picker {
   @extend %cstm-color-background-dark;
   @extend %cstm-color-text;
   border: none;
@@ -148,5 +157,19 @@ input::-webkit-inner-spin-button {
   @extend %cstm-color-text;
   font-size: 20px;
 }
+
+.el-message-box {
+  background-color: #3d3e48;
+}
+
+.el-message-box__content {
+  color: #ffffff
+}
+
+.el-button--small {
+  border-radius: 0;
+}
+
+
 
 </style>
