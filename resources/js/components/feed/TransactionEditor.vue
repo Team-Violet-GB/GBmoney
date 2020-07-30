@@ -97,7 +97,7 @@
                             <el-col :span="6">
                                 <div class="button-group">
                                     <el-button @click="updateTransaction('editorForm')" type="success" size="mini"
-                                               icon="el-icon-check"></el-button>
+                                               icon="el-icon-check" style="margin-right: 10px"></el-button>
                                     <el-popover
                                         placement="top"
                                         width="170">

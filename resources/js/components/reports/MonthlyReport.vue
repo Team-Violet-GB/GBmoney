@@ -11,16 +11,23 @@
                         value-format="yyyy-MM-dd"
                         @change="onMonthChange">
                     </el-date-picker>
+                    <el-radio-group v-model="categoryOfChart" size="small" style="margin-left: 38px">
+                        <el-radio-button label="Доходы">Доходы</el-radio-button>
+
+                        <el-radio-button label="Расходы">Расходы</el-radio-button>
+                    </el-radio-group>
                 </div>
                 <monthChart :chartdata="chartData" :options="chartOptions"/>
             </el-col>
             <el-col :span="12">
-                <feed
-                    :editable="false"
-                    page="1"
-                    :dateFrom="dates.from"
-                    :dateTo="dates.to"
-                ></feed>
+                <div class="feed-container">
+                    <feed
+                        :editable="false"
+                        page="1"
+                        :dateFrom="dates.from"
+                        :dateTo="dates.to"
+                    ></feed>
+                </div>
             </el-col>
         </el-row>
     </div>
@@ -30,12 +37,15 @@
     import monthChart from "./MonthChart"
     import feed from "../feed/Feed";
     import {mapActions, mapGetters, mapMutations} from 'vuex';
+    import type from '../feed/TypeMixin';
 
     export default {
         name: "monthlyReport",
+        mixins: [type],
         data() {
             return {
-                month: new Date().toISOString().slice(0, 8) + '01'
+                month: new Date().toISOString().slice(0, 8) + '01',
+                categoryOfChart: 'Расходы'
             }
         },
         computed: {
@@ -46,7 +56,6 @@
                 'getPage',
             ]),
             dates() {
-
                 Date.prototype.lastDayOfMonth = function () {
                     return 32 - new Date(this.getFullYear(), this.getMonth(), 32).getDate();
                 };
@@ -58,32 +67,59 @@
 
                 return {from: fromDate, to: toDate}
             },
+
             chartData() {
+
+
+
+                // console.log('lab: ', this.calcChartData.lab)
+
                 return {
-                    labels: ['Ребенок', 'Комуналка','Авто','Разное','Здоровье','Потерял'],
+                    labels: this.calcChartData.lab,
                     datasets: [
                         {
-                            label: 'Комуналка',
-                            backgroundColor: 'rgb(190, 99, 255, 0.25)',
-                            borderColor: 'rgb(190, 99, 255)',
-                            data: [1500, 1800, 2000, 1300, 1600, 1200]
-                        },{
-                            label: 'Ребенок',
-                            backgroundColor: 'rgb(190, 99, 255, 0.25)',
-                            borderColor: 'rgb(190, 99, 255)',
-                            data: [1300, 1400, 1000, 1300, 1600, 1200]
-                        },
-
+                            label: 'Расходы',
+                            backgroundColor: ['rgba(190, 99, 255, 0.66)', 'rgba(59,220,89,0.66)', 'rgba(239,106,5,0.66)'],
+                            borderColor: 'rgba(190,99,255,0)',
+                            data: this.calcChartData.dat
+                        }
                     ]
-                }
+                };
             },
             chartOptions() {
                 responsive: true
                 maintainAspectRatio: false
             },
-            chartLabels() {
-                return Object.keys(this.getTransactions);
-            }
+            calcChartData() {
+                console.log('Начало test()')
+                let trans = this.getTransactions;
+                console.log('trans: ', trans)
+
+                let labels = [];
+                let data = [];
+
+                for (let groupKey in trans) {
+                    let transGroup = trans[groupKey]
+                    console.log('transGroup: ', transGroup)
+
+                    for (let tranKey in transGroup) {
+                        let tran = transGroup[tranKey]
+                        console.log('tran: ', tran)
+
+                        if (tran.type == 3) {
+                            let name = this.getTypeData(tran).toName
+                            if (!labels.includes(name)) {
+                                labels.push(name);
+                                data.push(this.getTotalOfExpense(tran.expense_id));
+                            }
+                        }
+                    }
+                }
+                // console.log('labels: ', labels)
+                // console.log('data: ', data)
+                return {lab: labels, dat: data}
+
+            },
         },
         methods: {
             ...mapActions([
@@ -104,13 +140,10 @@
                 this.setPage(1)
                 this.setDateFrom(this.dates.from)
                 this.setDateTo(this.dates.to)
-                this.setTransactions({})
-                this.getTransactions()
-            }
+                this.fetchTransactions()
+            },
         },
-        mounted() {
-
-        },
+        mounted() {},
         components: {
             monthChart,
             feed
@@ -137,4 +170,8 @@
         padding-right: 5px;
     }
 
+    .feed-container {
+        height: 756px;
+        overflow-y: scroll;
+    }
 </style>
