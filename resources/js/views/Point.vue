@@ -62,8 +62,7 @@ export default {
 
   mounted() {
     if (!this.getTransactionsByPoint) this.fetchTransactionsByPoint()
-    console.log(this.$route.params.id)
-    console.log(this.$route.params.type)
+    this.fetchPoint()
   },
 
   computed: {
@@ -75,7 +74,14 @@ export default {
   methods: {
     ...mapActions([
       'fetchTransactionsByPoint',
-    ])
+    ]),
+
+    fetchPoint() {
+      this.axios.get(`/api/get/${this.$route.params.type}s/${this.$route.params.id}`)
+      .then(response => {
+          console.log(response)
+      })
+    }
   },
 
   data() {
