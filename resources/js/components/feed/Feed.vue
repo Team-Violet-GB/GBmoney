@@ -115,10 +115,10 @@
             }
         },
         mounted() {
-            this.fetchIncomes();
-            this.fetchWallets();
-            this.fetchExpenses();
-            this.fetchTags();
+            if (!this.incomes) this.fetchIncomes();
+            if (!this.wallets) this.fetchWallets();
+            if (!this.expenses) this.fetchExpenses();
+            if (!this.tags) this.fetchTags();
             this.setEditable(this.editable);
             this.setPage(this.page);
             this.setDateFrom(this.dateFrom);
@@ -172,5 +172,5 @@
     .cstm-red {
     color: #f56c6c;
     }
-    
+
 </style>
