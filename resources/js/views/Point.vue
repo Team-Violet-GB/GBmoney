@@ -50,7 +50,7 @@ import LineChart from "../components/chart/LineChart"
 import PieChart from "../components/chart/PieChart"
 import Feed from "../components/feed/Feed"
 import CalendarMonth from "../components/CalendarMonth" 
- import { mapGetters } from "vuex"
+import { mapGetters, mapActions } from "vuex"
  
 export default {
   components: {
@@ -59,12 +59,23 @@ export default {
     Feed,
     CalendarMonth,
   },
+
   mounted() {
-      console.log(this.thisPointPage.id)
-      console.log(this.thisPointPage.type)
+    if (!this.getTransactionsByPoint) this.fetchTransactionsByPoint()
+    console.log(this.$route.params.id)
+    console.log(this.$route.params.type)
   },
+
   computed: {
-    ...mapGetters(['thisPointPage'])
+    ...mapGetters([
+      'getTransactionsByPoint'
+      ])
+  },
+
+  methods: {
+    ...mapActions([
+      'fetchTransactionsByPoint',
+    ])
   },
 
   data() {
@@ -84,7 +95,6 @@ export default {
         //     data: [5000, 15000, 10000, 30000],
         //   },
         ],
-
       },
 
       pieChartData: {

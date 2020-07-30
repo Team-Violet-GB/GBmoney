@@ -75,6 +75,7 @@ export default {
     },
     state: {
         transactions: {},
+        transactionsByPoint: null,
         errorStatus: false,
         errorInfo: 'Список транзакций пуст',
         editable: true,
@@ -82,11 +83,13 @@ export default {
         dateTo: '',
         page: '',
         total: '',
-        transactionsByPoint: null
     },
     getters: {
         getTransactions(state) {
             return state.transactions
+        },
+        getTransactionsByPoint(state) {
+            return state.transactionsByPoint
         },
         getErrorStatus(state) {
             return state.errorStatus

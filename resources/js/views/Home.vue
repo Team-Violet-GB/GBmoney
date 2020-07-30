@@ -29,7 +29,7 @@
                 :icon="point.icon_name" 
                 circle 
                 class="cstm-icon-point" 
-                @click="pointPage({ id: point.id, type: 'income'})">
+                @click="$router.push(`/point/income/${point.id}`)">
               </el-button>
             </drop>
           </drag>
@@ -66,7 +66,7 @@
                   :icon="point.icon_name" 
                   circle 
                   class="cstm-icon-point" 
-                  @click="pointPage({ id: point.id, type: 'wallet'})" >
+                  @click="$router.push(`/point/wallet/${point.id}`)" >
                 </el-button>
                 </drag>
             </drop>
@@ -101,7 +101,7 @@
               :icon="point.icon_name"
               circle
               class="cstm-icon-point cstm-expense"
-              @click="pointPage({ id: point.id, type: 'expense'})"
+              @click="$router.push(`/point/expense/${point.id}`)"
             ></el-button>
           </drop>
           <div
@@ -200,10 +200,6 @@
               let date = new Date()
               return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
             },
-            pointPage(data) {
-              this.setThisPointPage(data)
-              this.$router.push('/point')
-            }
         },
     };
 </script>

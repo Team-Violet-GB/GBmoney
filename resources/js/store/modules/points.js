@@ -89,9 +89,6 @@ export default {
         updateTags(state, points) {
             state.tagsList = points
         },
-        setThisPointPage(state, data) {
-            state.thisPointPage = data
-        }
     },
     state: {
         incomesList: null,
@@ -102,7 +99,6 @@ export default {
         walletsSumm: null,
         expensesSumm: null,
         expensesLimit: null,
-        thisPointPage: null
     },
     getters: {
         incomes(state) {
@@ -128,9 +124,6 @@ export default {
         },
         expensesLimit(state) {
             return state.expensesLimit
-        },
-        thisPointPage(state) {
-            return state.thisPointPage
         },
     }
 }
