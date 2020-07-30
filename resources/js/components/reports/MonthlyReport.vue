@@ -70,10 +70,6 @@
 
             chartData() {
 
-
-
-                // console.log('lab: ', this.calcChartData.lab)
-
                 return {
                     labels: this.calcChartData.lab,
                     datasets: [
@@ -91,21 +87,13 @@
                 maintainAspectRatio: false
             },
             calcChartData() {
-                console.log('Начало test()')
                 let trans = this.getTransactions;
-                console.log('trans: ', trans)
-
                 let labels = [];
                 let data = [];
-
                 for (let groupKey in trans) {
                     let transGroup = trans[groupKey]
-                    console.log('transGroup: ', transGroup)
-
                     for (let tranKey in transGroup) {
                         let tran = transGroup[tranKey]
-                        console.log('tran: ', tran)
-
                         if (tran.type == 3) {
                             let name = this.getTypeData(tran).toName
                             if (!labels.includes(name)) {
@@ -115,8 +103,6 @@
                         }
                     }
                 }
-                // console.log('labels: ', labels)
-                // console.log('data: ', data)
                 return {lab: labels, dat: data}
 
             },
@@ -143,7 +129,12 @@
                 this.fetchTransactions()
             },
         },
-        mounted() {},
+        mounted() {
+            this.setPage(1)
+            this.setDateFrom(this.dates.from)
+            this.setDateTo(this.dates.to)
+            this.fetchTransactions()
+        },
         components: {
             monthChart,
             feed

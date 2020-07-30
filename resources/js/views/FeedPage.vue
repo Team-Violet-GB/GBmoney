@@ -27,6 +27,14 @@
                 'getErrorStatus',
                 'getErrorInfo'
             ]),
+        },
+        methods: {
+            ...mapActions([
+                'fetchTransactions'
+            ])
+        },
+        mounted() {
+            this.fetchTransactions()
         }
     }
 </script>

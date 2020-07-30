@@ -17,7 +17,9 @@
             <!--            группа транзакций-->
             <transaction-group :transactionGroup="transactionGroup" :transactionGroupName="index" class="tran-group"/>
         </el-card>
-        <div class="pagination">
+
+<!--        пагинация-->
+        <div v-if="editable" class="pagination">
             <el-pagination
                 background
                 :hide-on-single-page="true"
@@ -123,7 +125,6 @@
             this.setPage(this.page);
             this.setDateFrom(this.dateFrom);
             this.setDateTo(this.dateTo);
-            this.fetchTransactions()
         },
         components: {
             transactionGroup,
