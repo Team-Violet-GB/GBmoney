@@ -36,10 +36,9 @@
       </el-col>
       <el-col :span="12">
         <div class="grid-content bg-purple-light cstm-feed">
-            <Feed
+            <!-- <Feed
                 :editable="false"
-                page="1"
-            ></Feed>
+            ></Feed> -->
         </div>
       </el-col>
     </el-row>
@@ -51,7 +50,8 @@ import LineChart from "../components/chart/LineChart"
 import PieChart from "../components/chart/PieChart"
 import Feed from "../components/feed/Feed"
 import CalendarMonth from "../components/CalendarMonth" 
-
+ import { mapGetters } from "vuex"
+ 
 export default {
   components: {
     LineChart,
@@ -59,6 +59,14 @@ export default {
     Feed,
     CalendarMonth,
   },
+  mounted() {
+      console.log(this.thisPointPage.id)
+      console.log(this.thisPointPage.type)
+  },
+  computed: {
+    ...mapGetters(['thisPointPage'])
+  },
+
   data() {
     return {
       lineChartData: {
@@ -84,7 +92,8 @@ export default {
         datasets: [
           {
             label: 'Продажи',
-            backgroundColor: ['#F26202', '#0a93d1', '#e6a23c', '#67c23a', '#0a93d1', '#f56c6c', '#909399'],
+            backgroundColor: ['#0a93d1', '#e6a23c', '#67c23a', '#0a93d1', '#f56c6c', '#909399'],
+            borderWidth: 0,
             data: [10000, 1500, 1000],
           },
         ],

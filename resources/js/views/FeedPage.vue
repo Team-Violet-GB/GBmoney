@@ -16,7 +16,6 @@
     import {mapActions, mapGetters, mapMutations} from 'vuex';
     import Feed from "../components/feed/Feed";
 
-
     export default {
         name: "FeedPage",
         components: {

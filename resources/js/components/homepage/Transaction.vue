@@ -94,6 +94,10 @@ import LoginVue from '../../views/Login.vue'
       },
     },
 
+    mounted() {
+      if (!this.tags) this.fetchTags()
+    },
+
     computed: {
         ...mapGetters([
             'incomes',
@@ -122,10 +126,6 @@ import LoginVue from '../../views/Login.vue'
         pointsTo() {
           return (this.transaction.type == 3) ? this.expenses : this.wallets
         }, 
-    },
-    
-    mounted() {
-        this.fetchTags()
     },
 
     methods: {

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { update } from "lodash";
 
 export default {
     actions: {
@@ -25,7 +26,23 @@ export default {
                         commit('setErrorStatus', true);
                     }
                 });
-        }
+        },
+        fetchTransactionsByPoint({ commit }, data) {
+            // axios.get('/api/get/transactions', {      \\ ждём реализацию на бэке
+            //     params: {
+            //         id: data.id,
+            //         type: data.type,
+            //         dateFrom: data.dateFrom,
+            //         dateFrom: data.dateTo
+            //       }
+            // })
+            // .then(response => {
+            //     const transactions = response.data.data
+            //     commit('updateTransactionsByPoint', transactions)
+            // })
+                const transactions = this.getters.getTransactions // заглушка
+                commit('updateTransactionsByPoint', transactions)
+        },
     },
     mutations: {
         setTransactions(state, data) {
@@ -51,7 +68,10 @@ export default {
         },
         setTotal(state, data) {
             state.total = data
-        }
+        },
+        updateTransactionsByPoint(state, transactions) {
+            state.transactionsByPoint = transactions
+        },
     },
     state: {
         transactions: {},
@@ -62,6 +82,7 @@ export default {
         dateTo: '',
         page: '',
         total: '',
+        transactionsByPoint: null
     },
     getters: {
         getTransactions(state) {
