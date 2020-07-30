@@ -31,6 +31,7 @@
 
 <script>
     import {mapActions, mapGetters} from 'vuex'
+    import CalendarMonth from "../components/CalendarMonth"
 
   export default {
     data() {
