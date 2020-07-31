@@ -1,35 +1,36 @@
 <template>
     <div>
-        <el-row :gutter="30" style="height: 100vh">
-            <el-col :span="12">
-                <div class="block">
-                    <span class="month-label">Отчет за месяц </span>
-                    <el-date-picker
-                        v-model="month"
-                        type="month"
-                        format="  MMMM yyyy года"
-                        value-format="yyyy-MM-dd"
-                        @change="onMonthChange">
-                    </el-date-picker>
-                    <el-radio-group v-model="categoryOfChart" size="small" style="margin-left: 38px">
-                        <el-radio-button label="Доходы">Доходы</el-radio-button>
-
-                        <el-radio-button label="Расходы">Расходы</el-radio-button>
-                    </el-radio-group>
-                </div>
-                <monthChart :chart-data="chartData" :options="chartOptions"/>
-            </el-col>
-            <el-col :span="12">
-                <div class="feed-container">
-                    <feed
-                        :editable="false"
-                        page="1"
-                        :dateFrom="dates.from"
-                        :dateTo="dates.to"
-                    ></feed>
-                </div>
-            </el-col>
-        </el-row>
+        <div class="container">
+            <el-row :gutter="30" style="height: 100vh">
+                <el-col :span="12">
+                    <div class="block">
+                        <span class="month-label">Отчет за месяц </span>
+                        <el-date-picker
+                            v-model="month"
+                            type="month"
+                            format="  MMMM yyyy года"
+                            value-format="yyyy-MM-dd"
+                            @change="onMonthChange">
+                        </el-date-picker>
+                        <el-radio-group v-model="categoryOfChart" size="small" style="margin-left: 38px">
+                            <el-radio-button label="Доходы">Доходы</el-radio-button>
+                            <el-radio-button label="Расходы">Расходы</el-radio-button>
+                        </el-radio-group>
+                    </div>
+                    <monthChart ref="chart" :chartData="dataChart" :options="chartOptions"/>
+                </el-col>
+                <el-col :span="12">
+                    <div class="feed-container">
+                        <feed
+                            :editable="false"
+                            page="1"
+                            :dateFrom="dates.from"
+                            :dateTo="dates.to"
+                        ></feed>
+                    </div>
+                </el-col>
+            </el-row>
+        </div>
     </div>
 </template>
 
@@ -45,8 +46,7 @@
         data() {
             return {
                 month: new Date().toISOString().slice(0, 8) + '01',
-                categoryOfChart: 'Расходы',
-                chartData: null
+                categoryOfChart: 'Расходы'
             }
         },
         computed: {
@@ -72,25 +72,27 @@
                 responsive: true
                 maintainAspectRatio: false
             },
-            createChartData() {
-                let labels = [];
-                let data = [];
-                let trans = this.getTransactions;
-                for (let groupKey in trans) {
-                    let transGroup = trans[groupKey]
-                    for (let tranKey in transGroup) {
-                        let tran = transGroup[tranKey]
-                        if (tran.type == 3) {
-                            let name = this.getTypeData(tran).toName
-                            if (!labels.includes(name)) {
-                                labels.push(name);
-                                data.push(this.getTotalOfExpense(tran.expense_id));
-                            }
+            dataChart() {
+                return {
+                    labels: this.createChartData().labels,
+                    datasets: [
+                        {
+                            label: 'Расходы',
+                            backgroundColor: [
+                                'rgba(255,0,0,0.65)',
+                                'rgba(7,227,52,0.65)',
+                                'rgba(127,108,246,0.65)',
+                                'rgba(241,217,5,0.65)',
+                                'rgba(13,149,245,0.65)',
+                                'rgba(255,99,3,0.65)'
+                            ],
+                            borderColor: 'rgba(190,99,255,0)',
+                            data: this.createChartData().data
                         }
-                    }
+                    ]
                 }
-                return {labels, data}
-            },
+
+            }
         },
         methods: {
             ...mapActions([
@@ -111,34 +113,32 @@
                 this.setDateFrom(this.dates.from)
                 this.setDateTo(this.dates.to)
                 this.fetchTransactions()
-                this.chartData = {
-                    labels: this.createChartData.labels,
-                    datasets: [
-                        {
-                            label: 'Расходы',
-                            backgroundColor: ['rgba(190, 99, 255, 0.66)', 'rgba(59,220,89,0.66)', 'rgba(239,106,5,0.66)'],
-                            borderColor: 'rgba(190,99,255,0)',
-                            data: this.createChartData.data
+            },
+            createChartData() {
+                let labels = [];
+                let data = [];
+                let trans = this.getTransactions;
+                for (let groupKey in trans) {
+                    let transGroup = trans[groupKey]
+                    for (let tranKey in transGroup) {
+                        let tran = transGroup[tranKey]
+                        if (tran.type == 3) {
+                            let name = this.getTypeData(tran).toName
+                            if (!labels.includes(name)) {
+                                labels.push(name);
+                                data.push(this.getTotalOfExpense(tran.expense_id));
+                            }
                         }
-                    ]
+                    }
                 }
+                return {labels, data}
             },
         },
         mounted() {
             this.setDateFrom(this.dates.from)
             this.setDateTo(this.dates.to)
             this.fetchTransactions()
-            this.chartData = {
-                labels: this.createChartData.labels,
-                datasets: [
-                    {
-                        label: 'Расходы',
-                        backgroundColor: ['rgba(190, 99, 255, 0.66)', 'rgba(59,220,89,0.66)', 'rgba(239,106,5,0.66)'],
-                        borderColor: 'rgba(190,99,255,0)',
-                        data: this.createChartData.data
-                    }
-                ]
-            }
+            this.createChartData()
         },
         components: {
             monthChart,
@@ -148,8 +148,13 @@
 </script>
 
 <style scoped>
+    .container {
+        height: 700px;
+    }
+
     .el-date-editor {
         margin-top: 0;
+        overflow: visible;
     }
 
     .month-label {
