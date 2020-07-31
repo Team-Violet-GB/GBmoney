@@ -37,13 +37,15 @@ export default {
             .then(response => {
                 const incomes = response.data.data
                 commit('updateIncomes', incomes)
-            })
+                return incomes
+            })   
         },
         fetchWallets({ commit }) {
             axios.get('/api/get/wallets')
             .then(response => {
                 const wallets = response.data.data
                 commit('updateWallets', wallets)
+                return wallets
             })
         },
         fetchExpenses({ commit }) {
@@ -51,6 +53,7 @@ export default {
             .then(response => {
                 const expenses = response.data.data
                 commit('updateExpenses', expenses)
+                return expenses
             })
         },
         fetchTags({ commit }) {
@@ -58,6 +61,7 @@ export default {
             .then(response => {
                 const tags = response.data.data
                 commit('updateTags', tags)
+                return tags
             })
         },
     },
@@ -91,10 +95,10 @@ export default {
         },
     },
     state: {
-        incomesList: [],
-        walletsList: [],
-        expensesList: [],
-        tagsList: [],
+        incomesList: null,
+        walletsList: null,
+        expensesList: null,
+        tagsList: null,
         incomesSumm: null,
         walletsSumm: null,
         expensesSumm: null,
@@ -124,6 +128,13 @@ export default {
         },
         expensesLimit(state) {
             return state.expensesLimit
+        },
+        points(state) {
+            return {
+                'income': state.incomesList,
+                'wallet': state.walletsList,
+                'expense': state.expensesList,
+            }
         },
     }
 }
