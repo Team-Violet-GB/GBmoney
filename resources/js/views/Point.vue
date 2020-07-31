@@ -13,7 +13,7 @@
     <el-row>
       <el-col :span="12">
         <div class="grid-content bg-purple cstm-col-left">
-          <CalendarMonth /> 
+          <CalendarMonth @changeDate="newDate => changeDate(newDate)" /> 
           <div class="cstm-pie-chart">
             <PieChart
               :chartData="pieChartData"
@@ -22,9 +22,9 @@
           </div>
           <el-card class="box-card">
               <el-row  slot="header" class="clearfix tran-group-header">
-                  <el-col :span="10">{{ 'name' }}</el-col>
-                  <el-col class="cstm-percent" :span="7">{{ 'percent' }}</el-col>
-                  <el-col class="cstm-amount" :span="7">{{ 'amount' }}</el-col>
+                  <el-col :span="10">{{ points[type][id].name }}</el-col>
+                  <el-col class="cstm-percent" :span="7">100%</el-col>
+                  <el-col class="cstm-amount" :span="7">{{ 'сумма' }}</el-col>
               </el-row>
               <el-row class="tran-row-data">
                   <el-col :span="10">{{ 'name' }}</el-col>
@@ -62,35 +62,70 @@ export default {
 
   mounted() {
     if (!this.getTransactionsByPoint) this.fetchTransactionsByPoint()
-    this.fetchPoint()
+    if (!this.incomes) this.fetchIncomes()
+    if (!this.wallets) this.fetchWallets()
+    if (!this.expenses) this.fetchExpenses()
+    // switch (this.type) { 
+    //   case 'income':
+    //     if (!this.incomes) this.fetchIncomes()
+    //     break
+    //   case 'wallet':
+    //     if (!this.wallets) this.fetchWallets()
+    //     break
+    //   case 'expense':
+    //     if (!this.expenses) this.fetchExpenses()
+    //     break
+    // }
   },
 
   computed: {
     ...mapGetters([
-      'getTransactionsByPoint'
-      ])
-  },
+        'getTransactionsByPoint',
+        'incomes',
+        'wallets',
+        'expenses', 
+        'points',
+      ]),
+
+      // point() {
+      //   return this.points[this.$route.params.type][this.$route.params.id]         
+      // }
+},
 
   methods: {
     ...mapActions([
       'fetchTransactionsByPoint',
+      'fetchIncomes',
+      'fetchWallets',
+      'fetchExpenses',
     ]),
 
-    fetchPoint() {
-      this.axios.get(`/api/get/${this.$route.params.type}s/${this.$route.params.id}`)
-      .then(response => {
-          console.log(response)
-      })
+    changeDate(newDate) {
+      this.dateFrom = newDate[0]
+      this.dateTo = newDate[1]
+      console.log(this.dateFrom)
+      console.log(this.dateTo)
     }
+
+    // fetchPoint() {
+    //   this.axios.get(`/api/${id}s/${this.type}`)
+    //   .then(response => {
+    //       console.log(response)
+    //   })
+    // }
   },
 
   data() {
     return {
+      id: this.$route.params.id,
+      type: this.$route.params.type,
+      dateFrom: '',
+      dateTo: '',
       lineChartData: {
         labels: ["март", "апрель", "май", "июнь", "март", "апрель", "май", "июнь", "май", "июнь", "июнь"],
         datasets: [
            {
-            label: 'Еда',
+            label: 'this.points[this.type][this.id].name',
             backgroundColor: 'rgba(10, 147, 209, 0.2)',
             borderColor: 'rgba(10, 147, 209)',
             data: [0, 15000, 5000, 15000, -10000, 5000, 15000, -10000, 5000, 30000, -10000],
@@ -114,9 +149,9 @@ export default {
           },
         ],
       },
-    };
+    }
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

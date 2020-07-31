@@ -144,7 +144,6 @@
               'walletsSumm',
               'expensesSumm',
               'expensesLimit',
-              'thisPointPage'
               ]),
 
               dateNowString() {
@@ -164,8 +163,6 @@
               'fetchWallets',
               'fetchExpenses',
             ]),
-
-            ...mapMutations(['setThisPointPage']),
 
             transactionWallet (event) {
                 let fromID = Number(event.data.id)
