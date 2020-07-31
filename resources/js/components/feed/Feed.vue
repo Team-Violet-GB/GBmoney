@@ -64,6 +64,7 @@
         },
         computed: {
             ...mapGetters([
+
                 'getTransactions',
                 'getErrorStatus',
                 'getErrorInfo',

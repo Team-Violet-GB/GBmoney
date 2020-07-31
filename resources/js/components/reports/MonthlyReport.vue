@@ -11,7 +11,7 @@
                         value-format="yyyy-MM-dd"
                         @change="onMonthChange">
                     </el-date-picker>
-                    <el-radio-group v-model="categoryOfChart" size="small" style="margin-left: 38px">
+                    <el-radio-group v-model="categoryOfChart" size="small" style="margin-left: 38px; width: 200px">
                         <el-radio-button label="Доходы">Доходы</el-radio-button>
                         <el-radio-button label="Расходы">Расходы</el-radio-button>
                     </el-radio-group>
@@ -79,9 +79,9 @@
                             label: 'Расходы',
                             backgroundColor: [
                                 'rgba(255,0,0,0.65)',
-                                'rgba(7,227,52,0.65)',
                                 'rgba(127,108,246,0.65)',
                                 'rgba(241,217,5,0.65)',
+                                'rgba(7,227,52,0.65)',
                                 'rgba(13,149,245,0.65)',
                                 'rgba(255,99,3,0.65)'
                             ],
@@ -172,6 +172,6 @@
 
     .feed-container {
         height: 85vh;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
 </style>
