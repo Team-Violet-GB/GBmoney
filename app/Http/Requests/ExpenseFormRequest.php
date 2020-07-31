@@ -31,7 +31,7 @@ class ExpenseFormRequest extends FormRequest
                 'max:45',
                 Rule::unique('expenses')->ignore($this->route('expense'), 'id')->where('user_id', Auth::id()),
             ],
-            'amount' => 'required|numeric',
+            'amount' => 'numeric',
             'max_limit' => 'required|numeric',
             'icon_id' => 'required|int',
         ];

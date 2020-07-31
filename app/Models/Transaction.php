@@ -48,7 +48,6 @@ class Transaction extends Model
             // Заполняем общие свойства.
             $this->user_id = Auth::id();
             $this->type = $request->type;
-            $this->amount = $request->amount;
             $this->date = $request->date ?? now()->toDateString();
             $this->comment = $request->comment;
 
@@ -62,11 +61,11 @@ class Transaction extends Model
 
                 // Увеличиваем сумму дохода.
                 $income = Income::query()->find($request->from_id);
-                $income->increment('amount', $request->amount);
+                $income->increment('amount', $request->amount - $this->amount);
 
                 // Увеличиваем сумму кошелька.
                 $wallet = Wallet::query()->find($request->to_id);
-                $wallet->increment('amount', $request->amount);
+                $wallet->increment('amount', $request->amount - $this->amount);
             }
             if ($this->type == Transaction::TYPE_TRANSFER) {
                 $this->wallet_id_from = $request->from_id;
@@ -77,11 +76,11 @@ class Transaction extends Model
 
                 // Уменьшаем сумму кошелька списания.
                 $walletFrom = Wallet::query()->find($request->from_id);
-                $walletFrom->decrement('amount', $request->amount);
+                $walletFrom->decrement('amount', $request->amount - $this->amount);
 
                 // Увеличиваем сумму кошелька поступления.
                 $walletTo = Wallet::query()->find($request->to_id);
-                $walletTo->increment('amount', $request->amount);
+                $walletTo->increment('amount', $request->amount - $this->amount);
             }
             if ($this->type == Transaction::TYPE_EXPENSE) {
                 $this->wallet_id_from = $request->from_id;
@@ -92,14 +91,67 @@ class Transaction extends Model
 
                 // Уменьшаем сумму кошелька списания.
                 $walletFrom = Wallet::query()->find($request->from_id);
-                $walletFrom->decrement('amount', $request->amount);
+                $walletFrom->decrement('amount', $request->amount - $this->amount);
 
                 // Увеличиваем сумму расходов.
                 $expense = Expense::query()->find($request->to_id);
-                $expense->increment('amount', $request->amount);
+                $expense->increment('amount', $request->amount - $this->amount);
             }
 
+            // Заполняем сумму.
+            $this->amount = $request->amount;
+
             $this->save();
+        } catch (Exception $e) {
+            // Откатываем изменения.
+            DB::rollBack();
+
+            return $e;
+        }
+
+        // Фиксируем изменения.
+        DB::commit();
+
+        return true;
+    }
+
+    public function deleteTransaction()
+    {
+        try {
+            // Открываем транзакцию
+            DB::beginTransaction();
+
+            // Определяем значения внешних ключей в зависимости от типа операции (type).
+            if ($this->type == Transaction::TYPE_INCOME) {
+                // Уменьшаем сумму дохода.
+                $income = Income::query()->find($this->income_id);
+                $income->decrement('amount', $this->amount);
+
+                // Уменьшаем сумму кошелька.
+                $wallet = Wallet::query()->find($this->wallet_id_to);
+                $wallet->decrement('amount', $this->amount);
+            }
+            if ($this->type == Transaction::TYPE_TRANSFER) {
+                // Увеличиваем сумму кошелька списания.
+                $walletFrom = Wallet::query()->find($this->wallet_id_from);
+                $walletFrom->increment('amount', $this->amount);
+
+                // Уменьшаем сумму кошелька поступления.
+                $walletTo = Wallet::query()->find($this->wallet_id_to);
+                $walletTo->decrement('amount', $this->amount);
+            }
+            if ($this->type == Transaction::TYPE_EXPENSE) {
+                // Увеличиваем сумму кошелька списания.
+                $walletFrom = Wallet::query()->find($this->wallet_id_from);
+                $walletFrom->increment('amount', $this->amount);
+
+                // Уменьшаем сумму расходов.
+                $expense = Expense::query()->find($this->expense_id);
+                $expense->decrement('amount', $this->amount);
+            }
+
+            // Удаляем транзакцию
+            $this->delete();
         } catch (Exception $e) {
             // Откатываем изменения.
             DB::rollBack();

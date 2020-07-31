@@ -31,7 +31,7 @@ class IncomeFormRequest extends FormRequest
                 'max:45',
                 Rule::unique('incomes')->ignore($this->route('income'), 'id')->where('user_id', Auth::id()),
             ],
-            'amount' => 'required|numeric',
+            'amount' => 'numeric',
             'icon_id' => 'required|int',
         ];
     }
