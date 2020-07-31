@@ -16,7 +16,6 @@
     import {mapActions, mapGetters, mapMutations} from 'vuex';
     import Feed from "../components/feed/Feed";
 
-
     export default {
         name: "FeedPage",
         components: {
@@ -47,7 +46,6 @@
         font-weight: bolder;
         font-size: xx-large;
         margin-bottom: 40px;
-
     }
 
 </style>

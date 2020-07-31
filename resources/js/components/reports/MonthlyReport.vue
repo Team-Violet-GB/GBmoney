@@ -1,36 +1,34 @@
 <template>
     <div>
-        <div class="container">
-            <el-row :gutter="30" style="height: 100vh">
-                <el-col :span="12">
-                    <div class="block">
-                        <span class="month-label">Отчет за месяц </span>
-                        <el-date-picker
-                            v-model="month"
-                            type="month"
-                            format="  MMMM yyyy года"
-                            value-format="yyyy-MM-dd"
-                            @change="onMonthChange">
-                        </el-date-picker>
-                        <el-radio-group v-model="categoryOfChart" size="small" style="margin-left: 38px">
-                            <el-radio-button label="Доходы">Доходы</el-radio-button>
-                            <el-radio-button label="Расходы">Расходы</el-radio-button>
-                        </el-radio-group>
-                    </div>
-                    <monthChart ref="chart" :chartData="dataChart" :options="chartOptions"/>
-                </el-col>
-                <el-col :span="12">
-                    <div class="container">
-                        <feed
-                            :editable="false"
-                            page="1"
-                            :dateFrom="dates.from"
-                            :dateTo="dates.to"
-                        ></feed>
-                    </div>
-                </el-col>
-            </el-row>
-        </div>
+        <el-row :gutter="30" style="height: 85vh">
+            <el-col :span="12">
+                <div class="block">
+                    <span class="month-label">Отчет за месяц </span>
+                    <el-date-picker
+                        v-model="month"
+                        type="month"
+                        format="  MMMM yyyy года"
+                        value-format="yyyy-MM-dd"
+                        @change="onMonthChange">
+                    </el-date-picker>
+                    <el-radio-group v-model="categoryOfChart" size="small" style="margin-left: 38px">
+                        <el-radio-button label="Доходы">Доходы</el-radio-button>
+                        <el-radio-button label="Расходы">Расходы</el-radio-button>
+                    </el-radio-group>
+                </div>
+                <monthChart ref="chart" :chartData="dataChart" :options="chartOptions"/>
+            </el-col>
+            <el-col :span="12">
+                <div class="feed-container">
+                    <feed
+                        :editable="false"
+                        page="1"
+                        :dateFrom="dates.from"
+                        :dateTo="dates.to"
+                    ></feed>
+                </div>
+            </el-col>
+        </el-row>
     </div>
 </template>
 
@@ -150,8 +148,7 @@
 
 <style scoped>
     .container {
-        height: 770px;
-        overflow: hidden;
+        height: 87vh;
     }
 
     .el-date-editor {
@@ -173,8 +170,8 @@
         padding-right: 5px;
     }
 
-    .container {
-        height: 756px;
+    .feed-container {
+        height: 85vh;
         overflow-y: scroll;
     }
 </style>
