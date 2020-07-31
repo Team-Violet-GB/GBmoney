@@ -2,19 +2,14 @@
     <div>
         <el-row :gutter="30" style="height: 85vh">
             <el-col :span="12">
-                <div class="block">
-                    <span class="month-label">Отчет за месяц </span>
-                    <el-date-picker
-                        v-model="month"
-                        type="month"
-                        format="  MMMM yyyy года"
-                        value-format="yyyy-MM-dd"
-                        @change="onMonthChange">
-                    </el-date-picker>
-                    <el-radio-group v-model="categoryOfChart" size="small" style="margin-left: 38px; width: 200px">
-                        <el-radio-button label="Доходы">Доходы</el-radio-button>
-                        <el-radio-button label="Расходы">Расходы</el-radio-button>
-                    </el-radio-group>
+                <div class="options">
+                    <month-picker/>
+                    <div class="block">
+                        <el-radio-group v-model="categoryOfChart" size="small" style="margin-left: 38px; width: 200px">
+                            <el-radio-button label="Доходы">Доходы</el-radio-button>
+                            <el-radio-button label="Расходы">Расходы</el-radio-button>
+                        </el-radio-group>
+                    </div>
                 </div>
                 <monthChart ref="chart" :chartData="dataChart" :options="chartOptions"/>
             </el-col>
@@ -33,6 +28,7 @@
 </template>
 
 <script>
+    import monthPicker from '../CalendarMonth'
     import monthChart from "./MonthChart"
     import feed from "../feed/Feed";
     import {mapActions, mapGetters, mapMutations} from 'vuex';
@@ -67,7 +63,6 @@
                 return {from: fromDate, to: toDate}
             },
             chartOptions() {
-
                 responsive: true
                 maintainAspectRatio: false
             },
@@ -140,6 +135,7 @@
             this.createChartData()
         },
         components: {
+            monthPicker,
             monthChart,
             feed
         }
@@ -147,8 +143,8 @@
 </script>
 
 <style scoped>
-    .container {
-        height: 87vh;
+    body {
+        margin: 0;
     }
 
     .el-date-editor {
@@ -162,10 +158,10 @@
         margin-left: 30px;
     }
 
-    .block {
+    .options {
         display: flex;
         justify-content: flex-end;
-        align-items: center;
+        align-items: baseline;
         margin-bottom: 30px;
         padding-right: 5px;
     }

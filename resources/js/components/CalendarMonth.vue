@@ -1,6 +1,6 @@
 <template>
-  <div class="block">
-    <span class="demonstration">Месяц</span>
+  <div class="options">
+    <span class="demonstration">Месяц&nbsp;&nbsp;</span>
     <el-date-picker
       v-model="value2"
       type="monthrange"
@@ -9,7 +9,9 @@
       range-separator="To"
       start-placeholder="Первый"
       end-placeholder="Последний"
-      :picker-options="pickerOptions">
+      :picker-options="pickerOptions"
+      format="MMMM yyyy"
+      value-format="yyyy-MM-dd">
     </el-date-picker>
   </div>
 </template>
