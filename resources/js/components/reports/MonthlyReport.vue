@@ -20,7 +20,7 @@
                     <monthChart ref="chart" :chartData="dataChart" :options="chartOptions"/>
                 </el-col>
                 <el-col :span="12">
-                    <div class="feed-container">
+                    <div class="container">
                         <feed
                             :editable="false"
                             page="1"
@@ -69,6 +69,7 @@
                 return {from: fromDate, to: toDate}
             },
             chartOptions() {
+
                 responsive: true
                 maintainAspectRatio: false
             },
@@ -149,7 +150,8 @@
 
 <style scoped>
     .container {
-        height: 700px;
+        height: 770px;
+        overflow: hidden;
     }
 
     .el-date-editor {
@@ -171,7 +173,7 @@
         padding-right: 5px;
     }
 
-    .feed-container {
+    .container {
         height: 756px;
         overflow-y: scroll;
     }
