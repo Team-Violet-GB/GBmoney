@@ -11,9 +11,7 @@
             <!-- Календарь -->
             <Calendar 
               :date="transaction.date"
-              @changeDate="(newDate) => { 
-              newDate ? (transaction.date = new Date(newDate.getTime() - (newDate.getTimezoneOffset() * 60000)).toISOString().slice(0, 10)): transaction.date = null 
-              }" />
+              @changeDate="(newDate) => newDate ? transaction.date = newDate : transaction.date = null " />
             <!-- Блок Откуда -> Куда  будет производиться транзакция -->
             <div class="cstm-select-box cstm-mrgn-top-20">
               <SelectCustom :list="pointsFrom" :idSelected="transaction.fromID" @changeSelect="(fromID) => { transaction.fromID = fromID }" />
@@ -107,6 +105,7 @@ import LoginVue from '../../views/Login.vue'
         ]),
 
         tagsFromCategory() {
+          console.log(this.tags)
           var tags = []
           for (var tag in this.tags){
               if (this.tags[tag].expense_id == this.transaction.toID && !this.tags[tag].deleted) {
