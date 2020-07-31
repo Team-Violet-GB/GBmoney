@@ -10,11 +10,13 @@
                     <el-col :span="3"><span style="color: #8e8e8e">{{ from.typeName }}</span></el-col>
                     <el-col :span="6"><span>{{ to.to }}</span><span class="tran-tag-name">{{ to.tagName }}</span>
                     </el-col>
-                    <el-col :span="8"><div class="tran-comment">{{ transaction.data.comment }} &nbsp;</div></el-col>
+                    <el-col :span="8">
+                        <div class="tran-comment">{{ transaction.data.comment }} &nbsp;</div>
+                    </el-col>
                     <el-col :span="4">
                         <div
-                        :class="getTypeData(this.transaction.data).color"
-                        style="display: flex; justify-content: flex-end">
+                            :class="getTypeData(this.transaction.data).color"
+                            style="display: flex; justify-content: flex-end">
                             {{ getTypeData(this.transaction.data).symbol}}{{ transaction.data.amount }} &#8381;
                         </div>
                     </el-col>
@@ -33,7 +35,8 @@
                     <span>{{ to.to }}</span><span class="tran-tag-name">{{ to.tagName }}</span>
                 </el-col>
                 <el-col :span="5">
-                    <span style="display: flex;justify-content: flex-end">{{ transaction.data.amount }} &#8381;</span>
+                    <span :class="getTypeData(this.transaction.data).color"
+                          style="display: flex;justify-content: flex-end">{{ getTypeData(this.transaction.data).symbol}}{{ transaction.data.amount }} &#8381;</span>
                 </el-col>
             </el-row>
         </div>
@@ -178,12 +181,14 @@
     }
 
     .cstm-yellow {
-    color: #e6a23c;
+        color: #e6a23c;
     }
+
     .cstm-green {
-    color: #67c23a;
+        color: #67c23a;
     }
+
     .cstm-red {
-    color: #f56c6c;
+        color: #f56c6c;
     }
 </style>

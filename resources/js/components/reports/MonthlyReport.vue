@@ -61,7 +61,7 @@
                     return 32 - new Date(this.getFullYear(), this.getMonth(), 32).getDate();
                 };
 
-                let date = new Date(this.month)
+                let date = new Date(this.month);
                 let lastDay = date.lastDayOfMonth();
                 const fromDate = this.month;
                 const toDate = this.month.slice(0, 8) + lastDay.toString();

@@ -19,7 +19,7 @@
         </el-card>
 
 <!--        пагинация-->
-        <div v-if="editable" class="pagination">
+        <div class="pagination">
             <el-pagination
                 background
                 :hide-on-single-page="true"
