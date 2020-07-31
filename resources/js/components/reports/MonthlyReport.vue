@@ -17,7 +17,7 @@
                         <el-radio-button label="Расходы">Расходы</el-radio-button>
                     </el-radio-group>
                 </div>
-                <monthChart :chartdata="chartData" :options="chartOptions"/>
+                <monthChart :chart-data="chartData" :options="chartOptions"/>
             </el-col>
             <el-col :span="12">
                 <div class="feed-container">
@@ -45,7 +45,8 @@
         data() {
             return {
                 month: new Date().toISOString().slice(0, 8) + '01',
-                categoryOfChart: 'Расходы'
+                categoryOfChart: 'Расходы',
+                chartData: null
             }
         },
         computed: {
@@ -67,29 +68,14 @@
 
                 return {from: fromDate, to: toDate}
             },
-
-            chartData() {
-
-                return {
-                    labels: this.calcChartData.lab,
-                    datasets: [
-                        {
-                            label: 'Расходы',
-                            backgroundColor: ['rgba(190, 99, 255, 0.66)', 'rgba(59,220,89,0.66)', 'rgba(239,106,5,0.66)'],
-                            borderColor: 'rgba(190,99,255,0)',
-                            data: this.calcChartData.dat
-                        }
-                    ]
-                };
-            },
             chartOptions() {
                 responsive: true
                 maintainAspectRatio: false
             },
-            calcChartData() {
-                let trans = this.getTransactions;
+            createChartData() {
                 let labels = [];
                 let data = [];
+                let trans = this.getTransactions;
                 for (let groupKey in trans) {
                     let transGroup = trans[groupKey]
                     for (let tranKey in transGroup) {
@@ -103,8 +89,7 @@
                         }
                     }
                 }
-                return {lab: labels, dat: data}
-
+                return {labels, data}
             },
         },
         methods: {
@@ -123,17 +108,37 @@
                 'setPage'
             ]),
             onMonthChange() {
-                this.setPage(1)
                 this.setDateFrom(this.dates.from)
                 this.setDateTo(this.dates.to)
                 this.fetchTransactions()
+                this.chartData = {
+                    labels: this.createChartData.labels,
+                    datasets: [
+                        {
+                            label: 'Расходы',
+                            backgroundColor: ['rgba(190, 99, 255, 0.66)', 'rgba(59,220,89,0.66)', 'rgba(239,106,5,0.66)'],
+                            borderColor: 'rgba(190,99,255,0)',
+                            data: this.createChartData.data
+                        }
+                    ]
+                }
             },
         },
         mounted() {
-            this.setPage(1)
             this.setDateFrom(this.dates.from)
             this.setDateTo(this.dates.to)
             this.fetchTransactions()
+            this.chartData = {
+                labels: this.createChartData.labels,
+                datasets: [
+                    {
+                        label: 'Расходы',
+                        backgroundColor: ['rgba(190, 99, 255, 0.66)', 'rgba(59,220,89,0.66)', 'rgba(239,106,5,0.66)'],
+                        borderColor: 'rgba(190,99,255,0)',
+                        data: this.createChartData.data
+                    }
+                ]
+            }
         },
         components: {
             monthChart,
