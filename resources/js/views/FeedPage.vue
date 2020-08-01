@@ -33,7 +33,7 @@
             ])
         },
         mounted() {
-            // this.fetchTransactions()
+            this.fetchTransactions()
         }
     }
 </script>
