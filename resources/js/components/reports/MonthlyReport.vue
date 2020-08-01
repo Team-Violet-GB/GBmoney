@@ -5,7 +5,8 @@
                 <div class="options">
                     <month-picker @changeDate="onMonthChange"/>
                     <div class="block">
-                        <el-radio-group v-model="categoryOfChart" size="small" style="margin-left:80px; width: 200px">
+                        <el-radio-group @change="generateChartData(typeOfChart)" v-model="typeOfChart" size="small"
+                                        style="margin-left:80px; width: 200px">
                             <el-radio-button label="Доходы">Доходы</el-radio-button>
                             <el-radio-button label="Расходы">Расходы</el-radio-button>
                         </el-radio-group>
@@ -43,7 +44,7 @@
         data() {
             return {
                 currentISODateFrom: new Date().toISOString().slice(0, 8) + '01',
-                categoryOfChart: 'Расходы'
+                typeOfChart: 'Расходы'
             }
         },
         computed: {
@@ -54,7 +55,7 @@
                 'getPage',
             ]),
             dataChart() {
-                const generatedChartData = this.generateChartData()
+                const generatedChartData = this.generateChartData(this.typeOfChart)
                 return {
                     labels: generatedChartData.labels,
                     datasets: [
@@ -110,23 +111,47 @@
                 this.setDateTo(this.getLastISODateOfMonth(range[1]))
                 this.fetchTransactions()
             },
-            generateChartData() {
+            generateChartData(typeOfChart) {
                 let labels = [];
                 let data = [];
                 let trans = this.getTransactions;
-                for (let groupKey in trans) {
-                    let transGroup = trans[groupKey]
-                    for (let tranKey in transGroup) {
-                        let tran = transGroup[tranKey]
-                        if (tran.type == 3) {
-                            let name = this.getTypeData(tran).toName
-                            if (!labels.includes(name)) {
-                                labels.push(name);
-                                data.push(this.getTotalOfExpense(tran.expense_id));
-                            }
-                        }
-                    }
+                switch (typeOfChart) {
+                    case "Расходы":
+                        // for (let groupKey in trans) {
+                        //     let transGroup = trans[groupKey]
+                        //     for (let tranKey in transGroup) {
+                        //         let tran = transGroup[tranKey]
+                        //         if (tran.type === 3) {
+                        //             let name = this.getTypeData(tran).toName
+                        //             if (!labels.includes(name)) {
+                        //                 labels.push(name);
+                        //                 data.push(this.getTotalOfExpense(tran.expense_id));
+                        //             }
+                        //         }
+                        //     }
+                        // }
+                        labels = ['еда', 'авто', 'танцы']
+                        data = ['1000', '2000', '4000']
+                        break;
+                    case "Доходы":
+                        // for (let groupKey in trans) {
+                        //     let transGroup = trans[groupKey]
+                        //     for (let tranKey in transGroup) {
+                        //         let tran = transGroup[tranKey]
+                        //         if (tran.type === 1) {
+                        //             let name = this.getTypeData(tran).fromName
+                        //             if (!labels.includes(name)) {
+                        //                 labels.push(name);
+                        //                 data.push(this.getTotalOfExpense(tran.income_id));
+                        //             }
+                        //         }
+                        //     }
+                        // }
+                        labels = ['зряплата', 'премия', 'приз']
+                        data = ['2000', '3000', '1500']
+                        break;
                 }
+                console.log({labels, data})
                 return {labels, data}
             },
             getLastISODateOfMonth(anyISODateOfMonth) {
@@ -143,7 +168,7 @@
             this.setDateFrom(this.currentISODateFrom);
             this.setDateTo(this.getLastISODateOfMonth(this.currentISODateFrom));
             this.fetchTransactions();
-            this.generateChartData();
+            this.generateChartData(this.typeOfChart);
         },
         components: {
             monthPicker,
