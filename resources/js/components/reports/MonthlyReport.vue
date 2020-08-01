@@ -3,7 +3,7 @@
         <el-row :gutter="30" style="height: 85vh">
             <el-col :span="12">
                 <div class="options">
-                    <month-picker/>
+                    <month-picker @changeDate="onMonthChange"/>
                     <div class="block">
                         <el-radio-group v-model="categoryOfChart" size="small" style="margin-left:80px; width: 200px">
                             <el-radio-button label="Доходы">Доходы</el-radio-button>
@@ -25,8 +25,9 @@
                         :editable="false"
                         page="1"
                         :dateFrom="dates.from"
-                        :dateTo="dates.to"
-                    ></feed>
+                        :dateTo="dates.to">
+
+                    </feed>
                 </div>
             </el-col>
         </el-row>
@@ -45,8 +46,7 @@
         mixins: [type],
         data() {
             return {
-                month: new Date().toISOString().slice(0, 8) + '01',
-                // month: '2020-06-01',
+                currentDateFrom: new Date().toISOString().slice(0, 8) + '01',
                 categoryOfChart: 'Расходы'
             }
         },
@@ -62,10 +62,10 @@
                     return 32 - new Date(this.getFullYear(), this.getMonth(), 32).getDate();
                 };
 
-                let date = new Date(this.month);
+                let date = new Date(this.currentDateFrom);
                 let lastDay = date.lastDayOfMonth();
-                const fromDate = this.month;
-                const toDate = this.month.slice(0, 8) + lastDay.toString();
+                const fromDate = this.currentDateFrom;
+                const toDate = this.currentDateFrom.slice(0, 8) + lastDay.toString();
 
                 return {from: fromDate, to: toDate}
             },
@@ -111,9 +111,10 @@
                 'setPage',
                 'setErrorStatus'
             ]),
-            onMonthChange() {
-                this.setDateFrom(this.dates.from)
-                this.setDateTo(this.dates.to)
+            onMonthChange(range) {
+                console.log(range)
+                this.setDateFrom(range[0])
+                this.setDateTo(range[1])
                 this.fetchTransactions()
             },
             createChartData() {
