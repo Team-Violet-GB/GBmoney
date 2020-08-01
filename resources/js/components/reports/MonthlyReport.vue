@@ -46,7 +46,8 @@
         mixins: [type],
         data() {
             return {
-                currentDateFrom: new Date().toISOString().slice(0, 8) + '01',
+                month: new Date().toISOString().slice(0, 8) + '01',
+                // month: '2020-06-01',
                 categoryOfChart: 'Расходы'
             }
         },
@@ -62,10 +63,10 @@
                     return 32 - new Date(this.getFullYear(), this.getMonth(), 32).getDate();
                 };
 
-                let date = new Date(this.currentDateFrom);
+                let date = new Date(this.month);
                 let lastDay = date.lastDayOfMonth();
-                const fromDate = this.currentDateFrom;
-                const toDate = this.currentDateFrom.slice(0, 8) + lastDay.toString();
+                const fromDate = this.month;
+                const toDate = this.month.slice(0, 8) + lastDay.toString();
 
                 return {from: fromDate, to: toDate}
             },
@@ -113,8 +114,8 @@
             ]),
             onMonthChange(range) {
                 console.log(range)
-                this.setDateFrom(range[0])
-                this.setDateTo(range[1])
+                this.setDateFrom(this.dates.from)
+                this.setDateTo(this.dates.to)
                 this.fetchTransactions()
             },
             createChartData() {
