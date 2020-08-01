@@ -4,8 +4,6 @@ import { update } from "lodash";
 export default {
     actions: {
         fetchTransactions({commit}) {
-            console.log('from: ', this.getters.getDateFrom)
-            console.log('to: ', this.getters.getDateTo)
             const headers = {
                 'Content-Type': 'application/json'
             }
@@ -14,20 +12,22 @@ export default {
                 data_from: this.getters.getDateFrom,
                 data_to: this.getters.getDateTo
             }
+            commit('setErrorStatus', false);
             axios.get('/api/transactions', {params: params, headers: headers})
                 .then(response => {
                     commit('setTotal', response.data.meta.total);
                     commit('setTransactions', response.data.data);
+                    if ((Object.keys(response.data.data).length) === 0) {
+                        commit('setErrorStatus', true);
+                        commit('setErrorInfo', `За запрошеный период транзакции не производились ...`);
+                    } else {
+                        commit('setErrorStatus', false);
+                    }
                 })
                 .catch(error => {
                     commit('setErrorStatus', true);
-                    commit('setErrorInfo', `Транзакции отсутствуют: (${error})`);
+                    commit('setErrorInfo', `Ошибка во время запроса транзакций: (${error})`);
                 })
-                .finally(() => {
-                    if (Object.keys(this.getters.getTransactions).length === 0) {
-                        commit('setErrorStatus', true);
-                    }
-                });
         },
         fetchTransactionsByPoint({ commit }, data) {
             // axios.get('/api/get/transactions', {      \\ ждём реализацию на бэке
@@ -79,7 +79,7 @@ export default {
         transactions: {},
         transactionsByPoint: null,
         errorStatus: false,
-        errorInfo: 'Список транзакций пуст',
+        errorInfo: 'Не предопределенное сообщение об ошибке ...',
         editable: true,
         dateFrom: '',
         dateTo: '',

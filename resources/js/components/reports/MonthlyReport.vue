@@ -5,9 +5,9 @@
                 <div class="options">
                     <month-picker/>
                     <div class="block">
-                        <el-radio-group v-model="categoryOfChart" size="small" style="margin-left: 38px; width: 200px">
-                            <el-radio-button label="Доходы">Доходы</el-radio-button>
-                            <el-radio-button label="Расходы">Расходы</el-radio-button>
+                        <el-radio-group v-model="categoryOfChart" size="small" style="border-radius: 0; margin-left: 38px; width: 200px">
+                            <el-radio-button label="Доходы" style="border-radius: 0">Доходы</el-radio-button>
+                            <el-radio-button label="Расходы" style="border-radius: 0">Расходы</el-radio-button>
                         </el-radio-group>
                     </div>
                 </div>
@@ -15,7 +15,13 @@
             </el-col>
             <el-col :span="12">
                 <div class="feed-container">
-                    <feed
+                    <el-alert
+                        v-if="getErrorStatus"
+                        :title="getErrorInfo"
+                        type="error"
+                        effect="dark">
+                    </el-alert>
+                    <feed v-else
                         :editable="false"
                         page="1"
                         :dateFrom="dates.from"
@@ -102,7 +108,8 @@
                 'setEditable',
                 'setDateFrom',
                 'setDateTo',
-                'setPage'
+                'setPage',
+                'setErrorStatus'
             ]),
             onMonthChange() {
                 this.setDateFrom(this.dates.from)
@@ -143,7 +150,7 @@
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     body {
         margin: 0;
     }
@@ -168,6 +175,7 @@
     }
 
     .feed-container {
+        margin-top: 18px;
         height: 85vh;
         overflow-y: auto;
     }

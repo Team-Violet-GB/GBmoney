@@ -1,7 +1,7 @@
 <template>
     <div>
         <!--        заголовок группы транзакций-->
-        <el-card v-if="!getErrorStatus" v-for="(transactionGroup, index) in getTransactions" :key="index"
+        <el-card v-for="(transactionGroup, index) in getTransactions" :key="index"
                  class="box-card">
             <el-row :gutter="10" slot="header" class="clearfix tran-group-header">
                 <el-col :span="14">
@@ -28,7 +28,6 @@
                 :total="getTotal">
             </el-pagination>
         </div>
-
     </div>
 </template>
 
