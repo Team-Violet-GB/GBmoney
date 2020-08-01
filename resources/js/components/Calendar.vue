@@ -6,6 +6,7 @@
       @change="$emit('changeDate', dateSelect)"
       type="date"
       format="dd-MM-yyyy"
+      value-format="yyyy-MM-dd"
       placeholder="Дата">
     </el-date-picker>
   </div>

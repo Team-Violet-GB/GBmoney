@@ -24,7 +24,13 @@
           <div class="cstm-head-point">{{ point.name }}</div>
           <drag :data="{ id: point.id, type: 'income'}">
             <drop :accepts-data="() => false">
-              <el-button type="primary" :icon="point.icon_name" circle class="cstm-icon-point" @click="$router.push('/point')"></el-button>
+              <el-button 
+                type="primary" 
+                :icon="point.icon_name" 
+                circle 
+                class="cstm-icon-point" 
+                @click="$router.push(`/point/income/${point.id}`)">
+              </el-button>
             </drop>
           </drag>
           <div class="cstm-money-point cstm-blue">{{ point.amount }} &#8381;</div>
@@ -55,7 +61,13 @@
               :accepts-data="(data) => (data.type == 'income') || data.type == 'wallet'"
             >
               <drag :data="{ id: point.id, type: 'wallet'}">
-                <el-button type="warning" :icon="point.icon_name" circle class="cstm-icon-point" @click="$router.push('/point')"></el-button>
+                <el-button 
+                  type="warning" 
+                  :icon="point.icon_name" 
+                  circle 
+                  class="cstm-icon-point" 
+                  @click="$router.push(`/point/wallet/${point.id}`)" >
+                </el-button>
                 </drag>
             </drop>
           <div class="cstm-money-point cstm-yellow">{{ point.amount }} &#8381;</div>
@@ -89,7 +101,7 @@
               :icon="point.icon_name"
               circle
               class="cstm-icon-point cstm-expense"
-              @click="$router.push('/point')"
+              @click="$router.push(`/point/expense/${point.id}`)"
             ></el-button>
           </drop>
           <div
@@ -131,7 +143,7 @@
               'incomesSumm',
               'walletsSumm',
               'expensesSumm',
-              'expensesLimit'
+              'expensesLimit',
               ]),
 
               dateNowString() {
@@ -140,9 +152,9 @@
         },
 
         mounted() {
-            this.fetchIncomes()
-            this.fetchWallets()
-            this.fetchExpenses()
+            if (!this.incomes) this.fetchIncomes()
+            if (!this.wallets) this.fetchWallets()
+            if (!this.expenses) this.fetchExpenses()
         },
 
         methods: {

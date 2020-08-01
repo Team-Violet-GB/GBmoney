@@ -2,8 +2,11 @@
   <div class="options">
     <span class="demonstration">Месяц&nbsp;&nbsp;</span>
     <el-date-picker
-      v-model="value2"
+      v-model="dateSelect"
+      @change="$emit('changeDate', dateSelect)"
       type="monthrange"
+      format="MMMM yyyy"
+      value-format="yyyy-MM-dd"
       align="right"
       unlink-panels
       range-separator="To"
@@ -20,6 +23,7 @@
   export default {
     data() {
       return {
+        dateSelect: [new Date(), new Date()],
         pickerOptions: {
           shortcuts: [{
             text: 'Этот месяц',
@@ -43,7 +47,6 @@
             }
           }]
         },
-        value2: ''
       };
     }
   };

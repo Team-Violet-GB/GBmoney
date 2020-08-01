@@ -3,55 +3,63 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    meta: { layout: 'main' },
-    component: () => import('./views/Home.vue')
-  },
-  {
-    path: '/user',
-    name: 'User',
-    meta: { layout: 'main' },
-    component: () => import('./views/User.vue')
-  },
-  {
-    path: '/point',
-    name: 'Point',
-    meta: { layout: 'main' },
-    component: () => import('./views/Point.vue')
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    meta: { layout: 'empty' },
-    component: () => import('./views/Login.vue')
-  },
-  {
-    path: '/registration',
-    name: 'Registration',
-    meta: { layout: 'empty' },
-    component: () => import('./views/Registration.vue')
-  },
-  {
-    path: '/feed',
-    name: 'Feed',
-    meta: { layout: 'main' },
-    component: () => import('./views/FeedPage.vue')
-  },
-  {
-    path: '/monthly-report',
-    name: 'monthlyReport',
-    meta: { layout: 'main' },
-    component: () => import('./components/reports/MonthlyReport.vue')
-  }
-]
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes: [
+    {
+      path: '/',
+      name: 'Home',
+      meta: { layout: 'main', auth: true },
+      component: () => import('./views/Home.vue')
+    },
+    {
+      path: '/user',
+      name: 'User',
+      meta: { layout: 'main', auth: true },
+      component: () => import('./views/User.vue')
+    },
+    {
+      path: '/point/:type/:id',
+      name: 'Point',
+      meta: { layout: 'main', auth: true },
+      component: () => import('./views/Point.vue')
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      meta: { layout: 'empty' },
+      component: () => import('./views/Login.vue')
+    },
+    {
+      path: '/registration',
+      name: 'Registration',
+      meta: { layout: 'empty' },
+      component: () => import('./views/Registration.vue')
+    },
+    {
+      path: '/feed',
+      name: 'Feed',
+      meta: { layout: 'main', auth: true },
+      component: () => import('./views/FeedPage.vue')
+    },
+    {
+      path: '/monthly-report',
+      name: 'monthlyReport',
+      meta: { layout: 'main', auth: true },
+      component: () => import('./components/reports/MonthlyReport.vue')
+    }
+  ]
+})
+
+router.beforeEach((to, from, next) => {
+  const isAuth = localStorage.getItem('user-token')
+  const requireAuth = to.matched.some(route => route.meta.auth)
+
+  if (requireAuth && !isAuth) next('/login')
+  else if (!requireAuth && isAuth) next('/')
+  else next()
 })
 
 export default router
