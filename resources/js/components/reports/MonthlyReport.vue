@@ -5,9 +5,9 @@
                 <div class="options">
                     <month-picker/>
                     <div class="block">
-                        <el-radio-group v-model="categoryOfChart" size="small" style="border-radius: 0; margin-left: 38px; width: 200px">
-                            <el-radio-button label="Доходы" style="border-radius: 0">Доходы</el-radio-button>
-                            <el-radio-button label="Расходы" style="border-radius: 0">Расходы</el-radio-button>
+                        <el-radio-group v-model="categoryOfChart" size="small" style="margin-left:80px; width: 200px">
+                            <el-radio-button label="Доходы">Доходы</el-radio-button>
+                            <el-radio-button label="Расходы">Расходы</el-radio-button>
                         </el-radio-group>
                     </div>
                 </div>
@@ -155,17 +155,6 @@
         margin: 0;
     }
 
-    .el-date-editor {
-        margin-top: 0;
-        overflow: visible;
-    }
-
-    .month-label {
-        color: orange;
-        padding-right: 20px;
-        margin-left: 30px;
-    }
-
     .options {
         display: flex;
         justify-content: flex-end;
@@ -175,7 +164,7 @@
     }
 
     .feed-container {
-        margin-top: 18px;
+        margin-top: 20px;
         height: 85vh;
         overflow-y: auto;
     }
