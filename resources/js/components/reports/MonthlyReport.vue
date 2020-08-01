@@ -22,11 +22,7 @@
                         effect="dark">
                     </el-alert>
                     <feed v-else
-                        :editable="false"
-                        page="1"
-                        :dateFrom="dates.from"
-                        :dateTo="dates.to">
-
+                          :editable="false">
                     </feed>
                 </div>
             </el-col>
@@ -46,8 +42,7 @@
         mixins: [type],
         data() {
             return {
-                month: new Date().toISOString().slice(0, 8) + '01',
-                // month: '2020-06-01',
+                currentISODateFrom: new Date().toISOString().slice(0, 8) + '01',
                 categoryOfChart: 'Расходы'
             }
         },
@@ -58,25 +53,10 @@
                 'getErrorInfo',
                 'getPage',
             ]),
-            dates() {
-                Date.prototype.lastDayOfMonth = function () {
-                    return 32 - new Date(this.getFullYear(), this.getMonth(), 32).getDate();
-                };
-
-                let date = new Date(this.month);
-                let lastDay = date.lastDayOfMonth();
-                const fromDate = this.month;
-                const toDate = this.month.slice(0, 8) + lastDay.toString();
-
-                return {from: fromDate, to: toDate}
-            },
-            chartOptions() {
-                responsive: true
-                maintainAspectRatio: false
-            },
             dataChart() {
+                const generatedChartData = this.generateChartData()
                 return {
-                    labels: this.createChartData().labels,
+                    labels: generatedChartData.labels,
                     datasets: [
                         {
                             label: 'Расходы',
@@ -89,12 +69,25 @@
                                 'rgba(255,99,3,0.65)'
                             ],
                             borderColor: 'rgba(190,99,255,0)',
-                            data: this.createChartData().data
+                            data: generatedChartData.data
                         }
                     ]
                 }
+            },
+            chartOptions() {
+                return {
+                    responsive: true,
+                    maintainAspectRation: true,
+                    legend: {
+                        padding: 40,
+                        position: 'top',
+                        labels: {
+                            fontColor: 'rgb(255,255,255)'
+                        }
 
-            }
+                    }
+                }
+            },
         },
         methods: {
             ...mapActions([
@@ -113,12 +106,11 @@
                 'setErrorStatus'
             ]),
             onMonthChange(range) {
-                console.log(range)
-                this.setDateFrom(this.dates.from)
-                this.setDateTo(this.dates.to)
+                this.setDateFrom(range[0])
+                this.setDateTo(this.getLastISODateOfMonth(range[1]))
                 this.fetchTransactions()
             },
-            createChartData() {
+            generateChartData() {
                 let labels = [];
                 let data = [];
                 let trans = this.getTransactions;
@@ -137,12 +129,21 @@
                 }
                 return {labels, data}
             },
+            getLastISODateOfMonth(anyISODateOfMonth) {
+                Date.prototype.lastDayOfMonth = function () {
+                    return 32 - new Date(this.getFullYear(), this.getMonth(), 32).getDate();
+                };
+                const lastDayOfDateTo = new Date(anyISODateOfMonth).lastDayOfMonth();
+                const lastDateOfMonth = anyISODateOfMonth.slice(0, 8) + lastDayOfDateTo.toString();
+
+                return lastDateOfMonth;
+            }
         },
         mounted() {
-            this.setDateFrom(this.dates.from)
-            this.setDateTo(this.dates.to)
-            this.fetchTransactions()
-            this.createChartData()
+            this.setDateFrom(this.currentISODateFrom);
+            this.setDateTo(this.getLastISODateOfMonth(this.currentISODateFrom));
+            this.fetchTransactions();
+            this.generateChartData();
         },
         components: {
             monthPicker,
