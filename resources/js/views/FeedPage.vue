@@ -6,7 +6,6 @@
             type="error"
             effect="dark">
         </el-alert>
-        <!--        <div class="header">Лента транзакций</div>-->
         <feed v-else />
     </div>
 </template>
@@ -45,14 +44,4 @@
     }
 </script>
 
-<style scoped>
-    .header {
-        display: flex;
-        justify-content: center;
-        color: #8468ff;
-        font-weight: bolder;
-        font-size: xx-large;
-        margin-bottom: 40px;
-    }
-
-</style>
+<style scoped></style>
