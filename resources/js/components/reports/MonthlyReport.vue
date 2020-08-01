@@ -40,6 +40,7 @@
         data() {
             return {
                 month: new Date().toISOString().slice(0, 8) + '01',
+                // month: '2020-06-01',
                 categoryOfChart: 'Расходы'
             }
         },
