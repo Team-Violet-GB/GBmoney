@@ -3,6 +3,8 @@ import axios from "axios";
 export default {
     actions: {
         fetchTransactions({commit}) {
+            console.log('from: ', this.getters.getDateFrom)
+            console.log('to: ', this.getters.getDateTo)
             const headers = {
                 'Content-Type': 'application/json'
             }
@@ -54,7 +56,7 @@ export default {
         }
     },
     state: {
-        transactions: {},
+        transactions: null,
         errorStatus: false,
         errorInfo: 'Список транзакций пуст',
         editable: true,
