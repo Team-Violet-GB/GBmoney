@@ -9,8 +9,8 @@ export default {
             }
             const params = {
                 page: this.getters.getPage,
-                data_from: this.getters.getDateFrom,
-                data_to: this.getters.getDateTo
+                date_from: this.getters.getDateFrom,
+                date_to: this.getters.getDateTo
             }
             commit('setErrorStatus', false);
             axios.get('/api/transactions', {params: params, headers: headers})
