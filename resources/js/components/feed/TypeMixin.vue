@@ -23,6 +23,21 @@
                         }
                     }
                 }
+
+                return total;
+            },
+            getTotalOfIncomes(income_id) {
+                let total = 0;
+                for (let groupKey in this.getTransactions) {
+                    let group = this.getTransactions[groupKey]
+                    for (let tranKey in group) {
+                        let transaction = group[tranKey]
+                        if (transaction.type == 1 && transaction.income_id == income_id) {
+                            total += Number(transaction.amount);
+                        }
+                    }
+                }
+
                 return total;
             },
             getTypeData(transaction) {
@@ -66,6 +81,7 @@
                     }
                         break;
                 }
+
                 return data;
             }
         }

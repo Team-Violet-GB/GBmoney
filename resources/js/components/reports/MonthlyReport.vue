@@ -117,41 +117,38 @@
                 let trans = this.getTransactions;
                 switch (typeOfChart) {
                     case "Расходы":
-                        // for (let groupKey in trans) {
-                        //     let transGroup = trans[groupKey]
-                        //     for (let tranKey in transGroup) {
-                        //         let tran = transGroup[tranKey]
-                        //         if (tran.type === 3) {
-                        //             let name = this.getTypeData(tran).toName
-                        //             if (!labels.includes(name)) {
-                        //                 labels.push(name);
-                        //                 data.push(this.getTotalOfExpense(tran.expense_id));
-                        //             }
-                        //         }
-                        //     }
-                        // }
-                        labels = ['еда', 'авто', 'танцы']
-                        data = ['1000', '2000', '4000']
+                        for (let groupKey in trans) {
+                            let transGroup = trans[groupKey]
+                            for (let tranKey in transGroup) {
+                                let tran = transGroup[tranKey]
+                                if (tran.type === 3) {
+                                    let name = this.getTypeData(tran).toName
+                                    if (!labels.includes(name)) {
+                                        labels.push(name);
+                                        data.push(this.getTotalOfExpense(tran.expense_id));
+                                    }
+                                }
+                            }
+                        }
                         break;
+
                     case "Доходы":
-                        // for (let groupKey in trans) {
-                        //     let transGroup = trans[groupKey]
-                        //     for (let tranKey in transGroup) {
-                        //         let tran = transGroup[tranKey]
-                        //         if (tran.type === 1) {
-                        //             let name = this.getTypeData(tran).fromName
-                        //             if (!labels.includes(name)) {
-                        //                 labels.push(name);
-                        //                 data.push(this.getTotalOfExpense(tran.income_id));
-                        //             }
-                        //         }
-                        //     }
-                        // }
-                        labels = ['зряплата', 'премия', 'приз']
-                        data = ['2000', '3000', '1500']
+                        for (let groupKey in trans) {
+                            let transGroup = trans[groupKey]
+                            for (let tranKey in transGroup) {
+                                let tran = transGroup[tranKey]
+                                if (tran.type === 1) {
+                                    let name = this.getTypeData(tran).fromName
+                                    if (!labels.includes(name)) {
+                                        labels.push(name);
+                                        data.push(this.getTotalOfIncomes(tran.income_id));
+                                    }
+                                }
+                            }
+                        }
                         break;
                 }
-                console.log({labels, data})
+
                 return {labels, data}
             },
             getLastISODateOfMonth(anyISODateOfMonth) {
