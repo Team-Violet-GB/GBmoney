@@ -25,24 +25,24 @@ class TransactionController extends Controller
     {
         // Выполняем валидацию данных из запроса.
         $this->validate($request, [
-            'data_from' => 'nullable|date',
-            'data_to' => 'nullable|date|after:data_from',
+            'date_from' => 'nullable|date',
+            'date_to' => 'nullable|date|after:date_from',
             'page' => 'nullable|int',
         ]);
 
         // Получаем данные из запроса.
-        $dataFrom = request('data_from');
-        $dataTo = request('data_to');
+        $dateFrom = request('date_from');
+        $dateTo = request('date_to');
 
         $query = Transaction::query();
 
         $query->select('date')
             ->where('user_id', Auth::id())
-            ->when($dataFrom, function ($query) use ($dataFrom) {
-                return $query->where('date', '>=', $dataFrom);
+            ->when($dateFrom, function ($query) use ($dateFrom) {
+                return $query->where('date', '>=', $dateFrom);
             })
-            ->when($dataTo, function ($query) use ($dataTo) {
-                return $query->where('date', '<=', $dataTo);
+            ->when($dateTo, function ($query) use ($dateTo) {
+                return $query->where('date', '<=', $dateTo);
             })
             ->groupBy(['date'])
             ->orderByDesc('date');
