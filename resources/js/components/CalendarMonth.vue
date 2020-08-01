@@ -12,9 +12,7 @@
       range-separator="To"
       start-placeholder="Первый"
       end-placeholder="Последний"
-      :picker-options="pickerOptions"
-      format="MMMM yyyy"
-      value-format="yyyy-MM-dd">
+      :picker-options="pickerOptions">
     </el-date-picker>
   </div>
 </template>
