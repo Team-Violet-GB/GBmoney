@@ -66,6 +66,10 @@
             ...mapGetters([
 
                 'getTransactions',
+                'wallets',
+                'incomes',
+                'expenses',
+                'tags',
                 'getErrorStatus',
                 'getErrorInfo',
                 'getPage',
@@ -117,7 +121,7 @@
                 this.fetchTransactions()
             }
         },
-        mounted() {
+       async mounted() {
             if (!this.incomes) this.fetchIncomes();
             if (!this.wallets) this.fetchWallets();
             if (!this.expenses) this.fetchExpenses();
@@ -126,6 +130,8 @@
             this.setPage(this.page);
             this.setDateFrom(this.dateFrom);
             this.setDateTo(this.dateTo);
+            await this.fetchTransactions()
+
         },
         components: {
             transactionGroup,

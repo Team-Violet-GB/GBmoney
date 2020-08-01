@@ -61,11 +61,16 @@ class TransactionController extends Controller
         // Создаем новый объект транзакции.
         $transaction = new Transaction();
 
-        // Заполняем модель поступившими из запроса значениями.
-        $transaction->fillTransaction($request);
+        // Заполняем модель поступившими из запроса значениями и сохраняем ее..
+        $result = $transaction->fillTransaction($request);
 
-        // Сохраняем новую транзакцию.
-        $transaction->save();
+        // В случае неудачного добавления транзакции возвращаем ответ об ошибке.
+        if ($result !== true) {
+            return response()->json([
+                'message' => 'Ошибка выполнения запроса в базу данных',
+                'errors' => $result
+            ], 500);
+        }
 
         return response()->json(['data' => $transaction]);
     }
@@ -98,11 +103,16 @@ class TransactionController extends Controller
          */
         $transaction = Transaction::query()->find($id);
 
-        // Заполняем модель поступившими из запроса значениями.
-        $transaction->fillTransaction($request);
+        // Заполняем модель поступившими из запроса значениями и сохраняем ее..
+        $result = $transaction->fillTransaction($request);
 
-        // Сохраняем новую транзакцию.
-        $transaction->save();
+        // В случае неудачного добавления транзакции возвращаем ответ об ошибке.
+        if ($result !== true) {
+            return response()->json([
+                'message' => 'Ошибка выполнения запроса в базу данных',
+                'errors' => $result
+            ], 500);
+        }
 
         return response()->json(['message' => 'ok'], 200);
     }
@@ -115,8 +125,22 @@ class TransactionController extends Controller
      */
     public function destroy($id)
     {
-        // Удаляем транзакцию по ID.
-        Transaction::destroy($id);
+        /**
+         * Получаем объект транзакции по ID.
+         * @var Transaction $transaction
+         */
+        $transaction = Transaction::query()->find($id);
+
+        // Заполняем модель поступившими из запроса значениями и сохраняем ее..
+        $result = $transaction->deleteTransaction();
+
+        // В случае неудачного добавления транзакции возвращаем ответ об ошибке.
+        if ($result !== true) {
+            return response()->json([
+                'message' => 'Ошибка выполнения запроса в базу данных',
+                'errors' => $result
+            ], 500);
+        }
 
         return response()->json(['message' => 'ok'], 200);
     }

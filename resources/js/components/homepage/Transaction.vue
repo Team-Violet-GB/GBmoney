@@ -11,9 +11,7 @@
             <!-- Календарь -->
             <Calendar 
               :date="transaction.date"
-              @changeDate="(newDate) => { 
-              newDate ? (transaction.date = new Date(newDate.getTime() - (newDate.getTimezoneOffset() * 60000)).toISOString().slice(0, 10)): transaction.date = null 
-              }" />
+              @changeDate="(newDate) => newDate ? transaction.date = newDate : transaction.date = null " />
             <!-- Блок Откуда -> Куда  будет производиться транзакция -->
             <div class="cstm-select-box cstm-mrgn-top-20">
               <SelectCustom :list="pointsFrom" :idSelected="transaction.fromID" @changeSelect="(fromID) => { transaction.fromID = fromID }" />
@@ -94,6 +92,10 @@ import LoginVue from '../../views/Login.vue'
       },
     },
 
+    mounted() {
+      if (!this.tags) this.fetchTags()
+    },
+
     computed: {
         ...mapGetters([
             'incomes',
@@ -103,6 +105,7 @@ import LoginVue from '../../views/Login.vue'
         ]),
 
         tagsFromCategory() {
+          console.log(this.tags)
           var tags = []
           for (var tag in this.tags){
               if (this.tags[tag].expense_id == this.transaction.toID && !this.tags[tag].deleted) {
@@ -123,14 +126,15 @@ import LoginVue from '../../views/Login.vue'
           return (this.transaction.type == 3) ? this.expenses : this.wallets
         }, 
     },
-    
-    mounted() {
-        this.fetchTags()
-    },
 
-    methods: 
-    {
-      ...mapActions(['fetchTags']),
+    methods: {
+      ...mapActions([
+        'fetchTags',
+        'fetchIncomes',
+        'fetchWallets',
+        'fetchExpenses',
+      ]),
+
       
       handleClose() {
         this.$emit('closeCreateWindow')
@@ -261,12 +265,25 @@ import LoginVue from '../../views/Login.vue'
         .then(response => {
           let pointsNames = this.getPointsNames(response.data.data)
           this.MessageSuccess('Новая транзакция на сумму ' + response.data.data.amount + ' из ' + pointsNames.nameFrom + ' в ' + pointsNames.nameTo)
+          this.getNewPoints(this.transaction.type)
           this.transaction.amount = this.transaction.comment =  null
           this.handleClose()
         })
         .catch((error) => {
           this.MessageError(error.response.data.errors) 
         })
+      },
+
+      getNewPoints(type) {
+        if (type == 1) {
+          this.fetchIncomes()
+          this.fetchWallets()
+        } else if (type == 3) {
+          this.fetchWallets()
+          this.fetchExpenses()
+        } else {
+          this.fetchWallets()
+        }
       },
 
       getPointsNames(response) {

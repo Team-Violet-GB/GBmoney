@@ -1,8 +1,11 @@
 import axios from "axios";
+import { update } from "lodash";
 
 export default {
     actions: {
         fetchTransactions({commit}) {
+            console.log('from: ', this.getters.getDateFrom)
+            console.log('to: ', this.getters.getDateTo)
             const headers = {
                 'Content-Type': 'application/json'
             }
@@ -25,7 +28,23 @@ export default {
                         commit('setErrorStatus', true);
                     }
                 });
-        }
+        },
+        fetchTransactionsByPoint({ commit }, data) {
+            // axios.get('/api/get/transactions', {      \\ ждём реализацию на бэке
+            //     params: {
+            //         id: data.id,
+            //         type: data.type,
+            //         dateFrom: data.dateFrom,
+            //         dateFrom: data.dateTo
+            //       }
+            // })
+            // .then(response => {
+            //     const transactions = response.data.data
+            //     commit('updateTransactionsByPoint', transactions)
+            // })
+                const transactions = this.getters.getTransactions // заглушка
+                commit('updateTransactionsByPoint', transactions)
+        },
     },
     mutations: {
         setTransactions(state, data) {
@@ -51,10 +70,14 @@ export default {
         },
         setTotal(state, data) {
             state.total = data
-        }
+        },
+        updateTransactionsByPoint(state, transactions) {
+            state.transactionsByPoint = transactions
+        },
     },
     state: {
         transactions: {},
+        transactionsByPoint: null,
         errorStatus: false,
         errorInfo: 'Список транзакций пуст',
         editable: true,
@@ -66,6 +89,9 @@ export default {
     getters: {
         getTransactions(state) {
             return state.transactions
+        },
+        getTransactionsByPoint(state) {
+            return state.transactionsByPoint
         },
         getErrorStatus(state) {
             return state.errorStatus

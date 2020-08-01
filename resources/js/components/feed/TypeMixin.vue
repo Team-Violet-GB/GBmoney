@@ -25,32 +25,6 @@
                 }
                 return total;
             },
-            // getTotalOfTag(tag_id) {
-            //     let total = 0;
-            //     this.getTransactions.forEach(transaction => {
-            //         if (transaction.type == 3 && transaction.tag_id == tag_id) {
-            //             total += transaction.amount;
-            //         }
-            //     });
-            //     return total;
-            // },
-            // getTotalOfTypes() {
-            //     let total = {incomes: 0, transfers: 0, expenses: 0};
-            //     this.getTransactions.forEach(transaction => {
-            //         switch (transaction.type) {
-            //             case 1:
-            //                 total.incomes += transaction.amount;
-            //                 break;
-            //             case 2:
-            //                 total.transfers += transaction.amount;
-            //                 break;
-            //             case 3:
-            //                 total.expenses += transaction.amount;
-            //                 break;
-            //         }
-            //     });
-            //     return total;
-            // },
             getTypeData(transaction) {
                 let data = {}
                 switch (transaction.type) {

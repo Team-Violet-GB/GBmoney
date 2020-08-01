@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isAuthenticated">
+  <div>
     <el-container class="cstm-container">
       <el-container class="is-vertical">
         <el-main class="cstm-main">
@@ -12,22 +12,12 @@
 
 <script>
 import Navbar from '../../components/Navbar'
-import {mapGetters} from "vuex";
 
 export default {
   name: 'empty-layout',
   components: {
     Navbar
   },
-    computed: {
-        ...mapGetters([
-            'isAuth'
-        ]),
-        isAuthenticated() {
-            if (this.isAuth) this.$router.push('/')
-            return true
-        }
-    }
 }
 </script>
 
