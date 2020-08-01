@@ -20,29 +20,29 @@
   export default {
     data() {
       return {
-        pickerOptions: {
-          shortcuts: [{
-            text: 'Этот месяц',
-            onClick(picker) {
-              picker.$emit('pick', [new Date(), new Date()]);
-            }
-          }, {
-            text: 'Этот год',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date(new Date().getFullYear(), 0);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: 'Последние 6 месяцев',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setMonth(start.getMonth() - 6);
-              picker.$emit('pick', [start, end]);
-            }
-          }]
-        },
+          pickerOptions: {
+              shortcuts: [{
+                  text: 'Этот месяц',
+                  onClick(picker) {
+                      picker.$emit('pick', [new Date(), new Date()]);
+                  }
+              }, {
+                  text: 'Этот год',
+                  onClick(picker) {
+                      const end = new Date();
+                      const start = new Date(new Date().getFullYear(), 0);
+                      picker.$emit('pick', [start, end]);
+                  }
+              }, {
+                  text: 'Последние 6 месяцев',
+                  onClick(picker) {
+                      const end = new Date();
+                      const start = new Date();
+                      start.setMonth(start.getMonth() - 6);
+                      picker.$emit('pick', [start, end]);
+                  }
+              }]
+          },
         value2: ''
       };
     }
