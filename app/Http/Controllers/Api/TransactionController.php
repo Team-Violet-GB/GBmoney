@@ -26,7 +26,7 @@ class TransactionController extends Controller
         // Выполняем валидацию данных из запроса.
         $this->validate($request, [
             'date_from' => 'nullable|date',
-            'date_to' => 'nullable|date|after:date_from',
+            'date_to' => 'nullable|date|after_or_equal:date_from',
             'page' => 'nullable|int',
         ]);
 
