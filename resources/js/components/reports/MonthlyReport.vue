@@ -44,11 +44,13 @@
         data() {
             return {
                 currentISODateFrom: new Date().toISOString().slice(0, 8) + '01',
-                typeOfChart: 'Расходы'
+                typeOfChart: 'Доходы'
             }
         },
         computed: {
             ...mapGetters([
+                'getDateFrom',
+                'getDateTo',
                 'getTransactions',
                 'getErrorStatus',
                 'getErrorInfo',
@@ -80,9 +82,10 @@
                     responsive: true,
                     maintainAspectRation: true,
                     legend: {
-                        padding: 40,
+
                         position: 'top',
                         labels: {
+                            padding: 5,
                             fontColor: 'rgb(255,255,255)'
                         }
 
@@ -103,13 +106,19 @@
                 'setEditable',
                 'setDateFrom',
                 'setDateTo',
-                'setPage',
-                'setErrorStatus'
+                'setPage'
             ]),
             onMonthChange(range) {
-                this.setDateFrom(range[0])
-                this.setDateTo(this.getLastISODateOfMonth(range[1]))
-                this.fetchTransactions()
+                // console.log('piker from: ', range[0])
+                // console.log('piker to: ', range[1])
+
+                this.setDateFrom(range[0]);
+                this.setDateTo(this.getLastISODateOfMonth(range[1]));
+                this.fetchTransactions();
+
+                // console.log('store from: ', this.getDateFrom)
+                // console.log('store to: ', this.getDateTo)
+                // console.log('--------------------------')
             },
             generateChartData(typeOfChart) {
                 let labels = [];
@@ -155,10 +164,9 @@
                 Date.prototype.lastDayOfMonth = function () {
                     return 32 - new Date(this.getFullYear(), this.getMonth(), 32).getDate();
                 };
-                const lastDayOfDateTo = new Date(anyISODateOfMonth).lastDayOfMonth();
-                const lastDateOfMonth = anyISODateOfMonth.slice(0, 8) + lastDayOfDateTo.toString();
+                const lastDayOfISODateTo = new Date(anyISODateOfMonth).lastDayOfMonth();
 
-                return lastDateOfMonth;
+                return anyISODateOfMonth.slice(0, 8) + lastDayOfISODateTo.toString();
             }
         },
         mounted() {
@@ -184,7 +192,7 @@
         display: flex;
         justify-content: flex-end;
         align-items: baseline;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
         padding-right: 5px;
     }
 

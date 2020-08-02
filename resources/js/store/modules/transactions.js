@@ -66,10 +66,10 @@ export default {
             state.dateTo = data
         },
         setPage(state, data) {
-            state.page = data
+            state.page = Number(data)
         },
         setTotal(state, data) {
-            state.total = data
+            state.total = Number(data)
         },
         updateTransactionsByPoint(state, transactions) {
             state.transactionsByPoint = transactions
@@ -83,8 +83,8 @@ export default {
         editable: true,
         dateFrom: '',
         dateTo: '',
-        page: '',
-        total: '',
+        page: 1,
+        total: 1,
     },
     getters: {
         getTransactions(state) {

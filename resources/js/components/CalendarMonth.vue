@@ -12,7 +12,8 @@
       range-separator="To"
       start-placeholder="Первый"
       end-placeholder="Последний"
-      :picker-options="pickerOptions">
+      :picker-options="pickerOptions"
+      :clearable="false">
     </el-date-picker>
   </div>
 </template>

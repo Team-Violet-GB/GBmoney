@@ -38,22 +38,13 @@
     export default {
         props: {
             page: {
-                type: String,
+                type: Number,
                 default() {
-                    return '1';
-                }
-            }, dateFrom: {
-                type: String,
-                default() {
-                    return '';
+                    return 1;
                 }
             },
-            dateTo: {
-                type: String,
-                default() {
-                    return '';
-                }
-            },
+            dateFrom: String,
+            dateTo: String,
             editable: {
                 type: Boolean,
                 default() {
