@@ -5,7 +5,6 @@ export default {
         addIncomes({commit, dispatch}, data) {
             axios.post('/api/incomes' , data)
                 .then(response => {
-                    console.log('success', response)
                     dispatch('fetchIncomes')
                 })
                 .catch((error) => {
@@ -15,7 +14,6 @@ export default {
         addWallets({commit, dispatch}, data) {
             axios.post('/api/wallets' , data)
                 .then(response => {
-                    console.log('success', response)
                     dispatch('fetchWallets')
                 })
                 .catch((error) => {
@@ -25,7 +23,6 @@ export default {
         addExpenses({commit, dispatch}, data) {
             axios.post('/api/expenses' , data)
                 .then(response => {
-                    console.log('success', response)
                     dispatch('fetchExpenses')
                 })
                 .catch((error) => {
@@ -38,7 +35,7 @@ export default {
                 const incomes = response.data.data
                 commit('updateIncomes', incomes)
                 return incomes
-            })   
+            })
         },
         fetchWallets({ commit }) {
             axios.get('/api/get/wallets')

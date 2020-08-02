@@ -49,6 +49,7 @@
 
 <script>
     import { mapGetters, mapActions } from 'vuex'
+    import axios from 'axios'
 
     export default {
         props: ['category'],
@@ -79,7 +80,7 @@
             if (!this.allIcons.length) this.fetchIcons()
         },
         methods: {
-            ...mapActions(['fetchIcons', 'addIncomes', 'addWallets', 'addExpenses']),
+            ...mapActions(['fetchIcons', 'fetchIncomes', 'fetchWallets', 'fetchExpenses']),
 
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
@@ -87,36 +88,47 @@
                         this.isBalance();
                         // Incomes
                         if (this.ruleForm.category === 'Доход'){
-                            this.addIncomes({
-                                    name: this.ruleForm.name,
-                                    icon_id: this.ruleForm.choose
-                                }
-                            );
-                        }
+                            axios.post('/api/incomes' , {
+                                name: this.ruleForm.name,
+                                icon_id: this.ruleForm.choose
+                            }).then(response => {
+                                    this.fetchIncomes()
+                                    this.successForm()
+                                })
+                                .catch((error) => {
+                                    this.errors.push(error.response.data.errors.name[0])
+                                    this.MessageArrayErrors(this.errors)
+                                })
+                            }
                         // Wallets
                         if (this.ruleForm.category === 'Счета'){
-                            this.addWallets({
-                                    name: this.ruleForm.name,
-                                    amount: this.ruleForm.amount,
-                                    include: this.ruleForm.balance,
-                                    icon_id: this.ruleForm.choose
-                                }
-                            );
+                            axios.post('/api/wallets', {
+                                name: this.ruleForm.name,
+                                amount: this.ruleForm.amount,
+                                include: this.ruleForm.balance,
+                                icon_id: this.ruleForm.choose
+                            }).then( response => {
+                                this.fetchWallets()
+                                this.successForm()
+                            }).catch( error => {
+                                this.errors.push(error.response.data.errors.name[0])
+                                this.MessageArrayErrors(this.errors)
+                            })
                         }
                         // Expenses
                         if (this.ruleForm.category === 'Расход'){
-                            this.addExpenses({
-                                    name: this.ruleForm.name,
-                                    max_limit: this.ruleForm.amount,
-                                    icon_id: this.ruleForm.choose
-                                }
-                            );
+                            axios.post('/api/expenses', {
+                                name: this.ruleForm.name,
+                                max_limit: this.ruleForm.amount,
+                                icon_id: this.ruleForm.choose
+                            }).then( response => {
+                                this.fetchExpenses()
+                                this.successForm()
+                            }).catch( error => {
+                                this.errors.push(error.response.data.errors.name[0])
+                                this.MessageArrayErrors(this.errors)
+                            })
                         }
-                        // End works
-                        this.dialogVisible = false
-                        this.$message.success(this.ruleForm.name + ' успешно добавлен')
-                        this.isSuccessSubmit()
-                        this.$emit('cancel')
                     } else {
                         if (!this.ruleForm.name) this.errors.push('Введите название')
                         if (!this.ruleForm.choose) this.errors.push('Выберите картинку')
@@ -139,8 +151,15 @@
                         this.$message.error(error);
                     }, 100 * ++i)
                 });
+                this.errors = []
             },
             cancelForm () {
+                this.isSuccessSubmit()
+                this.$emit('cancel')
+            },
+            successForm () {
+                this.dialogVisible = false
+                this.$message.success(this.ruleForm.name + ' успешно добавлен')
                 this.isSuccessSubmit()
                 this.$emit('cancel')
             }
