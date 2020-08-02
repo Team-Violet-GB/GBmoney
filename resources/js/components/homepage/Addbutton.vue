@@ -8,16 +8,16 @@
             class="cstm-icon-point cstm-icon-point-add"
             @click="dialogVisible = true"
         ></el-button>
-        <el-dialog
+        <el-drawer
             :visible.sync="dialogVisible"
-            width="40%"
+            size="40%"
         >
             <ModalPoint
                 :key="'ModalPoint'"
                 :category = category
                 v-on:cancel = 'dialogVisible = false'
             />
-        </el-dialog>
+        </el-drawer>
     </div>
 </template>
 

@@ -1,48 +1,50 @@
 <template>
-    <el-form :rules="rules" :model="ruleForm" status-icon ref="ruleForm">
-        <span class="cstm-header">Добавление карточки</span>
-        <el-form-item prop="name">
-            <el-input placeholder="Введите название" v-model="ruleForm.name" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item prop="category">
-            <el-select v-model="ruleForm.category">
-                <el-option label="Доход" value="Доход" style="color: #ffffff"></el-option>
-                <el-option label="Счета" value="Счета" style="color: #ffffff"></el-option>
-                <el-option label="Расход" value="Расход" style="color: #ffffff"></el-option>
-            </el-select>
-            <el-switch v-if="(ruleForm.category === 'Счета')" v-model="ruleForm.balance" class="cstm-switch-margin"></el-switch>
-            <span v-if="(ruleForm.category === 'Счета')" class="cstm-switch-text">Учитывать в общем балансе</span>
-        </el-form-item>
-        <span v-if="(ruleForm.category === 'Расход')" class="cstm-amount">Планирую потратить</span>
-        <el-form-item v-if="(ruleForm.category === 'Расход')">
-            <el-input-number v-model="ruleForm.amount" :min="0" :step="500"></el-input-number>
-        </el-form-item>
-        <span v-if="(ruleForm.category === 'Счета')" class="cstm-amount">Баланс</span>
-        <el-form-item v-if="(ruleForm.category === 'Счета')">
-            <el-input-number v-model="ruleForm.amount" :min="0" :step="500"></el-input-number>
-        </el-form-item>
-        <br>
-        <div align="center">
-            <el-form-item prop="choose">
-                <el-radio-group v-model="ruleForm.choose">
-                    <el-radio-button
-                        class="cstm-radio-gap"
-                        :label="elem.id"
-                        v-for="elem in allIcons"
-                        :key="elem.id"
-                    >
-                        <i :class="elem.name" class="cstm-icon-size"></i>
-                    </el-radio-button>
-                </el-radio-group>
+    <div class="cstm-container">
+        <el-form :rules="rules" :model="ruleForm" status-icon ref="ruleForm">
+            <span class="cstm-header">Добавление карточки</span>
+            <el-form-item prop="name">
+                <el-input placeholder="Введите название" v-model="ruleForm.name" autocomplete="off"></el-input>
             </el-form-item>
-        </div>
-        <br>
-        <el-form-item align="center">
-            <el-button @click="cancelForm">Отмена</el-button>
-            <el-button type="primary" @click="submitForm('ruleForm')">Подтвердить</el-button>
-        </el-form-item>
+            <el-form-item prop="category">
+                <el-select v-model="ruleForm.category">
+                    <el-option label="Доход" value="Доход" style="color: #ffffff"></el-option>
+                    <el-option label="Счета" value="Счета" style="color: #ffffff"></el-option>
+                    <el-option label="Расход" value="Расход" style="color: #ffffff"></el-option>
+                </el-select>
+                <el-switch v-if="(ruleForm.category === 'Счета')" v-model="ruleForm.balance" class="cstm-switch-margin"></el-switch>
+                <span v-if="(ruleForm.category === 'Счета')" class="cstm-switch-text">Учитывать в общем балансе</span>
+            </el-form-item>
+            <span v-if="(ruleForm.category === 'Расход')" class="cstm-amount">Планирую потратить</span>
+            <el-form-item v-if="(ruleForm.category === 'Расход')">
+                <el-input-number v-model="ruleForm.amount" :min="0" :step="500"></el-input-number>
+            </el-form-item>
+            <span v-if="(ruleForm.category === 'Счета')" class="cstm-amount">Баланс</span>
+            <el-form-item v-if="(ruleForm.category === 'Счета')">
+                <el-input-number v-model="ruleForm.amount" :min="0" :step="500"></el-input-number>
+            </el-form-item>
+            <br>
+            <div align="center" style="overflow: auto; max-height: 40vh">
+                <el-form-item prop="choose">
+                    <el-radio-group v-model="ruleForm.choose">
+                        <el-radio-button
+                            class="cstm-radio-gap"
+                            :label="elem.id"
+                            v-for="elem in allIcons"
+                            :key="elem.id"
+                        >
+                            <i :class="elem.name" class="cstm-icon-size"></i>
+                        </el-radio-button>
+                    </el-radio-group>
+                </el-form-item>
+            </div>
+            <br>
+            <el-form-item align="center">
+                <el-button @click="cancelForm">Отмена</el-button>
+                <el-button type="primary" @click="submitForm('ruleForm')">Подтвердить</el-button>
+            </el-form-item>
 
-    </el-form>
+        </el-form>
+    </div>
 </template>
 
 <script>
@@ -147,6 +149,10 @@
 </script>
 
 <style lang="scss">
+    .cstm-container {
+        padding: 10px 10px;
+    }
+
     .cstm-header {
         display: block;
         font-size: 25px;
