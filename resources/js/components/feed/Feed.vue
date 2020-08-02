@@ -1,7 +1,7 @@
 <template>
     <div>
         <!--        заголовок группы транзакций-->
-        <el-card v-for="(transactionGroup, index) in getTransactions" :key="index"
+        <el-card v-for="(transactionGroup, index) in transactions" :key="index"
                  class="box-card">
             <el-row :gutter="10" slot="header" class="clearfix tran-group-header">
                 <el-col :span="14">
@@ -19,7 +19,7 @@
         </el-card>
 
 <!--        пагинация-->
-        <div class="pagination">
+        <div v-if="getEditable" class="pagination">
             <el-pagination
                 background
                 :hide-on-single-page="true"
@@ -37,14 +37,20 @@
 
     export default {
         props: {
-            page: {
-                type: Number,
+            // page: {
+            //     type: Number,
+            //     default() {
+            //         return 1;
+            //     }
+            // },
+            // dateFrom: String,
+            // dateTo: String,
+            transactions: {
+                type: Object,
                 default() {
-                    return 1;
+                    return null;
                 }
             },
-            dateFrom: String,
-            dateTo: String,
             editable: {
                 type: Boolean,
                 default() {
@@ -117,9 +123,9 @@
             if (!this.expenses) this.fetchExpenses();
             if (!this.tags) this.fetchTags();
             this.setEditable(this.editable);
-            this.setPage(this.page);
-            this.setDateFrom(this.dateFrom);
-            this.setDateTo(this.dateTo);
+            // this.setPage(this.page);
+            // this.setDateFrom(this.dateFrom);
+            // this.setDateTo(this.dateTo);
         },
         components: {
             transactionGroup,

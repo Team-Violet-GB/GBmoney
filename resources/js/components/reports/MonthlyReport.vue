@@ -5,7 +5,7 @@
                 <div class="options">
                     <month-picker @changeDate="onMonthChange"/>
                     <div class="block">
-                        <el-radio-group @change="generateChartData(typeOfChart)" v-model="typeOfChart" size="small"
+                        <el-radio-group @change="generateChartData" v-model="typeOfChart" size="small"
                                         style="margin-left:80px; width: 200px">
                             <el-radio-button label="Доходы">Доходы</el-radio-button>
                             <el-radio-button label="Расходы">Расходы</el-radio-button>
@@ -23,7 +23,8 @@
                         effect="dark">
                     </el-alert>
                     <feed v-else
-                          :editable="false">
+                          :editable="false"
+                          :transactions="transactions">
                     </feed>
                 </div>
             </el-col>
@@ -44,7 +45,8 @@
         data() {
             return {
                 currentISODateFrom: new Date().toISOString().slice(0, 8) + '01',
-                typeOfChart: 'Доходы'
+                typeOfChart: 'Доходы',
+                transactions: {}
             }
         },
         computed: {
@@ -55,9 +57,10 @@
                 'getErrorStatus',
                 'getErrorInfo',
                 'getPage',
+                'getTotal'
             ]),
             dataChart() {
-                const generatedChartData = this.generateChartData(this.typeOfChart)
+                const generatedChartData = this.generateChartData()
                 return {
                     labels: generatedChartData.labels,
                     datasets: [
@@ -109,18 +112,11 @@
                 'setPage'
             ]),
             onMonthChange(range) {
-                // console.log('piker from: ', range[0])
-                // console.log('piker to: ', range[1])
-
                 this.setDateFrom(range[0]);
                 this.setDateTo(this.getLastISODateOfMonth(range[1]));
                 this.fetchTransactions();
-
-                // console.log('store from: ', this.getDateFrom)
-                // console.log('store to: ', this.getDateTo)
-                // console.log('--------------------------')
             },
-            generateChartData(typeOfChart) {
+            generateChartData(typeOfChart = this.typeOfChart) {
                 let labels = [];
                 let data = [];
                 let transNew = {}
@@ -171,7 +167,8 @@
                         }
                         break;
                 }
-                this.setTransactions(transNew)
+                this.transactions = transNew
+
                 return {labels, data}
             },
             getLastISODateOfMonth(anyISODateOfMonth) {
@@ -187,7 +184,7 @@
             this.setDateFrom(this.currentISODateFrom);
             this.setDateTo(this.getLastISODateOfMonth(this.currentISODateFrom));
             this.fetchTransactions();
-            this.generateChartData(this.typeOfChart);
+            this.generateChartData();
         },
         components: {
             monthPicker,

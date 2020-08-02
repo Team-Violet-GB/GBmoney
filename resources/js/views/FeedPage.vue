@@ -6,7 +6,8 @@
             type="error"
             effect="dark">
         </el-alert>
-        <feed v-else />
+        <feed v-else
+        :transactions="getTransactions"/>
     </div>
 </template>
 
@@ -21,6 +22,7 @@
         },
         computed: {
             ...mapGetters([
+                'getTransactions',
                 'getErrorStatus',
                 'getErrorInfo'
             ]),
