@@ -101,8 +101,10 @@
                         var errors = error.response.data.errors
                         for (var err in errors) this.MessageArrayErrors(errors[err])
                     })
+                    this.clearPass()
                 } else {
                     this.MessageError('Проверьте правильность заполнения полей')
+                    this.clearPass()
                     return false
                 }
             });
@@ -110,14 +112,12 @@
         MessageError(message) {
             this.$message.error(message)
         },
-
         MessageSuccess(message) {
             this.$message({
                 message: message,
                 type: 'success'
             })
         },
-
         MessageArrayErrors(errors) {
             errors.forEach((error, i) => {
             setTimeout(() => {
@@ -125,7 +125,10 @@
             }, 100 * ++i)
             });
         },
-
+        clearPass() {
+            this.ruleForm.pass = ''
+            this.ruleForm.checkPass = ''
+        }
     }
   }
 </script>
