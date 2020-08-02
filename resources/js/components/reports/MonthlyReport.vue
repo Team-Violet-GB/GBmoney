@@ -15,17 +15,19 @@
                 <monthChart ref="chart" :chartData="dataChart" :options="chartOptions"/>
             </el-col>
             <el-col :span="12">
-                <div class="feed-container">
-                    <el-alert
-                        v-if="getErrorStatus"
-                        :title="getErrorInfo"
-                        type="error"
-                        effect="dark">
-                    </el-alert>
-                    <feed v-else
-                          :editable="false"
-                          :transactions="transactions">
-                    </feed>
+                <div class="feed-container-wrapper">
+                    <div class="feed-container">
+                        <el-alert
+                            v-if="getErrorStatus"
+                            :title="getErrorInfo"
+                            type="error"
+                            effect="dark">
+                        </el-alert>
+                        <feed v-else
+                              :editable="false"
+                              :transactions="transactions">
+                        </feed>
+                    </div>
                 </div>
             </el-col>
         </el-row>
@@ -195,10 +197,6 @@
 </script>
 
 <style lang="scss" scoped>
-    body {
-        margin: 0;
-    }
-
     .options {
         display: flex;
         justify-content: flex-end;
@@ -207,9 +205,17 @@
         padding-right: 5px;
     }
 
-    .feed-container {
-        margin-top: 20px;
+    .feed-container-wrapper {
+        width: 100%;
         height: 85vh;
-        overflow-y: auto;
+        overflow: hidden;
+    }
+
+    .feed-container {
+        max-height: 100%;
+        width: 100%;
+        padding-right: 45px;
+        margin-top: 20px;
+        overflow-y: scroll;
     }
 </style>
