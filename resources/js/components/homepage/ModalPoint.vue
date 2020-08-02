@@ -74,7 +74,7 @@
         computed:
             mapGetters(['allIcons']),
         mounted() {
-            this.fetchIcons()
+            if (!this.allIcons.length) this.fetchIcons()
         },
         methods: {
             ...mapActions(['fetchIcons', 'addIncomes', 'addWallets', 'addExpenses']),
