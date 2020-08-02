@@ -69,13 +69,17 @@
                         password: this.ruleForm.pass,
                         this: this
                     })
+                    this.clearPass()
                 } else {
                     console.log('error submit!!');
+                    this.clearPass()
                     return false;
                 }
             });
         },
-
+        clearPass() {
+            this.ruleForm.pass = ''
+        }
     }
   };
 </script>
