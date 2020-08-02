@@ -1,14 +1,13 @@
 <template>
     <div>
-        <!--        <div class="header">Лента транзакций</div>-->
         <el-alert
-            v-show="getErrorStatus"
+            v-if="getErrorStatus"
             :title="getErrorInfo"
             type="error"
             effect="dark">
         </el-alert>
-        <feed/>
-
+        <feed v-else
+        :transactions="getTransactions"/>
     </div>
 </template>
 
@@ -23,22 +22,28 @@
         },
         computed: {
             ...mapGetters([
+                'getTransactions',
                 'getErrorStatus',
                 'getErrorInfo'
             ]),
+        },
+        methods: {
+            ...mapMutations([
+                'setDateFrom',
+                'setDateTo',
+                'setPage'
+            ]),
+            ...mapActions([
+                'fetchTransactions'
+            ])
+        },
+        mounted() {
+            this.setPage(1);
+            this.setDateFrom('');
+            this.setDateTo('');
+            this.fetchTransactions()
         }
     }
 </script>
 
-<style scoped>
-    .header {
-        display: flex;
-        justify-content: center;
-        color: #8468ff;
-        font-weight: bolder;
-        font-size: xx-large;
-        margin-bottom: 40px;
-
-    }
-
-</style>
+<style scoped></style>

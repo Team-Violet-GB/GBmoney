@@ -167,7 +167,7 @@
     };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .cstm-container {
         padding: 10px 10px;
     }

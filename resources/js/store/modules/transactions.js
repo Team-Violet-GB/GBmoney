@@ -9,23 +9,25 @@ export default {
             }
             const params = {
                 page: this.getters.getPage,
-                data_from: this.getters.getDateFrom,
-                data_to: this.getters.getDateTo
+                date_from: this.getters.getDateFrom,
+                date_to: this.getters.getDateTo
             }
+            commit('setErrorStatus', false);
             axios.get('/api/transactions', {params: params, headers: headers})
                 .then(response => {
                     commit('setTotal', response.data.meta.total);
                     commit('setTransactions', response.data.data);
+                    if ((Object.keys(response.data.data).length) === 0) {
+                        commit('setErrorStatus', true);
+                        commit('setErrorInfo', `За запрошеный период транзакции не производились ...`);
+                    } else {
+                        commit('setErrorStatus', false);
+                    }
                 })
                 .catch(error => {
                     commit('setErrorStatus', true);
-                    commit('setErrorInfo', `Транзакции отсутствуют: (${error})`);
+                    commit('setErrorInfo', `Ошибка во время запроса транзакций: (${error})`);
                 })
-                .finally(() => {
-                    if (Object.keys(this.getters.getTransactions).length === 0) {
-                        commit('setErrorStatus', true);
-                    }
-                });
         },
         fetchTransactionsByPoint({ commit }, data) {
             // axios.get('/api/get/transactions', {      \\ ждём реализацию на бэке
@@ -64,10 +66,10 @@ export default {
             state.dateTo = data
         },
         setPage(state, data) {
-            state.page = data
+            state.page = Number(data)
         },
         setTotal(state, data) {
-            state.total = data
+            state.total = Number(data)
         },
         updateTransactionsByPoint(state, transactions) {
             state.transactionsByPoint = transactions
@@ -77,12 +79,12 @@ export default {
         transactions: {},
         transactionsByPoint: null,
         errorStatus: false,
-        errorInfo: 'Список транзакций пуст',
+        errorInfo: 'Не предопределенное сообщение об ошибке ...',
         editable: true,
         dateFrom: '',
         dateTo: '',
-        page: '',
-        total: '',
+        page: 1,
+        total: 1,
     },
     getters: {
         getTransactions(state) {

@@ -97,7 +97,7 @@
                             <el-col :span="6">
                                 <div class="button-group">
                                     <el-button @click="updateTransaction('editorForm')" type="success" size="mini"
-                                               icon="el-icon-check"></el-button>
+                                               icon="el-icon-check" style="margin-right: 10px"></el-button>
                                     <el-popover
                                         placement="top"
                                         width="170">
@@ -105,7 +105,8 @@
                                         <p style="margin-bottom: 5px">Транзакция от <strong>{{ new
                                             Date(this.editorData.data.date).toLocaleDateString()
                                             }}</strong></p>
-                                        <p style="text-align: right; margin-top: 0">{{ this.editorData.data.amount }} ₽</p>
+                                        <p style="text-align: right; margin-top: 0">{{ this.editorData.data.amount }}
+                                            ₽</p>
                                         <div style="text-align: right; margin: 0">
                                             <el-button style="margin-top: 10px" type="danger" size="mini"
                                                        @click="deleteTransaction(editorData)">
@@ -179,7 +180,11 @@
         },
         methods: {
             ...mapActions([
-                'fetchTransactions'
+                'fetchTransactions',
+                'fetchWallets',
+                'fetchIncomes',
+                'fetchExpenses',
+                'fetchTags'
             ]),
             setCurrentTagOfSelectedExpense() {
                 this.editorData.edata.tag_id = null;
@@ -200,6 +205,7 @@
                             })
                             .then(response => {
                                 if (response.status === 200) {
+                                    this.updatePoints(this.editorData.type);
                                     this.fetchTransactions()
                                 }
                             })
@@ -215,13 +221,13 @@
                         return false;
                     }
                 });
-
             },
             deleteTransaction() {
                 this.editorData.isEdit = false
                 axios.delete(`/api/transactions/${this.editorData.edata.id}`)
                     .then(response => {
                         if (response.status === 200) {
+                            this.updatePoints(this.editorData.type);
                             this.fetchTransactions()
                             this.$message({
                                 type: 'info',
@@ -237,6 +243,11 @@
                             type: 'error'
                         });
                     });
+            },
+            updatePoints(type) {
+                this.fetchWallets()
+                if (type == 1) this.fetchIncomes()
+                if (type == 3) this.fetchExpenses()
             }
         }
     }

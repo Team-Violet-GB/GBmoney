@@ -39,7 +39,7 @@
     };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
     .cstm-point {
         margin-bottom: 10px;
