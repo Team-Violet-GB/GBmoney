@@ -34,7 +34,8 @@
 </template>
 
 <script>
-    import {mapMutations} from 'vuex'
+  import {mapMutations} from 'vuex'
+
   export default {
     data() {
         var accordancePass = (rule, value, callback) => {
@@ -97,15 +98,8 @@
                         this.$router.push('/login')
                     })
                     .catch((error) => {
-                        console.log(error)
                         var errors = error.response.data.errors
-                        for (var err in errors) {
-                            errors[err].forEach((e, i) => {
-                                setTimeout(() => {
-                                    this.MessageError(e)
-                                }, 100 * ++i)
-                            });
-                        }
+                        for (var err in errors) this.MessageArrayErrors(errors[err])
                     })
                     this.clearPass()
                 } else {

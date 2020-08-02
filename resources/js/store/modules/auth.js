@@ -30,10 +30,11 @@ export default {
                     localStorage.removeItem('user-token')
                     state.commit('logout')
                     state.commit('clearUserData')
+                    data.this.$router.push('/login')
+                    
                 })
                 .catch((error) => {
                     console.log(error)
-                    data.this.$message.error(error.response.data.errors)
                 })
         }
     },

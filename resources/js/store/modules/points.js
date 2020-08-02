@@ -2,18 +2,50 @@ import axios from 'axios'
 
 export default {
     actions: {
+        addIncomes({commit, dispatch}, data) {
+            axios.post('/api/incomes' , data)
+                .then(response => {
+                    console.log('success', response)
+                    dispatch('fetchIncomes')
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        },
+        addWallets({commit, dispatch}, data) {
+            axios.post('/api/wallets' , data)
+                .then(response => {
+                    console.log('success', response)
+                    dispatch('fetchWallets')
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        },
+        addExpenses({commit, dispatch}, data) {
+            axios.post('/api/expenses' , data)
+                .then(response => {
+                    console.log('success', response)
+                    dispatch('fetchExpenses')
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        },
         fetchIncomes({ commit }) {
             axios.get('/api/get/incomes')
             .then(response => {
                 const incomes = response.data.data
                 commit('updateIncomes', incomes)
-            })
+                return incomes
+            })   
         },
         fetchWallets({ commit }) {
             axios.get('/api/get/wallets')
             .then(response => {
                 const wallets = response.data.data
                 commit('updateWallets', wallets)
+                return wallets
             })
         },
         fetchExpenses({ commit }) {
@@ -21,16 +53,16 @@ export default {
             .then(response => {
                 const expenses = response.data.data
                 commit('updateExpenses', expenses)
+                return expenses
             })
         },
         fetchTags({ commit }) {
-            const tags = [
-                { id: 1, name: "Подкатегория1" },
-                { id: 2, name: "Подкатегория2" },
-                { id: 3, name: "Подкатегория3" },
-                { id: 4, name: "Подкатегория4" }
-            ]
-            commit('updateTags', tags)
+            axios.get('/api/tags')
+            .then(response => {
+                const tags = response.data.data
+                commit('updateTags', tags)
+                return tags
+            })
         },
     },
     mutations: {
@@ -63,10 +95,10 @@ export default {
         },
     },
     state: {
-        incomesList: [],
-        walletsList: [],
-        expensesList: [],
-        tagsList: [],
+        incomesList: null,
+        walletsList: null,
+        expensesList: null,
+        tagsList: null,
         incomesSumm: null,
         walletsSumm: null,
         expensesSumm: null,
@@ -96,6 +128,13 @@ export default {
         },
         expensesLimit(state) {
             return state.expensesLimit
+        },
+        points(state) {
+            return {
+                'income': state.incomesList,
+                'wallet': state.walletsList,
+                'expense': state.expensesList,
+            }
         },
     }
 }

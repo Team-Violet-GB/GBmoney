@@ -1,9 +1,9 @@
 <template>
   <div>
     <!-- Модальное окно  -->
-    <CreateTransaction
+    <Transaction
       :newTransaction="newTransaction"
-      @closeCreateWindow="newTransaction.state_window = false"  
+      @closeCreateWindow="newTransaction.state_window = false"
     />
     <!-- ДОХОДЫ -->
     <div class="cstm-box-card">
@@ -24,13 +24,19 @@
           <div class="cstm-head-point">{{ point.name }}</div>
           <drag :data="{ id: point.id, type: 'income'}">
             <drop :accepts-data="() => false">
-              <el-button type="primary" :icon="point.icon_name" circle class="cstm-icon-point"></el-button>
+              <el-button 
+                type="primary" 
+                :icon="point.icon_name" 
+                circle 
+                class="cstm-icon-point" 
+                @click="$router.push(`/point/income/${point.id}`)">
+              </el-button>
             </drop>
           </drag>
           <div class="cstm-money-point cstm-blue">{{ point.amount }} &#8381;</div>
           <i class="el-icon-edit cstm-edit"></i>
         </div>
-        <Addbutton :key="'add'" />
+        <Addbutton :key="'add'" category="Доход"/>
       </transition-group>
     </div>
     <!-- СЧЕТА -->
@@ -55,13 +61,19 @@
               :accepts-data="(data) => (data.type == 'income') || data.type == 'wallet'"
             >
               <drag :data="{ id: point.id, type: 'wallet'}">
-                <el-button type="warning" :icon="point.icon_name" circle class="cstm-icon-point"></el-button>
+                <el-button 
+                  type="warning" 
+                  :icon="point.icon_name" 
+                  circle 
+                  class="cstm-icon-point" 
+                  @click="$router.push(`/point/wallet/${point.id}`)" >
+                </el-button>
                 </drag>
             </drop>
           <div class="cstm-money-point cstm-yellow">{{ point.amount }} &#8381;</div>
           <i class="el-icon-edit cstm-edit"></i>
-        </div> 
-        <Addbutton :key="'add'" />
+        </div>
+        <Addbutton :key="'add'" category="Счета"/>
       </transition-group>
     </div>
     <!-- Расходы -->
@@ -89,6 +101,7 @@
               :icon="point.icon_name"
               circle
               class="cstm-icon-point cstm-expense"
+              @click="$router.push(`/point/expense/${point.id}`)"
             ></el-button>
           </drop>
           <div
@@ -98,7 +111,7 @@
           <div  v-if="point.max_limit" class="cstm-plan">{{ point.max_limit }} &#8381;</div>
           <i class="el-icon-edit cstm-edit"></i>
         </div>
-        <Addbutton :key="'add'" />
+        <Addbutton :key="'add'" category="Расход"/>
       </transition-group>
     </div>
   </div>
@@ -107,7 +120,7 @@
     import { Drag, Drop } from "vue-easy-dnd"
     import { mapGetters, mapActions, mapMutations } from "vuex"
     import Addbutton from "../components/homepage/Addbutton"
-    import CreateTransaction from "../components/homepage/CreateTransaction"
+    import Transaction from "../components/homepage/Transaction"
 
     export default {
         name: "App",
@@ -115,7 +128,7 @@
             Drag,
             Drop,
             Addbutton,
-            CreateTransaction,
+            Transaction,
         },
         data() {
           return {
@@ -130,7 +143,7 @@
               'incomesSumm',
               'walletsSumm',
               'expensesSumm',
-              'expensesLimit'
+              'expensesLimit',
               ]),
 
               dateNowString() {
@@ -139,9 +152,9 @@
         },
 
         mounted() {
-            this.fetchIncomes()
-            this.fetchWallets()
-            this.fetchExpenses()
+            if (!this.incomes) this.fetchIncomes()
+            if (!this.wallets) this.fetchWallets()
+            if (!this.expenses) this.fetchExpenses()
         },
 
         methods: {
@@ -163,7 +176,9 @@
                     toID: toID,
                     type: (event.data.type == 'income') ? 1 : 2,
                     tag: null,
-                    date: this.dateNow(), 
+                    date: this.dateNow(),
+                    amount: null,
+                    comment: null,
                 }
             },
             transactionExpense (event) { // drag & drop  работает через раз, если указать одинаковые имена функций у разных групп
@@ -173,7 +188,9 @@
                     toID: Number(event.top.$el.parentElement.id),
                     type: 3,
                     tag: null,
-                    date: this.dateNow(), 
+                    date: this.dateNow(),
+                    amount: null,
+                    comment: null,
                 }
             },
             dateNow() {
@@ -185,6 +202,7 @@
 </script>
 
 <style lang="scss" scoped>
+
 %cstm-color-background-body {
   background-color: #3d3e48;
 }
@@ -194,8 +212,9 @@
 %cstm-color-text {
   color: #ffffff;
 }
+
 .cstm-box-card {
-  border-radius: 0%;
+  border-radius: 0;
   border: none;
   margin-bottom: 30px;
 }
@@ -282,21 +301,7 @@
 .cstm-edit:hover {
   color: #67c23a;
 }
-.cstm-blue {
-  color: #0a93d1;
-}
-.cstm-yellow {
-  color: #e6a23c;
-}
-.cstm-green {
-  color: #67c23a;
-}
-.cstm-red {
-  color: #f56c6c;
-}
-.cstm-grey {
-  color: #909399;
-}
+
 /* при наведении взятого элемента на ячейку */
 .drop-in button {
   background: grey;
@@ -310,7 +315,7 @@
   filter: brightness(130%);
   transition: 0.15s;
 }
-  
+
 /* элементы, НЕдоступные для транзакции */
 .drop-forbidden button {
   filter: brightness(60%);

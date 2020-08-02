@@ -47,13 +47,29 @@ body {
   color: #ffffff;
 }
 
+.cstm-blue {
+  color: #0a93d1;
+}
+.cstm-yellow {
+  color: #e6a23c;
+}
+.cstm-green {
+  color: #67c23a;
+}
+.cstm-red {
+  color: #f56c6c;
+}
+.cstm-grey {
+  color: #909399;
+}
+
 .cstm-container {
   height: 100vh;
 }
 
 .cstm-main {
   @extend %cstm-color-background-dark;
-  padding: 30px 80px;
+  padding: 30px 50px;
 }
 
 .cstm-mrgn-top-20 {
@@ -98,12 +114,27 @@ input::-webkit-inner-spin-button {
   margin-top: 20px;
   position: relative;
 }
-.el-date-picker {
+.el-date-picker,
+.el-picker-panel,
+.el-picker-panel__body,
+.el-picker-panel__sidebar {
   @extend %cstm-color-background-dark;
   @extend %cstm-color-text;
   border: none;
 }
-.el-date-picker__header button {
+
+
+.el-month-table td.in-range div, 
+.el-month-table td.in-range div:hover {
+  background-color: #5f6068;
+}
+
+.el-month-table td .cell,
+.el-picker-panel__shortcut,
+.el-date-picker__header button,
+.el-picker-panel__icon-btn,
+.demonstration,
+.el-date-editor .el-range-input {
   @extend %cstm-color-text;
 }
 
@@ -112,7 +143,9 @@ input::-webkit-inner-spin-button {
 }
 
 /* боковое выезжающее модальное окно */
-.el-drawer:focus {
+.el-drawer:focus,
+.el-range-editor.is-active,
+.el-range-editor.is-active:hover {
   outline: none;
   border: none;
 }
@@ -133,7 +166,8 @@ input::-webkit-inner-spin-button {
   line-height: 60px;
 }
 
-.el-drawer__body {
+.el-drawer__body,
+.el-range-input {
   @extend %cstm-color-background-body;
 }
 
@@ -141,5 +175,19 @@ input::-webkit-inner-spin-button {
   @extend %cstm-color-text;
   font-size: 20px;
 }
+
+.el-message-box {
+  background-color: #3d3e48;
+}
+
+.el-message-box__content {
+  color: #ffffff
+}
+
+.el-button--small {
+  border-radius: 0;
+}
+
+
 
 </style>
