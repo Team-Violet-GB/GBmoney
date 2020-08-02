@@ -245,13 +245,9 @@
                     });
             },
             updatePoints(type) {
-                if (type == 1) {
-                    this.fetchIncomes()
-                } else if (type == 3) {
-                    this.fetchExpenses()
-                } else {
-                    this.fetchWallets()
-                }
+                this.fetchWallets()
+                if (type == 1) this.fetchIncomes()
+                if (type == 3) this.fetchExpenses()
             }
         }
     }
