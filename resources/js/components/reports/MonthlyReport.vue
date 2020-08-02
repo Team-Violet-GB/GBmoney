@@ -123,6 +123,8 @@
             generateChartData(typeOfChart) {
                 let labels = [];
                 let data = [];
+                let transNew = {}
+
                 let trans = this.getTransactions;
                 switch (typeOfChart) {
                     case "Расходы":
@@ -135,6 +137,12 @@
                                     if (!labels.includes(name)) {
                                         labels.push(name);
                                         data.push(this.getTotalOfExpense(tran.expense_id));
+                                    }
+                                    if (!transNew.hasOwnProperty(groupKey)) {
+                                        transNew[groupKey] = [];
+                                        transNew[groupKey].push(tran)
+                                    } else {
+                                        transNew[groupKey].push(tran)
                                     }
                                 }
                             }
@@ -152,12 +160,18 @@
                                         labels.push(name);
                                         data.push(this.getTotalOfIncomes(tran.income_id));
                                     }
+                                    if (!transNew.hasOwnProperty(groupKey)) {
+                                        transNew[groupKey] = [];
+                                        transNew[groupKey].push(tran)
+                                    } else {
+                                        transNew[groupKey].push(tran)
+                                    }
                                 }
                             }
                         }
                         break;
                 }
-
+                this.setTransactions(transNew)
                 return {labels, data}
             },
             getLastISODateOfMonth(anyISODateOfMonth) {
