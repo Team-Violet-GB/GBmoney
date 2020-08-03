@@ -37,12 +37,7 @@
 
     export default {
         props: {
-            transactions: {
-                type: Object,
-                default() {
-                    return null;
-                }
-            },
+            transactions: null,
             editable: {
                 type: Boolean,
                 default() {
