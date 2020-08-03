@@ -65,12 +65,16 @@ export default {
 
   computed: {
     ...mapGetters([
-      "points",
-      "getTransactionsByPoint",
-      "incomes",
-      "wallets",
-      "expenses",
-      "getTagsForChart"
+      'points',
+      'getTransactionsByPoint',
+      'incomes',
+      'wallets',
+      'expenses',
+      'getLineData',
+      'getPieData',
+      'thisMonth',
+      'lastHalfYear',
+      'colors'
     ]),
     pointsByType() {
       return this.points[this.type]
@@ -78,23 +82,21 @@ export default {
   },
 
   mounted() {
-    // получение данных для круглого графика
-    this.setThisMonth() // установить dateFrom и dateTo для этого месяца
-    this.fetchTagsForChart({
-      [`${this.type}_id`]: this.id,
-      dateFrom: this.dateFrom,
-      dateTo: this.dateTo,
-    })
-    this.setPieChartData()
-
     // получение данных для линейного графика
-    this.setLastHalfYear()
-    this.fetchTagsForChart({
-      [`${this.type}_id`]: this.id,
-      dateFrom: this.dateFrom,
-      dateTo: this.dateTo,
-    })
+    this.fetchLineChart({
+        [`${this.type}_id`]: this.id,
+        dateFrom: this.lastHalfYear.dateFrom,
+        dateTo: this.lastHalfYear.dateTo,
+      })
     this.setLineChartData()
+
+    // получение данных для круглого графика
+    this.fetchPieChart({
+        [`${this.type}_id`]: this.id,
+        dateFrom: this.thisMonth.dateFrom,
+        dateTo: this.thisMonth.dateTo,
+      })
+    this.setPieChartData()
 
     // получение данных для ленты
     if (!this.getTransactionsByPoint) this.fetchTransactionsByPoint()
@@ -109,16 +111,16 @@ export default {
         if (!this.expenses) this.fetchExpenses()
         break
       }
-      
   },
 
   methods: {
     ...mapActions([
-      "fetchTransactionsByPoint",
-      "fetchIncomes",
-      "fetchWallets",
-      "fetchExpenses",
-      "fetchTagsForChart"
+      'fetchTransactionsByPoint',
+      'fetchIncomes',
+      'fetchWallets',
+      'fetchExpenses',
+      'fetchLineChart',
+      'fetchPieChart',
     ]),
 
     changeDate(newDate) {
@@ -128,37 +130,13 @@ export default {
 
     setLineChartData() {
       this.lineChartData = {
-        labels: [
-          "март",
-          "апрель",
-          "май",
-          "июнь",
-          "март",
-          "апрель",
-          "май",
-          "июнь",
-          "май",
-          "июнь",
-          "июнь",
-        ],
+        labels: this.getLineData.names,
         datasets: [
           {
             label: "this.poinst[this.type][this.id].name",
             backgroundColor: "rgba(10, 147, 209, 0.2)",
             borderColor: "rgba(10, 147, 209)",
-            data: [
-              0,
-              15000,
-              5000,
-              15000,
-              -10000,
-              5000,
-              15000,
-              -10000,
-              5000,
-              30000,
-              -10000,
-            ],
+            data: this.getLineData.amounts,
           },
           //   {   // вторая линия
           //     label: "Непродажи",
@@ -171,40 +149,17 @@ export default {
 
     setPieChartData() {
       this.pieChartData = {
-        labels: this.getTagsForChart.names,
+        labels: this.getPieData.names,
         datasets: [
           {
             label: "Продажи",
-            backgroundColor: [
-              "#0a93d1",
-              "#e6a23c",
-              "#67c23a",
-              "#0a93d1",
-              "#f56c6c",
-              "#909399",
-            ],
+            backgroundColor: this.colors,
             borderWidth: 0,
-            data: this.getTagsForChart.amounts
+            data: this.getPieData.amounts
           },
         ],
       }
     },
-
-    setThisMonth() {
-      let date = new Date()
-      let dateFrom = new Date(date.getFullYear(), date.getMonth(), 1)
-      let dateTo = new Date(date.getFullYear(), date.getMonth() + 1, 0)
-      this.dateFrom = dateFrom.getFullYear() + '-' + (dateFrom.getMonth() + 1) + '-' + dateFrom.getDate()
-      this.dateTo = dateTo.getFullYear() + '-' + (dateTo.getMonth() + 1) + '-' + dateTo.getDate()  
-    },
-
-    setLastHalfYear() {
-      let date = new Date()
-      let dateFrom = new Date(date.getFullYear(), date.getMonth() - 5 , 1)
-      let dateTo = new Date(date.getFullYear(), date.getMonth() + 1, 0)
-      this.dateFrom = dateFrom.getFullYear() + '-' + (dateFrom.getMonth() + 1) + '-' + dateFrom.getDate()
-      this.dateTo = dateTo.getFullYear() + '-' + (dateTo.getMonth() + 1) + '-' + dateTo.getDate()  
-    }
   },
 }
 </script>
@@ -220,21 +175,6 @@ export default {
   margin-top: 20px;
 }
 
-.cstm-blue {
-  color: #0a93d1;
-}
-.cstm-yellow {
-  color: #e6a23c;
-}
-.cstm-green {
-  color: #67c23a;
-}
-.cstm-red {
-  color: #f56c6c;
-}
-.cstm-grey {
-  color: #909399;
-}
 .cstm-amount {
   text-align: right;
   padding-right: 10px;
