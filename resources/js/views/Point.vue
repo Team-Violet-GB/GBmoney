@@ -30,9 +30,7 @@
       </el-col>
       <el-col :span="12">
         <div class="grid-content bg-purple-light cstm-feed">
-          <!-- <Feed
-                :editable="false"
-          ></Feed>-->
+          <Feed :transactions="getTransactionsByPoint" />
         </div>
       </el-col>
     </el-row>
@@ -136,9 +134,6 @@ export default {
   },
 
   mounted() {
-    // if (!this.incomes) this.fetchIncomes()
-    // if (!this.wallets) this.fetchWallets()
-    // if (!this.expenses) this.fetchExpenses()
     if (!this.getTransactionsByPoint) this.fetchTransactionsByPoint()
     switch (this.type) {
       case 'income':
