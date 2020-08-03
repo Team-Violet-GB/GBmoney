@@ -75,11 +75,28 @@ export default {
     pointsByType() {
       return this.points[this.type]
     },
-
   },
 
   mounted() {
-    if (!this.getTagsForChart) this.fetchTagsForChart()
+    // получение данных для круглого графика
+    this.setThisMonth() // установить dateFrom и dateTo для этого месяца
+    this.fetchTagsForChart({
+      [`${this.type}_id`]: this.id,
+      dateFrom: this.dateFrom,
+      dateTo: this.dateTo,
+    })
+    this.setPieChartData()
+
+    // получение данных для линейного графика
+    this.setLastHalfYear()
+    this.fetchTagsForChart({
+      [`${this.type}_id`]: this.id,
+      dateFrom: this.dateFrom,
+      dateTo: this.dateTo,
+    })
+    this.setLineChartData()
+
+    // получение данных для ленты
     if (!this.getTransactionsByPoint) this.fetchTransactionsByPoint()
     switch (this.type) {
       case 'income':
@@ -92,8 +109,6 @@ export default {
         if (!this.expenses) this.fetchExpenses()
         break
       }
-      this.getPieChartData()
-      this.getLineChartData()
       
   },
 
@@ -111,7 +126,7 @@ export default {
       this.dateTo = newDate[1];
     },
 
-    getLineChartData() {
+    setLineChartData() {
       this.lineChartData = {
         labels: [
           "март",
@@ -154,7 +169,7 @@ export default {
       }
     },
 
-    getPieChartData() {
+    setPieChartData() {
       this.pieChartData = {
         labels: this.getTagsForChart.names,
         datasets: [
@@ -173,6 +188,22 @@ export default {
           },
         ],
       }
+    },
+
+    setThisMonth() {
+      let date = new Date()
+      let dateFrom = new Date(date.getFullYear(), date.getMonth(), 1)
+      let dateTo = new Date(date.getFullYear(), date.getMonth() + 1, 0)
+      this.dateFrom = dateFrom.getFullYear() + '-' + (dateFrom.getMonth() + 1) + '-' + dateFrom.getDate()
+      this.dateTo = dateTo.getFullYear() + '-' + (dateTo.getMonth() + 1) + '-' + dateTo.getDate()  
+    },
+
+    setLastHalfYear() {
+      let date = new Date()
+      let dateFrom = new Date(date.getFullYear(), date.getMonth() - 5 , 1)
+      let dateTo = new Date(date.getFullYear(), date.getMonth() + 1, 0)
+      this.dateFrom = dateFrom.getFullYear() + '-' + (dateFrom.getMonth() + 1) + '-' + dateFrom.getDate()
+      this.dateTo = dateTo.getFullYear() + '-' + (dateTo.getMonth() + 1) + '-' + dateTo.getDate()  
     }
   },
 }

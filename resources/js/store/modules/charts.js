@@ -8,14 +8,14 @@ export default {
             //         const newTagsForChart = response.data.data;
             //         commit('updateTagsForChart', newTagsForChart)
             //     })
-
+            console.log(data)
             var newTagsForChart = {
                 names: ["продукты", "кафе/рестораны", "на работе"],
                 amounts: [10000, 1500, 1000],
               }
               
               commit('updateTagsForChart', newTagsForChart)
-        }
+        },
     },
 
     mutations: {
