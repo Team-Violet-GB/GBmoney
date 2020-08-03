@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export default {
     actions: {
-        fetchLineChart({ commit }, data) {
+        fetchCharts({ commit }, data) {
             // axios.get('/api/get/...')
             //     .then(response => {
             //         const newTagsForChart = response.data.data;
@@ -12,22 +12,15 @@ export default {
             var newData = {
                 names: ["март","апрель","май","июнь","март","апрель","май","июнь","май","июнь","июнь",],
                 amounts: [0,15000,5000,15000,-10000,5000,15000,-10000,5000,30000,-10000,],
-              }
-            commit('updateLineData', newData)
-        },
+            }
 
-        fetchPieChart({ commit }, data) {
-            // axios.get('/api/get/...')
-            //     .then(response => {
-            //         const newTagsForChart = response.data.data;
-            //         commit('updateTagsForChart', newTagsForChart)
-            //     })
-            console.log(data)
-            var newData = {
+            var newData2 = {
                 names: ["продукты", "кафе/рестораны", "на работе", "продукты", "кафе/рестораны", "на работе"],
                 amounts: [10000, 1500, 1000, 10000, 1500, 1000],
-              }
-            commit('updatePieData', newData)
+            }
+
+            commit('updateLineData', newData)
+            commit('updatePieData', newData2)
         },
     },
 
@@ -44,7 +37,7 @@ export default {
         lineData: null,
         pieData: null,
     },
-    
+
     getters: {
         getLineData(state) {
             return state.lineData
@@ -72,14 +65,7 @@ export default {
         },
 
         colors() {
-            return [
-                "#0a93d1",
-                "#e6a23c",
-                "#67c23a",
-                "#0a93d1",
-                "#f56c6c",
-                "#909399",
-              ]
+            return ["#0a93d1","#e6a23c","#67c23a","#0a93d1","#f56c6c","#909399",]
         }
     }
 }

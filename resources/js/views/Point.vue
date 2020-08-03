@@ -30,7 +30,7 @@
       </el-col>
       <el-col :span="12">
         <div class="grid-content bg-purple-light cstm-feed">
-          <!-- <Feed :transactions="getTransactionsByPoint" /> -->
+          <Feed :transactions="getTransactionsByPoint" />
         </div>
       </el-col>
     </el-row>
@@ -56,8 +56,6 @@ export default {
     return {
       id: this.$route.params.id,
       type: this.$route.params.type,
-      dateFrom: "",
-      dateTo: "",
       lineChartData: null,
       pieChartData: null
     }
@@ -72,7 +70,6 @@ export default {
       'expenses',
       'getLineData',
       'getPieData',
-      'thisMonth',
       'lastHalfYear',
       'colors'
     ]),
@@ -82,22 +79,15 @@ export default {
   },
 
   mounted() {
-    // получение данных для линейного графика
-    this.fetchLineChart({
+    // получение данных для графиков
+    this.fetchCharts({
         [`${this.type}_id`]: this.id,
         dateFrom: this.lastHalfYear.dateFrom,
         dateTo: this.lastHalfYear.dateTo,
       })
     this.setLineChartData()
-
-    // получение данных для круглого графика
-    this.fetchPieChart({
-        [`${this.type}_id`]: this.id,
-        dateFrom: this.thisMonth.dateFrom,
-        dateTo: this.thisMonth.dateTo,
-      })
     this.setPieChartData()
-
+    
     // получение данных для ленты
     if (!this.getTransactionsByPoint) this.fetchTransactionsByPoint()
     switch (this.type) {
@@ -119,13 +109,15 @@ export default {
       'fetchIncomes',
       'fetchWallets',
       'fetchExpenses',
-      'fetchLineChart',
-      'fetchPieChart',
+      'fetchCharts',
     ]),
 
     changeDate(newDate) {
-      this.dateFrom = newDate[0];
-      this.dateTo = newDate[1];
+      this.fetchCharts({
+        [`${this.type}_id`]: this.id,
+        dateFrom: newDate[0],
+        dateTo: newDate[1],
+      })
     },
 
     setLineChartData() {
