@@ -106,6 +106,7 @@
                                 let email = response.data.user.email
                                 this.MessageSuccess('Пользователь ' + email + ' успешно изменен')
                                 this.$store.commit('setUserEmail', email)
+                                this.clearPass()
                             })
                             .catch((error) => {
                                 if (error.response.data.errors) {
@@ -121,6 +122,7 @@
                                     let err = error.response.data.message
                                     this.MessageError(err)
                                 }
+                                this.clearPass()
                             })
 
                     } else {
@@ -192,6 +194,12 @@
                     type: 'success'
                 })
             },
+
+            clearPass() {
+                this.ruleForm.pass = ''
+                this.ruleForm.newpass = ''
+                this.ruleForm.checkPass = ''
+            }
         }
     }
 </script>

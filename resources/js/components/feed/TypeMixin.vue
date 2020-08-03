@@ -7,10 +7,39 @@
                 'wallets',
                 'incomes',
                 'expenses',
-                'tags'
+                'tags',
+                'getTransactions'
             ]),
         },
         methods: {
+            getTotalOfExpense(expense_id) {
+                let total = 0;
+                for (let groupKey in this.getTransactions) {
+                    let group = this.getTransactions[groupKey]
+                    for (let tranKey in group) {
+                        let transaction = group[tranKey]
+                        if (transaction.type == 3 && transaction.expense_id == expense_id) {
+                            total += Number(transaction.amount);
+                        }
+                    }
+                }
+
+                return total;
+            },
+            getTotalOfIncomes(income_id) {
+                let total = 0;
+                for (let groupKey in this.getTransactions) {
+                    let group = this.getTransactions[groupKey]
+                    for (let tranKey in group) {
+                        let transaction = group[tranKey]
+                        if (transaction.type == 1 && transaction.income_id == income_id) {
+                            total += Number(transaction.amount);
+                        }
+                    }
+                }
+
+                return total;
+            },
             getTypeData(transaction) {
                 let data = {}
                 switch (transaction.type) {
@@ -52,6 +81,7 @@
                     }
                         break;
                 }
+
                 return data;
             }
         }

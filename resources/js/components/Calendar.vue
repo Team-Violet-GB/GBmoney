@@ -1,5 +1,5 @@
 <template>
-  <div class="block">
+  <div class="options">
     <span class="demonstration"></span>
     <el-date-picker
       v-model="dateSelect"

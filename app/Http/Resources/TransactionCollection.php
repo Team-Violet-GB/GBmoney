@@ -20,7 +20,10 @@ class TransactionCollection extends ResourceCollection
         $dates = array_column($this->collection->toArray(), 'date');
 
         // Получаем массив транзакций для каждого элемента входного массива пагинации.
-        $transaction = Transaction::query()->whereIn('date', $dates)->orderByDesc('date')->get();
+        $transaction = Transaction::query()->whereIn('date', $dates)
+            ->orderByDesc('date')
+            ->orderByDesc('id')
+            ->get();
 
         return [
             'data' => $transaction->groupBy('date')

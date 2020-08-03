@@ -25,24 +25,24 @@ class TransactionController extends Controller
     {
         // Выполняем валидацию данных из запроса.
         $this->validate($request, [
-            'data_from' => 'nullable|date',
-            'data_to' => 'nullable|date|after:data_from',
+            'date_from' => 'nullable|date',
+            'date_to' => 'nullable|date|after_or_equal:date_from',
             'page' => 'nullable|int',
         ]);
 
         // Получаем данные из запроса.
-        $dataFrom = request('data_from');
-        $dataTo = request('data_to');
+        $dateFrom = request('date_from');
+        $dateTo = request('date_to');
 
         $query = Transaction::query();
 
         $query->select('date')
             ->where('user_id', Auth::id())
-            ->when($dataFrom, function ($query) use ($dataFrom) {
-                return $query->where('date', '>=', $dataFrom);
+            ->when($dateFrom, function ($query) use ($dateFrom) {
+                return $query->where('date', '>=', $dateFrom);
             })
-            ->when($dataTo, function ($query) use ($dataTo) {
-                return $query->where('date', '<=', $dataTo);
+            ->when($dateTo, function ($query) use ($dateTo) {
+                return $query->where('date', '<=', $dateTo);
             })
             ->groupBy(['date'])
             ->orderByDesc('date');
@@ -61,11 +61,16 @@ class TransactionController extends Controller
         // Создаем новый объект транзакции.
         $transaction = new Transaction();
 
-        // Заполняем модель поступившими из запроса значениями.
-        $transaction->fillTransaction($request);
+        // Заполняем модель поступившими из запроса значениями и сохраняем ее..
+        $result = $transaction->fillTransaction($request);
 
-        // Сохраняем новую транзакцию.
-        $transaction->save();
+        // В случае неудачного добавления транзакции возвращаем ответ об ошибке.
+        if ($result !== true) {
+            return response()->json([
+                'message' => 'Ошибка выполнения запроса в базу данных',
+                'errors' => $result
+            ], 500);
+        }
 
         return response()->json(['data' => $transaction]);
     }
@@ -98,11 +103,16 @@ class TransactionController extends Controller
          */
         $transaction = Transaction::query()->find($id);
 
-        // Заполняем модель поступившими из запроса значениями.
-        $transaction->fillTransaction($request);
+        // Заполняем модель поступившими из запроса значениями и сохраняем ее..
+        $result = $transaction->fillTransaction($request);
 
-        // Сохраняем новую транзакцию.
-        $transaction->save();
+        // В случае неудачного добавления транзакции возвращаем ответ об ошибке.
+        if ($result !== true) {
+            return response()->json([
+                'message' => 'Ошибка выполнения запроса в базу данных',
+                'errors' => $result
+            ], 500);
+        }
 
         return response()->json(['message' => 'ok'], 200);
     }
@@ -115,8 +125,22 @@ class TransactionController extends Controller
      */
     public function destroy($id)
     {
-        // Удаляем транзакцию по ID.
-        Transaction::destroy($id);
+        /**
+         * Получаем объект транзакции по ID.
+         * @var Transaction $transaction
+         */
+        $transaction = Transaction::query()->find($id);
+
+        // Заполняем модель поступившими из запроса значениями и сохраняем ее..
+        $result = $transaction->deleteTransaction();
+
+        // В случае неудачного добавления транзакции возвращаем ответ об ошибке.
+        if ($result !== true) {
+            return response()->json([
+                'message' => 'Ошибка выполнения запроса в базу данных',
+                'errors' => $result
+            ], 500);
+        }
 
         return response()->json(['message' => 'ok'], 200);
     }
