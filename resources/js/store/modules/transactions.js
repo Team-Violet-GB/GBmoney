@@ -76,7 +76,7 @@ export default {
         },
     },
     state: {
-        transactions: {},
+        transactions: null,
         transactionsByPoint: null,
         errorStatus: false,
         errorInfo: 'Не предопределенное сообщение об ошибке ...',
