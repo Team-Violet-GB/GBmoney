@@ -30,7 +30,7 @@
       </el-col>
       <el-col :span="12">
         <div class="grid-content bg-purple-light cstm-feed">
-          <Feed :transactions="getTransactionsByPoint" />
+          <!-- <Feed :transactions="getTransactionsByPoint" /> -->
         </div>
       </el-col>
     </el-row>
@@ -58,7 +58,61 @@ export default {
       type: this.$route.params.type,
       dateFrom: "",
       dateTo: "",
-      lineChartData: {
+      lineChartData: null,
+      pieChartData: null
+    }
+  },
+
+  computed: {
+    ...mapGetters([
+      "points",
+      "getTransactionsByPoint",
+      "incomes",
+      "wallets",
+      "expenses",
+      "getTagsForChart"
+    ]),
+    pointsByType() {
+      return this.points[this.type]
+    },
+
+  },
+
+  mounted() {
+    if (!this.getTagsForChart) this.fetchTagsForChart()
+    if (!this.getTransactionsByPoint) this.fetchTransactionsByPoint()
+    switch (this.type) {
+      case 'income':
+        if (!this.incomes) this.fetchIncomes()
+        break
+      case 'wallet':
+        if (!this.wallets) this.fetchWallets()
+        break
+      case 'expense':
+        if (!this.expenses) this.fetchExpenses()
+        break
+      }
+      this.getPieChartData()
+      this.getLineChartData()
+      
+  },
+
+  methods: {
+    ...mapActions([
+      "fetchTransactionsByPoint",
+      "fetchIncomes",
+      "fetchWallets",
+      "fetchExpenses",
+      "fetchTagsForChart"
+    ]),
+
+    changeDate(newDate) {
+      this.dateFrom = newDate[0];
+      this.dateTo = newDate[1];
+    },
+
+    getLineChartData() {
+      this.lineChartData = {
         labels: [
           "март",
           "апрель",
@@ -97,10 +151,12 @@ export default {
           //     data: [5000, 15000, 10000, 30000],
           //   },
         ],
-      },
+      }
+    },
 
-      pieChartData: {
-        labels: ["продукты", "кафе/рестораны", "на работе"],
+    getPieChartData() {
+      this.pieChartData = {
+        labels: this.getTagsForChart.names,
         datasets: [
           {
             label: "Продажи",
@@ -113,56 +169,13 @@ export default {
               "#909399",
             ],
             borderWidth: 0,
-            data: [10000, 1500, 1000],
+            data: this.getTagsForChart.amounts
           },
         ],
-      },
-    };
-  },
-
-  computed: {
-    ...mapGetters([
-      "points",
-      "getTransactionsByPoint",
-      "incomes",
-      "wallets",
-      "expenses",
-    ]),
-    pointsByType() {
-      return this.points[this.type]
-    } 
-  },
-
-  mounted() {
-    if (!this.getTransactionsByPoint) this.fetchTransactionsByPoint()
-    switch (this.type) {
-      case 'income':
-        if (!this.incomes) this.fetchIncomes()
-        break
-      case 'wallet':
-        if (!this.wallets) this.fetchWallets()
-        break
-      case 'expense':
-        if (!this.expenses) this.fetchExpenses()
-        break
       }
-      
+    }
   },
-
-  methods: {
-    ...mapActions([
-      "fetchTransactionsByPoint",
-      "fetchIncomes",
-      "fetchWallets",
-      "fetchExpenses",
-    ]),
-
-    changeDate(newDate) {
-      this.dateFrom = newDate[0];
-      this.dateTo = newDate[1];
-    },
-  },
-};
+}
 </script>
 
 <style lang="scss" scoped>
