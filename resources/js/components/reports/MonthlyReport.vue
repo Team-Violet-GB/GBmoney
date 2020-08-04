@@ -3,7 +3,7 @@
         <el-row :gutter="30" style="height: 85vh">
             <el-col :span="12">
                 <div class="options">
-                    <month-picker @changeDate="onMonthChange"/>
+                    <month-picker @changeDate="newDate => onMonthChange(newDate)"/>
                     <div class="block">
                         <el-radio-group @change="generateChartData" v-model="typeOfChart" size="small"
                                         style="margin-left:80px; width: 200px">
@@ -114,8 +114,8 @@
                 'setPage'
             ]),
             onMonthChange(range) {
-                this.setDateFrom(range[0]);
-                this.setDateTo(this.getLastISODateOfMonth(range[1]));
+                this.setDateFrom(range.from);
+                this.setDateTo(range.to);
                 this.fetchTransactions();
             },
             generateChartData(typeOfChart = this.typeOfChart) {
