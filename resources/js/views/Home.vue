@@ -11,7 +11,7 @@
       <div slot="header" class="cstm-header-card">
         <div class="clearfix cstm-up-text">
           <span>Доходы</span>
-          <span>{{ incomesSumm }} &#8381;</span>
+          <span>{{ Number(incomesSumm).toLocaleString() }} &#8381;</span>
         </div>
         <div class="clearfix cstm-down-text">
           <span>{{ dateNowString }}</span>
@@ -33,7 +33,7 @@
               </el-button>
             </drop>
           </drag>
-          <div class="cstm-money-point cstm-blue">{{ point.amount }} &#8381;</div>
+          <div class="cstm-money-point cstm-blue">{{ Number(point.amount).toLocaleString('ru') }} &#8381;</div>
           <i class="el-icon-edit cstm-edit"></i>
         </div>
         <Addbutton :key="'add'" category="Доход"/>
@@ -45,7 +45,7 @@
       <div slot="header" class="cstm-header-card">
         <div class="clearfix cstm-up-text">
           <span>Счета</span>
-          <span type="text">{{ walletsSumm }} &#8381;</span>
+          <span type="text">{{ Number(walletsSumm).toLocaleString() }} &#8381;</span>
         </div>
         <div class="clearfix cstm-down-text">
           <span>{{ dateNowString }}</span>
@@ -70,7 +70,7 @@
                 </el-button>
                 </drag>
             </drop>
-          <div class="cstm-money-point cstm-yellow">{{ point.amount }} &#8381;</div>
+          <div class="cstm-money-point cstm-yellow">{{ Number(point.amount).toLocaleString() }} &#8381;</div>
           <i class="el-icon-edit cstm-edit"></i>
         </div>
         <Addbutton :key="'add'" category="Счета"/>
@@ -82,8 +82,8 @@
       <div slot="header" class="cstm-header-card">
         <div class="clearfix cstm-up-text">
           <span>Расходы</span>
-          <span>{{ expensesSumm }} &#8381;</span>
-          <span>{{ expensesLimit }} &#8381;</span>
+          <span>{{ Number(expensesSumm).toLocaleString() }} &#8381;</span>
+          <span>{{ Number(expensesLimit).toLocaleString() }} &#8381;</span>
         </div>
         <div class="clearfix cstm-down-text">
           <span>{{ dateNowString }}</span>
@@ -107,8 +107,8 @@
           <div
             class="cstm-money-point"
             :class="(point.amount > point.max_limit)? 'cstm-red' : 'cstm-green'"
-          >{{ point.amount }} &#8381;</div>
-          <div  v-if="point.max_limit" class="cstm-plan">{{ point.max_limit }} &#8381;</div>
+          >{{ Number(point.amount).toLocaleString() }} &#8381;</div>
+          <div  v-if="point.max_limit" class="cstm-plan">{{ Number(point.max_limit).toLocaleString() }} &#8381;</div>
           <i class="el-icon-edit cstm-edit"></i>
         </div>
         <Addbutton :key="'add'" category="Расход"/>

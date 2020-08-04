@@ -48,7 +48,7 @@
             </div>
             <!-- Введите сумму -->
             <el-input placeholder="Сумма" class="cstm-input cstm-mrgn-top-20" type="number" v-model="transaction.amount"></el-input>
-            <Numbers @clickNumber="(number) => addNumber(number)" />  
+            <Numbers @click-number="(number) => addNumber(number)" />  
             <!-- Введите комментарий -->
             <el-input
               type="textarea"
@@ -199,7 +199,7 @@ import Numbers from './Numbers.vue'
             }
           })
         })
-        .catch(() => {});
+        .catch(() => {})
       },
 
       approveTag() {
@@ -312,7 +312,6 @@ import Numbers from './Numbers.vue'
           if (number == 'delete') this.transaction.amount = null
           else amount ? this.transaction.amount = amount.substring(0, amount.length - 1) : ''
         }
-        console.log(this.transaction.amount)
       },
 
       MessageError(message) {
