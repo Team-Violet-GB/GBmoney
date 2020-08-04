@@ -20,7 +20,6 @@ export default {
               labels: {
                 fontColor: '#ffffff',
               },
-
           },
           scales: {
               yAxes: [{

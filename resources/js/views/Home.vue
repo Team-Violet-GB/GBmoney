@@ -6,7 +6,7 @@
       @closeCreateWindow="newTransaction.state_window = false"
     />
     <!-- ДОХОДЫ -->
-    <div class="cstm-box-card">
+    <div class="cstm-box-card" v-loading="incomesLoading" element-loading-background="#3d3e48">
       <!-- хедер -->
       <div slot="header" class="cstm-header-card">
         <div class="clearfix cstm-up-text">
@@ -40,7 +40,7 @@
       </transition-group>
     </div>
     <!-- СЧЕТА -->
-    <div class="cstm-box-card">
+    <div class="cstm-box-card" v-loading="walletsLoading" element-loading-background="#3d3e48">
       <!-- хедер -->
       <div slot="header" class="cstm-header-card">
         <div class="clearfix cstm-up-text">
@@ -77,7 +77,7 @@
       </transition-group>
     </div>
     <!-- Расходы -->
-    <div class="cstm-box-card">
+    <div class="cstm-box-card" v-loading="expensesLoading" element-loading-background="#3d3e48">
       <!-- хедер -->
       <div slot="header" class="cstm-header-card">
         <div class="clearfix cstm-up-text">
@@ -133,6 +133,7 @@
         data() {
           return {
             newTransaction: { state_window: false },
+            loadingIncomes: true,
           }
         },
         computed: {
@@ -144,6 +145,9 @@
               'walletsSumm',
               'expensesSumm',
               'expensesLimit',
+              'incomesLoading',
+              'walletsLoading',
+              'expensesLoading',
               ]),
 
               dateNowString() {
@@ -151,8 +155,11 @@
               }
         },
 
-        mounted() {
-            if (!this.incomes) this.fetchIncomes()
+        async mounted() {
+            if (!this.incomes) {
+              var fetchInc = await this.fetchIncomes()
+              this.loadingIncomes = false
+            }
             if (!this.wallets) this.fetchWallets()
             if (!this.expenses) this.fetchExpenses()
         },
