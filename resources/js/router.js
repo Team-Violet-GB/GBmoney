@@ -24,7 +24,7 @@ const router = new VueRouter({
       path: '/:type/:id',
       name: 'Point',
       meta: { layout: 'main', auth: true },
-      component: () => import('./views/Point.vue')
+      component: () => import('./views/PointCharts.vue')
     },
     {
       path: '/login',
