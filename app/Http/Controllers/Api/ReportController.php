@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ReportSumByIncomesCollection;
+use App\Http\Resources\ReportSumByExpensesCollection;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,5 +44,34 @@ class ReportController extends Controller
             ->groupBy(['income_id']);
 
         return new ReportSumByIncomesCollection($query->get());
+    }
+
+    public function sumByExpenses(Request $request)
+    {
+        // Выполняем валидацию данных из запроса.
+        $this->validate($request, [
+            'date_from' => 'nullable|date',
+            'date_to' => 'nullable|date|after_or_equal:date_from',
+        ]);
+
+        // Получаем данные из запроса.
+        $dateFrom = request('date_from');
+        $dateTo = request('date_to');
+
+        $query = Transaction::query();
+
+        $query->selectRaw('transactions.expense_id, sum(transactions.amount) as amount, e.name')
+            ->Join('expenses as e', 'transactions.expense_id', '=', 'e.id')
+            ->where('transactions.user_id', Auth::id())
+            ->whereNotNull('expense_id')
+            ->when($dateFrom, function ($query) use ($dateFrom) {
+                return $query->where('date', '>=', $dateFrom);
+            })
+            ->when($dateTo, function ($query) use ($dateTo) {
+                return $query->where('date', '<=', $dateTo);
+            })
+            ->groupBy(['expense_id']);
+
+        return new ReportSumByExpensesCollection($query->get());
     }
 }
