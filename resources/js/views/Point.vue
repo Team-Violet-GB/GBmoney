@@ -29,7 +29,7 @@
           </div>
       </el-col>
       <el-col  class="grid-content bg-purple-light cstm-feed" :span="12">
-          <Feed :transactions="getTransactionsByPoint"  />
+          <!-- <Feed :transactions="getTransactionsByPoint"  /> -->
       </el-col>
     </el-row>
   </div>
