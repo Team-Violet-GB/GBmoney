@@ -48,6 +48,7 @@
             </div>
             <!-- Введите сумму -->
             <el-input placeholder="Сумма" class="cstm-input cstm-mrgn-top-20" type="number" v-model="transaction.amount"></el-input>
+            <Numbers @clickNumber="(number) => addNumber(number)" />  
             <!-- Введите комментарий -->
             <el-input
               type="textarea"
@@ -64,14 +65,17 @@
 </template>
 
 <script>
-import SelectCustom from "../homepage/SelectCustom"
-import Calendar from "../Calendar"
-import { mapGetters, mapActions } from "vuex"
+import { mapGetters, mapActions } from 'vuex'
+import SelectCustom from '../homepage/SelectCustom'
+import Calendar from '../Calendar'
 import LoginVue from '../../views/Login.vue'
+import Numbers from './Numbers.vue'
 
   export default {
     components: {
-      SelectCustom, Calendar
+      SelectCustom, 
+      Calendar, 
+      Numbers
     },
     props: ['newTransaction'],
     data() {
@@ -300,6 +304,17 @@ import LoginVue from '../../views/Login.vue'
           return {nameFrom, nameTo}
       },
 
+      addNumber(number) {
+        var amount = this.transaction.amount
+        if (!isNaN(number)) {
+          amount ? (this.transaction.amount = amount + '' + number) : this.transaction.amount =  number 
+        } else {
+          if (number == 'delete') this.transaction.amount = null
+          else amount ? this.transaction.amount = amount.substring(0, amount.length - 1) : ''
+        }
+        console.log(this.transaction.amount)
+      },
+
       MessageError(message) {
         this.$message.error(message);
       },
@@ -352,6 +367,7 @@ import LoginVue from '../../views/Login.vue'
 .cstm-tags {
   justify-content: space-between;
 }
+
 .cstm-buttons-tags{
   display: flex;
 }
