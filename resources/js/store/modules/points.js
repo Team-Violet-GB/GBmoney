@@ -34,7 +34,6 @@ export default {
             .then(response => {
                 const incomes = response.data.data
                 commit('updateIncomes', incomes)
-                return incomes
             })
         },
         fetchWallets({ commit }) {
@@ -42,7 +41,6 @@ export default {
             .then(response => {
                 const wallets = response.data.data
                 commit('updateWallets', wallets)
-                return wallets
             })
         },
         fetchExpenses({ commit }) {
@@ -50,7 +48,6 @@ export default {
             .then(response => {
                 const expenses = response.data.data
                 commit('updateExpenses', expenses)
-                return expenses
             })
         },
         fetchTags({ commit }) {
@@ -58,7 +55,6 @@ export default {
             .then(response => {
                 const tags = response.data.data
                 commit('updateTags', tags)
-                return tags
             })
         },
     },
@@ -86,10 +82,10 @@ export default {
             for (let point in points)  limit += Number(points[point].max_limit)
             state.expensesLimit = limit
         },
-
         updateTags(state, points) {
             state.tagsList = points
         },
+
     },
     state: {
         incomesList: null,
@@ -125,13 +121,6 @@ export default {
         },
         expensesLimit(state) {
             return state.expensesLimit
-        },
-        points(state) {
-            return {
-                'income': state.incomesList,
-                'wallet': state.walletsList,
-                'expense': state.expensesList,
-            }
         },
     }
 }

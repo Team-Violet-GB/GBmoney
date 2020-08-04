@@ -1,39 +1,35 @@
 <template>
   <div>
     <el-row>
-      <el-col :span="24">
-        <div class="grid-content bg-purple-dark">
+      <el-col class="grid-content bg-purple-dark" :span="24">
           <LineChart :chartData="lineChartData" :height="70"></LineChart>
-        </div>
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="12">
-        <div class="grid-content bg-purple cstm-col-left">
-          <CalendarMonth @changeDate="newDate => changeDate(newDate)" />
-          <div class="cstm-pie-chart">
+      <el-col class="grid-content bg-purple cstm-col-left" :span="12">
+        <CalendarMonth @changeDate="newDate => changeDate(newDate)" />
+          <div v-if="type == 'expense'">
+            <div class="cstm-pie-chart">
             <PieChart :chartData="pieChartData" :height="350"></PieChart>
           </div>
-          <el-card v-for="point in pointsByType" :key="point.id" class="box-card">
-            <el-row v-if="point.id == id" slot="header" class="clearfix tran-group-header">
+          <el-card class="box-card">
+            <el-row slot="header" class="clearfix tran-group-header">
               <el-col :span="10">{{ point.name }}</el-col>
               <el-col class="cstm-percent" :span="7">100%</el-col>
               <el-col class="cstm-amount" :span="7">{{ 'сумма' }}</el-col>
             </el-row>
-            <el-row v-if="point.id == id" class="tran-row-data">
-              <el-col :span="10">{{ 'name' }}</el-col>
-              <el-col class="cstm-percent" :span="7">{{ 'percent' }}</el-col>
-              <el-col class="cstm-amount" :span="7">{{ 'amount' }}</el-col>
-            </el-row>
+            <div>
+              <el-row class="tran-row-data">
+                <el-col :span="10">{{ 'name' }}</el-col>
+                <el-col class="cstm-percent" :span="7">{{ 'percent' }}</el-col>
+                <el-col class="cstm-amount" :span="7">{{ 'amount' }}</el-col>
+              </el-row>
+            </div>
           </el-card>
-        </div>
+          </div>
       </el-col>
-      <el-col :span="12">
-        <div class="grid-content bg-purple-light cstm-feed">
-          <!-- <Feed
-                :editable="false"
-          ></Feed>-->
-        </div>
+      <el-col  class="grid-content bg-purple-light cstm-feed" :span="12">
+          <!-- <Feed :transactions="getTransactionsByPoint"  /> -->
       </el-col>
     </el-row>
   </div>
@@ -58,40 +54,65 @@ export default {
     return {
       id: this.$route.params.id,
       type: this.$route.params.type,
-      dateFrom: "",
-      dateTo: "",
-      lineChartData: {
-        labels: [
-          "март",
-          "апрель",
-          "май",
-          "июнь",
-          "март",
-          "апрель",
-          "май",
-          "июнь",
-          "май",
-          "июнь",
-          "июнь",
-        ],
+      lineChartData: null,
+      pieChartData: null,
+      point: {name: null, type:null}
+    }
+  },
+
+  computed: {
+    ...mapGetters([
+      'getTransactionsByPoint',
+      'getLineData',
+      'getPieData',
+      'lastHalfYear',
+      'colors'
+    ]),
+  },
+
+ mounted() {
+      this.axios.get(`/api/${this.type}s/${this.id}`)  // получение данных о текущаем поинте
+      .then(response => {
+          this.point = response.data.data
+      })
+      .then(() => {
+        this.fetchCharts({ // получение данных для графиков
+          [`${this.type}_id`]: this.id,
+          dateFrom: this.lastHalfYear.dateFrom,
+          dateTo: this.lastHalfYear.dateTo,
+        })
+      })
+      .then(() => {
+        this.setLineChartData()
+        this.setPieChartData()
+      })
+
+    if (!this.getTransactionsByPoint) this.fetchTransactionsByPoint() // получение данных для ленты
+  },
+
+  methods: {
+    ...mapActions([
+      'fetchTransactionsByPoint',
+      'fetchCharts',
+    ]),
+
+    changeDate(newDate) {
+      this.fetchCharts({
+        [`${this.type}_id`]: this.id,
+        dateFrom: newDate.from,
+        dateTo: newDate.to,
+      })
+    },
+
+    setLineChartData() {
+      this.lineChartData = {
+        labels: this.getLineData.names,
         datasets: [
           {
-            label: "this.poinst[this.type][this.id].name",
+            label: this.point.name,
             backgroundColor: "rgba(10, 147, 209, 0.2)",
             borderColor: "rgba(10, 147, 209)",
-            data: [
-              0,
-              15000,
-              5000,
-              15000,
-              -10000,
-              5000,
-              15000,
-              -10000,
-              5000,
-              30000,
-              -10000,
-            ],
+            data: this.getLineData.amounts,
           },
           //   {   // вторая линия
           //     label: "Непродажи",
@@ -99,75 +120,24 @@ export default {
           //     data: [5000, 15000, 10000, 30000],
           //   },
         ],
-      },
+      }
+    },
 
-      pieChartData: {
-        labels: ["продукты", "кафе/рестораны", "на работе"],
+    setPieChartData() {
+      this.pieChartData = {
+        labels: this.getPieData.names,
         datasets: [
           {
             label: "Продажи",
-            backgroundColor: [
-              "#0a93d1",
-              "#e6a23c",
-              "#67c23a",
-              "#0a93d1",
-              "#f56c6c",
-              "#909399",
-            ],
+            backgroundColor: this.colors,
             borderWidth: 0,
-            data: [10000, 1500, 1000],
+            data: this.getPieData.amounts
           },
         ],
-      },
-    };
-  },
-
-  computed: {
-    ...mapGetters([
-      "points",
-      "getTransactionsByPoint",
-      "incomes",
-      "wallets",
-      "expenses",
-    ]),
-    pointsByType() {
-      return this.points[this.type]
-    } 
-  },
-
-  mounted() {
-    // if (!this.incomes) this.fetchIncomes()
-    // if (!this.wallets) this.fetchWallets()
-    // if (!this.expenses) this.fetchExpenses()
-    if (!this.getTransactionsByPoint) this.fetchTransactionsByPoint()
-    switch (this.type) {
-      case 'income':
-        if (!this.incomes) this.fetchIncomes()
-        break
-      case 'wallet':
-        if (!this.wallets) this.fetchWallets()
-        break
-      case 'expense':
-        if (!this.expenses) this.fetchExpenses()
-        break
       }
-      
-  },
-
-  methods: {
-    ...mapActions([
-      "fetchTransactionsByPoint",
-      "fetchIncomes",
-      "fetchWallets",
-      "fetchExpenses",
-    ]),
-
-    changeDate(newDate) {
-      this.dateFrom = newDate[0];
-      this.dateTo = newDate[1];
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -181,21 +151,6 @@ export default {
   margin-top: 20px;
 }
 
-.cstm-blue {
-  color: #0a93d1;
-}
-.cstm-yellow {
-  color: #e6a23c;
-}
-.cstm-green {
-  color: #67c23a;
-}
-.cstm-red {
-  color: #f56c6c;
-}
-.cstm-grey {
-  color: #909399;
-}
 .cstm-amount {
   text-align: right;
   padding-right: 10px;

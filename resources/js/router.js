@@ -21,7 +21,7 @@ const router = new VueRouter({
       component: () => import('./views/User.vue')
     },
     {
-      path: '/point/:type/:id',
+      path: '/:type/:id',
       name: 'Point',
       meta: { layout: 'main', auth: true },
       component: () => import('./views/Point.vue')
