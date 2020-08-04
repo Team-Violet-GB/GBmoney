@@ -3,7 +3,7 @@
     <el-row class="tac">
       <el-col :span="24">
         <h5 class="cstm-logo">
-          <el-image class="cstm-logo-img" :src="url"></el-image>GBmoney
+          <img class="cstm-logo-img" src="../images/gm-money-logo.jpg" alt="">GBmoney
         </h5>
         <el-menu
           default-active="2"
@@ -35,7 +35,6 @@
 export default {
   data () {
     return {
-      url: '../images/gm-money-logo.jpg',
       links: [
         { title: 'Главная', url: '/', class: 'el-icon-star-on' },
         { title: 'Профиль', url: '/user', class: 'el-icon-user-solid' },

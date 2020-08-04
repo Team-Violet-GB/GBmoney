@@ -7,7 +7,7 @@
         class="cstm-registr">
         <div>
             <div class="cstm-logo">
-                <el-image class="cstm-logo-img" :src="url"></el-image>GBmoney
+                 <img class="cstm-logo-img" src="../images/gm-money-logo.jpg" alt="">GBmoney
             </div>
             <div class="cstm-auth-header">Регистрация</div>
         </div>
@@ -60,7 +60,6 @@
 
         return {
             dialogVisible: true,
-            url: '../images/gm-money-logo.jpg',
             ruleForm: {
                 email: '',
                 pass: '',

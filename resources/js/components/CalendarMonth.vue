@@ -9,7 +9,6 @@
       value-format="yyyy-MM-dd"
       align="right"
       unlink-panels
-      range-separator="To"
       start-placeholder="Первый"
       end-placeholder="Последний"
       :picker-options="pickerOptions"

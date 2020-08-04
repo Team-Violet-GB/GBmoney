@@ -34,6 +34,7 @@ export default {
             .then(response => {
                 const incomes = response.data.data
                 commit('updateIncomes', incomes)
+                commit('updateIncomesLoad', false)
             })
         },
         fetchWallets({ commit }) {
@@ -41,6 +42,7 @@ export default {
             .then(response => {
                 const wallets = response.data.data
                 commit('updateWallets', wallets)
+                commit('updateWalletsSumm', false)
             })
         },
         fetchExpenses({ commit }) {
@@ -48,6 +50,7 @@ export default {
             .then(response => {
                 const expenses = response.data.data
                 commit('updateExpenses', expenses)
+                commit('updateExpensesLoad', false)
             })
         },
         fetchTags({ commit }) {
@@ -86,6 +89,16 @@ export default {
             state.tagsList = points
         },
 
+        updateIncomesLoad(state, newState) {
+            state.incomesLoad = newState
+        },
+        updateWalletsSumm(state, newState) {
+            state.walletsLoad = newState
+        },
+        updateExpensesLoad(state, newState) {
+            state.expensesLoad = newState
+        },
+
     },
     state: {
         incomesList: null,
@@ -96,6 +109,9 @@ export default {
         walletsSumm: null,
         expensesSumm: null,
         expensesLimit: null,
+        incomesLoad: true,
+        walletsLoad: true,
+        expensesLoad: true,
     },
     getters: {
         incomes(state) {
@@ -121,6 +137,15 @@ export default {
         },
         expensesLimit(state) {
             return state.expensesLimit
+        },
+        incomesLoading(state) {
+            return state.incomesLoad
+        },
+        walletsLoading(state) {
+            return state.walletsLoad
+        },
+        expensesLoading(state) {
+            return state.expensesLoad
         },
     }
 }

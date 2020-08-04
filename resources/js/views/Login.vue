@@ -7,7 +7,7 @@
         class="cstm-auth">
         <div>
             <div class="cstm-logo">
-                <el-image class="cstm-logo-img" :src="url"></el-image>GBmoney
+                 <img class="cstm-logo-img" src="../images/gm-money-logo.jpg" alt="">GBmoney
             </div>
             <div class="cstm-auth-header">Вход в личный кабинет</div>
         </div>
@@ -37,7 +37,6 @@
     data() {
         return {
             dialogVisible: true,
-            url: '../images/gm-money-logo.jpg',
             ruleForm: {
                 pass: '',
                 email: this.$store.getters.email,

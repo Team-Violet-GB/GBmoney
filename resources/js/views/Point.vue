@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="loading" element-loading-background="rgba(44, 46, 56, 0.8)">
     <el-row>
       <el-col class="grid-content bg-purple-dark" :span="24">
           <LineChart :chartData="lineChartData" :height="70"></LineChart>
@@ -7,7 +7,7 @@
     </el-row>
     <el-row>
       <el-col class="grid-content bg-purple cstm-col-left" :span="12">
-        <CalendarMonth @changeDate="newDate => changeDate(newDate)" />
+          <CalendarMonth @changeDate="newDate => changeDate(newDate)" />
           <div v-if="type == 'expense'">
             <div class="cstm-pie-chart">
             <PieChart :chartData="pieChartData" :height="350"></PieChart>
@@ -18,13 +18,11 @@
               <el-col class="cstm-percent" :span="7">100%</el-col>
               <el-col class="cstm-amount" :span="7">{{ 'сумма' }}</el-col>
             </el-row>
-            <div>
-              <el-row class="tran-row-data">
-                <el-col :span="10">{{ 'name' }}</el-col>
-                <el-col class="cstm-percent" :span="7">{{ 'percent' }}</el-col>
-                <el-col class="cstm-amount" :span="7">{{ 'amount' }}</el-col>
-              </el-row>
-            </div>
+            <el-row class="tran-row-data">
+              <el-col :span="10">{{ 'name' }}</el-col>
+              <el-col class="cstm-percent" :span="7">{{ 'percent' }}</el-col>
+              <el-col class="cstm-amount" :span="7">{{ 'amount' }}</el-col>
+            </el-row>
           </el-card>
           </div>
       </el-col>
@@ -56,7 +54,8 @@ export default {
       type: this.$route.params.type,
       lineChartData: null,
       pieChartData: null,
-      point: {name: null, type:null}
+      point: {name: null, type:null},
+      loading: true,
     }
   },
 
@@ -85,6 +84,8 @@ export default {
       .then(() => {
         this.setLineChartData()
         this.setPieChartData()
+        this.loading = false
+
       })
 
     if (!this.getTransactionsByPoint) this.fetchTransactionsByPoint() // получение данных для ленты
