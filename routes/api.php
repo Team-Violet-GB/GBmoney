@@ -43,5 +43,9 @@ Route::middleware('auth:api')->group(function () {
         Route::apiResource('tags', 'TagController');
         // Работа с кошельками.
         Route::apiResource('wallets', 'WalletController');
+
+        // ОТЧЕТЫ ------------------------------------------------------------------
+        // Возвращаем суммы по каждому элементу доходов.
+        Route::get('report/sum-incomes', 'ReportController@sumByIncomes');
     });
 });
