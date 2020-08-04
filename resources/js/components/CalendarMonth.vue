@@ -3,13 +3,12 @@
     <span class="demonstration">Месяц&nbsp;&nbsp;</span>
     <el-date-picker
       v-model="dateSelect"
-      @change="$emit('changeDate', dateSelect)"
+      @change="$emit('changeDate', date)"
       type="monthrange"
       format="MMMM yyyy"
       value-format="yyyy-MM-dd"
       align="right"
       unlink-panels
-      range-separator="To"
       start-placeholder="Первый"
       end-placeholder="Последний"
       :picker-options="pickerOptions"
@@ -22,6 +21,7 @@
   export default {
     data() {
       return {
+        date: null,
         dateSelect: [new Date(), new Date()],
         pickerOptions: {
           shortcuts: [{
@@ -47,6 +47,16 @@
           }]
         },
       };
+    },
+
+    watch: {
+      dateSelect(newDate) {
+        var dateTo = new Date(newDate[1].split('-'))
+        dateTo.setMonth(dateTo.getMonth() + 1)
+        dateTo.setDate(dateTo.getDate() - 1)
+        dateTo = dateTo.getFullYear() + '-' + (dateTo.getMonth() + 1) + '-' + dateTo.getDate()
+        this.date = {from: newDate[0], to: dateTo}
+      }
     }
-  };
+  }
 </script>

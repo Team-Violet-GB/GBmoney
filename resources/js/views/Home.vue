@@ -6,7 +6,7 @@
       @closeCreateWindow="newTransaction.state_window = false"
     />
     <!-- ДОХОДЫ -->
-    <div class="cstm-box-card">
+    <div class="cstm-box-card" v-loading="incomesLoading" element-loading-background="#3d3e48">
       <!-- хедер -->
       <div slot="header" class="cstm-header-card">
         <div class="clearfix cstm-up-text">
@@ -29,7 +29,7 @@
                 :icon="point.icon_name" 
                 circle 
                 class="cstm-icon-point" 
-                @click="$router.push(`/point/income/${point.id}`)">
+                @click="$router.push(`/income/${point.id}`)">
               </el-button>
             </drop>
           </drag>
@@ -40,7 +40,7 @@
       </transition-group>
     </div>
     <!-- СЧЕТА -->
-    <div class="cstm-box-card">
+    <div class="cstm-box-card" v-loading="walletsLoading" element-loading-background="#3d3e48">
       <!-- хедер -->
       <div slot="header" class="cstm-header-card">
         <div class="clearfix cstm-up-text">
@@ -66,7 +66,7 @@
                   :icon="point.icon_name" 
                   circle 
                   class="cstm-icon-point" 
-                  @click="$router.push(`/point/wallet/${point.id}`)" >
+                  @click="$router.push(`/wallet/${point.id}`)" >
                 </el-button>
                 </drag>
             </drop>
@@ -77,7 +77,7 @@
       </transition-group>
     </div>
     <!-- Расходы -->
-    <div class="cstm-box-card">
+    <div class="cstm-box-card" v-loading="expensesLoading" element-loading-background="#3d3e48">
       <!-- хедер -->
       <div slot="header" class="cstm-header-card">
         <div class="clearfix cstm-up-text">
@@ -101,7 +101,7 @@
               :icon="point.icon_name"
               circle
               class="cstm-icon-point cstm-expense"
-              @click="$router.push(`/point/expense/${point.id}`)"
+              @click="$router.push(`/expense/${point.id}`)"
             ></el-button>
           </drop>
           <div
@@ -133,6 +133,7 @@
         data() {
           return {
             newTransaction: { state_window: false },
+            loadingIncomes: true,
           }
         },
         computed: {
@@ -144,6 +145,9 @@
               'walletsSumm',
               'expensesSumm',
               'expensesLimit',
+              'incomesLoading',
+              'walletsLoading',
+              'expensesLoading',
               ]),
 
               dateNowString() {
@@ -151,8 +155,11 @@
               }
         },
 
-        mounted() {
-            if (!this.incomes) this.fetchIncomes()
+        async mounted() {
+            if (!this.incomes) {
+              var fetchInc = await this.fetchIncomes()
+              this.loadingIncomes = false
+            }
             if (!this.wallets) this.fetchWallets()
             if (!this.expenses) this.fetchExpenses()
         },

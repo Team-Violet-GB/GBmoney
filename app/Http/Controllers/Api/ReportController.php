@@ -2,18 +2,28 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\ReportSumIncomes;
-use App\Http\Resources\ReportSumIncomesCollection;
-use App\Http\Resources\TransactionCollection;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\ReportSumByIncomesCollection;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class ReportController extends Controller
 {
-    public function sumByIncomes()
+    /**
+     * @param Request $request
+     * @return ReportSumByIncomesCollection
+     * @throws ValidationException
+     */
+    public function sumByIncomes(Request $request)
     {
+        // Выполняем валидацию данных из запроса.
+        $this->validate($request, [
+            'date_from' => 'nullable|date',
+            'date_to' => 'nullable|date|after_or_equal:date_from',
+        ]);
+
         // Получаем данные из запроса.
         $dateFrom = request('date_from');
         $dateTo = request('date_to');
@@ -32,6 +42,6 @@ class ReportController extends Controller
             })
             ->groupBy(['income_id']);
 
-        return new ReportSumIncomesCollection($query->get());
+        return new ReportSumByIncomesCollection($query->get());
     }
 }
