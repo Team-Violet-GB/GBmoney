@@ -29,7 +29,7 @@
                 :icon="point.icon_name" 
                 circle 
                 class="cstm-icon-point" 
-                @click="$router.push(`/point/income/${point.id}`)">
+                @click="$router.push(`/income/${point.id}`)">
               </el-button>
             </drop>
           </drag>
@@ -66,7 +66,7 @@
                   :icon="point.icon_name" 
                   circle 
                   class="cstm-icon-point" 
-                  @click="$router.push(`/point/wallet/${point.id}`)" >
+                  @click="$router.push(`/wallet/${point.id}`)" >
                 </el-button>
                 </drag>
             </drop>
@@ -101,7 +101,7 @@
               :icon="point.icon_name"
               circle
               class="cstm-icon-point cstm-expense"
-              @click="$router.push(`/point/expense/${point.id}`)"
+              @click="$router.push(`/expense/${point.id}`)"
             ></el-button>
           </drop>
           <div
