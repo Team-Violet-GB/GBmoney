@@ -46,6 +46,6 @@ Route::middleware('auth:api')->group(function () {
 
         // ОТЧЕТЫ ------------------------------------------------------------------
         // Возвращаем суммы по каждому элементу доходов.
-        Route::get('report/sum-points', 'ReportController@sumByIncomes');
+        Route::get('report/sum-incomes', 'ReportController@sumByIncomes');
     });
 });
