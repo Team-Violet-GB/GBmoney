@@ -42,7 +42,7 @@ class ReportController extends Controller
             ->when($dateTo, function ($query) use ($dateTo) {
                 return $query->where('transactions.date', '<=', $dateTo);
             })
-            ->groupBy(['transactions.income_id']);
+            ->groupBy(['transactions.income_id', 'i.name']);
 
         return new ReportSumByIncomesCollection($query->get());
     }
@@ -62,7 +62,7 @@ class ReportController extends Controller
         $query = Transaction::query();
 
         $query->selectRaw('transactions.expense_id, sum(transactions.amount) as amount, e.name')
-            ->Join('expenses as e', 'transactions.expense_id', '=', 'e.id')
+            ->join('expenses as e', 'transactions.expense_id', '=', 'e.id')
             ->where('transactions.user_id', Auth::id())
             ->whereNotNull('transactions.expense_id')
             ->when($dateFrom, function ($query) use ($dateFrom) {
@@ -71,8 +71,8 @@ class ReportController extends Controller
             ->when($dateTo, function ($query) use ($dateTo) {
                 return $query->where('transactions.date', '<=', $dateTo);
             })
-            ->groupBy(['transactions.expense_id']);
-
+            ->groupBy(['transactions.expense_id', 'e.name']);
+//return $query->toSql();
         return new ReportSumByExpensesCollection($query->get());
     }
 
@@ -107,7 +107,7 @@ class ReportController extends Controller
             ->when($dateTo, function ($query) use ($dateTo) {
                 return $query->where('transactions.date', '<=', $dateTo);
             })
-            ->groupBy(['transactions.tag_id']);
+            ->groupBy(['transactions.tag_id', 't.name']);
 
         return new ReportSumByTagsCollection($query->get());
     }
