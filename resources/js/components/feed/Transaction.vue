@@ -17,7 +17,7 @@
                         <div
                             :class="getTypeData(this.transaction.data).color"
                             style="display: flex; justify-content: flex-end">
-                            {{ getTypeData(this.transaction.data).symbol}}{{ transaction.data.amount }} &#8381;
+                            {{ getTypeData(this.transaction.data).symbol}}{{ Number(transaction.data.amount).toFixed(2).toLocaleString() }} &#8381;
                         </div>
                     </el-col>
                 </el-row>

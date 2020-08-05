@@ -105,7 +105,7 @@
                                         <p style="margin-bottom: 5px">Транзакция от <strong>{{ new
                                             Date(this.editorData.data.date).toLocaleDateString()
                                             }}</strong></p>
-                                        <p style="text-align: right; margin-top: 0">{{ this.editorData.data.amount }}
+                                        <p style="text-align: right; margin-top: 0">{{ Number(this.editorData.data.amount).toFixed(2).toLocaleString() }}
                                             ₽</p>
                                         <div style="text-align: right; margin: 0">
                                             <el-button style="margin-top: 10px" type="danger" size="mini"

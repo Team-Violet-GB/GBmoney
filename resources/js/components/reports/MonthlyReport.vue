@@ -40,6 +40,7 @@
     import feed from "../feed/Feed";
     import {mapActions, mapGetters, mapMutations} from 'vuex';
     import type from '../feed/TypeMixin';
+    import axios from "axios";
 
     export default {
         name: "monthlyReport",
@@ -93,7 +94,6 @@
                             padding: 5,
                             fontColor: 'rgb(255,255,255)'
                         }
-
                     }
                 }
             },
@@ -148,25 +148,41 @@
                         break;
 
                     case "Доходы":
-                        for (let groupKey in trans) {
-                            let transGroup = trans[groupKey]
-                            for (let tranKey in transGroup) {
-                                let tran = transGroup[tranKey]
-                                if (tran.type === 1) {
-                                    let name = this.getTypeData(tran).fromName
-                                    if (!labels.includes(name)) {
-                                        labels.push(name);
-                                        data.push(this.getTotalOfIncomes(tran.income_id));
-                                    }
-                                    if (!transNew.hasOwnProperty(groupKey)) {
-                                        transNew[groupKey] = [];
-                                        transNew[groupKey].push(tran)
-                                    } else {
-                                        transNew[groupKey].push(tran)
-                                    }
-                                }
-                            }
+                        // for (let groupKey in trans) {
+                        //     let transGroup = trans[groupKey]
+                        //     for (let tranKey in transGroup) {
+                        //         let tran = transGroup[tranKey]
+                        //         if (tran.type === 1) {
+                        //             let name = this.getTypeData(tran).fromName
+                        //             if (!labels.includes(name)) {
+                        //                 labels.push(name);
+                        //                 data.push(this.getTotalOfIncomes(tran.income_id));
+                        //             }
+                        //             if (!transNew.hasOwnProperty(groupKey)) {
+                        //                 transNew[groupKey] = [];
+                        //                 transNew[groupKey].push(tran)
+                        //             } else {
+                        //                 transNew[groupKey].push(tran)
+                        //             }
+                        //         }
+                        //     }
+                        // }
+
+                        const headers = {
+                            'Content-Type': 'application/json'
                         }
+                        const params = {
+                            date_from: '2020-06-01',
+                            date_to: '2020-7-30'
+                        }
+                        axios.get('api/report/sum-incomes', {params: params, headers: headers})
+                            .then(response => {
+                                console.log(response.data);
+
+                            })
+                            .catch(error => {
+                                console.log(error);
+                            })
                         break;
                 }
                 this.transactions = transNew

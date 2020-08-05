@@ -9,7 +9,7 @@
                 </el-col>
                 <el-col :span="10">
                     <div class="tran-group-header-sum" :class="groupSumCalc(transactionGroup).color">
-                        {{ groupSumCalc(transactionGroup).symbol }}{{ groupSumCalc(transactionGroup).sum }} &#8381;
+                        {{ groupSumCalc(transactionGroup).symbol }}{{ Number(groupSumCalc(transactionGroup).sum).toLocaleString() }} &#8381;
                     </div>
                 </el-col>
             </el-row>
