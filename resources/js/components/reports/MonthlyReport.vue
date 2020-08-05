@@ -5,7 +5,7 @@
                 <div class="options">
                     <month-picker @changeDate="newDate => onMonthChange(newDate)"/>
                     <div class="block">
-                        <el-radio-group @change="generateChartData" v-model="typeOfChart" size="small"
+                        <el-radio-group @change="onMonthChange" v-model="typeOfChart" size="small"
                                         style="margin-left:80px; width: 200px">
                             <el-radio-button label="Доходы">Доходы</el-radio-button>
                             <el-radio-button label="Расходы">Расходы</el-radio-button>
@@ -23,10 +23,10 @@
                             type="error"
                             effect="dark">
                         </el-alert>
-                        <feed v-else
-                              :editable="false"
-                              :transactions="transactions">
-                        </feed>
+<!--                        <feed v-else-->
+<!--                              :editable="false"-->
+<!--                              :transactions="transactions">-->
+<!--                        </feed>-->
                     </div>
                 </div>
             </el-col>
@@ -40,7 +40,6 @@
     import feed from "../feed/Feed";
     import {mapActions, mapGetters, mapMutations} from 'vuex';
     import type from '../feed/TypeMixin';
-    import axios from "axios";
 
     export default {
         name: "monthlyReport",
@@ -49,7 +48,6 @@
             return {
                 currentISODateFrom: new Date().toISOString().slice(0, 8) + '01',
                 typeOfChart: 'Доходы',
-                transactions: {}
             }
         },
         computed: {
@@ -62,10 +60,20 @@
                 'getPage',
                 'getTotal'
             ]),
+            generatedChartData() {
+                let labels = [];
+                let data = [];
+
+                for (let key in this.getTransactions) {
+                    labels.push(this.getTransactions[key].name);
+                    data.push(this.getTransactions[key].amount);
+                }
+
+                return {labels, data}
+            },
             dataChart() {
-                const generatedChartData = this.generateChartData()
                 return {
-                    labels: generatedChartData.labels,
+                    labels: this.generatedChartData.labels,
                     datasets: [
                         {
                             label: 'Расходы',
@@ -78,7 +86,7 @@
                                 'rgba(255,99,3,0.65)'
                             ],
                             borderColor: 'rgba(190,99,255,0)',
-                            data: generatedChartData.data
+                            data: this.generatedChartData.data
                         }
                     ]
                 }
@@ -104,7 +112,9 @@
                 'fetchIncomes',
                 'fetchExpenses',
                 'fetchTags',
-                'fetchTransactions'
+                'fetchTransactions',
+                'fetchTransactionsTotalAmountOfIncomes',
+                'fetchTransactionsTotalAmountOfExpenses'
             ]),
             ...mapMutations([
                 'setTransactions',
@@ -114,80 +124,19 @@
                 'setPage'
             ]),
             onMonthChange(range) {
-                this.setDateFrom(range.from);
-                this.setDateTo(range.to);
-                this.fetchTransactions();
-            },
-            generateChartData(typeOfChart = this.typeOfChart) {
-                let labels = [];
-                let data = [];
-                let transNew = {}
-
-                let trans = this.getTransactions;
-                switch (typeOfChart) {
+                if (typeof(range) === "object") {
+                    this.setDateFrom(range.from);
+                    this.setDateTo(range.to);
+                }
+                switch (this.typeOfChart) {
                     case "Расходы":
-                        for (let groupKey in trans) {
-                            let transGroup = trans[groupKey]
-                            for (let tranKey in transGroup) {
-                                let tran = transGroup[tranKey]
-                                if (tran.type === 3) {
-                                    let name = this.getTypeData(tran).toName
-                                    if (!labels.includes(name)) {
-                                        labels.push(name);
-                                        data.push(this.getTotalOfExpense(tran.expense_id));
-                                    }
-                                    if (!transNew.hasOwnProperty(groupKey)) {
-                                        transNew[groupKey] = [];
-                                        transNew[groupKey].push(tran)
-                                    } else {
-                                        transNew[groupKey].push(tran)
-                                    }
-                                }
-                            }
-                        }
+                        this.fetchTransactionsTotalAmountOfExpenses()
                         break;
 
                     case "Доходы":
-                        // for (let groupKey in trans) {
-                        //     let transGroup = trans[groupKey]
-                        //     for (let tranKey in transGroup) {
-                        //         let tran = transGroup[tranKey]
-                        //         if (tran.type === 1) {
-                        //             let name = this.getTypeData(tran).fromName
-                        //             if (!labels.includes(name)) {
-                        //                 labels.push(name);
-                        //                 data.push(this.getTotalOfIncomes(tran.income_id));
-                        //             }
-                        //             if (!transNew.hasOwnProperty(groupKey)) {
-                        //                 transNew[groupKey] = [];
-                        //                 transNew[groupKey].push(tran)
-                        //             } else {
-                        //                 transNew[groupKey].push(tran)
-                        //             }
-                        //         }
-                        //     }
-                        // }
-
-                        const headers = {
-                            'Content-Type': 'application/json'
-                        }
-                        const params = {
-                            date_from: '2020-06-01',
-                            date_to: '2020-7-30'
-                        }
-                        axios.get('api/report/sum-expenses', {params: params, headers: headers})
-                            .then(response => {
-                                console.log(response.data);
-
-                            })
-                            .catch(error => {
-                                console.log(error);
-                            })
+                        this.fetchTransactionsTotalAmountOfIncomes()
                         break;
                 }
-                this.transactions = transNew
-
-                return {labels, data}
             },
             getLastISODateOfMonth(anyISODateOfMonth) {
                 Date.prototype.lastDayOfMonth = function () {
@@ -201,13 +150,12 @@
         mounted() {
             this.setDateFrom(this.currentISODateFrom);
             this.setDateTo(this.getLastISODateOfMonth(this.currentISODateFrom));
-            this.fetchTransactions();
-            this.generateChartData();
+            this.onMonthChange()
         },
         components: {
             monthPicker,
             monthChart,
-            feed
+            // feed
         }
     }
 </script>

@@ -22,6 +22,7 @@ export default {
             commit('updateLineData', newData)
             commit('updatePieData', newData2)
         },
+
     },
 
     mutations: {
@@ -54,14 +55,14 @@ export default {
             dateTo = dateTo.getFullYear() + '-' + (dateTo.getMonth() + 1) + '-' + dateTo.getDate()
             return  {dateFrom, dateTo}
         },
-      
+
         lastHalfYear() {
             let date = new Date()
             let dateFrom = new Date(date.getFullYear(), date.getMonth() - 5 , 1)
             let dateTo = new Date(date.getFullYear(), date.getMonth() + 1, 0)
             dateFrom = dateFrom.getFullYear() + '-' + (dateFrom.getMonth() + 1) + '-' + dateFrom.getDate()
-            dateTo = dateTo.getFullYear() + '-' + (dateTo.getMonth() + 1) + '-' + dateTo.getDate() 
-            return  {dateFrom, dateTo} 
+            dateTo = dateTo.getFullYear() + '-' + (dateTo.getMonth() + 1) + '-' + dateTo.getDate()
+            return  {dateFrom, dateTo}
         },
 
         colors() {
