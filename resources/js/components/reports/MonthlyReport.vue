@@ -61,7 +61,7 @@
                 'getPage',
                 'getTotal'
             ]),
-            generatedChartData() {
+            transformResponseToChartData() {
                 let labels = [];
                 let data = [];
 
@@ -74,7 +74,7 @@
             },
             dataChart() {
                 return {
-                    labels: this.generatedChartData.labels,
+                    labels: this.transformResponseToChartData.labels,
                     datasets: [
                         {
                             label: 'Расходы',
@@ -87,7 +87,7 @@
                                 'rgba(255,99,3,0.65)'
                             ],
                             borderColor: 'rgba(190,99,255,0)',
-                            data: this.generatedChartData.data
+                            data: this.transformResponseToChartData.data
                         }
                     ]
                 }
@@ -124,6 +124,7 @@
                     this.setDateFrom(range.from);
                     this.setDateTo(range.to);
                 }
+
                 switch (this.typeOfChart) {
                     case "Расходы":
                         this.fetchTotalAmountOfCategories('api/report/sum-expenses')
