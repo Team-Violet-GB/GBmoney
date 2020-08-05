@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ReportSumByIncomesCollection;
 use App\Http\Resources\ReportSumByExpensesCollection;
+use App\Http\Resources\ReportSumByIncomesCollection;
 use App\Http\Resources\ReportSumByTagsCollection;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
@@ -72,7 +72,7 @@ class ReportController extends Controller
                 return $query->where('transactions.date', '<=', $dateTo);
             })
             ->groupBy(['transactions.expense_id', 'e.name']);
-//return $query->toSql();
+
         return new ReportSumByExpensesCollection($query->get());
     }
 
