@@ -55,6 +55,7 @@
                 'getDateFrom',
                 'getDateTo',
                 'getTransactions',
+                'getTotalAmountOfCategories',
                 'getErrorStatus',
                 'getErrorInfo',
                 'getPage',
@@ -64,9 +65,9 @@
                 let labels = [];
                 let data = [];
 
-                for (let key in this.getTransactions) {
-                    labels.push(this.getTransactions[key].name);
-                    data.push(this.getTransactions[key].amount);
+                for (let key in this.getTotalAmountOfCategories) {
+                    labels.push(this.getTotalAmountOfCategories[key].name);
+                    data.push(this.getTotalAmountOfCategories[key].amount);
                 }
 
                 return {labels, data}
@@ -108,17 +109,12 @@
         },
         methods: {
             ...mapActions([
-                'fetchWallets',
-                'fetchIncomes',
-                'fetchExpenses',
-                'fetchTags',
                 'fetchTransactions',
-                'fetchTransactionsTotalAmountOfIncomes',
-                'fetchTransactionsTotalAmountOfExpenses'
+                'fetchTotalAmountOfCategories'
             ]),
             ...mapMutations([
                 'setTransactions',
-                'setEditable',
+                'setTotalAmountOfCategories',
                 'setDateFrom',
                 'setDateTo',
                 'setPage'
@@ -130,11 +126,11 @@
                 }
                 switch (this.typeOfChart) {
                     case "Расходы":
-                        this.fetchTransactionsTotalAmountOfExpenses()
+                        this.fetchTotalAmountOfCategories('api/report/sum-expenses')
                         break;
 
                     case "Доходы":
-                        this.fetchTransactionsTotalAmountOfIncomes()
+                        this.fetchTotalAmountOfCategories('api/report/sum-incomes')
                         break;
                 }
             },

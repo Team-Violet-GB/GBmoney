@@ -29,54 +29,6 @@ export default {
                     commit('setErrorInfo', `Ошибка во время запроса транзакций: (${error})`);
                 })
         },
-        fetchTransactionsTotalAmountOfIncomes({commit}) {
-            const headers = {
-                'Content-Type': 'application/json'
-            }
-            const params = {
-                date_from: this.getters.getDateFrom,
-                date_to: this.getters.getDateTo
-            }
-            commit('setErrorStatus', false);
-            axios.get('api/report/sum-incomes', {params: params, headers: headers})
-                .then(response => {
-                    commit('setTransactions', response.data.data);
-                    if ((Object.keys(response.data.data).length) === 0) {
-                        commit('setErrorStatus', true);
-                        commit('setErrorInfo', `За запрошеный период транзакции не производились ...`);
-                    } else {
-                        commit('setErrorStatus', false);
-                    }
-                })
-                .catch(error => {
-                    commit('setErrorStatus', true);
-                    commit('setErrorInfo', `Ошибка во время запроса транзакций: (${error})`);
-                })
-        },
-        fetchTransactionsTotalAmountOfExpenses({commit}) {
-            const headers = {
-                'Content-Type': 'application/json'
-            }
-            const params = {
-                date_from: this.getters.getDateFrom,
-                date_to: this.getters.getDateTo
-            }
-            commit('setErrorStatus', false);
-            axios.get('api/report/sum-expenses', {params: params, headers: headers})
-                .then(response => {
-                    commit('setTransactions', response.data.data);
-                    if ((Object.keys(response.data.data).length) === 0) {
-                        commit('setErrorStatus', true);
-                        commit('setErrorInfo', `За запрошеный период транзакции не производились ...`);
-                    } else {
-                        commit('setErrorStatus', false);
-                    }
-                })
-                .catch(error => {
-                    commit('setErrorStatus', true);
-                    commit('setErrorInfo', `Ошибка во время запроса транзакций: (${error})`);
-                })
-        },
         fetchTransactionsByPoint({ commit }, data) {
             // axios.get('/api/get/transactions', {      \\ ждём реализацию на бэке
             //     params: {
