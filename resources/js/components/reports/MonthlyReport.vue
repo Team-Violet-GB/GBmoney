@@ -175,7 +175,7 @@
                             date_from: '2020-06-01',
                             date_to: '2020-7-30'
                         }
-                        axios.get('api/report/sum-incomes', {params: params, headers: headers})
+                        axios.get('api/report/sum-expenses', {params: params, headers: headers})
                             .then(response => {
                                 console.log(response.data);
 
