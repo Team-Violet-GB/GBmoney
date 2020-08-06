@@ -1,9 +1,10 @@
 <template>
     <div>
-        <!--        разметка и поведение для ленты-->
-        <div ref="div" v-if="getEditable" class="tran-wrapper" @click="openEditor">
+        <div ref="div" class="tran-wrapper" @click="openEditor">
             <el-card :class="{active: editorData.isEdit && editorData.transactionGroupLength > 1}">
-                <el-row :gutter="10" class="tran-row-data">
+
+                <!--        разметка и поведение для ленты-->
+                <el-row v-if="feedTemplate" :gutter="10" class="tran-row-data">
                     <el-col :span="3">
                         <div>{{ from.name }}</div>
                     </el-col>
@@ -17,31 +18,31 @@
                         <div
                             :class="getTypeData(this.transaction.data).color"
                             style="display: flex; justify-content: flex-end">
-                            {{ getTypeData(this.transaction.data).symbol}}{{ Number(transaction.data.amount).toFixed(2).toLocaleString() }} &#8381;
+                            {{ getTypeData(this.transaction.data).symbol}}{{
+                            Number(transaction.data.amount).toFixed(2).toLocaleString() }} &#8381;
                         </div>
+                    </el-col>
+                </el-row>
+
+                <!--        разметка для отчетов-->
+                <el-row v-else :gutter="10" class="tran-row-data">
+                    <el-col :span="6">
+                        <div>{{ from.name }}</div>
+                    </el-col>
+                    <el-col :span="3"><span :class="getTypeData(this.transaction.data).color"><i
+                        class="el-icon-d-arrow-right"></i></span></el-col>
+                    <el-col :span="6">
+                        <span>{{ to.to }}</span><span class="tran-tag-name">{{ to.tagName }}</span>
+                    </el-col>
+                    <el-col :span="9">
+                    <span :class="getTypeData(this.transaction.data).color"
+                          style="display: flex;justify-content: flex-end">{{ getTypeData(this.transaction.data).symbol}}{{ transaction.data.amount }} &#8381;</span>
                     </el-col>
                 </el-row>
             </el-card>
         </div>
 
-        <!--        разметка для отчетов-->
-        <div v-else>
-            <el-row :gutter="10" class="tran-row-data">
-                <el-col :span="6">
-                    <div>{{ from.name }}</div>
-                </el-col>
-                <el-col :span="5"><span style="color: #8e8e8e">{{ from.typeName }}</span></el-col>
-                <el-col :span="8">
-                    <span>{{ to.to }}</span><span class="tran-tag-name">{{ to.tagName }}</span>
-                </el-col>
-                <el-col :span="5">
-                    <span :class="getTypeData(this.transaction.data).color"
-                          style="display: flex;justify-content: flex-end">{{ getTypeData(this.transaction.data).symbol}}{{ transaction.data.amount }} &#8381;</span>
-                </el-col>
-            </el-row>
-        </div>
-
-        <!--    подключаемый по условию компонент редактора транзакций    -->
+        <!--    подключаемый компонент редактора транзакций    -->
         <transactionEditor
             v-if="getEditable && editorData.isEdit"
             :editorData="editorData"
@@ -69,6 +70,12 @@
             transaction: {
                 default() {
                     return Object;
+                }
+            },
+            feedTemplate: {
+                type: Boolean,
+                default() {
+                    return true;
                 }
             }
         },

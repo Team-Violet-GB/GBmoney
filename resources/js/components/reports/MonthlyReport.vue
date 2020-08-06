@@ -57,7 +57,8 @@
                             effect="dark">
                         </el-alert>
                         <feed v-else
-                              :editable="false"
+                              :editable="true"
+                              :feed-template="false"
                               :transactions="getTransactions">
                         </feed>
                     </div>

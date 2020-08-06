@@ -9,17 +9,19 @@
                 </el-col>
                 <el-col :span="10">
                     <div class="tran-group-header-sum" :class="groupSumCalc(transactionGroup).color">
-                        {{ groupSumCalc(transactionGroup).symbol }}{{ Number(groupSumCalc(transactionGroup).sum).toLocaleString() }} &#8381;
+                        {{ groupSumCalc(transactionGroup).symbol }}{{
+                        Number(groupSumCalc(transactionGroup).sum).toLocaleString() }} &#8381;
                     </div>
                 </el-col>
             </el-row>
 
             <!--            группа транзакций-->
-            <transaction-group :transactionGroup="transactionGroup" :transactionGroupName="index" class="tran-group"/>
+            <transaction-group :transactionGroup="transactionGroup" :transactionGroupName="index" class="tran-group"
+                               :feed-template="feedTemplate"/>
         </el-card>
 
-<!--        пагинация-->
-        <div v-if="getEditable" class="pagination">
+        <!--        пагинация-->
+        <div class="pagination">
             <el-pagination
                 background
                 :hide-on-single-page="true"
@@ -39,6 +41,12 @@
         props: {
             transactions: null,
             editable: {
+                type: Boolean,
+                default() {
+                    return true;
+                }
+            },
+            feedTemplate: {
                 type: Boolean,
                 default() {
                     return true;
@@ -94,16 +102,16 @@
                 }
                 sum = Math.round(sum) * 100;
                 sum = sum / 100
-                let color = (sum > 0)? 'cstm-green' : (sum < 0)? 'cstm-red': 'cstm-yellow'
-                let symbol = (sum > 0)? '+' : ''
-                return {sum: sum.toFixed(0), color, symbol };
+                let color = (sum > 0) ? 'cstm-green' : (sum < 0) ? 'cstm-red' : 'cstm-yellow'
+                let symbol = (sum > 0) ? '+' : ''
+                return {sum: sum.toFixed(0), color, symbol};
             },
             paginate(page) {
                 this.setPage(page);
                 this.fetchTransactions()
             }
         },
-       mounted() {
+        mounted() {
             if (!this.incomes) this.fetchIncomes();
             if (!this.wallets) this.fetchWallets();
             if (!this.expenses) this.fetchExpenses();
@@ -149,13 +157,15 @@
     }
 
     .cstm-yellow {
-    color: #e6a23c;
+        color: #e6a23c;
     }
+
     .cstm-green {
-    color: #67c23a;
+        color: #67c23a;
     }
+
     .cstm-red {
-    color: #f56c6c;
+        color: #f56c6c;
     }
 
 </style>
