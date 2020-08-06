@@ -2,6 +2,7 @@
     <div>
         <el-row :gutter="30" style="height: 100%;">
             <el-col :span="12">
+
                 <!--                выбор диапазона месяцов-->
                 <div class="options">
                     <month-picker @changeDate="newDate => onMonthChange(newDate)"/>
@@ -16,12 +17,14 @@
 
                 <!--                круговая диаграмма категорий-->
                 <div class="chart-block">
-                    <div class="totalAmount" v-if="totalAmount !== 0">{{ totalAmount }}&#8381</div>
+                    <div class="total-amount-wrapper" v-if="totalAmount !== 0">
+                        <div class="total-amount">{{ totalAmount }}&#8381</div>
+                    </div>
                     <monthChart ref="chart" :chartData="dataChart" :options="chartOptions"/>
                 </div>
 
                 <!--                текстовое отображение данных диаграммы-->
-                <div v-if="totalAmount !== 0" class="box-card wrapper">
+                <div v-if="totalAmount !== 0" class="box-card text-chart-table-wrapper">
                     <el-row class="tran-group-header">
                         <el-col class="text-chart-data-name" :span="10">{{ typeOfChart }}</el-col>
                         <el-col class="cstm-percent" :span="7">Проценты</el-col>
@@ -29,11 +32,10 @@
                     </el-row>
                     <div class="text-chart-data-wrapper">
                         <div class="text-chart-data">
-                            <el-row v-for="(item, index) in getTotalAmountOfCategories" :key="index">
-                                <el-col class="text-chart-data-name" :span="10">{{ item.name }}</el-col>
+                            <el-row class="text-chart-data-row" v-for="(item, index) in getTotalAmountOfCategories" :key="index">
+                                <el-col :span="10">{{ item.name }}</el-col>
                                 <el-col class="cstm-percent" :span="7">{{ ((100 / totalAmount) *
-                                    +item.amount).toFixed(0)
-                                    }}%
+                                    +item.amount).toFixed(0) }}%
                                 </el-col>
                                 <el-col class="cstm-amount" :span="7">{{ Number(item.amount).toFixed(2).toLocaleString()
                                     }}&#8381;
@@ -44,6 +46,8 @@
                 </div>
             </el-col>
             <el-col :span="12">
+
+<!--                лента-->
                 <div class="feed-container-wrapper">
                     <div class="feed-container">
                         <el-alert
@@ -152,20 +156,16 @@
                 'setPage'
             ]),
             onMonthChange(range) {
+                //установка параметров запроса
                 if (typeof (range) === "object") {
                     this.setDateFrom(range.from);
                     this.setDateTo(range.to);
                 }
+                let url = this.typeOfChart == 'Расходы' ? 'api/report/sum-expenses' : 'api/report/sum-incomes';
 
-                switch (this.typeOfChart) {
-                    case "Расходы":
-                        this.fetchTotalAmountOfCategories('api/report/sum-expenses')
-                        break;
-
-                    case "Доходы":
-                        this.fetchTotalAmountOfCategories('api/report/sum-incomes')
-                        break;
-                }
+                // выполнение запроса
+                this.fetchTotalAmountOfCategories(url);
+                this.fetchTransactions();
             },
             getLastISODateOfMonth(anyISODateOfMonth) {
                 Date.prototype.lastDayOfMonth = function () {
@@ -202,6 +202,7 @@
         width: 100%;
         height: 85vh;
         overflow: hidden;
+        padding-bottom: 20px;
     }
 
     .feed-container {
@@ -212,19 +213,14 @@
         overflow-y: scroll;
     }
 
-    /*.el-card {*/
-    /*    border: none;*/
-    /*    background-color: rgba(61, 62, 72, 0.99);*/
-    /*    color: #b682f9;*/
-    /*    margin-top: 20px;*/
-    /*}*/
-
     .tran-group-header {
         color: #b3fb2acf;
         font-size: 20px;
         font-weight: 500;
-        background-color: #5c5c5c;
+        background-color: #5F6068;
         padding-left: 5px;
+        padding-bottom: 5px;
+        padding-top: 3px;
     }
 
     .tran-group-header-sum {
@@ -247,35 +243,39 @@
     }
 
     .chart-block {
-        width: 75%;
-        margin: auto;
+        width: 70%;
+        margin: 0 auto;
         position: relative
     }
 
     .chart {
         width: auto;
-        position: absolute;
-        height: 500px;
-        /*top: 50%;*/
-        /*left: 37.5%;*/
+        /*position: absolute;*/
+        /*height: 450px;*/
     }
 
-    .totalAmount {
+    .total-amount-wrapper {
         position: absolute;
         top: 50%;
-        left: 30%;
         font-weight: bolder;
         font-size: x-large;
         color: #fbfbfbd1;
-        width: 236px;
+
+        width: 100%;
         text-align: center;
     }
 
-    .wrapper {
+    .total-amount {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 0 150px;
+    }
+
+    .text-chart-table-wrapper {
         border: none;
         margin-top: 20px;
         position: fixed;
-        width: 700px;
+        width: 730px;
         bottom: 20px;
     }
 
@@ -285,12 +285,17 @@
     }
 
     .text-chart-data {
-        max-height: 150px;
+        padding: 7px 0;
+        height: 70px;
         border: none;
         background-color: rgba(61, 62, 72, 0.99);
         color: #b682f9;
         width: 100%;
         padding-right: 45px;
         overflow-y: scroll;
+    }
+
+    .text-chart-data-row {
+        padding: 0px 0px 3px 15px;
     }
 </style>
