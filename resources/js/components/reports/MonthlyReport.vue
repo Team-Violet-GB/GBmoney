@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-row :gutter="30" style="height: 85vh">
+        <el-row :gutter="30" style="height: 100vh;">
             <el-col :span="12">
                 <div class="options">
                     <month-picker @changeDate="newDate => onMonthChange(newDate)"/>
@@ -12,7 +12,24 @@
                         </el-radio-group>
                     </div>
                 </div>
-                <monthChart ref="chart" :chartData="dataChart" :options="chartOptions"/>
+                <div style="display: flex; justify-content: center; align-items: center">
+                    <div v-if="totalAmount !== 0" class="totalAmount">{{ totalAmount }}&#8381</div>
+                    <monthChart ref="chart" :chartData="dataChart" :options="chartOptions"/>
+                </div>
+                <el-card v-if="totalAmount !== 0" class="box-card">
+                    <el-row slot="header" class="clearfix tran-group-header">
+                        <el-col :span="10">{{ typeOfChart }}</el-col>
+                        <el-col class="cstm-percent" :span="7">Проценты</el-col>
+                        <el-col class="cstm-amount" :span="7">Сумма</el-col>
+                    </el-row>
+                    <el-row v-for="(item, index) in getTotalAmountOfCategories" :key="index" class="tran-row-data">
+                        <el-col :span="10">{{ item.name }}</el-col>
+                        <el-col class="cstm-percent" :span="7">{{ ((100 / totalAmount) * +item.amount).toFixed(0) }}%
+                        </el-col>
+                        <el-col class="cstm-amount" :span="7">{{ Number(item.amount).toFixed(2).toLocaleString() }}&#8381;
+                        </el-col>
+                    </el-row>
+                </el-card>
             </el-col>
             <el-col :span="12">
                 <div class="feed-container-wrapper">
@@ -23,10 +40,10 @@
                             type="error"
                             effect="dark">
                         </el-alert>
-<!--                        <feed v-else-->
-<!--                              :editable="false"-->
-<!--                              :transactions="transactions">-->
-<!--                        </feed>-->
+                        <!--                        <feed v-else-->
+                        <!--                              :editable="false"-->
+                        <!--                              :transactions="transactions">-->
+                        <!--                        </feed>-->
                     </div>
                 </div>
             </el-col>
@@ -48,6 +65,7 @@
             return {
                 currentISODateFrom: new Date().toISOString().slice(0, 8) + '01',
                 typeOfChart: 'Доходы',
+                totalAmount: 0
             }
         },
         computed: {
@@ -64,10 +82,12 @@
             transformResponseToChartData() {
                 let labels = [];
                 let data = [];
+                this.totalAmount = 0;
 
                 for (let key in this.getTotalAmountOfCategories) {
                     labels.push(this.getTotalAmountOfCategories[key].name);
                     data.push(this.getTotalAmountOfCategories[key].amount);
+                    this.totalAmount += +this.getTotalAmountOfCategories[key].amount
                 }
 
                 return {labels, data}
@@ -120,7 +140,7 @@
                 'setPage'
             ]),
             onMonthChange(range) {
-                if (typeof(range) === "object") {
+                if (typeof (range) === "object") {
                     this.setDateFrom(range.from);
                     this.setDateTo(range.to);
                 }
@@ -178,5 +198,47 @@
         padding-right: 45px;
         margin-top: 20px;
         overflow-y: scroll;
+    }
+
+    .el-card {
+        border: none;
+        background-color: #3d3e48;
+        color: #b682f9;
+        margin-top: 20px;
+    }
+
+    .tran-group-header {
+        color: #b3fb2acf;
+        font-size: 20px;
+        font-weight: 500;
+        padding-left: 5px;
+    }
+
+    .tran-group-header-sum {
+        text-align: right;
+        font-size: 20px;
+        font-weight: 500;
+        padding-right: 5px;
+        padding-top: 4px;
+    }
+
+    .cstm-amount {
+        text-align: right;
+        padding-right: 10px;
+    }
+
+    .cstm-percent {
+        text-align: center;
+    }
+
+    .totalAmount {
+        position: absolute;
+        top: 48%;
+        left: 19%;
+        font-weight: bolder;
+        font-size: large;
+        color: #fbfbfbd1;
+        width: 184px;
+        text-align: center;
     }
 </style>

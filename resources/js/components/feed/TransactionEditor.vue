@@ -100,12 +100,12 @@
                                                icon="el-icon-check" style="margin-right: 10px"></el-button>
                                     <el-popover
                                         placement="top"
-                                        width="170">
+                                        width="175">
                                         <p style="margin-top: 0; font-size: large; font-weight: bold">Подтверждение!</p>
-                                        <p style="margin-bottom: 5px">Транзакция от <strong>{{ new
+                                        <p style="margin-bottom: 5px">Транзакция от {{ new
                                             Date(this.editorData.data.date).toLocaleDateString()
-                                            }}</strong></p>
-                                        <p style="text-align: right; margin-top: 0">{{ Number(this.editorData.data.amount).toFixed(2).toLocaleString() }}
+                                            }}</p>
+                                        <p style="text-align: right; margin-top: 0; margin-right: 8px; font-weight: bold">{{ Number(this.editorData.data.amount).toFixed(2).toLocaleString() }}
                                             ₽</p>
                                         <div style="text-align: right; margin: 0">
                                             <el-button style="margin-top: 10px" type="danger" size="mini"
