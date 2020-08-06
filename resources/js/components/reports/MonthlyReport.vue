@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-row :gutter="30" style="height: 100%;">
+        <el-row :gutter="2" style="height: 100%;">
             <el-col :span="12">
 
                 <!--                выбор диапазона месяцов-->
@@ -8,7 +8,7 @@
                     <month-picker @changeDate="newDate => onMonthChange(newDate)"/>
                     <div class="block">
                         <el-radio-group @change="onMonthChange" v-model="typeOfChart" size="small"
-                                        style="margin-left:80px; width: 200px">
+                                        style="margin-left:40px; width: 180px">
                             <el-radio-button label="Доходы">Доходы</el-radio-button>
                             <el-radio-button label="Расходы">Расходы</el-radio-button>
                         </el-radio-group>
@@ -201,7 +201,7 @@
 
     .feed-container-wrapper {
         width: 100%;
-        height: 85vh;
+        height: 83vh;
         overflow: hidden;
         padding-bottom: 20px;
     }
