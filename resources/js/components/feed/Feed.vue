@@ -47,7 +47,6 @@
         },
         computed: {
             ...mapGetters([
-
                 'getTransactions',
                 'wallets',
                 'incomes',
