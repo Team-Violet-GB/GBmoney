@@ -64,6 +64,7 @@ export default {
       'getTransactionsByPoint',
       'getLineData',
       'getPieData',
+      'thisMonth',
       'lastHalfYear',
       'colors'
     ]),
@@ -77,8 +78,8 @@ export default {
       .then(() => {
         this.fetchCharts({ // получение данных для графиков
           [`${this.type}_id`]: this.id,
-          dateFrom: this.lastHalfYear.dateFrom,
-          dateTo: this.lastHalfYear.dateTo,
+          dateFrom: this.thisMonth.dateFrom,
+          dateTo: this.thisMonth.dateTo,
         })
       })
       .then(() => {

@@ -3,24 +3,30 @@ import axios from 'axios'
 export default {
     actions: {
         fetchCharts({ commit }, data) {
-            // axios.get('/api/get/...')
-            //     .then(response => {
-            //         const newTagsForChart = response.data.data;
-            //         commit('updateTagsForChart', newTagsForChart)
-            //     })
+            axios.get(`/api/report/sum-tags?expense_id=${data.expense_id}&date_from=${data.dateFrom}&date_to=${data.dateTo}`)
+                .then(response => {
+                    const tags = response.data.data
+                    var names = []
+                    var amounts = []
+                    for (let tag in tags) {
+                        names.push(tags[tag].name)
+                        amounts.push(tags[tag].amount)
+                    }
+                    console.log (names)
+                    console.log (amounts)
+                    var pieData = {
+                        names,
+                        amounts,
+                    }
+                    commit('updatePieData', pieData)
+                })
+
+            // заглушка для линейного графика
             var newData = {
                 names: ["март","апрель","май","июнь","март","апрель","май","июнь","май","июнь","июнь",],
                 amounts: [0,15000,5000,15000,-10000,5000,15000,-10000,5000,30000,-10000,],
             }
-
-            var newData2 = {
-                names: ["продукты", "кафе/рестораны", "на работе", "продукты", "кафе/рестораны", "на работе"],
-                amounts: [10000, 1500, 1000, 10000, 1500, 1000],
-            }
-            console.log(data)
-
             commit('updateLineData', newData)
-            commit('updatePieData', newData2)
         },
     },
 
@@ -30,7 +36,8 @@ export default {
         },
         updatePieData (state, pieData) {
             state.pieData = pieData
-        }
+        },
+
     },
 
     state: {
