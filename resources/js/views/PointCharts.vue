@@ -2,7 +2,7 @@
   <div v-loading="loading" element-loading-background="rgba(44, 46, 56, 0.8)">
     <el-row>
       <el-col class="grid-content bg-purple-dark" :span="24">
-          <LineChart :chartData="lineChartData" :height="70"></LineChart>
+          <LineChart :chartData="getLineData" :height="70"></LineChart>
       </el-col>
     </el-row>
     <el-row>
@@ -10,7 +10,7 @@
           <CalendarMonth @changeDate="newDate => changeDate(newDate)" />
           <div v-if="type == 'expense'">
             <div class="cstm-pie-chart">
-            <PieChart :chartData="pieChartData" :height="350"></PieChart>
+            <PieChart :chartData="getPieData" :height="350"></PieChart>
           </div>
           <el-card class="box-card">
             <el-row slot="header" class="clearfix tran-group-header">
@@ -52,8 +52,6 @@ export default {
     return {
       id: this.$route.params.id,
       type: this.$route.params.type,
-      lineChartData: null,
-      pieChartData: null,
       point: {name: null, type:null},
       loading: true,
     }
@@ -66,7 +64,6 @@ export default {
       'getPieData',
       'thisMonth',
       'lastHalfYear',
-      'colors'
     ]),
   },
 
@@ -78,15 +75,13 @@ export default {
       .then(() => {
         this.fetchCharts({ // получение данных для графиков
           [`${this.type}_id`]: this.id,
-          dateFrom: this.thisMonth.dateFrom,
-          dateTo: this.thisMonth.dateTo,
+          dateFrom: this.lastHalfYear.dateFrom,
+          dateTo: this.lastHalfYear.dateTo,
+          namePoint: this.point.name
         })
       })
       .then(() => {
-        this.setLineChartData()
-        this.setPieChartData()
         this.loading = false
-
       })
 
     if (!this.getTransactionsByPoint) this.fetchTransactionsByPoint() // получение данных для ленты
@@ -103,40 +98,8 @@ export default {
         [`${this.type}_id`]: this.id,
         dateFrom: newDate.from,
         dateTo: newDate.to,
+        namePoint: this.point.name
       })
-    },
-
-    setLineChartData() {
-      this.lineChartData = {
-        labels: this.getLineData.names,
-        datasets: [
-          {
-            label: this.point.name,
-            backgroundColor: "rgba(10, 147, 209, 0.2)",
-            borderColor: "rgba(10, 147, 209)",
-            data: this.getLineData.amounts,
-          },
-          //   {   // вторая линия
-          //     label: "Непродажи",
-          //     backgroundColor: "#e6a23c",
-          //     data: [5000, 15000, 10000, 30000],
-          //   },
-        ],
-      }
-    },
-
-    setPieChartData() {
-      this.pieChartData = {
-        labels: this.getPieData.names,
-        datasets: [
-          {
-            label: "Продажи",
-            backgroundColor: this.colors,
-            borderWidth: 0,
-            data: this.getPieData.amounts
-          },
-        ],
-      }
     },
   },
 }

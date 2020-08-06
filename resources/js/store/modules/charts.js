@@ -8,36 +8,67 @@ export default {
                     const tags = response.data.data
                     var names = []
                     var amounts = []
+                    var colors = []
                     for (let tag in tags) {
+                        var r = Math.floor(Math.random() * (256))
+                        var g = Math.floor(Math.random() * (256))
+                        var b = Math.floor(Math.random() * (256))
+                        var color = '#' + r.toString(16) + g.toString(16) + b.toString(16)
+
                         names.push(tags[tag].name)
                         amounts.push(tags[tag].amount)
+                        colors.push(color)
                     }
-                    console.log (names)
-                    console.log (amounts)
                     var pieData = {
                         names,
                         amounts,
+                        colors,
                     }
                     commit('updatePieData', pieData)
                 })
 
             // заглушка для линейного графика
-            var newData = {
+            var lineData = {
                 names: ["март","апрель","май","июнь","март","апрель","май","июнь","май","июнь","июнь",],
                 amounts: [0,15000,5000,15000,-10000,5000,15000,-10000,5000,30000,-10000,],
+                namePoint: data.namePoint
             }
-            commit('updateLineData', newData)
+            commit('updateLineData', lineData)
         },
     },
 
     mutations: {
         updateLineData (state, lineData) {
-            state.lineData = lineData
+            state.lineData = {
+                labels: lineData.names,
+                datasets: [
+                  {
+                    label: lineData.namePoint,
+                    backgroundColor: "rgba(10, 147, 209, 0.2)",
+                    borderColor: "rgba(10, 147, 209)",
+                    data: lineData.amounts,
+                  },
+                  //   {   // вторая линия
+                  //     label: "Непродажи",
+                  //     backgroundColor: "#e6a23c",
+                  //     data: [5000, 15000, 10000, 30000],
+                  //   },
+                ],
+              }
         },
         updatePieData (state, pieData) {
-            state.pieData = pieData
+            state.pieData = {
+                labels: pieData.names,
+                datasets: [
+                  {
+                    label: "Подкатегории",
+                    backgroundColor: pieData.colors,
+                    borderWidth: 0,
+                    data: pieData.amounts
+                  },
+                ],
+              }
         },
-
     },
 
     state: {
@@ -70,9 +101,5 @@ export default {
             dateTo = dateTo.getFullYear() + '-' + (dateTo.getMonth() + 1) + '-' + dateTo.getDate() 
             return  {dateFrom, dateTo} 
         },
-
-        colors() {
-            return ["#0a93d1","#e6a23c","#67c23a","#0a93d1","#f56c6c","#909399",]
-        }
     }
 }
