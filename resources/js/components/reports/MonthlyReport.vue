@@ -28,8 +28,9 @@
                 <div v-if="totalAmount !== 0" class="box-card text-chart-table-wrapper">
                     <el-row class="tran-group-header">
                         <el-col class="text-chart-data-name" :span="10">{{ typeOfChart }}</el-col>
-                        <el-col class="cstm-percent" :span="7">Проценты</el-col>
-                        <el-col class="tran-group-header-sum" :span="7">Сумма</el-col>
+                        <el-col class="cstm-percent" :span="7">100%</el-col>
+                        <el-col class="tran-group-header-sum" :span="7">{{ totalAmount.toLocaleString('ru',
+                            { maximumFractionDigits: 0 }) }}&#8381</el-col>
                     </el-row>
                     <div class="text-chart-data-wrapper">
                         <div class="text-chart-data">
