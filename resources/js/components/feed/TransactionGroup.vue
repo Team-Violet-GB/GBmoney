@@ -3,7 +3,7 @@
         <transaction v-for="(transaction, index) in transactionGroup"
                      :key="transaction.id" :transaction="{transactionGroupName: transactionGroupName,
                      transactionGroupLength: transactionGroup.length,
-                     transactionIndex: index, data: transaction, edata: {}, isEdit: false}"/>
+                     transactionIndex: index, data: transaction, edata: {}, isEdit: false}" :feedTemplate="feedTemplate"/>
     </div>
 </template>
 
@@ -15,6 +15,12 @@
         props: {
             transactionGroup: {
                 type: Array
+            },
+            feedTemplate: {
+                type: Boolean,
+                default() {
+                    return true;
+                }
             },
             transactionGroupName: {
                 type: String

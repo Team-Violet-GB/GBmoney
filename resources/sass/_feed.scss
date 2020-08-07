@@ -37,9 +37,10 @@
     font-weight: 700 !important;
 }
 
-.el-input .el-input__count .el-input__count-inner {
+.el-textarea .el-input__count {
     background-color: rgba(44, 46, 56, 0) !important;
-    font-size: 15px !important;
+    bottom: 2px !important;
+    font-size: 12px !important;
 }
 
 .right-sum .el-input__inner {
