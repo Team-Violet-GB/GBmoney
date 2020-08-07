@@ -6,8 +6,7 @@
             type="error"
             effect="dark">
         </el-alert>
-        <feed v-else
-        :transactions="getTransactions"/>
+        <feed v-else/>
     </div>
 </template>
 
@@ -29,18 +28,24 @@
         },
         methods: {
             ...mapMutations([
+                'setPage',
                 'setDateFrom',
                 'setDateTo',
-                'setPage'
+                'setExpenseId',
+                'setIncomeId',
+                'setTypeId',
             ]),
             ...mapActions([
                 'fetchTransactions'
             ])
         },
         mounted() {
-            this.setPage(1);
-            this.setDateFrom('');
-            this.setDateTo('');
+            this.setPage(1)
+            this.setDateFrom('')
+            this.setDateTo('')
+            // this.setIncomeId('')
+            // this.setExpenseId('')
+            // this.setTypeId('')
             this.fetchTransactions()
         }
     }

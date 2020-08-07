@@ -46,9 +46,9 @@
             </el-card>
         </div>
 
-        <!--    подключаемый компонент редактора транзакций    -->
+        <!--    компонент редактора транзакций    -->
         <transactionEditor
-            v-if="getEditable && editorData.isEdit"
+            v-if="editorData.isEdit"
             :editorData="editorData"
         />
     </div>
@@ -91,7 +91,6 @@
                 'tags',
                 'getErrorStatus',
                 'getErrorInfo',
-                'getEditable',
                 'getTransactions'
             ]),
             from() {

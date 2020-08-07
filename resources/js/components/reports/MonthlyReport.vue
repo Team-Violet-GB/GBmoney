@@ -18,7 +18,7 @@
                 <!--                круговая диаграмма категорий-->
                 <div class="chart-block">
                     <div class="total-amount-wrapper" v-if="totalAmount !== 0">
-                        <div class="total-amount">{{ totalAmount }}&#8381</div>
+                        <div class="total-amount">{{ Number(totalAmount).toFixed(0).toLocaleString() }}&#8381</div>
                     </div>
                     <monthChart ref="chart" :chartData="dataChart" :options="chartOptions"/>
                 </div>
@@ -57,9 +57,7 @@
                             effect="dark">
                         </el-alert>
                         <feed v-else
-                              :editable="true"
-                              :feed-template="false"
-                              :transactions="getTransactions">
+                              :feed-template="false">
                         </feed>
                     </div>
                 </div>
@@ -152,20 +150,26 @@
             ...mapMutations([
                 'setTransactions',
                 'setTotalAmountOfCategories',
+
+                'setPage',
                 'setDateFrom',
                 'setDateTo',
-                'setPage'
+                'setExpenseId',
+                'setIncomeId',
+                'setTypeId',
             ]),
             onMonthChange(range) {
-                //установка параметров запроса
+                //установка параметров запросов получения данных диаграммы списка транзакций
                 if (typeof (range) === "object") {
                     this.setDateFrom(range.from);
                     this.setDateTo(range.to);
                 }
-                let url = this.typeOfChart == 'Расходы' ? 'api/report/sum-expenses' : 'api/report/sum-incomes';
+                // this.setIncomeId('');
+                // this.setExpenseId('');
+                this.setTypeId(this.typeOfChart == 'Расходы' ? 3 : 1);
 
-                // выполнение запроса
-                this.fetchTotalAmountOfCategories(url);
+                // выполнение запросов
+                this.fetchTotalAmountOfCategories();
                 this.fetchTransactions();
             },
             getLastISODateOfMonth(anyISODateOfMonth) {
@@ -180,7 +184,7 @@
         mounted() {
             this.setDateFrom(this.currentISODateFrom);
             this.setDateTo(this.getLastISODateOfMonth(this.currentISODateFrom));
-            this.onMonthChange()
+            this.onMonthChange();
         },
         components: {
             monthPicker,
@@ -251,8 +255,6 @@
 
     .chart {
         width: auto;
-        /*position: absolute;*/
-        /*height: 450px;*/
     }
 
     .total-amount-wrapper {
@@ -297,6 +299,6 @@
     }
 
     .text-chart-data-row {
-        padding: 0px 0px 3px 15px;
+        padding: 0 0 3px 15px;
     }
 </style>

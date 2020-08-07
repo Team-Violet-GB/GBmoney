@@ -10,7 +10,10 @@ export default {
             const params = {
                 page: this.getters.getPage,
                 date_from: this.getters.getDateFrom,
-                date_to: this.getters.getDateTo
+                date_to: this.getters.getDateTo,
+                // expense_id: this.getters.getExpenseId(),
+                // income_id: this.getters.getIncomeId(),
+                // type: this.getters.getTypeId()
             }
             commit('setErrorStatus', false);
             axios.get('/api/transactions', {params: params, headers: headers})
@@ -50,14 +53,10 @@ export default {
         setTransactions(state, data) {
             state.transactions = data
         },
-        setErrorStatus(state, data) {
-            state.errorStatus = data
-        },
-        setErrorInfo(state, data) {
-            state.errorInfo = data
-        },
-        setEditable(state, data) {
-            state.editable = data
+
+        //сеттеры параметров запроса
+        setPage(state, data) {
+            state.page = Number(data)
         },
         setDateFrom(state, data) {
             state.dateFrom = data
@@ -65,9 +64,24 @@ export default {
         setDateTo(state, data) {
             state.dateTo = data
         },
-        setPage(state, data) {
-            state.page = Number(data)
+        setTypeId(state, data) {
+            state.typeId = data
         },
+        setExpenseId(state, data) {
+            state.expenseId = data
+        },
+        setIncomeId(state, data) {
+            state.incomeId = data
+        },
+
+
+        setErrorStatus(state, data) {
+            state.errorStatus = data
+        },
+        setErrorInfo(state, data) {
+            state.errorInfo = data
+        },
+
         setTotal(state, data) {
             state.total = Number(data)
         },
@@ -80,10 +94,15 @@ export default {
         transactionsByPoint: null,
         errorStatus: false,
         errorInfo: 'Не предопределенное сообщение об ошибке ...',
-        editable: true,
+
+        //параметры запроса транзакций
+        page: 1,
         dateFrom: '',
         dateTo: '',
-        page: 1,
+        expenseId: '',
+        incomeId: '',
+        typeId: '',
+
         total: 1,
     },
     getters: {
@@ -99,9 +118,7 @@ export default {
         getErrorInfo(state) {
             return state.errorInfo
         },
-        getEditable(state) {
-            return state.editable
-        },
+
         getDateFrom(state) {
             return state.dateFrom
         },
@@ -110,6 +127,15 @@ export default {
         },
         getPage(state) {
             return state.page
+        },
+        getTypeId(state) {
+            return state.typeId
+        },
+        getExpenseId(state) {
+            return state.expenseId
+        },
+        getIncomeId(state) {
+            return state.incomeId
         },
         getTotal(state) {
             return Number(state.total)

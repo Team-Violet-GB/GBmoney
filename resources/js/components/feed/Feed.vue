@@ -1,7 +1,8 @@
 <template>
     <div>
+        <div class="feed-conteiner">
         <!--        заголовок группы транзакций-->
-        <el-card v-for="(transactionGroup, index) in transactions" :key="index"
+        <el-card v-for="(transactionGroup, index) in getTransactions" :key="index"
                  class="box-card">
             <el-row :gutter="10" slot="header" class="clearfix tran-group-header">
                 <el-col :span="14">
@@ -19,9 +20,10 @@
             <transaction-group :transactionGroup="transactionGroup" :transactionGroupName="index" class="tran-group"
                                :feed-template="feedTemplate"/>
         </el-card>
+    </div>
 
         <!--        пагинация-->
-        <div class="pagination">
+        <div class="pagination-container">
             <el-pagination
                 background
                 :hide-on-single-page="true"
@@ -39,13 +41,6 @@
 
     export default {
         props: {
-            transactions: null,
-            editable: {
-                type: Boolean,
-                default() {
-                    return true;
-                }
-            },
             feedTemplate: {
                 type: Boolean,
                 default() {
@@ -63,7 +58,6 @@
                 'getErrorStatus',
                 'getErrorInfo',
                 'getPage',
-                'getEditable',
                 'getTotal'
             ]),
         },
@@ -76,10 +70,13 @@
                 'fetchTransactions'
             ]),
             ...mapMutations([
-                'setEditable',
+                'setPage',
                 'setDateFrom',
                 'setDateTo',
-                'setPage',
+                'setExpenseId',
+                'setIncomeId',
+                'setTypeId',
+
                 'setTotal'
             ]),
             getLocalDateString(date) {
@@ -116,7 +113,6 @@
             if (!this.wallets) this.fetchWallets();
             if (!this.expenses) this.fetchExpenses();
             if (!this.tags) this.fetchTags();
-            this.setEditable(this.editable);
         },
         components: {
             transactionGroup,
@@ -125,9 +121,10 @@
 </script>
 
 <style scoped>
-    /*body {*/
-    /*    margin: 0;*/
-    /*}*/
+    body {
+        margin: 0;
+        padding: 0;
+    }
 
     .el-card {
         border: 0 solid rgba(255, 255, 255, 0);
@@ -166,6 +163,14 @@
 
     .cstm-red {
         color: #f56c6c;
+    }
+
+    .feed-container {
+
+    }
+
+    .pagination-container {
+
     }
 
 </style>
