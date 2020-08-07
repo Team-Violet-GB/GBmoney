@@ -32,6 +32,7 @@ class TagFormRequest extends FormRequest
                 Rule::unique('tags')
                     ->ignore($this->route('tag'), 'id')
                     ->where('user_id', Auth::id())
+                    ->where('deleted', 0)
                     ->where('expense_id', $this->get('expense_id')),
             ],
             'expense_id' => 'required|int',
