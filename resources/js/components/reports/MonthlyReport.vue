@@ -164,8 +164,8 @@
                     this.setDateFrom(range.from);
                     this.setDateTo(range.to);
                 }
-                // this.setIncomeId('');
-                // this.setExpenseId('');
+                this.setIncomeId('');
+                this.setExpenseId('');
                 this.setTypeId(this.typeOfChart == 'Расходы' ? 3 : 1);
 
                 // выполнение запросов

@@ -11,9 +11,9 @@ export default {
                 page: this.getters.getPage,
                 date_from: this.getters.getDateFrom,
                 date_to: this.getters.getDateTo,
-                // expense_id: this.getters.getExpenseId(),
-                // income_id: this.getters.getIncomeId(),
-                // type: this.getters.getTypeId()
+                expense_id: this.getters.getExpenseId,
+                income_id: this.getters.getIncomeId,
+                type: this.getters.getTypeId
             }
             commit('setErrorStatus', false);
             axios.get('/api/transactions', {params: params, headers: headers})

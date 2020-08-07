@@ -43,9 +43,9 @@
             this.setPage(1)
             this.setDateFrom('')
             this.setDateTo('')
-            // this.setIncomeId('')
-            // this.setExpenseId('')
-            // this.setTypeId('')
+            this.setIncomeId('')
+            this.setExpenseId('')
+            this.setTypeId('')
             this.fetchTransactions()
         }
     }
