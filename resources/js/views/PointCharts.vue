@@ -1,14 +1,22 @@
 <template>
-  <div v-loading="loadingCharts" element-loading-background="rgba(44, 46, 56, 0.8)">
-    <el-row>
+  <div v-loading="loading" element-loading-background="rgba(44, 46, 56, 0.8)">
+
+    <el-row v-if="type == 'income' || type == 'expense'">
       <el-col class="grid-content bg-purple-dark" :span="24">
           <LineChart :chartData="lineChart" :height="70"></LineChart>
       </el-col>
     </el-row>
-    <el-row>
+
+    <el-row >
+      <div class="cstm-col">
+        <CalendarMonth @changeDate="newDate => changeDate(newDate)" />
+        <Feed v-if="type == 'income' || type == 'wallet'" :transactions="getTransactionsByPoint" />
+      </div>
+    </el-row>
+
+    <el-row v-if="type == 'expense'">
       <el-col class="grid-content bg-purple cstm-col-left" :span="12">
-          <CalendarMonth @changeDate="newDate => changeDate(newDate)" />
-          <div v-if="type == 'expense'">
+          <div>
             <div class="cstm-pie-chart">
             <PieChart :chartData="pieChart" :height="350"></PieChart>
           </div>
@@ -30,6 +38,10 @@
           <!-- <Feed :transactions="getTransactionsByPoint" v-loading="loadingFeed" /> -->
       </el-col>
     </el-row>
+
+
+
+
   </div>
 </template>
 
@@ -57,8 +69,7 @@ export default {
       pieSumm: 0,
       pieChart: null,
       lineChart: null,
-      loadingCharts: true, 
-      loadingFeed: true, 
+      loading: true, 
     }
   },
 
@@ -89,19 +100,21 @@ export default {
   },
 
 mounted() {
+      if (!this.getTransactionsByPoint) this.fetchTransactionsByPoint() // получение данных для ленты
+      
       this.axios.get(`/api/${this.type}s/${this.id}`)  // получение данных о текущаем поинте
       .then(response => {
           this.point = response.data.data
       })
       .then(() => {
-        this.fetchCharts({ // получение данных для графиков
-          [`${this.type}_id`]: this.id,
-          dateFrom: this.lastHalfYear.dateFrom,
-          dateTo: this.lastHalfYear.dateTo,
-        })
+        if (this.type == 'expense') {
+          this.fetchPieChart({ // получение данных для круглого графика
+            [`${this.type}_id`]: this.id,
+            dateFrom: this.lastHalfYear.dateFrom,
+            dateTo: this.lastHalfYear.dateTo,
+          })
+        }
       })
-
-    if (!this.getTransactionsByPoint) this.fetchTransactionsByPoint() // получение данных для ленты
   },
 
   methods: {
@@ -110,7 +123,7 @@ mounted() {
     ]),
 
     changeDate(newDate) {
-      this.fetchCharts({
+      this.fetchPieChart({
         [`${this.type}_id`]: this.id,
         dateFrom: newDate.from,
         dateTo: newDate.to,
@@ -118,13 +131,13 @@ mounted() {
       })
     },
     
-    fetchCharts(data) {
+    fetchPieChart(data) {
         this.axios.get(`/api/report/sum-tags?expense_id=${data.expense_id}&date_from=${data.dateFrom}&date_to=${data.dateTo}`)
             .then(response => {
                 this.pieTable = response.data.data
                 let pieData = this.preparePieData(response.data.data)
                 this.setPieChart(pieData)
-                this.loadingCharts = false
+                this.loading = false
             })
 
         // заглушка для линейного графика
@@ -163,7 +176,7 @@ mounted() {
                 data: lineData.amounts,
               },
             ],
-          }
+        }
     },
 
     setPieChart(pieData) {
@@ -205,6 +218,12 @@ mounted() {
 .cstm-pie-chart,
 .cstm-feed {
   margin-top: 20px;
+}
+
+.cstm-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .cstm-amount {
