@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-row :gutter="30" style="height: 100%;">
+        <el-row :gutter="2" style="height: 100%;">
             <el-col :span="12">
 
                 <!--                выбор диапазона месяцов-->
@@ -8,7 +8,7 @@
                     <month-picker @changeDate="newDate => onMonthChange(newDate)"/>
                     <div class="block">
                         <el-radio-group @change="onMonthChange" v-model="typeOfChart" size="small"
-                                        style="margin-left:80px; width: 200px">
+                                        style="margin-left:40px; width: 180px">
                             <el-radio-button label="Доходы">Доходы</el-radio-button>
                             <el-radio-button label="Расходы">Расходы</el-radio-button>
                         </el-radio-group>
@@ -18,7 +18,8 @@
                 <!--                круговая диаграмма категорий-->
                 <div class="chart-block">
                     <div class="total-amount-wrapper" v-if="totalAmount !== 0">
-                        <div class="total-amount">{{ totalAmount }}&#8381</div>
+                        <div class="total-amount">{{ totalAmount.toLocaleString('ru',
+                            { maximumFractionDigits: 0 }) }}&#8381</div>
                     </div>
                     <monthChart ref="chart" :chartData="dataChart" :options="chartOptions"/>
                 </div>
@@ -27,8 +28,9 @@
                 <div v-if="totalAmount !== 0" class="box-card text-chart-table-wrapper">
                     <el-row class="tran-group-header">
                         <el-col class="text-chart-data-name" :span="10">{{ typeOfChart }}</el-col>
-                        <el-col class="cstm-percent" :span="7">Проценты</el-col>
-                        <el-col class="tran-group-header-sum" :span="7">Сумма</el-col>
+                        <el-col class="cstm-percent" :span="7">100%</el-col>
+                        <el-col class="tran-group-header-sum" :span="7">{{ totalAmount.toLocaleString('ru',
+                            { maximumFractionDigits: 0 }) }}&#8381</el-col>
                     </el-row>
                     <div class="text-chart-data-wrapper">
                         <div class="text-chart-data">
@@ -37,7 +39,8 @@
                                 <el-col class="cstm-percent" :span="7">{{ ((100 / totalAmount) *
                                     +item.amount).toFixed(0) }}%
                                 </el-col>
-                                <el-col class="cstm-amount" :span="7">{{ Number(item.amount).toFixed(2).toLocaleString()
+                                <el-col class="cstm-amount" :span="7">{{ Number(item.amount).toLocaleString('ru',
+                                    {minimumFractionDigits: 2, maximumFractionDigits: 2 })
                                     }}&#8381;
                                 </el-col>
                             </el-row>
@@ -46,8 +49,6 @@
                 </div>
             </el-col>
             <el-col :span="12">
-
-<!--                лента-->
                 <div class="feed-container-wrapper">
                     <div class="feed-container">
                         <el-alert
@@ -56,11 +57,9 @@
                             type="error"
                             effect="dark">
                         </el-alert>
-                        <feed v-else
-                              :editable="true"
-                              :feed-template="false"
-                              :transactions="getTransactions">
-                        </feed>
+
+                        <!--                лента-->
+                        <feed v-else :feed-template="false"/>
                     </div>
                 </div>
             </el-col>
@@ -104,7 +103,7 @@
                 for (let key in this.getTotalAmountOfCategories) {
                     labels.push(this.getTotalAmountOfCategories[key].name);
                     data.push(this.getTotalAmountOfCategories[key].amount);
-                    this.totalAmount += +this.getTotalAmountOfCategories[key].amount
+                    this.totalAmount += Number(this.getTotalAmountOfCategories[key].amount)
                 }
 
                 return {labels, data}
@@ -145,6 +144,9 @@
             },
         },
         methods: {
+            update() {
+                console.log('событие: ')
+            },
             ...mapActions([
                 'fetchTransactions',
                 'fetchTotalAmountOfCategories'
@@ -152,20 +154,26 @@
             ...mapMutations([
                 'setTransactions',
                 'setTotalAmountOfCategories',
+
+                'setPage',
                 'setDateFrom',
                 'setDateTo',
-                'setPage'
+                'setExpenseId',
+                'setIncomeId',
+                'setTypeId',
             ]),
             onMonthChange(range) {
-                //установка параметров запроса
+                //установка параметров запросов получения данных диаграммы списка транзакций
                 if (typeof (range) === "object") {
                     this.setDateFrom(range.from);
                     this.setDateTo(range.to);
                 }
-                let url = this.typeOfChart == 'Расходы' ? 'api/report/sum-expenses' : 'api/report/sum-incomes';
+                this.setIncomeId('');
+                this.setExpenseId('');
+                this.setTypeId(this.typeOfChart == 'Расходы' ? 3 : 1);
 
-                // выполнение запроса
-                this.fetchTotalAmountOfCategories(url);
+                // выполнение запросов
+                this.fetchTotalAmountOfCategories();
                 this.fetchTransactions();
             },
             getLastISODateOfMonth(anyISODateOfMonth) {
@@ -178,9 +186,10 @@
             }
         },
         mounted() {
+            this.setPage(1)
             this.setDateFrom(this.currentISODateFrom);
             this.setDateTo(this.getLastISODateOfMonth(this.currentISODateFrom));
-            this.onMonthChange()
+            this.onMonthChange();
         },
         components: {
             monthPicker,
@@ -201,7 +210,7 @@
 
     .feed-container-wrapper {
         width: 100%;
-        height: 85vh;
+        height: 83vh;
         overflow: hidden;
         padding-bottom: 20px;
     }
@@ -251,8 +260,6 @@
 
     .chart {
         width: auto;
-        /*position: absolute;*/
-        /*height: 450px;*/
     }
 
     .total-amount-wrapper {
@@ -297,6 +304,6 @@
     }
 
     .text-chart-data-row {
-        padding: 0px 0px 3px 15px;
+        padding: 0 0 3px 15px;
     }
 </style>

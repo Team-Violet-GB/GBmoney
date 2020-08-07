@@ -22,7 +22,8 @@ export default {
             commit('updateLineData', newData)
             commit('updatePieData', newData2)
         },
-        fetchTotalAmountOfCategories({commit}, url) {
+        fetchTotalAmountOfCategories({commit}) {
+            const url = this.getters.getTypeId == 3 ? 'api/report/sum-expenses' : 'api/report/sum-incomes';
             const headers = {
                 'Content-Type': 'application/json'
             }

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Http\Requests\TransactionFormRequest;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Mockery\Exception;

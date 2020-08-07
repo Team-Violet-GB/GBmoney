@@ -12,40 +12,48 @@
                     <el-col :span="6"><span>{{ to.to }}</span><span class="tran-tag-name">{{ to.tagName }}</span>
                     </el-col>
                     <el-col :span="8">
-                        <div class="tran-comment">{{ transaction.data.comment }} &nbsp;</div>
+                        <div class="tran-comment text-no-wrap" :title="transaction.data.comment">&nbsp;{{ transaction.data.comment }}</div>
                     </el-col>
                     <el-col :span="4">
                         <div
                             :class="getTypeData(this.transaction.data).color"
                             style="display: flex; justify-content: flex-end">
                             {{ getTypeData(this.transaction.data).symbol}}{{
-                            Number(transaction.data.amount).toFixed(2).toLocaleString() }} &#8381;
+                            Number(transaction.data.amount).toLocaleString('ru',
+                            {minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} &#8381;
+
                         </div>
                     </el-col>
                 </el-row>
 
                 <!--        разметка для отчетов-->
                 <el-row v-else :gutter="10" class="tran-row-data">
-                    <el-col :span="6">
-                        <div>{{ from.name }}</div>
+                    <el-col :span="5" class="text-no-wrap">{{ from.name }}</el-col>
+                    <el-col :span="2">
+                        <i :class="getTypeData(this.transaction.data).color" class="el-icon-right"></i>
                     </el-col>
-                    <el-col :span="3"><span :class="getTypeData(this.transaction.data).color"><i
-                        class="el-icon-d-arrow-right"></i></span></el-col>
-                    <el-col :span="6">
-                        <span>{{ to.to }}</span><span class="tran-tag-name">{{ to.tagName }}</span>
+                    <el-col :span="5" class="text-no-wrap">
+                        {{ to.to }}<span class="tran-tag-name">{{ to.tagName }}</span>
                     </el-col>
-                    <el-col :span="9">
-                    <span :class="getTypeData(this.transaction.data).color"
-                          style="display: flex;justify-content: flex-end">{{ getTypeData(this.transaction.data).symbol}}{{ transaction.data.amount }} &#8381;</span>
+                    <el-col :span="6"><div :title="transaction.data.comment" class="tran-comment text-no-wrap">&nbsp;{{ transaction.data.comment }}</div></el-col>
+                    <el-col :span="6">
+                        <div
+                            :class="getTypeData(this.transaction.data).color"
+                            style="display: flex; justify-content: flex-end">
+                            {{ getTypeData(this.transaction.data).symbol}}{{
+                            Number(transaction.data.amount).toLocaleString('ru',
+                            {minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} &#8381;
+                        </div>
                     </el-col>
                 </el-row>
             </el-card>
         </div>
 
-        <!--    подключаемый компонент редактора транзакций    -->
+        <!--    компонент редактора транзакций    -->
         <transactionEditor
-            v-if="getEditable && editorData.isEdit"
+            v-if="editorData.isEdit"
             :editorData="editorData"
+            :feedTemplate="feedTemplate"
         />
     </div>
 </template>
@@ -68,9 +76,7 @@
         },
         props: {
             transaction: {
-                default() {
-                    return Object;
-                }
+                type: Object
             },
             feedTemplate: {
                 type: Boolean,
@@ -87,7 +93,6 @@
                 'tags',
                 'getErrorStatus',
                 'getErrorInfo',
-                'getEditable',
                 'getTransactions'
             ]),
             from() {
@@ -174,9 +179,12 @@
     .tran-comment {
         color: #886ebb;
         font-weight: 400;
-        white-space: nowrap;
+    }
+
+    .text-no-wrap {
         overflow: hidden;
         text-overflow: ellipsis;
+        white-space: nowrap;
         padding: 0 5px;
     }
 

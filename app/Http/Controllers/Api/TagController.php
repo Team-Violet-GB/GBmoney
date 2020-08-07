@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use phpDocumentor\Reflection\Types\False_;
 
 class TagController extends Controller
 {
@@ -35,6 +36,20 @@ class TagController extends Controller
      */
     public function store(TagFormRequest $request)
     {
+        // Проверяем, есть ли уже скрытая категория с таким же именем. Если есть, то делаем ее не скрытой.
+        $tagDeletedSql = Tag::query()
+            ->where('expense_id', $request->expense_id)
+            ->where('name', $request->name)
+            ->where('deleted', true);
+
+        $tagDeleted = $tagDeletedSql->first();
+
+        if ($tagDeleted) {
+            $tagDeletedSql->update(['deleted' => false]);
+
+            return response()->json(['data' => $tagDeleted], 200);
+        }
+
         // Создаем новый объект тэгов.
         $tag = new Tag();
 

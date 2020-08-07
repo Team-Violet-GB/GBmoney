@@ -10,6 +10,31 @@
                         <el-row>
                             <div class="editor-pointers">
                                 <el-form-item>
+                                    <el-date-picker type="date"
+                                                    firstDayOfWeek="1"
+                                                    format="dd.MM.yyyy"
+                                                    value-format="yyyy-MM-dd"
+                                                    v-model="editorData.edata.date"
+                                                    style="margin-top: 0;font-size: 1em; width: 200px">
+                                    </el-date-picker>
+                                </el-form-item>
+                                <el-form-item prop="amount">
+                                    <i v-if="editorData.edata.type == 1" :class="getTypeData(editorData.edata).color" class="el-icon-plus"></i>
+                                    <i v-if="editorData.edata.type == 2" :class="getTypeData(editorData.edata).color" class="el-icon-refresh"></i>
+                                    <i v-if="editorData.edata.type == 3" :class="getTypeData(editorData.edata).color" class="el-icon-minus"></i>
+                                    <el-input type="number" class="right-sum"
+                                              v-model.number="editorData.edata.amount"
+                                              style="margin-top: 0; font-size: 1em; width: 200px"
+
+                                    ><strong slot="suffix">₽&nbsp;&nbsp;&nbsp;</strong></el-input>
+                                </el-form-item>
+                            </div>
+                        </el-row>
+
+                        <!--                        вторая строка редактора-->
+                        <el-row>
+                            <div class="editor-pointers">
+                                <el-form-item>
                                     <el-select
                                         style="margin-top: 0; font-size: 1em; width: 200px"
                                         v-if="getTypeData(editorData.edata).typeName === 'Доход'"
@@ -26,17 +51,11 @@
                                                    :label="wallet.name"
                                                    :value="wallet.id" class="select_option">
                                         </el-option>
-                                    </el-select>&nbsp;&nbsp;<i class="el-icon-d-arrow-right"></i>
+                                    </el-select>
                                 </el-form-item>
-                                <el-form-item prop="amount">
-                                    <el-input type="number" class="right-sum"
-                                              v-model.number="editorData.edata.amount"
-                                              style="margin-top: 0; font-size: 1em; width: 200px"
 
-                                    ><strong slot="suffix">₽&nbsp;&nbsp;&nbsp;</strong></el-input>
-                                    &nbsp;<i class="el-icon-d-arrow-right"></i>
-                                </el-form-item>
                                 <el-form-item>
+                                    <i :class="getTypeData(editorData.edata).color" class="el-icon-d-arrow-right"></i>
                                     <el-select class="selector"
                                                v-if="getTypeData(editorData.edata).typeName === 'Доход'"
                                                v-model="editorData.edata.wallet_id_to">
@@ -72,22 +91,13 @@
                             </div>
                         </el-row>
 
-                        <!--                        вторая строка редактора-->
+                        <!--                        третья строка редактора-->
                         <el-row>
                             <div class="editor-pointers">
-                                <el-form-item>
-                                    <el-date-picker type="date"
-                                                    firstDayOfWeek="1"
-                                                    format="dd.MM.yyyy"
-                                                    value-format="yyyy-MM-dd"
-                                                    v-model="editorData.edata.date"
-                                                    style="margin-top: 0;font-size: 1em; width: 200px">
-                                    </el-date-picker>
-                                </el-form-item>
                                 <el-form-item :class="{comment_long: editorData.edata.type == 3 }"
                                               class="comment_short">
-                                    <el-input v-model="editorData.edata.comment" clearable placeholder="Коментарий"
-                                              maxlength="44" show-word-limit></el-input>
+                                    <el-input autosize type="textarea" v-model="editorData.edata.comment" placeholder="Коментарий"
+                                              maxlength="200" show-word-limit></el-input>
                                 </el-form-item>
                             </div>
                         </el-row>
@@ -152,12 +162,17 @@
                         {validator: checkAmount, trigger: 'blur'}
                     ]
                 },
-
             }
         },
         props: {
             editorData: {
                 type: Object
+            },
+            feedTemplate: {
+                type: Boolean,
+                default() {
+                    return true;
+                }
             }
         },
         computed: {
@@ -169,7 +184,7 @@
             ]),
             getTagsOfExpense() {
                 let tagsOfExpense = [];
-                tagsOfExpense.push({name: "Нет", id: null});
+                tagsOfExpense.push({name: "Без категории", id: null});
                 for (let tag in this.tags) {
                     if (this.tags[tag].expense_id === this.editorData.edata.expense_id) {
                         tagsOfExpense.push(this.tags[tag])
@@ -181,6 +196,7 @@
         methods: {
             ...mapActions([
                 'fetchTransactions',
+                'fetchTotalAmountOfCategories',
                 'fetchWallets',
                 'fetchIncomes',
                 'fetchExpenses',
@@ -205,8 +221,7 @@
                             })
                             .then(response => {
                                 if (response.status === 200) {
-                                    this.updatePoints(this.editorData.type);
-                                    this.fetchTransactions()
+                                    this.updateOtherData(this.editorData.type);
                                 }
                             })
                             .catch(error => {
@@ -227,8 +242,7 @@
                 axios.delete(`/api/transactions/${this.editorData.edata.id}`)
                     .then(response => {
                         if (response.status === 200) {
-                            this.updatePoints(this.editorData.type);
-                            this.fetchTransactions()
+                            this.updateOtherData(this.editorData.type);
                             this.$message({
                                 type: 'info',
                                 message: `Транзакции от ${new Date(this.editorData.data.date).toLocaleDateString()} была удалена`
@@ -244,10 +258,12 @@
                         });
                     });
             },
-            updatePoints(type) {
-                this.fetchWallets()
-                if (type == 1) this.fetchIncomes()
-                if (type == 3) this.fetchExpenses()
+            updateOtherData(type) {
+                if (!this.feedTemplate) this.fetchTotalAmountOfCategories();
+                this.fetchTransactions();
+                this.fetchWallets();
+                if (type == 1) this.fetchIncomes();
+                if (type == 3) this.fetchExpenses();
             }
         }
     }
@@ -256,7 +272,6 @@
 <style scoped>
     .editor {
         color: rgb(255, 208, 75) !important;
-        /*background-color: #3d3e48;*/
         background-color: rgba(88, 89, 106, 0.30);
         border-radius: 2px;
         padding: 15px 17px 1px;
@@ -265,18 +280,17 @@
     .editor-pointers {
         display: flex;
         justify-content: flex-start;
+        align-items: center;
         margin-bottom: -14px;
         width: 870px;
     }
 
     .comment_short {
-        margin-left: 21px;
-        width: 430px;
+        width: 427px;
     }
 
     .comment_long {
-        margin-left: 21px;
-        width: 633px;
+        width: 630px;
     }
 
     .selector {
