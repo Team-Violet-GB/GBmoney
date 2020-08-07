@@ -1,18 +1,51 @@
 <template>
     <div>
-        <el-row :gutter="30" style="height: 85vh">
+        <el-row :gutter="2" style="height: 100%;">
             <el-col :span="12">
+
+                <!--                выбор диапазона месяцов-->
                 <div class="options">
-                    <month-picker @changeDate="onMonthChange"/>
+                    <month-picker @changeDate="newDate => onMonthChange(newDate)"/>
                     <div class="block">
-                        <el-radio-group @change="generateChartData" v-model="typeOfChart" size="small"
-                                        style="margin-left:80px; width: 200px">
+                        <el-radio-group @change="onMonthChange" v-model="typeOfChart" size="small"
+                                        style="margin-left:40px; width: 180px">
                             <el-radio-button label="Доходы">Доходы</el-radio-button>
                             <el-radio-button label="Расходы">Расходы</el-radio-button>
                         </el-radio-group>
                     </div>
                 </div>
-                <monthChart ref="chart" :chartData="dataChart" :options="chartOptions"/>
+
+                <!--                круговая диаграмма категорий-->
+                <div class="chart-block">
+                    <div class="total-amount-wrapper" v-if="totalAmount !== 0">
+                        <div class="total-amount">{{ totalAmount.toLocaleString('ru',
+                            { maximumFractionDigits: 0 }) }}&#8381</div>
+                    </div>
+                    <monthChart ref="chart" :chartData="dataChart" :options="chartOptions"/>
+                </div>
+
+                <!--                текстовое отображение данных диаграммы-->
+                <div v-if="totalAmount !== 0" class="box-card text-chart-table-wrapper">
+                    <el-row class="tran-group-header">
+                        <el-col class="text-chart-data-name" :span="10">{{ typeOfChart }}</el-col>
+                        <el-col class="cstm-percent" :span="7">Проценты</el-col>
+                        <el-col class="tran-group-header-sum" :span="7">Сумма</el-col>
+                    </el-row>
+                    <div class="text-chart-data-wrapper">
+                        <div class="text-chart-data">
+                            <el-row class="text-chart-data-row" v-for="(item, index) in getTotalAmountOfCategories" :key="index">
+                                <el-col :span="10">{{ item.name }}</el-col>
+                                <el-col class="cstm-percent" :span="7">{{ ((100 / totalAmount) *
+                                    +item.amount).toFixed(0) }}%
+                                </el-col>
+                                <el-col class="cstm-amount" :span="7">{{ Number(item.amount).toLocaleString('ru',
+                                    {minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                    }}&#8381;
+                                </el-col>
+                            </el-row>
+                        </div>
+                    </div>
+                </div>
             </el-col>
             <el-col :span="12">
                 <div class="feed-container-wrapper">
@@ -23,10 +56,9 @@
                             type="error"
                             effect="dark">
                         </el-alert>
-                        <feed v-else
-                              :editable="false"
-                              :transactions="transactions">
-                        </feed>
+
+                        <!--                лента-->
+                        <feed v-else :feed-template="false"/>
                     </div>
                 </div>
             </el-col>
@@ -48,7 +80,7 @@
             return {
                 currentISODateFrom: new Date().toISOString().slice(0, 8) + '01',
                 typeOfChart: 'Доходы',
-                transactions: {}
+                totalAmount: 0
             }
         },
         computed: {
@@ -56,15 +88,28 @@
                 'getDateFrom',
                 'getDateTo',
                 'getTransactions',
+                'getTotalAmountOfCategories',
                 'getErrorStatus',
                 'getErrorInfo',
                 'getPage',
                 'getTotal'
             ]),
+            transformResponseToChartData() {
+                let labels = [];
+                let data = [];
+                this.totalAmount = 0;
+
+                for (let key in this.getTotalAmountOfCategories) {
+                    labels.push(this.getTotalAmountOfCategories[key].name);
+                    data.push(this.getTotalAmountOfCategories[key].amount);
+                    this.totalAmount += Number(this.getTotalAmountOfCategories[key].amount)
+                }
+
+                return {labels, data}
+            },
             dataChart() {
-                const generatedChartData = this.generateChartData()
                 return {
-                    labels: generatedChartData.labels,
+                    labels: this.transformResponseToChartData.labels,
                     datasets: [
                         {
                             label: 'Расходы',
@@ -77,7 +122,7 @@
                                 'rgba(255,99,3,0.65)'
                             ],
                             borderColor: 'rgba(190,99,255,0)',
-                            data: generatedChartData.data
+                            data: this.transformResponseToChartData.data
                         }
                     ]
                 }
@@ -93,85 +138,42 @@
                             padding: 5,
                             fontColor: 'rgb(255,255,255)'
                         }
-
                     }
                 }
             },
         },
         methods: {
+            update() {
+                console.log('событие: ')
+            },
             ...mapActions([
-                'fetchWallets',
-                'fetchIncomes',
-                'fetchExpenses',
-                'fetchTags',
-                'fetchTransactions'
+                'fetchTransactions',
+                'fetchTotalAmountOfCategories'
             ]),
             ...mapMutations([
                 'setTransactions',
-                'setEditable',
+                'setTotalAmountOfCategories',
+
+                'setPage',
                 'setDateFrom',
                 'setDateTo',
-                'setPage'
+                'setExpenseId',
+                'setIncomeId',
+                'setTypeId',
             ]),
             onMonthChange(range) {
-                this.setDateFrom(range[0]);
-                this.setDateTo(this.getLastISODateOfMonth(range[1]));
-                this.fetchTransactions();
-            },
-            generateChartData(typeOfChart = this.typeOfChart) {
-                let labels = [];
-                let data = [];
-                let transNew = {}
-
-                let trans = this.getTransactions;
-                switch (typeOfChart) {
-                    case "Расходы":
-                        for (let groupKey in trans) {
-                            let transGroup = trans[groupKey]
-                            for (let tranKey in transGroup) {
-                                let tran = transGroup[tranKey]
-                                if (tran.type === 3) {
-                                    let name = this.getTypeData(tran).toName
-                                    if (!labels.includes(name)) {
-                                        labels.push(name);
-                                        data.push(this.getTotalOfExpense(tran.expense_id));
-                                    }
-                                    if (!transNew.hasOwnProperty(groupKey)) {
-                                        transNew[groupKey] = [];
-                                        transNew[groupKey].push(tran)
-                                    } else {
-                                        transNew[groupKey].push(tran)
-                                    }
-                                }
-                            }
-                        }
-                        break;
-
-                    case "Доходы":
-                        for (let groupKey in trans) {
-                            let transGroup = trans[groupKey]
-                            for (let tranKey in transGroup) {
-                                let tran = transGroup[tranKey]
-                                if (tran.type === 1) {
-                                    let name = this.getTypeData(tran).fromName
-                                    if (!labels.includes(name)) {
-                                        labels.push(name);
-                                        data.push(this.getTotalOfIncomes(tran.income_id));
-                                    }
-                                    if (!transNew.hasOwnProperty(groupKey)) {
-                                        transNew[groupKey] = [];
-                                        transNew[groupKey].push(tran)
-                                    } else {
-                                        transNew[groupKey].push(tran)
-                                    }
-                                }
-                            }
-                        }
-                        break;
+                //установка параметров запросов получения данных диаграммы списка транзакций
+                if (typeof (range) === "object") {
+                    this.setDateFrom(range.from);
+                    this.setDateTo(range.to);
                 }
-                this.transactions = transNew
+                this.setIncomeId('');
+                this.setExpenseId('');
+                this.setTypeId(this.typeOfChart == 'Расходы' ? 3 : 1);
 
-                return {labels, data}
+                // выполнение запросов
+                this.fetchTotalAmountOfCategories();
+                this.fetchTransactions();
             },
             getLastISODateOfMonth(anyISODateOfMonth) {
                 Date.prototype.lastDayOfMonth = function () {
@@ -185,8 +187,7 @@
         mounted() {
             this.setDateFrom(this.currentISODateFrom);
             this.setDateTo(this.getLastISODateOfMonth(this.currentISODateFrom));
-            this.fetchTransactions();
-            this.generateChartData();
+            this.onMonthChange();
         },
         components: {
             monthPicker,
@@ -207,8 +208,9 @@
 
     .feed-container-wrapper {
         width: 100%;
-        height: 85vh;
+        height: 83vh;
         overflow: hidden;
+        padding-bottom: 20px;
     }
 
     .feed-container {
@@ -217,5 +219,89 @@
         padding-right: 45px;
         margin-top: 20px;
         overflow-y: scroll;
+    }
+
+    .tran-group-header {
+        color: #b3fb2acf;
+        font-size: 20px;
+        font-weight: 500;
+        background-color: #5F6068;
+        padding-left: 5px;
+        padding-bottom: 5px;
+        padding-top: 3px;
+    }
+
+    .tran-group-header-sum {
+        text-align: right;
+        font-size: 20px;
+        font-weight: 500;
+        padding-right: 20px;
+    }
+
+    .text-chart-data-name {
+        padding-left: 10px;
+    }
+
+    .cstm-amount {
+        text-align: right;
+    }
+
+    .cstm-percent {
+        text-align: center;
+    }
+
+    .chart-block {
+        width: 70%;
+        margin: 0 auto;
+        position: relative
+    }
+
+    .chart {
+        width: auto;
+    }
+
+    .total-amount-wrapper {
+        position: absolute;
+        top: 50%;
+        font-weight: bolder;
+        font-size: x-large;
+        color: #fbfbfbd1;
+
+        width: 100%;
+        text-align: center;
+    }
+
+    .total-amount {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 0 150px;
+    }
+
+    .text-chart-table-wrapper {
+        border: none;
+        margin-top: 20px;
+        position: fixed;
+        width: 730px;
+        bottom: 20px;
+    }
+
+    .text-chart-data-wrapper {
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .text-chart-data {
+        padding: 7px 0;
+        height: 70px;
+        border: none;
+        background-color: rgba(61, 62, 72, 0.99);
+        color: #b682f9;
+        width: 100%;
+        padding-right: 45px;
+        overflow-y: scroll;
+    }
+
+    .text-chart-data-row {
+        padding: 0 0 3px 15px;
     }
 </style>
