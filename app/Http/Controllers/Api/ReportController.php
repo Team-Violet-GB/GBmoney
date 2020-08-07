@@ -129,24 +129,44 @@ class ReportController extends Controller
         $this->validate($request, [
             'date_from' => 'required|date',
             'date_to' => 'required|date|after_or_equal:date_from',
-            'type' => ['required', Rule::in([Transaction::TYPE_INCOME, Transaction::TYPE_EXPENSE])]
+            'income_id' => 'nullable|int',
+            'expense_id' => 'nullable|int',
+            'type' => ['nullable', Rule::in([Transaction::TYPE_INCOME, Transaction::TYPE_EXPENSE])]
         ]);
 
-        if ($request->type == Transaction::TYPE_INCOME) {
+        if (isset($request->type) && $request->type == Transaction::TYPE_INCOME) {
             $point_id = 'income_id';
             $point_table = 'incomes';
+            $income_id = null;
+            $expense_id = null;
         }
 
-        if ($request->type == Transaction::TYPE_EXPENSE) {
+        if (isset($request->type) && $request->type == Transaction::TYPE_EXPENSE) {
             $point_id = 'expense_id';
             $point_table = 'expenses';
+            $income_id = null;
+            $expense_id = null;
+        }
+
+        if ($request->income_id) {
+            $point_id = 'income_id';
+            $point_table = 'incomes';
+            $income_id = $request->income_id;
+            $expense_id = null;
+        }
+
+        if ($request->expense_id) {
+            $point_id = 'expense_id';
+            $point_table = 'expenses';
+            $income_id = null;
+            $expense_id = $request->expense_id;
         }
 
         // Получаем массив месяцев (с начальной и конечно датой месяца) за выбранный период.
         $dateArr = ReportHelpers::getArrMonthsForPeriod($request->date_from, $request->date_to);
 
         // Получаем массив из сгруппированных по месяцам элементов с указанием суммы, id и названия поинта.
-        $arr = ReportHelpers::getArrWithSumPointsByDate($dateArr, $point_table, $point_id);
+        $arr = ReportHelpers::getArrWithSumPointsByDate($dateArr, $point_table, $point_id, $income_id, $expense_id);
 
         return response()->json($arr);
     }

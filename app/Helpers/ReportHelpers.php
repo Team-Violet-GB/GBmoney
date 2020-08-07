@@ -57,9 +57,11 @@ class ReportHelpers
      * @param array $dateArr
      * @param string $point_table
      * @param string $point_id
+     * @param int|null $income_id
+     * @param int|null $expense_id
      * @return array
      */
-    public static function getArrWithSumPointsByDate(array $dateArr, string $point_table, string $point_id)
+    public static function getArrWithSumPointsByDate(array $dateArr, string $point_table, string $point_id, ?int $income_id, ?int $expense_id)
     {
         $result = [];
 
@@ -79,6 +81,12 @@ class ReportHelpers
                 })
                 ->when($dateTo, function ($query) use ($dateTo) {
                     return $query->where('transactions.date', '<=', $dateTo);
+                })
+                ->when($income_id, function ($query) use ($income_id, $point_id) {
+                    return $query->where('transactions.' . $point_id . '', '=', $income_id);
+                })
+                ->when($expense_id, function ($query) use ($expense_id, $point_id) {
+                    return $query->where('transactions.' . $point_id . '', '=', $expense_id);
                 })
                 ->groupBy(['transactions.' . $point_id . '', 'p.name']);
 
