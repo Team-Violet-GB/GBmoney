@@ -156,6 +156,7 @@ mounted() {
         this.pieSumm = 0
         for (let tag in tags) {
             let color = this.colorGenerator()
+            if (tags[tag].tag_id == 0) color = '#C9C9C9'
             names.push(tags[tag].name)
             amounts.push(tags[tag].amount)
             colors.push(color)
