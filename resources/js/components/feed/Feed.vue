@@ -1,7 +1,7 @@
 <template>
     <div>
         <!--        заголовок группы транзакций-->
-        <el-card v-if="!getErrorStatus" v-for="(transactionGroup, index) in getTransactions" :key="index"
+        <el-card v-for="(transactionGroup, index) in transactions" :key="index"
                  class="box-card">
             <el-row :gutter="10" slot="header" class="clearfix tran-group-header">
                 <el-col :span="14">
@@ -17,7 +17,9 @@
             <!--            группа транзакций-->
             <transaction-group :transactionGroup="transactionGroup" :transactionGroupName="index" class="tran-group"/>
         </el-card>
-        <div class="pagination">
+
+<!--        пагинация-->
+        <div v-if="getEditable" class="pagination">
             <el-pagination
                 background
                 :hide-on-single-page="true"
@@ -26,7 +28,6 @@
                 :total="getTotal">
             </el-pagination>
         </div>
-
     </div>
 </template>
 
@@ -36,23 +37,7 @@
 
     export default {
         props: {
-            page: {
-                type: String,
-                default() {
-                    return '1';
-                }
-            }, dateFrom: {
-                type: String,
-                default() {
-                    return '';
-                }
-            },
-            dateTo: {
-                type: String,
-                default() {
-                    return '';
-                }
-            },
+            transactions: null,
             editable: {
                 type: Boolean,
                 default() {
@@ -62,7 +47,12 @@
         },
         computed: {
             ...mapGetters([
+
                 'getTransactions',
+                'wallets',
+                'incomes',
+                'expenses',
+                'tags',
                 'getErrorStatus',
                 'getErrorInfo',
                 'getPage',
@@ -114,16 +104,12 @@
                 this.fetchTransactions()
             }
         },
-        mounted() {
-            this.fetchIncomes();
-            this.fetchWallets();
-            this.fetchExpenses();
-            this.fetchTags();
+       mounted() {
+            if (!this.incomes) this.fetchIncomes();
+            if (!this.wallets) this.fetchWallets();
+            if (!this.expenses) this.fetchExpenses();
+            if (!this.tags) this.fetchTags();
             this.setEditable(this.editable);
-            this.setPage(this.page);
-            this.setDateFrom(this.dateFrom);
-            this.setDateTo(this.dateTo);
-            this.fetchTransactions()
         },
         components: {
             transactionGroup,
@@ -132,9 +118,9 @@
 </script>
 
 <style scoped>
-    body {
-        margin: 0;
-    }
+    /*body {*/
+    /*    margin: 0;*/
+    /*}*/
 
     .el-card {
         border: 0 solid rgba(255, 255, 255, 0);
@@ -172,5 +158,5 @@
     .cstm-red {
     color: #f56c6c;
     }
-    
+
 </style>

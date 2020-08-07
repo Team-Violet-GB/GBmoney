@@ -5,7 +5,6 @@ export default {
         addIncomes({commit, dispatch}, data) {
             axios.post('/api/incomes' , data)
                 .then(response => {
-                    console.log('success', response)
                     dispatch('fetchIncomes')
                 })
                 .catch((error) => {
@@ -15,7 +14,6 @@ export default {
         addWallets({commit, dispatch}, data) {
             axios.post('/api/wallets' , data)
                 .then(response => {
-                    console.log('success', response)
                     dispatch('fetchWallets')
                 })
                 .catch((error) => {
@@ -25,7 +23,6 @@ export default {
         addExpenses({commit, dispatch}, data) {
             axios.post('/api/expenses' , data)
                 .then(response => {
-                    console.log('success', response)
                     dispatch('fetchExpenses')
                 })
                 .catch((error) => {
@@ -37,15 +34,15 @@ export default {
             .then(response => {
                 const incomes = response.data.data
                 commit('updateIncomes', incomes)
-                return incomes
-            })   
+                commit('updateIncomesLoad', false)
+            })
         },
         fetchWallets({ commit }) {
             axios.get('/api/get/wallets')
             .then(response => {
                 const wallets = response.data.data
                 commit('updateWallets', wallets)
-                return wallets
+                commit('updateWalletsSumm', false)
             })
         },
         fetchExpenses({ commit }) {
@@ -53,7 +50,7 @@ export default {
             .then(response => {
                 const expenses = response.data.data
                 commit('updateExpenses', expenses)
-                return expenses
+                commit('updateExpensesLoad', false)
             })
         },
         fetchTags({ commit }) {
@@ -61,7 +58,6 @@ export default {
             .then(response => {
                 const tags = response.data.data
                 commit('updateTags', tags)
-                return tags
             })
         },
     },
@@ -89,10 +85,20 @@ export default {
             for (let point in points)  limit += Number(points[point].max_limit)
             state.expensesLimit = limit
         },
-
         updateTags(state, points) {
             state.tagsList = points
         },
+
+        updateIncomesLoad(state, newState) {
+            state.incomesLoad = newState
+        },
+        updateWalletsSumm(state, newState) {
+            state.walletsLoad = newState
+        },
+        updateExpensesLoad(state, newState) {
+            state.expensesLoad = newState
+        },
+
     },
     state: {
         incomesList: null,
@@ -103,6 +109,9 @@ export default {
         walletsSumm: null,
         expensesSumm: null,
         expensesLimit: null,
+        incomesLoad: true,
+        walletsLoad: true,
+        expensesLoad: true,
     },
     getters: {
         incomes(state) {
@@ -129,12 +138,14 @@ export default {
         expensesLimit(state) {
             return state.expensesLimit
         },
-        points(state) {
-            return {
-                'income': state.incomesList,
-                'wallet': state.walletsList,
-                'expense': state.expensesList,
-            }
+        incomesLoading(state) {
+            return state.incomesLoad
+        },
+        walletsLoading(state) {
+            return state.walletsLoad
+        },
+        expensesLoading(state) {
+            return state.expensesLoad
         },
     }
 }
