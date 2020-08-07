@@ -17,10 +17,11 @@
 
                 <!--                круговая диаграмма категорий-->
                 <div class="chart-block">
-                    <div class="total-amount-wrapper" v-if="totalAmount !== 0">
-                        <div class="total-amount">{{ totalAmount.toLocaleString('ru',
+                    <div class="total-amount-wrapper">
+                        <div v-if="totalAmount !== 0" class="total-amount">{{ totalAmount.toLocaleString('ru',
                             { maximumFractionDigits: 0 }) }}&#8381
                         </div>
+                        <div v-else class="total-amount">Нет данных</div>
                     </div>
                     <monthChart ref="chart" :chartData="dataChart" :options="chartOptions"/>
                 </div>
