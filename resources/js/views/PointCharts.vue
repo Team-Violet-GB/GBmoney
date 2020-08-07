@@ -181,26 +181,16 @@ mounted() {
     },
 
     colorGenerator() {
-      let rbg = [4, 255, (Math.floor(Math.random() * (256)))]
-      let value1 = rbg.splice(Math.floor(Math.random()*rbg.length), 1)[0]
+      let rbg = [0, 255, (Math.floor(Math.random() * (256)))] // параметры для самого яркого цвета, чтобы не получались тёмные
+      let value1 = rbg.splice(Math.floor(Math.random()*rbg.length), 1)[0] // перемешиваем, выбирая случайный элемент масива, удаляем его из массива
       let value2 = rbg.splice(Math.floor(Math.random()*rbg.length), 1)[0]
       let value3 = rbg[0]
-      
       return '#' + this.rgbToHex(value1) + this.rgbToHex(value2) + this.rgbToHex(value3)
     },
     
-    rgbToHex(c) {
+    rgbToHex(c) { // конвертирует rgb цвет в hex 16-ти битный для css
         let hex = c.toString(16)
         return hex.length == 1 ? "0" + hex : hex
-    },
-
-    colorGenerator1() {
-      var rbg = [1, 255, (Math.floor(Math.random() * (256)))]
-      var value1 = rbg.splice(Math.floor(Math.random()*rbg.length), 1)[0]
-      var value2 = rbg.splice(Math.floor(Math.random()*rbg.length), 1)[0]
-      var value3 = rbg[0]
-      console.log(value1,value2,value3)
-      return '#' + value1.toString(16) + value2.toString(16) + value3.toString(16)
     },
   },
 }
@@ -224,8 +214,6 @@ mounted() {
 .cstm-percent {
   text-align: center;
 }
-
-
 
 body {
   margin: 0;
