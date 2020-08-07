@@ -53,6 +53,7 @@
         <transactionEditor
             v-if="editorData.isEdit"
             :editorData="editorData"
+            :feedTemplate="feedTemplate"
         />
     </div>
 </template>
@@ -75,9 +76,7 @@
         },
         props: {
             transaction: {
-                default() {
-                    return Object;
-                }
+                type: Object
             },
             feedTemplate: {
                 type: Boolean,

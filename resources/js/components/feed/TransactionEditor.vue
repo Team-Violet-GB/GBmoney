@@ -167,6 +167,12 @@
         props: {
             editorData: {
                 type: Object
+            },
+            feedTemplate: {
+                type: Boolean,
+                default() {
+                    return true;
+                }
             }
         },
         computed: {
@@ -216,7 +222,6 @@
                             .then(response => {
                                 if (response.status === 200) {
                                     this.updateOtherData(this.editorData.type);
-                                    this.fetchTransactions()
                                 }
                             })
                             .catch(error => {
@@ -238,7 +243,6 @@
                     .then(response => {
                         if (response.status === 200) {
                             this.updateOtherData(this.editorData.type);
-                            this.fetchTransactions()
                             this.$message({
                                 type: 'info',
                                 message: `Транзакции от ${new Date(this.editorData.data.date).toLocaleDateString()} была удалена`
@@ -255,7 +259,8 @@
                     });
             },
             updateOtherData(type) {
-                this.fetchTotalAmountOfCategories();
+                if (!this.feedTemplate) this.fetchTotalAmountOfCategories();
+                this.fetchTransactions();
                 this.fetchWallets()
                 if (type == 1) this.fetchIncomes()
                 if (type == 3) this.fetchExpenses()
