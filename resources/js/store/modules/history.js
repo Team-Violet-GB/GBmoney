@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 export default {
+    namespaced: true,
     state: {
         expenses: null,
         incomes: null,
@@ -30,14 +31,14 @@ export default {
         }
     },
     actions: {
-        fetchHistCategories({ commit }) {
+        fetchCategories({ commit }) {
           commit("setCategories", {
               "1": "Авто",
               "2": "Дом",
           })
         },
-        fetchHistIncomes({commit}) {
-            let data = {
+        fetchIncomes({commit}, dates) {
+            /*let data = {
                 "01.2020": {
                     "1": 125000,
                     "2": 124000,
@@ -86,7 +87,23 @@ export default {
                     "1": 125000,
                     "2": 1200,
                 },
+            }*/
+            let data = null
+            const headers = {
+                'Content-Type': 'application/json'
             }
+            const params = {
+                date_from: "01-2020",
+                date_to: "08-2020",
+                type: 1
+            }
+            axios.get('api/report/sum-points-by-months', {params: params, headers: headers})
+                .then(response => {
+                    console.log(response)
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
             let labels = []
             for (let key in data) {
                 labels.push(key)
@@ -94,7 +111,7 @@ export default {
             commit("setLabels", labels)
             commit("setIncomes", data)
         },
-        fetchHistExpenses({commit}) {
+        fetchExpenses({commit}) {
             commit("setExpenses", {
                 "01.2020": {
                     "1": 125000,

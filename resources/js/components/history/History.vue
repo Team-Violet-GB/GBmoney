@@ -8,7 +8,7 @@
             </el-col>
         </el-row>
         <CalendarMonth @changeDate="newDate => changeDate(newDate)" />
-        <el-card v-for="cat in getCategories" :key="point.id" class="box-card">
+        <el-card v-for="cat in this.$store.getters.getCategories" :key="id" class="box-card">
         </el-card>
     </div>
 </template>
@@ -28,13 +28,13 @@ export default {
         chartData: null
     }),
     computed: {
-        ...mapGetters([
-            'getSums',
-            'getCategories',
-            'getLabels',
+        ...mapGetters({
+            getSums: 'history/getSums',
+            getCategories: 'history/getCategories',
+            getLabels: 'history/getLabels',
             /*'getErrorStatus',
             'getErrorInfo',*/
-        ]),
+        }),
         chartOptions() {
             responsive: true
             maintainAspectRatio: false
@@ -42,7 +42,7 @@ export default {
         chartHistData() {
             return {
                 /*labels: ["01.2020", "02.2020", "03.2020", "04.2020", "05.2020", "06.2020", "07.2020", "08.2020", "09.2020", "10.2020", "11.2020", "12.2020"],*/
-                labels: this.getLabels,
+                labels: this.$store.getters.getLabels,
                 datasets: []
             }
         },
@@ -50,26 +50,29 @@ export default {
             return null
         }
     },
-    mounted() {
-        this.fetchHistCategories()
-        this.fetchHistExpenses()
-        this.fetchHistIncomes()
-    },
     methods: {
         ...mapActions([
-            "fetchHistCategories",
-            "fetchHistIncomes",
-            "fetchHistExpenses",
+            "history/fetchCategories",
+            "history/fetchIncomes",
+            "history/fetchExpenses",
         ]),
 
         ...mapMutations([
-           "setLabels"
+            "history/setLabels"
         ]),
 
         changeDate(newDate) {
             this.dateFrom = newDate[0];
             this.dateTo = newDate[1];
         },
+    },
+    mounted() {
+        this.$store.dispatch('history/fetchCategories')
+        this.$store.dispatch('history/fetchExpenses')
+        this.$store.dispatch('history/fetchIncomes', {
+            dateFrom: '01-2020',
+            dateTo: '08-2020',
+        })
     },
 }
 </script>
