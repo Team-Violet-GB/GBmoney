@@ -57,6 +57,9 @@ export default {
             state.pieData = pieData
         },
         setTotalAmountOfCategories(state, data) {
+            for (let key in data) {
+                data[key].show = true
+            }
             state.totalAmountOfCategories = data
         }
     },

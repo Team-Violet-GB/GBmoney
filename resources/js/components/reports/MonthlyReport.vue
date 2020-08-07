@@ -19,30 +19,35 @@
                 <div class="chart-block">
                     <div class="total-amount-wrapper" v-if="totalAmount !== 0">
                         <div class="total-amount">{{ totalAmount.toLocaleString('ru',
-                            { maximumFractionDigits: 0 }) }}&#8381</div>
+                            { maximumFractionDigits: 0 }) }}&#8381
+                        </div>
                     </div>
                     <monthChart ref="chart" :chartData="dataChart" :options="chartOptions"/>
                 </div>
 
                 <!--                текстовое отображение данных диаграммы-->
-                <div v-if="totalAmount !== 0" class="box-card text-chart-table-wrapper">
+                <div v-if="!getErrorStatus" class="box-card text-chart-table-wrapper">
                     <el-row class="tran-group-header">
                         <el-col class="text-chart-data-name" :span="10">{{ typeOfChart }}</el-col>
                         <el-col class="cstm-percent" :span="7">100%</el-col>
                         <el-col class="tran-group-header-sum" :span="7">{{ totalAmount.toLocaleString('ru',
-                            { maximumFractionDigits: 0 }) }}&#8381</el-col>
+                            { maximumFractionDigits: 0 }) }}&#8381
+                        </el-col>
                     </el-row>
                     <div class="text-chart-data-wrapper">
                         <div class="text-chart-data">
-                            <el-row class="text-chart-data-row" v-for="(item, index) in getTotalAmountOfCategories" :key="index">
-                                <el-col :span="10">{{ item.name }}</el-col>
-                                <el-col class="cstm-percent" :span="7">{{ ((100 / totalAmount) *
-                                    +item.amount).toFixed(0) }}%
-                                </el-col>
-                                <el-col class="cstm-amount" :span="7">{{ Number(item.amount).toLocaleString('ru',
-                                    {minimumFractionDigits: 2, maximumFractionDigits: 2 })
-                                    }}&#8381;
-                                </el-col>
+                            <el-row v-for="(item, index) in getTotalAmountOfCategories" :key="index" :class="{exclude: !item.show}"
+                                    class="text-chart-data-row">
+                                <div @click="item.show = !item.show" class="text-chart-data-row-wrapper" style="cursor: pointer">
+                                    <el-col :span="10">{{ item.name }}</el-col>
+                                    <el-col class="cstm-percent" :span="7">{{ item.show ? ((100 / totalAmount) *
+                                        +item.amount).toFixed(0) + '%' : '-'}}
+                                    </el-col>
+                                    <el-col class="cstm-amount" :span="7">{{ Number(item.amount).toLocaleString('ru',
+                                        {minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                        }}&#8381;
+                                    </el-col>
+                                </div>
                             </el-row>
                         </div>
                     </div>
@@ -101,9 +106,11 @@
                 this.totalAmount = 0;
 
                 for (let key in this.getTotalAmountOfCategories) {
-                    labels.push(this.getTotalAmountOfCategories[key].name);
-                    data.push(this.getTotalAmountOfCategories[key].amount);
-                    this.totalAmount += Number(this.getTotalAmountOfCategories[key].amount)
+                    if (this.getTotalAmountOfCategories[key].show) {
+                        labels.push(this.getTotalAmountOfCategories[key].name);
+                        data.push(this.getTotalAmountOfCategories[key].amount);
+                        this.totalAmount += Number(this.getTotalAmountOfCategories[key].amount)
+                    }
                 }
 
                 return {labels, data}
@@ -133,7 +140,9 @@
                     responsive: true,
                     maintainAspectRation: true,
                     legend: {
+                        onClick(e, legendItem) {
 
+                        },
                         position: 'top',
                         labels: {
                             padding: 5,
@@ -297,7 +306,7 @@
         height: 70px;
         border: none;
         background-color: rgba(61, 62, 72, 0.99);
-        color: #b682f9;
+        color: rgba(182, 130, 249, 0.94);
         width: 100%;
         padding-right: 45px;
         overflow-y: scroll;
@@ -305,5 +314,17 @@
 
     .text-chart-data-row {
         padding: 0 0 3px 15px;
+    }
+
+    .text-chart-data-row-wrapper {
+        cursor: pointer;
+    }
+
+    .text-chart-data-row:hover {
+        color: #FFF8F6F6;
+    }
+
+    .exclude {
+        color: rgba(182, 130, 249, 0.40);
     }
 </style>
