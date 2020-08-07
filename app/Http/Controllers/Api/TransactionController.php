@@ -7,6 +7,7 @@ use App\Http\Requests\TransactionFormRequest;
 use App\Http\Resources\Transaction as TransactionResource;
 use App\Http\Resources\TransactionCollection;
 use App\Models\Transaction;
+use http\Env\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,11 +29,17 @@ class TransactionController extends Controller
             'date_from' => 'nullable|date',
             'date_to' => 'nullable|date|after_or_equal:date_from',
             'page' => 'nullable|int',
+            'income_id' => 'nullable|int',
+            'expense_id' => 'nullable|int',
+            'type' => 'nullable|int',
         ]);
 
         // Получаем данные из запроса.
         $dateFrom = request('date_from');
         $dateTo = request('date_to');
+        $incomeID = request('income_id');
+        $expenseID = request('expense_id');
+        $type = request('type');
 
         $query = Transaction::query();
 
@@ -43,6 +50,15 @@ class TransactionController extends Controller
             })
             ->when($dateTo, function ($query) use ($dateTo) {
                 return $query->where('date', '<=', $dateTo);
+            })
+            ->when($incomeID, function ($query) use ($incomeID) {
+                return $query->where('income_id', '=', $incomeID);
+            })
+            ->when($expenseID, function ($query) use ($expenseID) {
+                return $query->where('expense_id', '=', $expenseID);
+            })
+            ->when($type, function ($query) use ($type) {
+                return $query->where('type', '=', $type);
             })
             ->groupBy(['date'])
             ->orderByDesc('date');
