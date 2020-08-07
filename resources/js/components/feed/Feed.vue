@@ -76,7 +76,6 @@
                 'setExpenseId',
                 'setIncomeId',
                 'setTypeId',
-
                 'setTotal'
             ]),
             getLocalDateString(date) {

@@ -162,7 +162,6 @@
                         {validator: checkAmount, trigger: 'blur'}
                     ]
                 },
-
             }
         },
         props: {
@@ -191,6 +190,7 @@
         methods: {
             ...mapActions([
                 'fetchTransactions',
+                'fetchTotalAmountOfCategories',
                 'fetchWallets',
                 'fetchIncomes',
                 'fetchExpenses',
@@ -215,7 +215,7 @@
                             })
                             .then(response => {
                                 if (response.status === 200) {
-                                    this.updatePoints(this.editorData.type);
+                                    this.updateOtherData(this.editorData.type);
                                     this.fetchTransactions()
                                 }
                             })
@@ -237,7 +237,7 @@
                 axios.delete(`/api/transactions/${this.editorData.edata.id}`)
                     .then(response => {
                         if (response.status === 200) {
-                            this.updatePoints(this.editorData.type);
+                            this.updateOtherData(this.editorData.type);
                             this.fetchTransactions()
                             this.$message({
                                 type: 'info',
@@ -254,7 +254,8 @@
                         });
                     });
             },
-            updatePoints(type) {
+            updateOtherData(type) {
+                this.fetchTotalAmountOfCategories();
                 this.fetchWallets()
                 if (type == 1) this.fetchIncomes()
                 if (type == 3) this.fetchExpenses()

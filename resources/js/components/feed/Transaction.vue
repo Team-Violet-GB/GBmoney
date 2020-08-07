@@ -19,7 +19,9 @@
                             :class="getTypeData(this.transaction.data).color"
                             style="display: flex; justify-content: flex-end">
                             {{ getTypeData(this.transaction.data).symbol}}{{
-                            Number(transaction.data.amount).toFixed(2).toLocaleString() }} &#8381;
+                            Number(transaction.data.amount).toLocaleString('ru',
+                            {minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} &#8381;
+
                         </div>
                     </el-col>
                 </el-row>
@@ -39,7 +41,8 @@
                             :class="getTypeData(this.transaction.data).color"
                             style="display: flex; justify-content: flex-end">
                             {{ getTypeData(this.transaction.data).symbol}}{{
-                            Number(transaction.data.amount).toFixed(2).toLocaleString() }} &#8381;
+                            Number(transaction.data.amount).toLocaleString('ru',
+                            {minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} &#8381;
                         </div>
                     </el-col>
                 </el-row>
