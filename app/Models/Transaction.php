@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Http\Requests\TransactionFormRequest;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Mockery\Exception;
@@ -29,6 +28,17 @@ class Transaction extends Model
     const TYPE_INCOME = 1;
     const TYPE_TRANSFER = 2;
     const TYPE_EXPENSE = 3;
+
+    /**
+     * Задаем какие атрибуты будут преобразованы в Даты.
+     *
+     * @var array
+     */
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'date',
+    ];
 
     /**
      * Метод заполняет модель значениями поступившими из запроса в соответствии с типом операции.

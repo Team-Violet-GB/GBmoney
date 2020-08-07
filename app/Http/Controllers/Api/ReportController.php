@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\ReportHelpers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ReportSumByExpensesCollection;
 use App\Http\Resources\ReportSumByIncomesCollection;
@@ -9,8 +10,13 @@ use App\Http\Resources\ReportSumByTagsCollection;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * Class ReportController
+ * @package App\Http\Controllers\Api
+ */
 class ReportController extends Controller
 {
     /**
@@ -47,6 +53,11 @@ class ReportController extends Controller
         return new ReportSumByIncomesCollection($query->get());
     }
 
+    /**
+     * @param Request $request
+     * @return ReportSumByExpensesCollection
+     * @throws ValidationException
+     */
     public function sumByExpenses(Request $request)
     {
         // Выполняем валидацию данных из запроса.
@@ -98,9 +109,9 @@ class ReportController extends Controller
         $query = Transaction::query();
 
         $query->selectRaw('transactions.tag_id, sum(transactions.amount) as amount, t.name')
-            ->Join('tags as t', 'transactions.tag_id', '=', 't.id')
+            ->leftJoin('tags as t', 'transactions.tag_id', '=', 't.id')
             ->where('transactions.user_id', Auth::id())
-            ->where('t.expense_id', $expense_id)
+            ->where('transactions.expense_id', $expense_id)
             ->when($dateFrom, function ($query) use ($dateFrom) {
                 return $query->where('transactions.date', '>=', $dateFrom);
             })
@@ -110,5 +121,33 @@ class ReportController extends Controller
             ->groupBy(['transactions.tag_id', 't.name']);
 
         return new ReportSumByTagsCollection($query->get());
+    }
+
+    public function sumByPointsByMonths(Request $request)
+    {
+        // Выполняем валидацию данных из запроса.
+        $this->validate($request, [
+            'date_from' => 'required|date',
+            'date_to' => 'required|date|after_or_equal:date_from',
+            'type' => ['required', Rule::in([Transaction::TYPE_INCOME, Transaction::TYPE_EXPENSE])]
+        ]);
+
+        if ($request->type == Transaction::TYPE_INCOME) {
+            $point_id = 'income_id';
+            $point_table = 'incomes';
+        }
+
+        if ($request->type == Transaction::TYPE_EXPENSE) {
+            $point_id = 'expense_id';
+            $point_table = 'expenses';
+        }
+
+        // Получаем массив месяцев (с начальной и конечно датой месяца) за выбранный период.
+        $dateArr = ReportHelpers::getArrMonthsForPeriod($request->date_from, $request->date_to);
+
+        // Получаем массив из сгруппированных по месяцам элементов с указанием суммы, id и названия поинта.
+        $arr = ReportHelpers::getArrWithSumPointsByDate($dateArr, $point_table, $point_id);
+
+        return response()->json($arr);
     }
 }
