@@ -51,5 +51,7 @@ Route::middleware('auth:api')->group(function () {
         Route::get('report/sum-expenses', 'ReportController@sumByExpenses');
         // Возвращаем суммы по каждому элементу подкатегории расходов.
         Route::get('report/sum-tags', 'ReportController@sumByTags');
+        // Возвращаем сумму по каждому элементу сгруппированные по месяцам.
+        Route::get('report/sum-points-by-months', 'ReportController@sumByPointsByMonths');
     });
 });
