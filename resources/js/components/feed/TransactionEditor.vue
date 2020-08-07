@@ -261,9 +261,9 @@
             updateOtherData(type) {
                 if (!this.feedTemplate) this.fetchTotalAmountOfCategories();
                 this.fetchTransactions();
-                this.fetchWallets()
-                if (type == 1) this.fetchIncomes()
-                if (type == 3) this.fetchExpenses()
+                this.fetchWallets();
+                if (type == 1) this.fetchIncomes();
+                if (type == 3) this.fetchExpenses();
             }
         }
     }
@@ -272,7 +272,6 @@
 <style scoped>
     .editor {
         color: rgb(255, 208, 75) !important;
-        /*background-color: #3d3e48;*/
         background-color: rgba(88, 89, 106, 0.30);
         border-radius: 2px;
         padding: 15px 17px 1px;

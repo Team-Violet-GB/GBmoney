@@ -186,6 +186,7 @@
             }
         },
         mounted() {
+            this.setPage(1)
             this.setDateFrom(this.currentISODateFrom);
             this.setDateTo(this.getLastISODateOfMonth(this.currentISODateFrom));
             this.onMonthChange();
