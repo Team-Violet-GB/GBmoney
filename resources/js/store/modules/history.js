@@ -14,6 +14,8 @@ export default {
         dateTo: '',
         expensesSums: [],
         incomesSums: [],
+        totalIncomes: "",
+        totalExpenses: "",
     },
     mutations: {
         setExpenses(state, data) {
@@ -42,6 +44,12 @@ export default {
         },
         setIncomesSums(state, data) {
             state.incomesSums = data
+        },
+        setTotalIncomes(state, data) {
+            state.totalIncomes = data
+        },
+        setTotalExpenses(state, data) {
+            state.totalExpenses = data
         },
     },
     actions: {
@@ -106,6 +114,12 @@ export default {
         },
         getIncomesSums(state) {
             return state.incomesSums
+        },
+        getTotalExpenses(state) {
+            return state.totalExpenses
+        },
+        getTotalIncomes(state) {
+            return state.totalIncomes
         },
     }
 }
