@@ -11,6 +11,8 @@ export default {
         },
         categories: null,
         labels: [],
+        dateFrom: '',
+        dateTo: '',
     },
     mutations: {
         setExpenses(state, data) {
@@ -28,7 +30,13 @@ export default {
         },
         setLabels(state, data) {
             state.labels = data
-        }
+        },
+        setDateFrom(state, data) {
+            state.dateFrom = data
+        },
+        setDateTo(state, data) {
+            state.dateTo = data
+        },
     },
     actions: {
         fetchCategories({ commit }) {
@@ -173,6 +181,12 @@ export default {
         },
         getLabels(state) {
             return state.labels
-        }
+        },
+        getDateFrom(state) {
+            return state.dateFrom
+        },
+        getDateTo(state) {
+            return state.dateTo
+        },
     }
 }

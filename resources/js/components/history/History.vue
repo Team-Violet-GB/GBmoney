@@ -58,13 +58,11 @@ export default {
         ]),
 
         ...mapMutations([
-            "history/setLabels"
+            "history/setLabels",
+            "history/setDateFrom",
+            "history/setDateTo",
         ]),
 
-        changeDate(newDate) {
-            this.dateFrom = newDate[0];
-            this.dateTo = newDate[1];
-        },
     },
     mounted() {
         this.$store.dispatch('history/fetchCategories')
