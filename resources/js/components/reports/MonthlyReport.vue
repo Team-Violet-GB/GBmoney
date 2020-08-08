@@ -37,8 +37,8 @@
                     </el-row>
                     <div class="text-chart-data-wrapper">
                         <div class="text-chart-data">
-                            <el-row v-for="(item, index) in getTotalAmountOfCategories" :key="index" :class="{exclude: !item.show}"
-                                    class="text-chart-data-row">
+                            <el-row v-for="(item, index) in getTotalAmountOfCategories" :key="index"
+                                    class="text-chart-data-row" :style="{color: item.show ? item.color : 'rgba(110, 110, 114, 0.99)'}">
                                 <div @click="item.show = !item.show" class="text-chart-data-row-wrapper" style="cursor: pointer">
                                     <el-col :span="10">{{ item.name }}</el-col>
                                     <el-col class="cstm-percent" :span="7">{{ item.show ? ((100 / totalAmount) *
@@ -104,32 +104,26 @@
             transformResponseToChartData() {
                 let labels = [];
                 let data = [];
+                let colors = [];
                 this.totalAmount = 0;
 
                 for (let key in this.getTotalAmountOfCategories) {
                     if (this.getTotalAmountOfCategories[key].show) {
                         labels.push(this.getTotalAmountOfCategories[key].name);
                         data.push(this.getTotalAmountOfCategories[key].amount);
+                        colors.push(this.getTotalAmountOfCategories[key].color);
                         this.totalAmount += Number(this.getTotalAmountOfCategories[key].amount)
                     }
                 }
-
-                return {labels, data}
+                console.log(colors)
+                return {labels, data, colors}
             },
             dataChart() {
                 return {
                     labels: this.transformResponseToChartData.labels,
                     datasets: [
                         {
-                            label: 'Расходы',
-                            backgroundColor: [
-                                'rgba(255,0,0,0.65)',
-                                'rgba(127,108,246,0.65)',
-                                'rgba(241,217,5,0.65)',
-                                'rgba(7,227,52,0.65)',
-                                'rgba(13,149,245,0.65)',
-                                'rgba(255,99,3,0.65)'
-                            ],
+                            backgroundColor: this.transformResponseToChartData.colors,
                             borderColor: 'rgba(190,99,255,0)',
                             data: this.transformResponseToChartData.data
                         }
@@ -306,8 +300,7 @@
         padding: 7px 0;
         height: 70px;
         border: none;
-        background-color: rgba(61, 62, 72, 0.99);
-        color: rgba(182, 130, 249, 0.94);
+        background-color: #3D3E48;
         width: 100%;
         padding-right: 45px;
         overflow-y: scroll;
@@ -315,6 +308,7 @@
 
     .text-chart-data-row {
         padding: 0 0 3px 15px;
+        font-weight: 600;
     }
 
     .text-chart-data-row-wrapper {
@@ -323,9 +317,5 @@
 
     .text-chart-data-row:hover {
         color: #FFF8F6F6;
-    }
-
-    .exclude {
-        color: rgba(182, 130, 249, 0.40);
     }
 </style>
