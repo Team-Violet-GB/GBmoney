@@ -1,18 +1,21 @@
 import axios from 'axios'
+import store from "element-ui/packages/cascader-panel/src/store";
+import da from "element-ui/src/locale/lang/da";
 
 export default {
     namespaced: true,
     state: {
         expenses: null,
         incomes: null,
-        sums: {
+        categories: {
           incomes: null,
           expenses: null
         },
-        categories: null,
         labels: [],
         dateFrom: '',
         dateTo: '',
+        expensesSums: [],
+        incomesSums: [],
     },
     mutations: {
         setExpenses(state, data) {
@@ -21,12 +24,11 @@ export default {
         setIncomes(state, data) {
             state.incomes = data
         },
-        setCategories(state, data) {
-            state.categories = data
+        setIncomesCategories(state, data) {
+            state.categories.incomes = data
         },
-        setSums(state, data) {
-            data.incomes ? state.sums.incomes = data.incomes : null
-            data.expenses ? state.sums.expenses = data.expenses : null
+        setExpensesCategories(state, data) {
+            state.categories.expenses = data
         },
         setLabels(state, data) {
             state.labels = data
@@ -37,144 +39,57 @@ export default {
         setDateTo(state, data) {
             state.dateTo = data
         },
+        setExpensesSums(state, data) {
+            state.expensesSums = data
+        },
+        setIncomesSums(state, data) {
+            state.incomesSums = data
+        },
     },
     actions: {
-        fetchCategories({ commit }) {
-          commit("setCategories", {
-              "1": "Авто",
-              "2": "Дом",
-          })
-        },
-        fetchIncomes({commit}, dates) {
-            /*let data = {
-                "01.2020": {
-                    "1": 125000,
-                    "2": 124000,
-                },
-                "02.2020": {
-                    "1": 122000,
-                    "2": 53300,
-                },
-                "03.2020": {
-                    "1": 125000,
-                    "2": 13400,
-                },
-                "04.2020": {
-                    "1": 125000,
-                    "2": 10400,
-                },
-                "05.2020": {
-                    "1": 125000,
-                    "2": 12400,
-                },
-                "06.2020": {
-                    "1": 12500,
-                    "2": 24400,
-                },
-                "07.2020": {
-                    "1": 125000,
-                    "2": 22400,
-                },
-                "08.2020": {
-                    "1": 125000,
-                    "2": 104000,
-                },
-                "09.2020": {
-                    "1": 12000,
-                    "2": 13400,
-                },
-                "10.2020": {
-                    "1": 125000,
-                    "2": 13400,
-                },
-                "11.2020": {
-                    "1": 125000,
-                    "2": 0,
-                },
-                "12.2020": {
-                    "1": 125000,
-                    "2": 1200,
-                },
-            }*/
-            let data = null
+        fetchIncomes(state) {
             const headers = {
                 'Content-Type': 'application/json'
             }
             const params = {
-                date_from: "01-2020",
-                date_to: "08-2020",
+                date_from: this.getters.getDateFrom,
+                date_to: this.getters.getDateTo,
                 type: 1
             }
+
             axios.get('api/report/sum-points-by-months', {params: params, headers: headers})
                 .then(response => {
-                    console.log(response)
+                    state.commit('setIncomes', response.data)
                 })
                 .catch((error) => {
                     console.log(error)
                 })
-            let labels = []
-            for (let key in data) {
-                labels.push(key)
-            }
-            commit("setLabels", labels)
-            commit("setIncomes", data)
         },
-        fetchExpenses({commit}) {
-            commit("setExpenses", {
-                "01.2020": {
-                    "1": 125000,
-                    "2": 12400,
-                },
-                "02.2020": {
-                    "1": 122000,
-                    "2": 12400,
-                },
-                "03.2020": {
-                    "1": 125000,
-                    "2": 16400,
-                },
-                "04.2020": {
-                    "1": 125000,
-                    "2": 12400,
-                },
-                "05.2020": {
-                    "1": 125000,
-                    "2": 1240,
-                },
-                "06.2020": {
-                    "1": 12500,
-                    "2": 12400,
-                },
-                "07.2020": {
-                    "1": 125000,
-                    "2": 12400,
-                },
-                "08.2020": {
-                    "1": 125000,
-                    "2": 124000,
-                },
-                "09.2020": {
-                    "1": 12000,
-                    "2": 12400,
-                },
-                "10.2020": {
-                    "1": 125000,
-                    "2": 12400,
-                },
-                "11.2020": {
-                    "1": 125000,
-                    "2": 12400,
-                },
-                "12.2020": {
-                    "1": 125000,
-                    "2": 12400,
-                },
-            })
+        fetchExpenses(state) {
+            const headers = {
+                'Content-Type': 'application/json'
+            }
+            const params = {
+                date_from: this.getters.getDateFrom,
+                date_to: this.getters.getDateTo,
+                type: 3
+            }
+
+            axios.get('api/report/sum-points-by-months', {params: params, headers: headers})
+                .then(response => {
+                    state.commit('setExpenses', response.data)
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
         }
     },
     getters: {
-        getSums(state) {
-            return state.sums
+        getIncomes(state) {
+            return state.incomes
+        },
+        getExpenses(state) {
+            return state.expenses
         },
         getCategories(state) {
             return state.categories
@@ -187,6 +102,12 @@ export default {
         },
         getDateTo(state) {
             return state.dateTo
+        },
+        getExpensesSums(state) {
+            return state.expensesSums
+        },
+        getIncomesSums(state) {
+            return state.incomesSums
         },
     }
 }
