@@ -7,7 +7,7 @@
                 </div>
             </el-col>
         </el-row>
-        <CalendarMonth @changeDate="newDate => onMonthChange(newDate)"/>
+        <CalendarMonth v-bind:default-value="this.currentISODateFrom" @changeDate="newDate => onMonthChange(newDate)"/>
         <el-card v-for="cat in this.$store.getters.getCategories" :key="id" class="box-card">
         </el-card>
     </div>
@@ -53,11 +53,13 @@ export default {
                 datasets: [
                     {
                         label: 'Доходы',
-                        data: store.getters["history/getIncomesSums"]
+                        data: store.getters["history/getIncomesSums"],
+                        borderColor: ['green']
                     },
                     {
                         label: 'Расходы',
-                        data: store.getters["history/getExpensesSums"]
+                        data: store.getters["history/getExpensesSums"],
+                        borderColor: ['red']
                     },
                 ]
             }
@@ -78,25 +80,18 @@ export default {
         }),
         onMonthChange(range) {
             if (typeof (range) === "object") {
-                this.$store.commit('history/setDateFrom', range.from);
-                this.$store.commit('history/setDateTo', range.to);
+                store.commit('setDateFrom', range.from)
+                store.commit('setDateTo', range.to)
             }
-            this.$store.dispatch('history/fetchExpenses')
-            this.$store.dispatch('history/fetchIncomes')
+            store.dispatch('history/fetchExpenses')
+            store.dispatch('history/fetchIncomes')
         },
-        update() {
-            this.$store.commit('setDateFrom', this.currentISODateFrom)
-            this.$store.commit('setDateTo', this.currentISODateTo)
-            this.$store.dispatch('history/fetchExpenses')
-            this.$store.dispatch('history/fetchIncomes')
-        }
     },
     watch: {
         getIncomes: getIncomes => {
             let labels = []
             let cats = new Map
             let sum = []
-
             Object.keys(getIncomes).forEach(
                 key => {
                     labels.push(key.substr(0, 7))
@@ -110,8 +105,6 @@ export default {
                     }
                 }
             )
-            console.log(sum)
-            console.log(cats)
             store.commit('history/setIncomesCategories', cats)
             store.commit('history/setIncomesSums', sum)
             store.commit('history/setLabels', labels)
@@ -131,14 +124,14 @@ export default {
                     }
                 }
             )
-            console.log(sum)
-            console.log(cats)
             store.commit('history/setExpensesCategories', cats)
             store.commit('history/setExpensesSums', sum)
         },
     },
     mounted() {
-        this.update()
+        store.commit('setDateFrom', this.currentISODateFrom)
+        store.commit('setDateTo', this.currentISODateTo)
+        this.onMonthChange()
     },
 
 }

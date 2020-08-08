@@ -1,6 +1,4 @@
 import axios from 'axios'
-import store from "element-ui/packages/cascader-panel/src/store";
-import da from "element-ui/src/locale/lang/da";
 
 export default {
     namespaced: true,
@@ -47,11 +45,11 @@ export default {
         },
     },
     actions: {
-        fetchIncomes(state) {
+        fetchIncomes({ commit }) {
             const headers = {
                 'Content-Type': 'application/json'
             }
-            const params = {
+            let params = {
                 date_from: this.getters.getDateFrom,
                 date_to: this.getters.getDateTo,
                 type: 1
@@ -59,17 +57,17 @@ export default {
 
             axios.get('api/report/sum-points-by-months', {params: params, headers: headers})
                 .then(response => {
-                    state.commit('setIncomes', response.data)
+                    commit('setIncomes', response.data)
                 })
                 .catch((error) => {
                     console.log(error)
                 })
         },
-        fetchExpenses(state) {
+        fetchExpenses({ commit }) {
             const headers = {
                 'Content-Type': 'application/json'
             }
-            const params = {
+            let params = {
                 date_from: this.getters.getDateFrom,
                 date_to: this.getters.getDateTo,
                 type: 3
@@ -77,7 +75,7 @@ export default {
 
             axios.get('api/report/sum-points-by-months', {params: params, headers: headers})
                 .then(response => {
-                    state.commit('setExpenses', response.data)
+                    commit('setExpenses', response.data)
                 })
                 .catch((error) => {
                     console.log(error)
