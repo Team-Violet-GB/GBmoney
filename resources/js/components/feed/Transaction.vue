@@ -1,9 +1,10 @@
 <template>
     <div>
-        <!--        разметка и поведение для ленты-->
-        <div ref="div" v-if="getEditable" class="tran-wrapper" @click="openEditor">
+        <div ref="div" class="tran-wrapper" @click="openEditor">
             <el-card :class="{active: editorData.isEdit && editorData.transactionGroupLength > 1}">
-                <el-row :gutter="10" class="tran-row-data">
+
+                <!--        разметка и поведение для ленты-->
+                <el-row v-if="feedTemplate" :gutter="10" class="tran-row-data">
                     <el-col :span="3">
                         <div>{{ from.name }}</div>
                     </el-col>
@@ -11,39 +12,46 @@
                     <el-col :span="6"><span>{{ to.to }}</span><span class="tran-tag-name">{{ to.tagName }}</span>
                     </el-col>
                     <el-col :span="8">
-                        <div class="tran-comment">{{ transaction.data.comment }} &nbsp;</div>
+                        <div class="tran-comment text-no-wrap" :title="transaction.data.comment">&nbsp;{{ transaction.data.comment }}</div>
                     </el-col>
                     <el-col :span="4">
                         <div
                             :class="getTypeData(this.transaction.data).color"
                             style="display: flex; justify-content: flex-end">
-                            {{ getTypeData(this.transaction.data).symbol}}{{ transaction.data.amount }} &#8381;
+                            {{ getTypeData(this.transaction.data).symbol}}{{
+                            Number(transaction.data.amount).toLocaleString('ru',
+                            {minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} &#8381;
+
+                        </div>
+                    </el-col>
+                </el-row>
+
+                <!--        разметка для отчетов-->
+                <el-row v-else :gutter="10" class="tran-row-data">
+                    <el-col :span="5" class="text-no-wrap">{{ from.name }}</el-col>
+                    <el-col :span="2">
+                        <i :class="getTypeData(this.transaction.data).color" class="el-icon-right"></i>
+                    </el-col>
+                    <el-col :span="5" class="text-no-wrap">
+                        {{ to.to }}<span class="tran-tag-name">{{ to.tagName }}</span>
+                    </el-col>
+                    <el-col :span="6"><div :title="transaction.data.comment" class="tran-comment text-no-wrap">&nbsp;{{ transaction.data.comment }}</div></el-col>
+                    <el-col :span="6">
+                        <div
+                            :class="getTypeData(this.transaction.data).color"
+                            style="display: flex; justify-content: flex-end">
+                            {{ getTypeData(this.transaction.data).symbol}}{{
+                            Number(transaction.data.amount).toLocaleString('ru',
+                            {minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} &#8381;
                         </div>
                     </el-col>
                 </el-row>
             </el-card>
         </div>
 
-        <!--        разметка для отчетов-->
-        <div v-else>
-            <el-row :gutter="10" class="tran-row-data">
-                <el-col :span="6">
-                    <div>{{ from.name }}</div>
-                </el-col>
-                <el-col :span="5"><span style="color: #8e8e8e">{{ from.typeName }}</span></el-col>
-                <el-col :span="8">
-                    <span>{{ to.to }}</span><span class="tran-tag-name">{{ to.tagName }}</span>
-                </el-col>
-                <el-col :span="5">
-                    <span :class="getTypeData(this.transaction.data).color"
-                          style="display: flex;justify-content: flex-end">{{ getTypeData(this.transaction.data).symbol}}{{ transaction.data.amount }} &#8381;</span>
-                </el-col>
-            </el-row>
-        </div>
-
-        <!--    подключаемый по условию компонент редактора транзакций    -->
+        <!--    компонент редактора транзакций    -->
         <transactionEditor
-            v-if="getEditable && editorData.isEdit"
+            v-if="editorData.isEdit"
             :editorData="editorData"
         />
     </div>
@@ -70,6 +78,12 @@
                 default() {
                     return Object;
                 }
+            },
+            feedTemplate: {
+                type: Boolean,
+                default() {
+                    return true;
+                }
             }
         },
         computed: {
@@ -80,7 +94,6 @@
                 'tags',
                 'getErrorStatus',
                 'getErrorInfo',
-                'getEditable',
                 'getTransactions'
             ]),
             from() {
@@ -167,9 +180,12 @@
     .tran-comment {
         color: #886ebb;
         font-weight: 400;
-        white-space: nowrap;
+    }
+
+    .text-no-wrap {
         overflow: hidden;
         text-overflow: ellipsis;
+        white-space: nowrap;
         padding: 0 5px;
     }
 
