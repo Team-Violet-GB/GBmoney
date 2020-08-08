@@ -4,7 +4,7 @@
             <el-col :span="12">
 
                 <!--                выбор диапазона месяцов-->
-                <div class="options">
+                <div class="choisers">
                     <month-picker @changeDate="newDate => onMonthChange(newDate)"/>
                     <div class="block">
                         <el-radio-group @change="onMonthChange" v-model="typeOfChart" size="small"
@@ -18,16 +18,16 @@
                 <!--                круговая диаграмма категорий-->
                 <div class="chart-block">
                     <div class="total-amount-wrapper">
-                        <div v-if="totalAmount !== 0" class="total-amount">{{ totalAmount.toLocaleString('ru',
+                        <div v-if="totalAmount !== 0 && getLoaded" class="total-amount">{{ totalAmount.toLocaleString('ru',
                             { maximumFractionDigits: 0 }) }}&#8381
                         </div>
-                        <div v-else class="total-amount">Нет данных</div>
+<!--                        <div v-else class="total-amount">Нет данных</div>-->
                     </div>
-                    <monthChart ref="chart" :chartData="dataChart" :options="chartOptions"/>
+                    <monthChart v-if="getLoaded" ref="chart" :chartData="dataChart" :options="chartOptions"/>
                 </div>
 
                 <!--                текстовое отображение данных диаграммы-->
-                <div v-if="!getErrorStatus" class="box-card text-chart-table-wrapper">
+                <div v-if="getLoaded" class="box-card text-chart-table-wrapper">
                     <el-row class="tran-group-header">
                         <el-col class="text-chart-data-name" :span="10">{{ typeOfChart }}</el-col>
                         <el-col class="cstm-percent" :span="7">100%</el-col>
@@ -38,8 +38,10 @@
                     <div class="text-chart-data-wrapper">
                         <div class="text-chart-data">
                             <el-row v-for="(item, index) in getTotalAmountOfCategories" :key="index"
-                                    class="text-chart-data-row" :style="{color: item.show ? item.color : 'rgba(110, 110, 114, 0.99)'}">
-                                <div @click="item.show = !item.show" class="text-chart-data-row-wrapper" style="cursor: pointer">
+                                    class="text-chart-data-row"
+                                    :style="{color: item.show ? item.color : 'rgba(110, 110, 114, 0.99)'}">
+                                <div @click="item.show = !item.show"
+                                     class="text-chart-data-row-wrapper" style="cursor: pointer">
                                     <el-col :span="10">{{ item.name }}</el-col>
                                     <el-col class="cstm-percent" :span="7">{{ item.show ? ((100 / totalAmount) *
                                         +item.amount).toFixed(0) + '%' : '-'}}
@@ -65,7 +67,7 @@
                         </el-alert>
 
                         <!--                лента-->
-                        <feed v-else :feed-template="false"/>
+                        <feed v-if="getLoaded" :feed-template="false"/>
                     </div>
                 </div>
             </el-col>
@@ -98,6 +100,7 @@
                 'getTotalAmountOfCategories',
                 'getErrorStatus',
                 'getErrorInfo',
+                'getLoaded',
                 'getPage',
                 'getTotal'
             ]),
@@ -124,7 +127,9 @@
                     datasets: [
                         {
                             backgroundColor: this.transformResponseToChartData.colors,
-                            borderColor: 'rgba(190,99,255,0)',
+                            borderColor: 'rgba(44,46,56,1)',
+                            borderWidth: 10,
+                            borderAlign: 'inner',
                             data: this.transformResponseToChartData.data
                         }
                     ]
@@ -135,14 +140,12 @@
                     responsive: true,
                     maintainAspectRation: true,
                     legend: {
-                        onClick(e, legendItem) {
-
-                        },
-                        position: 'top',
-                        labels: {
-                            padding: 5,
-                            fontColor: 'rgb(255,255,255)'
-                        }
+                        display: false,
+                        // position: 'top',
+                        // labels: {
+                        //     padding: 5,
+                        //     fontColor: 'rgb(255,255,255)'
+                        // }
                     }
                 }
             },
@@ -158,7 +161,6 @@
             ...mapMutations([
                 'setTransactions',
                 'setTotalAmountOfCategories',
-
                 'setPage',
                 'setDateFrom',
                 'setDateTo',
@@ -167,6 +169,7 @@
                 'setTypeId',
             ]),
             onMonthChange(range) {
+
                 //установка параметров запросов получения данных диаграммы списка транзакций
                 if (typeof (range) === "object") {
                     this.setDateFrom(range.from);
@@ -190,7 +193,8 @@
             }
         },
         mounted() {
-            this.setPage(1)
+            this.totalAmount = 0;
+            this.setPage(1);
             this.setDateFrom(this.currentISODateFrom);
             this.setDateTo(this.getLastISODateOfMonth(this.currentISODateFrom));
             this.onMonthChange();
@@ -204,7 +208,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .options {
+    .choisers {
         display: flex;
         justify-content: flex-end;
         align-items: baseline;

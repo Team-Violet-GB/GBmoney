@@ -1,5 +1,5 @@
 <template>
-  <div class="options">
+  <div class="choisers">
     <span class="demonstration">Месяц&nbsp;&nbsp;</span>
     <el-date-picker
       v-model="dateSelect"

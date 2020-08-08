@@ -16,6 +16,7 @@ export default {
                 type: this.getters.getTypeId
             }
             commit('setErrorStatus', false);
+            commit('setLoaded', false);
             axios.get('/api/transactions', {params: params, headers: headers})
                 .then(response => {
                     commit('setTotal', response.data.meta.total);
@@ -24,12 +25,13 @@ export default {
                         commit('setErrorStatus', true);
                         commit('setErrorInfo', `За запрошеный период транзакции не производились ...`);
                     } else {
-                        commit('setErrorStatus', false);
+                        commit('setLoaded', true);
                     }
                 })
                 .catch(error => {
                     commit('setErrorStatus', true);
                     commit('setErrorInfo', `Ошибка во время запроса транзакций: (${error})`);
+                    console.log(error)
                 })
         },
         fetchTransactionsByPoint({ commit }, data) {
@@ -53,8 +55,6 @@ export default {
         setTransactions(state, data) {
             state.transactions = data
         },
-
-        //сеттеры параметров запроса
         setPage(state, data) {
             state.page = Number(data)
         },
@@ -73,15 +73,15 @@ export default {
         setIncomeId(state, data) {
             state.incomeId = data
         },
-
-
         setErrorStatus(state, data) {
             state.errorStatus = data
         },
         setErrorInfo(state, data) {
             state.errorInfo = data
         },
-
+        setLoaded(state, data) {
+            state.loaded = data
+        },
         setTotal(state, data) {
             state.total = Number(data)
         },
@@ -94,8 +94,7 @@ export default {
         transactionsByPoint: null,
         errorStatus: false,
         errorInfo: 'Не предопределенное сообщение об ошибке ...',
-
-        //параметры запроса транзакций
+        loaded: false,
         page: 1,
         dateFrom: '',
         dateTo: '',
@@ -118,7 +117,9 @@ export default {
         getErrorInfo(state) {
             return state.errorInfo
         },
-
+        getLoaded(state) {
+            return state.loaded
+        },
         getDateFrom(state) {
             return state.dateFrom
         },

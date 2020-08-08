@@ -32,6 +32,8 @@ export default {
                 date_to: this.getters.getDateTo
             }
             commit('setErrorStatus', false);
+            commit('setLoaded', false);
+
             axios.get(url, {params: params, headers: headers})
                 .then(response => {
                     commit('setTotalAmountOfCategories', response.data.data);
@@ -39,12 +41,13 @@ export default {
                         commit('setErrorStatus', true);
                         commit('setErrorInfo', `За запрошеный период транзакции не производились ...`);
                     } else {
-                        commit('setErrorStatus', false);
+                        commit('setLoaded', true);
                     }
                 })
                 .catch(error => {
                     commit('setErrorStatus', true);
                     commit('setErrorInfo', `Ошибка во время запроса транзакций: (${error})`);
+                    console.log(error)
                 })
         }
     },
@@ -67,14 +70,13 @@ export default {
                     Math.floor(Math.random() * (255 - 210 + 1)) + 210
                 ]
                 let rnd, temp;
-                for(let i = rgb.length - 1; i > 0; i--){
+                for(let i = rgb.length - 1; i > 0; i--) {
                     rnd = Math.floor(Math.random()*(i + 1));
                     temp = rgb[rnd];
                     rgb[rnd] = rgb[i];
                     rgb[i] = temp;
                 }
                 let [red, green, blue] = rgb;
-
                 data[key].color = `rgba(${red},${green},${blue},0.90)`
             }
             state.totalAmountOfCategories = data
