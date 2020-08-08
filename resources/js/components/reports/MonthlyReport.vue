@@ -17,32 +17,38 @@
 
                 <!--                круговая диаграмма категорий-->
                 <div class="chart-block">
-                    <div class="total-amount-wrapper" v-if="totalAmount !== 0">
-                        <div class="total-amount">{{ totalAmount.toLocaleString('ru',
-                            { maximumFractionDigits: 0 }) }}&#8381</div>
+                    <div class="total-amount-wrapper">
+                        <div v-if="totalAmount !== 0" class="total-amount">{{ totalAmount.toLocaleString('ru',
+                            { maximumFractionDigits: 0 }) }}&#8381
+                        </div>
+                        <div v-else class="total-amount">Нет данных</div>
                     </div>
                     <monthChart ref="chart" :chartData="dataChart" :options="chartOptions"/>
                 </div>
 
                 <!--                текстовое отображение данных диаграммы-->
-                <div v-if="totalAmount !== 0" class="box-card text-chart-table-wrapper">
+                <div v-if="!getErrorStatus" class="box-card text-chart-table-wrapper">
                     <el-row class="tran-group-header">
                         <el-col class="text-chart-data-name" :span="10">{{ typeOfChart }}</el-col>
                         <el-col class="cstm-percent" :span="7">100%</el-col>
                         <el-col class="tran-group-header-sum" :span="7">{{ totalAmount.toLocaleString('ru',
-                            { maximumFractionDigits: 0 }) }}&#8381</el-col>
+                            { maximumFractionDigits: 0 }) }}&#8381
+                        </el-col>
                     </el-row>
                     <div class="text-chart-data-wrapper">
                         <div class="text-chart-data">
-                            <el-row class="text-chart-data-row" v-for="(item, index) in getTotalAmountOfCategories" :key="index">
-                                <el-col :span="10">{{ item.name }}</el-col>
-                                <el-col class="cstm-percent" :span="7">{{ ((100 / totalAmount) *
-                                    +item.amount).toFixed(0) }}%
-                                </el-col>
-                                <el-col class="cstm-amount" :span="7">{{ Number(item.amount).toLocaleString('ru',
-                                    {minimumFractionDigits: 2, maximumFractionDigits: 2 })
-                                    }}&#8381;
-                                </el-col>
+                            <el-row v-for="(item, index) in getTotalAmountOfCategories" :key="index"
+                                    class="text-chart-data-row" :style="{color: item.show ? item.color : 'rgba(110, 110, 114, 0.99)'}">
+                                <div @click="item.show = !item.show" class="text-chart-data-row-wrapper" style="cursor: pointer">
+                                    <el-col :span="10">{{ item.name }}</el-col>
+                                    <el-col class="cstm-percent" :span="7">{{ item.show ? ((100 / totalAmount) *
+                                        +item.amount).toFixed(0) + '%' : '-'}}
+                                    </el-col>
+                                    <el-col class="cstm-amount" :span="7">{{ Number(item.amount).toLocaleString('ru',
+                                        {minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                        }}&#8381;
+                                    </el-col>
+                                </div>
                             </el-row>
                         </div>
                     </div>
@@ -98,30 +104,26 @@
             transformResponseToChartData() {
                 let labels = [];
                 let data = [];
+                let colors = [];
                 this.totalAmount = 0;
 
                 for (let key in this.getTotalAmountOfCategories) {
-                    labels.push(this.getTotalAmountOfCategories[key].name);
-                    data.push(this.getTotalAmountOfCategories[key].amount);
-                    this.totalAmount += Number(this.getTotalAmountOfCategories[key].amount)
+                    if (this.getTotalAmountOfCategories[key].show) {
+                        labels.push(this.getTotalAmountOfCategories[key].name);
+                        data.push(this.getTotalAmountOfCategories[key].amount);
+                        colors.push(this.getTotalAmountOfCategories[key].color);
+                        this.totalAmount += Number(this.getTotalAmountOfCategories[key].amount)
+                    }
                 }
-
-                return {labels, data}
+                console.log(colors)
+                return {labels, data, colors}
             },
             dataChart() {
                 return {
                     labels: this.transformResponseToChartData.labels,
                     datasets: [
                         {
-                            label: 'Расходы',
-                            backgroundColor: [
-                                'rgba(255,0,0,0.65)',
-                                'rgba(127,108,246,0.65)',
-                                'rgba(241,217,5,0.65)',
-                                'rgba(7,227,52,0.65)',
-                                'rgba(13,149,245,0.65)',
-                                'rgba(255,99,3,0.65)'
-                            ],
+                            backgroundColor: this.transformResponseToChartData.colors,
                             borderColor: 'rgba(190,99,255,0)',
                             data: this.transformResponseToChartData.data
                         }
@@ -133,7 +135,9 @@
                     responsive: true,
                     maintainAspectRation: true,
                     legend: {
+                        onClick(e, legendItem) {
 
+                        },
                         position: 'top',
                         labels: {
                             padding: 5,
@@ -296,8 +300,7 @@
         padding: 7px 0;
         height: 70px;
         border: none;
-        background-color: rgba(61, 62, 72, 0.99);
-        color: #b682f9;
+        background-color: #3D3E48;
         width: 100%;
         padding-right: 45px;
         overflow-y: scroll;
@@ -305,5 +308,14 @@
 
     .text-chart-data-row {
         padding: 0 0 3px 15px;
+        font-weight: 600;
+    }
+
+    .text-chart-data-row-wrapper {
+        cursor: pointer;
+    }
+
+    .text-chart-data-row:hover {
+        color: #FFF8F6F6;
     }
 </style>

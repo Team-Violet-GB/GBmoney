@@ -272,7 +272,7 @@
 <style scoped>
     .editor {
         color: rgb(255, 208, 75) !important;
-        background-color: rgba(88, 89, 106, 0.30);
+        background-color: rgba(88, 89, 106, 0.0);
         border-radius: 2px;
         padding: 15px 17px 1px;
     }

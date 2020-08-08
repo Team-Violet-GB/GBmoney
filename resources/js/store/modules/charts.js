@@ -57,6 +57,26 @@ export default {
             state.pieData = pieData
         },
         setTotalAmountOfCategories(state, data) {
+            for (let key in data) {
+                data[key].show = true
+
+                // добавление данных о цвете для отображения категории на диаграмме
+                let rgb = [
+                    Math.floor(Math.random() * (50 - 2 + 1)) + 2,
+                    Math.floor(Math.random() * (255 - 2 + 1)) + 2,
+                    Math.floor(Math.random() * (255 - 210 + 1)) + 210
+                ]
+                let rnd, temp;
+                for(let i = rgb.length - 1; i > 0; i--){
+                    rnd = Math.floor(Math.random()*(i + 1));
+                    temp = rgb[rnd];
+                    rgb[rnd] = rgb[i];
+                    rgb[i] = temp;
+                }
+                let [red, green, blue] = rgb;
+
+                data[key].color = `rgba(${red},${green},${blue},0.90)`
+            }
             state.totalAmountOfCategories = data
         }
     },
@@ -96,8 +116,9 @@ export default {
         colors() {
             return ["#0a93d1", "#e6a23c", "#67c23a", "#0a93d1", "#f56c6c", "#909399",]
         },
+
         getTotalAmountOfCategories(state) {
             return state.totalAmountOfCategories
-        },
+        }
     }
 }
