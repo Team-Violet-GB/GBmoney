@@ -3,12 +3,7 @@ import { update } from "lodash";
 
 export default {
     actions: {
-        fetchTransactions({commit}, data) {
-                if (data.date_from) commit('setDateFrom', data.date_from)
-                if (data.date_to) commit('setDateTo', data.date_to)
-                if (data.income_id) commit('setIncomeId', Number(data.income_id))
-                if (data.expense_id) commit('setExpenseId', Number(data.expense_id))
-                if (data.wallet_id) commit('setWalletId', Number(data.wallet_id))
+        fetchTransactions({commit}) {
             const params = {
                 page: this.getters.getPage,
                 date_from: this.getters.getDateFrom,
@@ -18,6 +13,7 @@ export default {
                 income_id: this.getters.getIncomeId,
                 type: this.getters.getTypeId
             }
+
 
             commit('setErrorStatus', false);
             axios.get('/api/transactions', {params: params})
@@ -120,10 +116,10 @@ export default {
             return state.expenseId
         },
         getIncomeId(state) {
-            return state.walletId
+            return state.incomeId
         },
         getWalletId(state) {
-            return state.incomeId
+            return state.walletId
         },
         getTotal(state) {
             return Number(state.total)

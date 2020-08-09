@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex"
+import { mapGetters, mapActions, mapMutations } from "vuex"
 import LineChart from "../components/chart/LineChart"
 import PieChart from "../components/chart/PieChart"
 import Feed from "../components/feed/Feed"
@@ -97,7 +97,9 @@ export default {
 mounted() {
       if (this.type == 'income') this.loadingPie = false
       if (this.type == 'wallet') this.loadingPie = this.loadingLine = false
-      this.fetchTransactions({ [`${this.type}_id`]: this.id }) // получение данных для ленты
+
+      this.getTransactionList({ [`${this.type}_id`]: this.id }) // получение данных для ленты
+
       this.axios.get(`/api/${this.type}s/${this.id}`)  // получение данных о текущаем поинте
       .then(response => {
           this.point = response.data.data
@@ -124,6 +126,15 @@ mounted() {
       'fetchTransactions'
     ]),
 
+    ...mapMutations([
+        'setDateFrom',
+        'setDateTo',
+        'setExpenseId',
+        'setWalletId',
+        'setIncomeId',
+        'setTypeId',
+    ]),
+
     changeDate(newDate) {
       if (this.type == 'expense') {
         this.fetchPieChart({ dateFrom: newDate.from, dateTo: newDate.to })
@@ -131,7 +142,7 @@ mounted() {
       if (this.type == 'expense' || this.type == 'income') {
         this.fetchLineChart({ dateFrom: newDate.from, dateTo: newDate.to })
       }
-      this.fetchTransactions({ [`${this.type}_id`]: this.id, date_from: newDate.from, date_to: newDate.to })
+      this.getTransactionList({ [`${this.type}_id`]: this.id, dateFrom: newDate.from, dateTo: newDate.to })
     },
     
     fetchLineChart(data) {
@@ -166,8 +177,8 @@ mounted() {
         color.r = '255'
         color.g = color.b =  '0'
       } else {
-        color.b = '255'
-        color.r = color.g =  '0'
+        color.g = '255'
+        color.r = color.b =  '0'
       }
       return { names, amounts, color }
     },
@@ -229,6 +240,16 @@ mounted() {
         let hex = c.toString(16)
         return hex.length == 1 ? "0" + hex : hex
     },
+
+    getTransactionList(data) {
+        this.setDateFrom(data.dateFrom)
+        this.setDateTo(data.dateTo)
+        this.setIncomeId(data.income_id)
+        this.setExpenseId(data.expense_id)
+        this.setWalletId(data.wallet_id)
+        this.setTypeId(data.type)
+        this.fetchTransactions()
+    }
   },
 }
 </script>
