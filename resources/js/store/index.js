@@ -5,8 +5,8 @@ import points from './modules/points'
 import auth from './modules/auth'
 import icons from './modules/icons'
 import transactions from './modules/transactions'
+import history from './modules/history'
 import charts from './modules/charts'
-
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -16,6 +16,7 @@ export default new Vuex.Store({
         points,
         auth,
         icons,
+        history,
         charts
     }
 })
