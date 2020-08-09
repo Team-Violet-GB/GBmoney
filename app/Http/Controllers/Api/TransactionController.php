@@ -57,8 +57,7 @@ class TransactionController extends Controller
                 return $query->where('income_id', '=', $incomeID);
             })
             ->when($walletID, function ($query) use ($walletID) {
-                return $query
-                    ->where('wallet_id_from', '=', $walletID)
+                return $query->where('wallet_id_from', '=', $walletID)
                     ->orWhere('wallet_id_to', '=', $walletID);
             },)
             ->when($expenseID, function ($query) use ($expenseID) {

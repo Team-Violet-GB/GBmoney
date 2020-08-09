@@ -4,27 +4,21 @@ import { update } from "lodash";
 export default {
     actions: {
         fetchTransactions({commit}, data) {
-            var params = {}
-            if (data) {
-                params = data 
-                commit('setDateFrom', data.date_from)
-                commit('setDateTo', data.date_to)
-                commit('setIncomeId', data.income_id)
-                commit('setExpenseId', data.expense_id)
-                commit('setWalletId', data.wallet_id)
-                commit('setTypeId', data.type)
+                if (data.date_from) commit('setDateFrom', data.date_from)
+                if (data.date_to) commit('setDateTo', data.date_to)
+                if (data.income_id) commit('setIncomeId', Number(data.income_id))
+                if (data.expense_id) commit('setExpenseId', Number(data.expense_id))
+                if (data.wallet_id) commit('setWalletId', Number(data.wallet_id))
+            const params = {
+                page: this.getters.getPage,
+                date_from: this.getters.getDateFrom,
+                date_to: this.getters.getDateTo,
+                expense_id: this.getters.getExpenseId,
+                wallet_id: this.getters.getWalletId,
+                income_id: this.getters.getIncomeId,
+                type: this.getters.getTypeId
             }
-            else {
-                params = {
-                    page: this.getters.getPage,
-                    date_from: this.getters.getDateFrom,
-                    date_to: this.getters.getDateTo,
-                    expense_id: this.getters.getExpenseId,
-                    wallet_id: this.getters.getWalletId,
-                    income_id: this.getters.getIncomeId,
-                    type: this.getters.getTypeId
-                }
-            }
+
             commit('setErrorStatus', false);
             axios.get('/api/transactions', {params: params})
                 .then(response => {
