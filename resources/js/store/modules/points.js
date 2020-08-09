@@ -72,7 +72,7 @@ export default {
         updateWallets(state, points) {
             state.walletsList = points
             let summ = 0
-            for (let point in points)  summ += Number(points[point].amount)
+            for (let point in points) if (points[point].include) summ += Number(points[point].amount)
             state.walletsSumm = summ
         },
         updateExpenses(state, points) {
@@ -133,7 +133,7 @@ export default {
             return state.walletsSumm
         },
         expensesSumm(state) {
-            return state.walletsSumm
+            return state.expensesSumm
         },
         expensesLimit(state) {
             return state.expensesLimit
