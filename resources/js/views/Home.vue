@@ -155,13 +155,10 @@
               }
         },
 
-        async mounted() {
-            if (!this.incomes) {
-              var fetchInc = await this.fetchIncomes()
-              this.loadingIncomes = false
-            }
-            if (!this.wallets) this.fetchWallets()
-            if (!this.expenses) this.fetchExpenses()
+       mounted() {
+            this.fetchIncomes()
+            this.fetchWallets()
+            this.fetchExpenses()
         },
 
         methods: {

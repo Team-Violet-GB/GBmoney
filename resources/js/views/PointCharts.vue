@@ -7,12 +7,11 @@
       </el-col>
     </el-row>
 
-    <el-row >
-      <div class="cstm-col">
-        <CalendarMonth @changeDate="newDate => changeDate(newDate)" />
-        <Feed v-if="type == 'income' || type == 'wallet'" :transactions="getTransactionsByPoint" />
-      </div>
-    </el-row>
+    <div class="cstm-col">
+      <CalendarMonth @changeDate="newDate => changeDate(newDate)" />
+        <br>
+    </div>
+     <Feed v-if="type == 'income' || type == 'wallet'" />
 
     <el-row v-if="type == 'expense'">
       <el-col class="grid-content bg-purple cstm-col-left" :span="12">
@@ -35,13 +34,9 @@
           </div>
       </el-col>
       <el-col  class="grid-content bg-purple-light cstm-feed" :span="12">
-          <!-- <Feed :transactions="getTransactionsByPoint" v-loading="loadingFeed" /> -->
+        <Feed :feed-template="false" />
       </el-col>
     </el-row>
-
-
-
-
   </div>
 </template>
 
@@ -69,18 +64,18 @@ export default {
       pieSumm: 0,
       pieChart: null,
       lineChart: null,
-      loading: true, 
+      loadingPie: true, 
+      loadingLine: true,
     }
   },
 
   computed: {
-    ...mapGetters([
-      'getTransactionsByPoint',
-      'getLineData',
+    loading() {
+      if (!this.loadingPie && !this.loadingLine) return false
+      return true
+    },
 
-    ]),
-
-    thisMonth() {
+    intervalMonth() {
         let date = new Date()
         let dateFrom = new Date(date.getFullYear(), date.getMonth(), 1)
         let dateTo = new Date(date.getFullYear(), date.getMonth() + 1, 0)
@@ -89,7 +84,7 @@ export default {
         return  {dateFrom, dateTo}
     },
   
-    lastHalfYear() {
+    intervalHalfYear() {
         let date = new Date()
         let dateFrom = new Date(date.getFullYear(), date.getMonth() - 5 , 1)
         let dateTo = new Date(date.getFullYear(), date.getMonth() + 1, 0)
@@ -100,18 +95,25 @@ export default {
   },
 
 mounted() {
-      if (!this.getTransactionsByPoint) this.fetchTransactionsByPoint() // получение данных для ленты
-      
+      if (this.type == 'income') this.loadingPie = false
+      if (this.type == 'wallet') this.loadingPie = this.loadingLine = false
+      this.fetchTransactions({ [`${this.type}_id`]: this.id }) // получение данных для ленты
       this.axios.get(`/api/${this.type}s/${this.id}`)  // получение данных о текущаем поинте
       .then(response => {
           this.point = response.data.data
       })
       .then(() => {
         if (this.type == 'expense') {
-          this.fetchPieChart({ // получение данных для круглого графика
-            [`${this.type}_id`]: this.id,
-            dateFrom: this.lastHalfYear.dateFrom,
-            dateTo: this.lastHalfYear.dateTo,
+          this.fetchPieChart({ // получение данных для круглого графика за этот месяц
+            dateFrom: this.intervalMonth.dateFrom,
+            dateTo: this.intervalMonth.dateTo,
+          })
+        }
+
+        if (this.type == 'expense' || this.type == 'income') {
+          this.fetchLineChart({ // получение данных для линейного графика за пол года
+            dateFrom: this.intervalHalfYear.dateFrom,
+            dateTo: this.intervalHalfYear.dateTo,
           })
         }
       })
@@ -119,34 +121,51 @@ mounted() {
 
   methods: {
     ...mapActions([
-      'fetchTransactionsByPoint',
+      'fetchTransactions'
     ]),
 
     changeDate(newDate) {
-      this.fetchPieChart({
-        [`${this.type}_id`]: this.id,
-        dateFrom: newDate.from,
-        dateTo: newDate.to,
-        namePoint: this.point.name
-      })
+      this.fetchPieChart({ dateFrom: newDate.from, dateTo: newDate.to })
+      this.fetchLineChart({ dateFrom: newDate.from, dateTo: newDate.to })
+      this.fetchTransactions({ [`${this.type}_id`]: this.id, date_from: newDate.from, date_to: newDate.to })
     },
     
+    fetchLineChart(data) {
+        this.axios.get(`/api/report/sum-points-by-months?${this.type}_id=${this.id}&date_from=${data.dateFrom}&date_to=${data.dateTo}`)
+            .then(response => {
+              let lineData =  this.prepareLineData(response.data)
+              this.setLineChart(lineData)
+              this.loadingLine = false
+            })
+    },
+
     fetchPieChart(data) {
-        this.axios.get(`/api/report/sum-tags?expense_id=${data.expense_id}&date_from=${data.dateFrom}&date_to=${data.dateTo}`)
+        this.axios.get(`/api/report/sum-tags?expense_id=${this.id}&date_from=${data.dateFrom}&date_to=${data.dateTo}`)
             .then(response => {
                 this.pieTable = response.data.data
                 let pieData = this.preparePieData(response.data.data)
                 this.setPieChart(pieData)
-                this.loading = false
+                this.loadingPie = false
             })
+    },
 
-        // заглушка для линейного графика
-        var lineData = {
-            names: ["март","апрель","май","июнь","март","апрель","май","июнь","май","июнь","июнь",],
-            amounts: [0,15000,5000,15000,-10000,5000,15000,-10000,5000,30000,-10000,],
-            namePoint: this.point.name
-        }
-        this.setLineChart(lineData)
+    prepareLineData(months) {
+      let names = []
+      let amounts = []
+      let color = {}
+      for (let month in months) {
+        names.push(month)
+        if (months[month][0]) amounts.push(months[month][0].amount)
+        else amounts.push(0)
+      }
+      if (this.type == 'expense') {
+        color.r = '255'
+        color.g = color.b =  '0'
+      } else {
+        color.b = '255'
+        color.r = color.g =  '0'
+      }
+      return { names, amounts, color }
     },
 
     preparePieData(tags) {
@@ -171,9 +190,9 @@ mounted() {
             labels: lineData.names,
             datasets: [
               {
-                label: lineData.namePoint,
-                backgroundColor: "rgba(10, 147, 209, 0.2)",
-                borderColor: "rgba(10, 147, 209)",
+                label: this.point.name,
+                backgroundColor: `rgba(${lineData.color.r}, ${lineData.color.g}, ${lineData.color.b}, 0.2)`,
+                borderColor: `rgba(${lineData.color.r}, ${lineData.color.g}, ${lineData.color.b})`,
                 data: lineData.amounts,
               },
             ],

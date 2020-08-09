@@ -30,6 +30,7 @@ class TransactionController extends Controller
             'date_to' => 'nullable|date|after_or_equal:date_from',
             'page' => 'nullable|int',
             'income_id' => 'nullable|int',
+            'wallet_id' => 'nullable|int',
             'expense_id' => 'nullable|int',
             'type' => 'nullable|int',
         ]);
@@ -38,6 +39,8 @@ class TransactionController extends Controller
         $dateFrom = request('date_from');
         $dateTo = request('date_to');
         $incomeID = request('income_id');
+        $walletFromID = request('wallet_id');
+        $walletToID = request('wallet_id');
         $expenseID = request('expense_id');
         $type = request('type');
 
@@ -54,6 +57,12 @@ class TransactionController extends Controller
             ->when($incomeID, function ($query) use ($incomeID) {
                 return $query->where('income_id', '=', $incomeID);
             })
+            ->when($walletFromID, function ($query) use ($walletFromID) {
+                return $query->where('wallet_id_from', '=', $walletFromID);
+            })
+            // ->when($walletToID, function ($query) use ($walletToID) {
+            //     return $query->where('wallet_id_to', '=', $walletToID);
+            // })
             ->when($expenseID, function ($query) use ($expenseID) {
                 return $query->where('expense_id', '=', $expenseID);
             })
