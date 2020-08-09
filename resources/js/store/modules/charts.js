@@ -39,7 +39,7 @@ export default {
                         commit('setErrorStatus', true);
                         commit('setErrorInfo', `За запрошеный период транзакции не производились ...`);
                     } else {
-                        commit('setErrorStatus', false);
+                        commit('setErrorStatus', false)
                     }
                 })
                 .catch(error => {
