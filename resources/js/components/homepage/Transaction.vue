@@ -110,7 +110,6 @@ import Numbers from './Numbers.vue'
         ]),
 
         tagsFromCategory() {
-          console.log(this.tags)
           var tags = []
           for (var tag in this.tags){
               if (this.tags[tag].expense_id == this.transaction.toID && !this.tags[tag].deleted) {
