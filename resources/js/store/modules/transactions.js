@@ -4,9 +4,6 @@ import { update } from "lodash";
 export default {
     actions: {
         fetchTransactions({commit}) {
-            const headers = {
-                'Content-Type': 'application/json'
-            }
             const params = {
                 page: this.getters.getPage,
                 date_from: this.getters.getDateFrom,
@@ -17,7 +14,7 @@ export default {
             }
             commit('setErrorStatus', false);
             commit('setLoaded', false);
-            axios.get('/api/transactions', {params: params, headers: headers})
+            axios.get('/api/transactions', {params})
                 .then(response => {
                     commit('setTotal', response.data.meta.total);
                     commit('setTransactions', response.data.data);

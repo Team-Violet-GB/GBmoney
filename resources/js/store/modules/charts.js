@@ -24,9 +24,6 @@ export default {
         },
         fetchTotalAmountOfCategories({commit}) {
             const url = this.getters.getTypeId == 3 ? 'api/report/sum-expenses' : 'api/report/sum-incomes';
-            const headers = {
-                'Content-Type': 'application/json'
-            }
             const params = {
                 date_from: this.getters.getDateFrom,
                 date_to: this.getters.getDateTo
@@ -34,7 +31,7 @@ export default {
             commit('setErrorStatus', false);
             commit('setLoaded', false);
 
-            axios.get(url, {params: params, headers: headers})
+            axios.get(url, {params})
                 .then(response => {
                     commit('setTotalAmountOfCategories', response.data.data);
                     if ((Object.keys(response.data.data).length) === 0) {
@@ -65,22 +62,22 @@ export default {
             const rgbStaticData = [
                 [250, 169, 39],
                 [81, 190, 40],
+                [235, 42, 81],
+                [39, 136, 164],
+                [233, 130, 36],
+                [240, 44, 226],
+                [33, 251, 204],
                 [200, 50, 243],
                 [244, 66, 35],
-                [49, 171, 236],
                 [228, 247, 42],
-                [39, 136, 164],
                 [209, 73, 41],
                 [42, 225, 154],
-                [105, 246, 30],
-                [240, 44, 226],
-                [233, 130, 36],
-                [33, 251, 204],
+                [49, 171, 236],
                 [37, 202, 230],
                 [204, 243, 36],
                 [243, 45, 154],
                 [120, 171, 45],
-                [235, 42, 81]
+                [105, 246, 30],
             ];
 
             for (let key in data) {

@@ -5,53 +5,62 @@
 
                 <!--                выбор диапазона месяцов-->
                 <div class="params">
-                    <month-picker @changeDate="newDate => onMonthChange(newDate)"/>
-                    <div class="block">
-                        <el-radio-group @change="onMonthChange" v-model="typeOfChart" size="small"
-                                        style="margin-left:40px; width: 180px">
-                            <el-radio-button label="Доходы">Доходы</el-radio-button>
-                            <el-radio-button label="Расходы">Расходы</el-radio-button>
-                        </el-radio-group>
+                    <month-picker @changeDate="onMonthChange" style="float: left;"/>
+
+                    <!--                    выбор типа категории для отображения-->
+                    <div class="btn-group">
+                        <el-button-group>
+                            <el-button @click="onTypeBtnClick('Доходы')" type="success" size="mini"
+                                       :class="typeOfChart == 'Доходы' ? 'isActive' : 'inActive'">Доходы
+                            </el-button>
+                            <el-button @click="onTypeBtnClick('Расходы')" type="danger" size="mini"
+                                       :class="typeOfChart == 'Расходы' ? 'isActive' : 'inActive'" class="inActive">
+                                Расходы
+                            </el-button>
+                        </el-button-group>
+
                     </div>
                 </div>
 
                 <!--                круговая диаграмма категорий-->
                 <div class="chart-block">
                     <div class="total-amount-wrapper">
-                        <div v-show="totalAmount !== 0 && getLoaded" class="total-amount">{{
+                        <div v-show="totalAmount !== 0 && getLoaded" class="total-amount"
+                             :style="{color: typeOfChart === 'Доходы' ? '#67C23A' : '#F56C6C'}">{{
                             totalAmount.toLocaleString('ru',
                             { maximumFractionDigits: 0 }) }}&#8381
                         </div>
                     </div>
                     <monthChart v-show="getLoaded" ref="chart" :chartData="dataChart" :options="chartOptions"/>
-                </div>
 
-                <!--                текстовое отображение данных диаграммы-->
-                <div v-if="getLoaded" class="box-card text-chart-table-wrapper">
-                    <el-row class="tran-group-header">
-                        <el-col class="text-chart-data-name" :span="10">{{ typeOfChart }}</el-col>
-                        <el-col class="cstm-percent" :span="7">100%</el-col>
-                        <el-col class="tran-group-header-sum" :span="7">{{ totalAmount.toLocaleString('ru',
-                            { maximumFractionDigits: 0 }) }}&#8381
-                        </el-col>
-                    </el-row>
-                    <div class="text-chart-data-wrapper">
-                        <div class="text-chart-data">
-                            <el-row v-for="(item, index) in getTotalAmountOfCategories" :key="index"
-                                    class="text-chart-data-row"
-                                    :style="{color: item.show ? item.color : 'rgba(110, 110, 114, 0.99)'}">
-                                <div @click="item.show = !item.show"
-                                     class="text-chart-data-row-wrapper" style="cursor: pointer">
-                                    <el-col :span="10">{{ item.name }}</el-col>
-                                    <el-col class="cstm-percent" :span="7">{{ item.show ? ((100 / totalAmount) *
-                                        +item.amount).toFixed(1) + '%' : 'не отображается'}}
-                                    </el-col>
-                                    <el-col class="cstm-amount" :span="7">{{ Number(item.amount).toLocaleString('ru',
-                                        {minimumFractionDigits: 2, maximumFractionDigits: 2 })
-                                        }}&#8381;
-                                    </el-col>
-                                </div>
-                            </el-row>
+                    <!--                текстовое отображение данных диаграммы-->
+                    <div v-if="getLoaded" class="box-card text-chart-table-wrapper">
+                        <el-row class="tran-group-header">
+                            <el-col class="text-chart-data-name" :span="10">{{ typeOfChart }}</el-col>
+                            <el-col class="cstm-percent" :span="7">100%</el-col>
+                            <el-col class="tran-group-header-sum" :span="7">{{ totalAmount.toLocaleString('ru',
+                                { maximumFractionDigits: 0 }) }}&#8381
+                            </el-col>
+                        </el-row>
+                        <div class="text-chart-data-wrapper">
+                            <div class="text-chart-data">
+                                <el-row v-for="(item, index) in getTotalAmountOfCategories" :key="index"
+                                        class="text-chart-data-row"
+                                        :style="{color: item.show ? item.color : 'rgba(110, 110, 114, 0.99)'}">
+                                    <div @click="item.show = !item.show"
+                                         class="text-chart-data-row-wrapper" style="cursor: pointer">
+                                        <el-col :span="10">{{ item.name }}</el-col>
+                                        <el-col class="cstm-percent" :span="7">{{ item.show ? ((100 / totalAmount) *
+                                            +item.amount).toFixed(1) + '%' : 'не отображается'}}
+                                        </el-col>
+                                        <el-col class="cstm-amount" :span="7">{{
+                                            Number(item.amount).toLocaleString('ru',
+                                            {minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                            }}&#8381;
+                                        </el-col>
+                                    </div>
+                                </el-row>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -128,7 +137,7 @@
                         {
                             backgroundColor: this.transformResponseToChartData.colors,
                             borderColor: 'rgba(44,46,56,1)',
-                            borderWidth: 9,
+                            borderWidth: 2,
                             data: this.transformResponseToChartData.data
                         }
                     ]
@@ -159,6 +168,10 @@
                 'setIncomeId',
                 'setTypeId',
             ]),
+            onTypeBtnClick(typeOfChart) {
+                this.typeOfChart = typeOfChart
+                this.onMonthChange()
+            },
             onMonthChange(range) {
 
                 //установка параметров запросов получения данных диаграммы списка транзакций
@@ -198,13 +211,26 @@
     }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
     .params {
         display: flex;
         justify-content: flex-end;
         align-items: baseline;
         margin-bottom: 20px;
-        padding-right: 5px;
+    }
+
+    .btn-group {
+        min-width: max-content;
+        padding: 0 35px;
+
+    }
+
+    .inActive {
+        box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.7);
+    }
+
+    .isActive {
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9);
     }
 
     .feed-container-wrapper {
@@ -223,7 +249,7 @@
     }
 
     .tran-group-header {
-        color: #b3fb2acf;
+        color: rgba(255, 255, 255, 0.57);
         font-size: 20px;
         font-weight: 500;
         background-color: #5F6068;
@@ -263,11 +289,9 @@
 
     .total-amount-wrapper {
         position: absolute;
-        top: 46%;
+        top: 36%;
         font-weight: bolder;
         font-size: x-large;
-        color: #fbfbfbd1;
-
         width: 100%;
         text-align: center;
     }
@@ -281,9 +305,7 @@
     .text-chart-table-wrapper {
         border: none;
         margin-top: 20px;
-        position: fixed;
-        width: 730px;
-        bottom: 20px;
+        width: 100%;
     }
 
     .text-chart-data-wrapper {
@@ -293,7 +315,7 @@
 
     .text-chart-data {
         padding: 7px 0;
-        height: 70px;
+        height: 77px;
         border: none;
         background-color: #3D3E48;
         width: 100%;
@@ -303,7 +325,7 @@
 
     .text-chart-data-row {
         padding: 0 0 3px 15px;
-        font-weight: 600;
+        font-weight: 500;
     }
 
     .text-chart-data-row-wrapper {
