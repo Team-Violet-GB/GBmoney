@@ -39,8 +39,7 @@ class TransactionController extends Controller
         $dateFrom = request('date_from');
         $dateTo = request('date_to');
         $incomeID = request('income_id');
-        $walletFromID = request('wallet_id');
-        $walletToID = request('wallet_id');
+        $walletID = request('wallet_id');
         $expenseID = request('expense_id');
         $type = request('type');
 
@@ -57,12 +56,11 @@ class TransactionController extends Controller
             ->when($incomeID, function ($query) use ($incomeID) {
                 return $query->where('income_id', '=', $incomeID);
             })
-            ->when($walletFromID, function ($query) use ($walletFromID) {
-                return $query->where('wallet_id_from', '=', $walletFromID);
-            })
-            // ->when($walletToID, function ($query) use ($walletToID) {
-            //     return $query->where('wallet_id_to', '=', $walletToID);
-            // })
+            ->when($walletID, function ($query) use ($walletID) {
+                return $query
+                    ->where('wallet_id_from', '=', $walletID)
+                    ->orWhere('wallet_id_to', '=', $walletID);
+            },)
             ->when($expenseID, function ($query) use ($expenseID) {
                 return $query->where('expense_id', '=', $expenseID);
             })

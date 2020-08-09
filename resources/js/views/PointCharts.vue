@@ -125,8 +125,12 @@ mounted() {
     ]),
 
     changeDate(newDate) {
-      this.fetchPieChart({ dateFrom: newDate.from, dateTo: newDate.to })
-      this.fetchLineChart({ dateFrom: newDate.from, dateTo: newDate.to })
+      if (this.type == 'expense') {
+        this.fetchPieChart({ dateFrom: newDate.from, dateTo: newDate.to })
+      }
+      if (this.type == 'expense' || this.type == 'income') {
+        this.fetchLineChart({ dateFrom: newDate.from, dateTo: newDate.to })
+      }
       this.fetchTransactions({ [`${this.type}_id`]: this.id, date_from: newDate.from, date_to: newDate.to })
     },
     
