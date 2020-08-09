@@ -47,7 +47,7 @@ export default {
                 .catch(error => {
                     commit('setErrorStatus', true);
                     commit('setErrorInfo', `Ошибка во время запроса транзакций: (${error})`);
-                    console.log(error)
+                    console.log(error);
                 })
         }
     },
@@ -60,26 +60,54 @@ export default {
             state.pieData = pieData
         },
         setTotalAmountOfCategories(state, data) {
+            let red, green, blue;
+            let staticColorIndex = 0;
+            const rgbStaticData = [
+                [250, 169, 39],
+                [81, 190, 40],
+                [200, 50, 243],
+                [244, 66, 35],
+                [49, 171, 236],
+                [228, 247, 42],
+                [39, 136, 164],
+                [209, 73, 41],
+                [42, 225, 154],
+                [105, 246, 30],
+                [240, 44, 226],
+                [233, 130, 36],
+                [33, 251, 204],
+                [37, 202, 230],
+                [204, 243, 36],
+                [243, 45, 154],
+                [120, 171, 45],
+                [235, 42, 81]
+            ];
+
             for (let key in data) {
                 data[key].show = true
 
                 // добавление данных о цвете для отображения категории на диаграмме
-                let rgb = [
-                    Math.floor(Math.random() * (50 - 2 + 1)) + 2,
-                    Math.floor(Math.random() * (255 - 2 + 1)) + 2,
-                    Math.floor(Math.random() * (255 - 210 + 1)) + 210
-                ]
-                let rnd, temp;
-                for(let i = rgb.length - 1; i > 0; i--) {
-                    rnd = Math.floor(Math.random()*(i + 1));
-                    temp = rgb[rnd];
-                    rgb[rnd] = rgb[i];
-                    rgb[i] = temp;
+                if (staticColorIndex < rgbStaticData.length - 1) {
+                    [red, green, blue] = rgbStaticData[staticColorIndex];
+                    staticColorIndex++;
+                } else {
+                    let rgbDynamicData = [
+                        Math.floor(Math.random() * (255 - 5 + 1)) + 5,
+                        Math.floor(Math.random() * (100 - 50 + 1)) + 50,
+                        Math.floor(Math.random() * (255 - 200 + 1)) + 200
+                    ]
+                    let rnd, temp;
+                    for (let i = rgbDynamicData.length - 1; i > 0; i--) {
+                        rnd = Math.floor(Math.random() * (i + 1));
+                        temp = rgbDynamicData[rnd];
+                        rgbDynamicData[rnd] = rgbDynamicData[i];
+                        rgbDynamicData[i] = temp;
+                    }
+                    [red, green, blue] = rgbDynamicData;
                 }
-                let [red, green, blue] = rgb;
-                data[key].color = `rgba(${red},${green},${blue},0.90)`
+                data[key].color = `rgba(${red},${green},${blue},0.85)`;
             }
-            state.totalAmountOfCategories = data
+            state.totalAmountOfCategories = data;
         }
     },
 

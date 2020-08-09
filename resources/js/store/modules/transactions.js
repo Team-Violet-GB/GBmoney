@@ -31,7 +31,7 @@ export default {
                 .catch(error => {
                     commit('setErrorStatus', true);
                     commit('setErrorInfo', `Ошибка во время запроса транзакций: (${error})`);
-                    console.log(error)
+                    console.log(error);
                 })
         },
         fetchTransactionsByPoint({ commit }, data) {

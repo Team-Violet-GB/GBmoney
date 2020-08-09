@@ -4,7 +4,7 @@
             <el-col :span="12">
 
                 <!--                выбор диапазона месяцов-->
-                <div class="choisers">
+                <div class="params">
                     <month-picker @changeDate="newDate => onMonthChange(newDate)"/>
                     <div class="block">
                         <el-radio-group @change="onMonthChange" v-model="typeOfChart" size="small"
@@ -18,12 +18,12 @@
                 <!--                круговая диаграмма категорий-->
                 <div class="chart-block">
                     <div class="total-amount-wrapper">
-                        <div v-if="totalAmount !== 0 && getLoaded" class="total-amount">{{ totalAmount.toLocaleString('ru',
+                        <div v-show="totalAmount !== 0 && getLoaded" class="total-amount">{{
+                            totalAmount.toLocaleString('ru',
                             { maximumFractionDigits: 0 }) }}&#8381
                         </div>
-<!--                        <div v-else class="total-amount">Нет данных</div>-->
                     </div>
-                    <monthChart v-if="getLoaded" ref="chart" :chartData="dataChart" :options="chartOptions"/>
+                    <monthChart v-show="getLoaded" ref="chart" :chartData="dataChart" :options="chartOptions"/>
                 </div>
 
                 <!--                текстовое отображение данных диаграммы-->
@@ -44,7 +44,7 @@
                                      class="text-chart-data-row-wrapper" style="cursor: pointer">
                                     <el-col :span="10">{{ item.name }}</el-col>
                                     <el-col class="cstm-percent" :span="7">{{ item.show ? ((100 / totalAmount) *
-                                        +item.amount).toFixed(0) + '%' : '-'}}
+                                        +item.amount).toFixed(1) + '%' : 'не отображается'}}
                                     </el-col>
                                     <el-col class="cstm-amount" :span="7">{{ Number(item.amount).toLocaleString('ru',
                                         {minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -67,7 +67,7 @@
                         </el-alert>
 
                         <!--                лента-->
-                        <feed v-if="getLoaded" :feed-template="false"/>
+                        <feed v-show="getLoaded" :feed-template="false"/>
                     </div>
                 </div>
             </el-col>
@@ -115,10 +115,10 @@
                         labels.push(this.getTotalAmountOfCategories[key].name);
                         data.push(this.getTotalAmountOfCategories[key].amount);
                         colors.push(this.getTotalAmountOfCategories[key].color);
-                        this.totalAmount += Number(this.getTotalAmountOfCategories[key].amount)
+                        this.totalAmount += Number(this.getTotalAmountOfCategories[key].amount);
                     }
                 }
-                console.log(colors)
+
                 return {labels, data, colors}
             },
             dataChart() {
@@ -128,8 +128,7 @@
                         {
                             backgroundColor: this.transformResponseToChartData.colors,
                             borderColor: 'rgba(44,46,56,1)',
-                            borderWidth: 10,
-                            borderAlign: 'inner',
+                            borderWidth: 9,
                             data: this.transformResponseToChartData.data
                         }
                     ]
@@ -140,20 +139,12 @@
                     responsive: true,
                     maintainAspectRation: true,
                     legend: {
-                        display: false,
-                        // position: 'top',
-                        // labels: {
-                        //     padding: 5,
-                        //     fontColor: 'rgb(255,255,255)'
-                        // }
+                        display: false
                     }
                 }
             },
         },
         methods: {
-            update() {
-                console.log('событие: ')
-            },
             ...mapActions([
                 'fetchTransactions',
                 'fetchTotalAmountOfCategories'
@@ -208,7 +199,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .choisers {
+    .params {
         display: flex;
         justify-content: flex-end;
         align-items: baseline;
@@ -272,7 +263,7 @@
 
     .total-amount-wrapper {
         position: absolute;
-        top: 50%;
+        top: 46%;
         font-weight: bolder;
         font-size: x-large;
         color: #fbfbfbd1;
