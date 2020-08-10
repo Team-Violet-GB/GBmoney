@@ -22,6 +22,7 @@ class TransactionCollection extends ResourceCollection
         // Получаем данные из запроса.
         $incomeID = request('income_id');
         $expenseID = request('expense_id');
+        $walletID = request('wallet_id');
         $type = request('type');
 
         // Получаем массив транзакций для каждого элемента входного массива пагинации.
@@ -31,6 +32,10 @@ class TransactionCollection extends ResourceCollection
             })
             ->when($expenseID, function ($query) use ($expenseID) {
                 return $query->where('expense_id', '=', $expenseID);
+            })
+            ->when($walletID, function ($query) use ($walletID) {
+                return $query->where('wallet_id_from', '=', $walletID)
+                    ->orWhere('wallet_id_to', '=', $walletID);
             })
             ->when($type, function ($query) use ($type) {
                 return $query->where('type', '=', $type);
