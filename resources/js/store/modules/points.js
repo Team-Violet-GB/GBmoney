@@ -60,14 +60,38 @@ export default {
                 commit('updateTags', tags)
             })
         },
+
+        fetchAmountsByMonth({ commit, dispatch }, data) {
+            const type = data.type == 1 ? 'sum-incomes' : 'sum-expenses'
+            axios.get(`api/report/${type}?date_from=${data.dateFrom}&date_to=${data.dateTo}`)
+                .then(response => {
+                    if (data.type == 1) {
+                        commit('updateIncomesAmountsByMonth', response.data.data)
+                        dispatch('fetchIncomes')
+                        
+                    }
+                    if (data.type == 3) {
+                        commit('updateExpensesAmountsByMonth', response.data.data)
+                        dispatch('fetchExpenses')
+                    }
+                })
+        },
+
+
     },
     mutations: {
         updateIncomes(state, points) {
-            state.incomesList = points
             let summ = 0
-            for (let point in points)  summ += Number(points[point].amount)
+            for (let point in points)  {
+                if (state.incomesAmountsByMonth[point]) {
+                    points[point].amount = state.incomesAmountsByMonth[point].amount
+                    summ += Number(points[point].amount)
+                } else {
+                    points[point].amount = 0
+                }
+            }
+            state.incomesList = points
             state.incomesSumm = summ
-            console.log()
         },
         updateWallets(state, points) {
             state.walletsList = points
@@ -76,9 +100,16 @@ export default {
             state.walletsSumm = summ
         },
         updateExpenses(state, points) {
-            state.expensesList = points
             let summ = 0
-            for (let point in points)  summ += Number(points[point].amount)
+            for (let point in points)  {
+                if (state.expensesAmountsByMonth[point]) {
+                    points[point].amount = state.expensesAmountsByMonth[point].amount
+                    summ += Number(points[point].amount)
+                } else {
+                    points[point].amount = 0
+                }
+            }
+            state.expensesList = points
             state.expensesSumm = summ
 
             let limit = 0
@@ -98,6 +129,12 @@ export default {
         updateExpensesLoad(state, newState) {
             state.expensesLoad = newState
         },
+        updateIncomesAmountsByMonth(state, data) {
+            state.incomesAmountsByMonth = data
+        },
+        updateExpensesAmountsByMonth(state, data) {
+            state.expensesAmountsByMonth = data
+        },
 
     },
     state: {
@@ -112,6 +149,8 @@ export default {
         incomesLoad: true,
         walletsLoad: true,
         expensesLoad: true,
+        incomesAmountsByMonth: null,
+        expensesAmountsByMonth: null,
     },
     getters: {
         incomes(state) {
@@ -146,6 +185,20 @@ export default {
         },
         expensesLoading(state) {
             return state.expensesLoad
+        },
+        incomesAmountByMonth(state) {
+            return state.incomesAmountsByMonth
+        },
+        expensesAmountByMonth(state) {
+            return state.expensesAmountsByMonth
+        },
+
+        intervalMonth() {
+            let date = new Date()
+            let dateFrom = new Date(date.getFullYear(), date.getMonth(), 1)
+            dateFrom = dateFrom.getFullYear() + '-' + (dateFrom.getMonth() + 1) + '-' + dateFrom.getDate()
+            let dateTo = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+            return  {dateFrom, dateTo}
         },
     }
 }

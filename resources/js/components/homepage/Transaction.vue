@@ -106,10 +106,10 @@ import Numbers from './Numbers.vue'
             'wallets',
             'expenses',
             'tags',
+            'intervalMonth',
         ]),
 
         tagsFromCategory() {
-          console.log(this.tags)
           var tags = []
           for (var tag in this.tags){
               if (this.tags[tag].expense_id == this.transaction.toID && !this.tags[tag].deleted) {
@@ -134,9 +134,8 @@ import Numbers from './Numbers.vue'
     methods: {
       ...mapActions([
         'fetchTags',
-        'fetchIncomes',
         'fetchWallets',
-        'fetchExpenses',
+        'fetchAmountsByMonth'
       ]),
 
       
@@ -280,11 +279,19 @@ import Numbers from './Numbers.vue'
 
       getNewPoints(type) {
         if (type == 1) {
-          this.fetchIncomes()
+          this.fetchAmountsByMonth({
+            dateFrom: this.intervalMonth.dateFrom,
+            dateTo: this.intervalMonth.dateTo,
+            type: 1
+          })
           this.fetchWallets()
         } else if (type == 3) {
           this.fetchWallets()
-          this.fetchExpenses()
+          this.fetchAmountsByMonth({
+            dateFrom: this.intervalMonth.dateFrom,
+            dateTo: this.intervalMonth.dateTo,
+            type: 3
+          })
         } else {
           this.fetchWallets()
         }
