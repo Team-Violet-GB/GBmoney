@@ -279,18 +279,16 @@ import Numbers from './Numbers.vue'
 
       getNewPoints(type) {
         if (type == 1) {
-          this.fetchAmountsByMonth({
+          this.fetchIncomes({
             dateFrom: this.intervalMonth.dateFrom,
             dateTo: this.intervalMonth.dateTo,
-            type: 1
           })
           this.fetchWallets()
         } else if (type == 3) {
           this.fetchWallets()
-          this.fetchAmountsByMonth({
+          this.fetchExpenses({
             dateFrom: this.intervalMonth.dateFrom,
             dateTo: this.intervalMonth.dateTo,
-            type: 3
           })
         } else {
           this.fetchWallets()

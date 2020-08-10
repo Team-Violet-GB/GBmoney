@@ -138,8 +138,8 @@
         },
         computed: {
           ...mapGetters([
-              'incomes',
               'wallets',
+              'incomes',
               'expenses',
               'incomesSumm',
               'walletsSumm',
@@ -158,23 +158,21 @@
 
        mounted() {
             this.fetchWallets()
-            this.fetchAmountsByMonth({
+            this.fetchIncomes({
               dateFrom: this.intervalMonth.dateFrom,
               dateTo: this.intervalMonth.dateTo,
-              type: 1
             })
-            this.fetchAmountsByMonth({
+            this.fetchExpenses({
               dateFrom: this.intervalMonth.dateFrom,
               dateTo: this.intervalMonth.dateTo,
-              type: 3
             })
-
         },
 
         methods: {
             ...mapActions([
               'fetchWallets',
-              'fetchAmountsByMonth',
+              'fetchIncomes',
+              'fetchExpenses',
             ]),
 
             transactionWallet (event) {
