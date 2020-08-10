@@ -4,7 +4,7 @@
             <el-card :class="{active: editorData.isEdit && editorData.transactionGroupLength > 1}">
 
                 <!--        разметка и поведение для ленты-->
-                <el-row v-if="feedTemplate" :gutter="10" class="tran-row-data">
+                <el-row v-if="feedTemplate" :gutter="10" class="tran-row-data text-no-wrap">
                     <el-col :span="3">
                         <div>{{ from.name }}</div>
                     </el-col>
@@ -27,15 +27,15 @@
                 </el-row>
 
                 <!--        разметка для отчетов-->
-                <el-row v-else :gutter="10" class="tran-row-data">
-                    <el-col :span="5" class="text-no-wrap">{{ from.name }}</el-col>
+                <el-row v-else :gutter="10" class="tran-row-data text-no-wrap">
+                    <el-col :span="5">{{ from.name }}</el-col>
                     <el-col :span="2">
                         <i :class="getTypeData(this.transaction.data).color" class="el-icon-right"></i>
                     </el-col>
-                    <el-col :span="5" class="text-no-wrap">
+                    <el-col :span="5">
                         {{ to.to }}<span class="tran-tag-name">{{ to.tagName }}</span>
                     </el-col>
-                    <el-col :span="6"><div :title="transaction.data.comment" class="tran-comment text-no-wrap">&nbsp;{{ transaction.data.comment }}</div></el-col>
+                    <el-col :span="6"><div :title="transaction.data.comment" class="tran-comment">&nbsp;{{ transaction.data.comment }}</div></el-col>
                     <el-col :span="6">
                         <div
                             :class="getTypeData(this.transaction.data).color"

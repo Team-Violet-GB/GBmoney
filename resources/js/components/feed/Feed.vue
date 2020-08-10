@@ -1,36 +1,39 @@
 <template>
     <div>
-        <div class="feed-conteiner">
-        <!--        заголовок группы транзакций-->
-        <el-card v-for="(transactionGroup, index) in getTransactions" :key="index"
-                 class="box-card">
-            <el-row :gutter="10" slot="header" class="clearfix tran-group-header">
-                <el-col :span="14">
-                    <div>{{ getLocalDateString(index) }}</div>
-                </el-col>
-                <el-col :span="10">
-                    <div class="tran-group-header-sum" :class="groupSumCalc(transactionGroup).color">
-                        {{ groupSumCalc(transactionGroup).symbol }}{{
-                        Number(groupSumCalc(transactionGroup).sum).toLocaleString() }} &#8381;
-                    </div>
-                </el-col>
-            </el-row>
+        <div class="container">
+            <div class="feed">
+                <!--        заголовок группы транзакций-->
+                <el-card v-for="(transactionGroup, index) in getTransactions" :key="index"
+                         class="box-card">
+                    <el-row :gutter="10" slot="header" class="clearfix tran-group-header text-no-wrap">
+                        <el-col :span="14">
+                            <div>{{ getLocalDateString(index) }}</div>
+                        </el-col>
+                        <el-col :span="10">
+                            <div class="tran-group-header-sum" :class="groupSumCalc(transactionGroup).color">
+                                {{ groupSumCalc(transactionGroup).symbol }}{{
+                                Number(groupSumCalc(transactionGroup).sum).toLocaleString() }} &#8381;
+                            </div>
+                        </el-col>
+                    </el-row>
 
-            <!--            группа транзакций-->
-            <transaction-group :transactionGroup="transactionGroup" :transactionGroupName="index" class="tran-group"
-                               :feed-template="feedTemplate"/>
-        </el-card>
-    </div>
+                    <!--            группа транзакций-->
+                    <transaction-group :transactionGroup="transactionGroup" :transactionGroupName="index"
+                                       class="tran-group"
+                                       :feed-template="feedTemplate"/>
+                </el-card>
+            </div>
 
-        <!--        пагинация-->
-        <div class="pagination-container">
-            <el-pagination
-                background
-                :hide-on-single-page="true"
-                layout="prev, pager, next"
-                @current-change="paginate"
-                :total="getTotal">
-            </el-pagination>
+            <!--        пагинация-->
+            <div class="pagination">
+                <el-pagination
+                    background
+                    :hide-on-single-page="true"
+                    layout="prev, pager, next"
+                    @current-change="paginate"
+                    :total="getTotal">
+                </el-pagination>
+            </div>
         </div>
     </div>
 </template>
@@ -120,16 +123,36 @@
 </script>
 
 <style scoped>
-    body {
-        margin: 0;
-        padding: 0;
+    .container {
+        display: block;
+        height: 100%;
+    }
+
+    .feed {
+        width: 100%;
+    }
+
+    .pagination {
+        margin: 10px 0;
+    }
+
+    .el-pagination {
+        display: flex;
+        justify-content: center;
     }
 
     .el-card {
         border: 0 solid rgba(255, 255, 255, 0);
-        margin-bottom: 40px;
+        margin-bottom: 30px;
         background-color: #3D3E48;
         color: #b682f9;
+    }
+
+    .text-no-wrap {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding: 0 5px;
     }
 
     .tran-group-header {
@@ -147,11 +170,6 @@
         padding-top: 4px;
     }
 
-    .el-pagination {
-        display: flex;
-        justify-content: center;
-    }
-
     .cstm-yellow {
         color: #e6a23c;
     }
@@ -163,13 +181,4 @@
     .cstm-red {
         color: #f56c6c;
     }
-
-    .feed-container {
-
-    }
-
-    .pagination-container {
-
-    }
-
 </style>

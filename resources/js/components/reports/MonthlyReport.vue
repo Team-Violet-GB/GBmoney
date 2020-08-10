@@ -1,40 +1,42 @@
 <template>
-    <div>
-        <el-row :gutter="2" style="height: 100%;">
-            <el-col :span="12">
+    <div class="container">
+        <el-row :gutter="2">
+            <el-col :lg="14" :xl="12">
 
-                <!--                выбор диапазона месяцов-->
-                <div class="params">
-                    <month-picker @changeDate="onMonthChange" style="float: left;"/>
+                <!--                выбор диапазона месяцов при помощи компонента MonthPicker-->
+                <el-row :gutter="20" type="flex" justify="end" class="params">
+                    <el-col :lg="13" :xl="10">
+                        <month-picker @changeDate="onMonthChange"/>
+                    </el-col>
 
                     <!--                    выбор типа категории для отображения-->
-                    <div class="btn-group">
-                        <el-button-group>
-                            <el-button @click="onTypeBtnClick('Доходы')" type="success" size="mini"
-                                       :class="typeOfChart == 'Доходы' ? 'isActive' : 'inActive'">Доходы
-                            </el-button>
-                            <el-button @click="onTypeBtnClick('Расходы')" type="danger" size="mini"
-                                       :class="typeOfChart == 'Расходы' ? 'isActive' : 'inActive'" class="inActive">
-                                Расходы
-                            </el-button>
-                        </el-button-group>
-
-                    </div>
-                </div>
-
-                <!--                круговая диаграмма категорий-->
-                <div class="chart-block">
-                    <div class="total-amount-wrapper">
-                        <div v-show="totalAmount !== 0 && getLoaded" class="total-amount"
-                             :style="{color: typeOfChart === 'Доходы' ? '#67C23A' : '#F56C6C'}">{{
-                            totalAmount.toLocaleString('ru',
-                            { maximumFractionDigits: 0 }) }}&#8381
+                    <el-col :lg="9" :xl="8">
+                        <div class="btn-group">
+                            <el-button-group>
+                                <el-button @click="onTypeBtnClick('Доходы')" type="success" size="mini"
+                                           :class="typeOfChart == 'Доходы' ? 'isActive' : 'inActive'">Доходы
+                                </el-button>
+                                <el-button @click="onTypeBtnClick('Расходы')" type="danger" size="mini"
+                                           :class="typeOfChart == 'Расходы' ? 'isActive' : 'inActive'" class="inActive">
+                                    Расходы
+                                </el-button>
+                            </el-button-group>
                         </div>
-                    </div>
-                    <monthChart v-show="getLoaded" ref="chart" :chartData="dataChart" :options="chartOptions"/>
+                    </el-col>
+                </el-row>
 
-                    <!--                текстовое отображение данных диаграммы-->
-                    <div v-if="getLoaded" class="box-card text-chart-table-wrapper">
+                <!--                круговая диаграмма-->
+                <div class="chart-block">
+                    <div class="chart">
+                        <div v-show="totalAmount !== 0" class="total-amount-wrapper"
+                             :style="{color: typeOfChart === 'Доходы' ? '#67C23A' : '#F56C6C'}">
+                            {{totalAmount.toLocaleString('ru', { maximumFractionDigits: 0 }) }}&#8381
+                        </div>
+                        <monthChart ref="chart" :chartData="dataChart" :options="chartOptions"/>
+                    </div>
+
+                    <!--                легенда для диаграммы в которую можно тыкать-->
+                    <div class="box-card text-chart-table-wrapper">
                         <el-row class="tran-group-header">
                             <el-col class="text-chart-data-name" :span="10">{{ typeOfChart }}</el-col>
                             <el-col class="cstm-percent" :span="7">100%</el-col>
@@ -65,7 +67,7 @@
                     </div>
                 </div>
             </el-col>
-            <el-col :span="12">
+            <el-col :lg="10" :xl="12">
                 <div class="feed-container-wrapper">
                     <div class="feed-container">
                         <el-alert
@@ -75,8 +77,8 @@
                             effect="dark">
                         </el-alert>
 
-                        <!--                лента-->
-                        <feed v-show="getLoaded" :feed-template="false"/>
+                        <!--                интегрированный компонент ленты-->
+                        <feed :feed-template="false"/>
                     </div>
                 </div>
             </el-col>
@@ -212,9 +214,13 @@
 </script>
 
 <style scoped>
+    .container {
+        width: 100%;
+        height: 83vh;
+    }
+
     .params {
         display: flex;
-        justify-content: flex-end;
         align-items: baseline;
         margin-bottom: 20px;
     }
@@ -235,9 +241,9 @@
 
     .feed-container-wrapper {
         width: 100%;
-        height: 83vh;
+        height: 85vh;
         overflow: hidden;
-        padding-bottom: 20px;
+        padding-bottom: 10px;
     }
 
     .feed-container {
@@ -249,7 +255,7 @@
     }
 
     .tran-group-header {
-        color: rgba(255, 255, 255, 0.57);
+        color: #b3fb2acf;
         font-size: 20px;
         font-weight: 500;
         background-color: #5F6068;
@@ -280,26 +286,22 @@
     .chart-block {
         width: 70%;
         margin: 0 auto;
-        position: relative
     }
 
     .chart {
-        width: auto;
+        position: relative
     }
 
     .total-amount-wrapper {
         position: absolute;
-        top: 36%;
+        top: 45%;
         font-weight: bolder;
         font-size: x-large;
         width: 100%;
-        text-align: center;
-    }
-
-    .total-amount {
+        margin: 0 auto;
         overflow: hidden;
+        text-align: center;
         text-overflow: ellipsis;
-        padding: 0 150px;
     }
 
     .text-chart-table-wrapper {
@@ -314,12 +316,11 @@
     }
 
     .text-chart-data {
-        padding: 7px 0;
         height: 77px;
         border: none;
         background-color: #3D3E48;
         width: 100%;
-        padding-right: 45px;
+        padding: 7px 45px 7px 0;
         overflow-y: scroll;
     }
 

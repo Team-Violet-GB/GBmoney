@@ -60,24 +60,25 @@ export default {
             let red, green, blue;
             let staticColorIndex = 0;
             const rgbStaticData = [
+                [244, 66, 35],
                 [250, 169, 39],
                 [81, 190, 40],
-                [235, 42, 81],
                 [39, 136, 164],
                 [233, 130, 36],
                 [240, 44, 226],
                 [33, 251, 204],
                 [200, 50, 243],
-                [244, 66, 35],
-                [228, 247, 42],
                 [209, 73, 41],
                 [42, 225, 154],
                 [49, 171, 236],
                 [37, 202, 230],
                 [204, 243, 36],
                 [243, 45, 154],
+                [42, 225, 154],
+                [235, 42, 81],
                 [120, 171, 45],
                 [105, 246, 30],
+                [228, 247, 42],
             ];
 
             for (let key in data) {
@@ -102,7 +103,7 @@ export default {
                     }
                     [red, green, blue] = rgbDynamicData;
                 }
-                data[key].color = `rgba(${red},${green},${blue},0.85)`;
+                data[key].color = `rgba(${red},${green},${blue},0.9)`;
             }
             state.totalAmountOfCategories = data;
         }
