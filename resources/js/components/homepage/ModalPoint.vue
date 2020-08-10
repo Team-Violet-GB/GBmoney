@@ -1,5 +1,5 @@
 <template>
-    <div class="cstm-container">
+    <div class="cstm-modal-container">
         <el-form :rules="rules" :model="ruleForm" status-icon ref="ruleForm">
             <span class="cstm-header">Добавление карточки</span>
             <el-form-item prop="name">
@@ -168,7 +168,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .cstm-container {
+    .cstm-modal-container {
         padding: 10px 10px;
     }
 
@@ -243,6 +243,13 @@
             height: 72px;
         }
     }
+    .cstm-radio-gap .el-radio-button__inner:first-child
+    {
+            border-radius: 50%;
+            border: none;
+            height: 72px;
+        }
+
     .el-radio-button:first-child {
         border-radius: 50%;
         .el-radio-button__inner {
