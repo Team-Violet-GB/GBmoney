@@ -5,6 +5,8 @@
         <el-drawer
             :visible.sync="dialogEditVisible"
             size="40%"
+            :wrapperClosable = false
+            :modal-append-to-body = false
         >
             <div class="cstm-container">
                 <el-form :model="ruleForm" status-icon ref="ruleForm">
