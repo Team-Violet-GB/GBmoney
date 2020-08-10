@@ -20,7 +20,7 @@
       </div>
       <!-- тело -->
       <transition-group name="list" tag="div" class="cstm-body-card">
-        <div v-for="point in incomes" :key="point.id" :id="point.id" class="cstm-point">
+        <div v-for="point in incomesByInterval" :key="point.id" :id="point.id" class="cstm-point">
           <div class="cstm-head-point">{{ point.name }}</div>
           <drag :data="{ id: point.id, type: 'income'}">
             <drop :accepts-data="() => false">
@@ -93,7 +93,7 @@
       </div>
       <!-- тело -->
       <transition-group name="list" tag="div" class="cstm-body-card">
-        <div v-for="point in expenses" :key="point.id" :id="point.id" class="cstm-point">
+        <div v-for="point in expensesByInterval" :key="point.id" :id="point.id" class="cstm-point">
           <div class="cstm-head-point">{{ point.name }}</div>
           <drop @drop="transactionExpense" :accepts-data="(data) => (data.type == 'wallet')">
             <el-button
@@ -141,8 +141,8 @@
         computed: {
           ...mapGetters([
               'wallets',
-              'incomes',
-              'expenses',
+              'incomesByInterval',
+              'expensesByInterval',
               'incomesSumm',
               'walletsSumm',
               'expensesSumm',
