@@ -27,7 +27,7 @@
             <!--        пагинация-->
             <div class="pagination">
                 <el-pagination
-                    background
+
                     :hide-on-single-page="true"
                     layout="prev, pager, next"
                     @current-change="paginate"
@@ -138,7 +138,7 @@
 
     .el-pagination {
         display: flex;
-        justify-content: center;
+        justify-content: flex-end;
     }
 
     .el-card {
