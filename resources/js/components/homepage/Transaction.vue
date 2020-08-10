@@ -135,7 +135,8 @@ import Numbers from './Numbers.vue'
       ...mapActions([
         'fetchTags',
         'fetchWallets',
-        'fetchAmountsByMonth'
+        'fetchIncomes',
+        'fetchExpenses',
       ]),
 
       
