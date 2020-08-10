@@ -87,9 +87,6 @@ export default {
     mutations: {
         updateIncomes(state, points) {
             state.incomesList = points
-            let summ = 0
-            for (let point in points)  summ += Number(points[point].amount)
-            state.incomesSumm = summ
         },
         updateWallets(state, points) {
             state.walletsList = points
@@ -99,13 +96,6 @@ export default {
         },
         updateExpenses(state, points) {
             state.expensesList = points
-            let summ = 0
-            for (let point in points)  summ += Number(points[point].amount)
-            state.expensesSumm = summ
-
-            let limit = 0
-            for (let point in points)  limit += Number(points[point].max_limit)
-            state.expensesLimit = limit
         },
         updateTags(state, points) {
             state.tagsList = points
@@ -132,7 +122,7 @@ export default {
                     points[point].amount = 0
                 }
             }
-            state.incomesList = points
+            state.incomesListByInterval = points
             state.incomesSumm = summ
         },
 
@@ -147,7 +137,7 @@ export default {
                     points[point].amount = 0
                 }
             }
-            state.expensesList = points
+            state.expensesListByInterval = points
             state.expensesSumm = summ
 
             let limit = 0
@@ -159,6 +149,8 @@ export default {
         incomesList: null,
         walletsList: null,
         expensesList: null,
+        incomesListByInterval: null,
+        expensesListByInterval: null,
         tagsList: null,
         incomesSumm: null,
         walletsSumm: null,
@@ -201,6 +193,12 @@ export default {
         },
         expensesLoading(state) {
             return state.expensesLoad
+        },
+        incomesByInterval(state) {
+            return state.incomesListByInterval
+        },
+        expensesByInterval(state) {
+            return state.expensesListByInterval
         },
         
         intervalMonth() {
