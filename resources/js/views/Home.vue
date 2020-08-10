@@ -148,24 +148,33 @@
               'incomesLoading',
               'walletsLoading',
               'expensesLoading',
+              'intervalMonth',
               ]),
 
               dateNowString() {
                 return new Date().toLocaleString('ru', {month: 'long', year: 'numeric'})
-              }
+              },
         },
 
        mounted() {
-            this.fetchIncomes()
             this.fetchWallets()
-            this.fetchExpenses()
+            this.fetchAmountsByMonth({
+              dateFrom: this.intervalMonth.dateFrom,
+              dateTo: this.intervalMonth.dateTo,
+              type: 1
+            })
+            this.fetchAmountsByMonth({
+              dateFrom: this.intervalMonth.dateFrom,
+              dateTo: this.intervalMonth.dateTo,
+              type: 3
+            })
+
         },
 
         methods: {
             ...mapActions([
-              'fetchIncomes',
               'fetchWallets',
-              'fetchExpenses',
+              'fetchAmountsByMonth',
             ]),
 
             transactionWallet (event) {
