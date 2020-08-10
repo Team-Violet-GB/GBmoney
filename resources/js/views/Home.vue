@@ -24,17 +24,17 @@
           <div class="cstm-head-point">{{ point.name }}</div>
           <drag :data="{ id: point.id, type: 'income'}">
             <drop :accepts-data="() => false">
-              <el-button 
-                type="primary" 
-                :icon="point.icon_name" 
-                circle 
-                class="cstm-icon-point" 
+              <el-button
+                type="primary"
+                :icon="point.icon_name"
+                circle
+                class="cstm-icon-point"
                 @click="$router.push(`/income/${point.id}`)">
               </el-button>
             </drop>
           </drag>
           <div class="cstm-money-point cstm-blue">{{ Number(point.amount).toLocaleString('ru') }} &#8381;</div>
-          <i class="el-icon-edit cstm-edit"></i>
+          <EditButton :key="'edit'" :data="{id: point.id, name: point.name, choose: point.icon_id}" category="Доход"/>
         </div>
         <Addbutton :key="'add'" category="Доход"/>
       </transition-group>
@@ -61,17 +61,17 @@
               :accepts-data="(data) => (data.type == 'income') || data.type == 'wallet'"
             >
               <drag :data="{ id: point.id, type: 'wallet'}">
-                <el-button 
-                  type="warning" 
-                  :icon="point.icon_name" 
-                  circle 
-                  class="cstm-icon-point" 
+                <el-button
+                  type="warning"
+                  :icon="point.icon_name"
+                  circle
+                  class="cstm-icon-point"
                   @click="$router.push(`/wallet/${point.id}`)" >
                 </el-button>
                 </drag>
             </drop>
           <div class="cstm-money-point cstm-yellow">{{ Number(point.amount).toLocaleString() }} &#8381;</div>
-          <i class="el-icon-edit cstm-edit"></i>
+            <EditButton :key="'edit'" :data="{id: point.id, name: point.name, choose: point.icon_id, include: point.include, amount: point.amount}" category="Счета"/>
         </div>
         <Addbutton :key="'add'" category="Счета"/>
       </transition-group>
@@ -109,7 +109,7 @@
             :class="(Number(point.amount) > Number(point.max_limit))? 'cstm-red' : 'cstm-green'"
           >{{ Number(point.amount).toLocaleString() }} &#8381;</div>
           <div  v-if="point.max_limit" class="cstm-plan">{{ Number(point.max_limit).toLocaleString() }} &#8381;</div>
-          <i class="el-icon-edit cstm-edit"></i>
+            <EditButton :key="'edit'" :data="{id: point.id, name: point.name, choose: point.icon_id, amount: point.max_limit}" category="Расход"/>
         </div>
         <Addbutton :key="'add'" category="Расход"/>
       </transition-group>
@@ -121,10 +121,12 @@
     import { mapGetters, mapActions, mapMutations } from "vuex"
     import Addbutton from "../components/homepage/Addbutton"
     import Transaction from "../components/homepage/Transaction"
+    import EditButton from "../components/homepage/EditButton";
 
     export default {
         name: "App",
         components: {
+            EditButton,
             Drag,
             Drop,
             Addbutton,
