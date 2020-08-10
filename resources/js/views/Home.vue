@@ -34,7 +34,7 @@
             </drop>
           </drag>
           <div class="cstm-money-point cstm-blue">{{ Number(point.amount).toLocaleString('ru') }} &#8381;</div>
-          <EditButton :key="'edit'" :data="{name: point.name, choose: point.icon_name}"/>
+          <EditButton :key="'edit'" :data="{id: point.id, name: point.name, choose: point.icon_name}" category="Доход"/>
         </div>
         <Addbutton :key="'add'" category="Доход"/>
       </transition-group>
@@ -71,7 +71,7 @@
                 </drag>
             </drop>
           <div class="cstm-money-point cstm-yellow">{{ Number(point.amount).toLocaleString() }} &#8381;</div>
-            <EditButton :key="'edit'" :data="{name: point.name, choose: point.icon_name}"/>
+            <EditButton :key="'edit'" :data="{id: point.id, name: point.name, choose: point.icon_name}" category="Счета"/>
         </div>
         <Addbutton :key="'add'" category="Счета"/>
       </transition-group>
@@ -109,7 +109,7 @@
             :class="(Number(point.amount) > Number(point.max_limit))? 'cstm-red' : 'cstm-green'"
           >{{ Number(point.amount).toLocaleString() }} &#8381;</div>
           <div  v-if="point.max_limit" class="cstm-plan">{{ Number(point.max_limit).toLocaleString() }} &#8381;</div>
-            <EditButton :key="'edit'" :data="{name: point.name, choose: point.icon_name}"/>
+            <EditButton :key="'edit'" :data="{id: point.id, name: point.name, choose: point.icon_name}" category="Расход"/>
         </div>
         <Addbutton :key="'add'" category="Расход"/>
       </transition-group>

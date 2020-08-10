@@ -8,7 +8,7 @@
         >
             <div class="cstm-container">
                 <el-form :rules="rules" :model="ruleForm" status-icon ref="ruleForm">
-                    <span class="cstm-header">Редактировать </span>
+                    <span class="cstm-header">Редактировать {{ this.data.name }}</span>
                     <el-form-item prop="name">
                         <el-input placeholder="Введите название" v-model="ruleForm.name" autocomplete="off"></el-input>
                     </el-form-item>
@@ -31,6 +31,7 @@
                     <el-form-item align="center">
                         <el-button @click="cancelForm">Отмена</el-button>
                         <el-button type="primary" @click="submitForm('ruleForm')">Подтвердить</el-button>
+                        <el-button type="danger" @click="pointDelete()">Удалить</el-button>
                     </el-form-item>
 
                 </el-form>
@@ -45,13 +46,13 @@
     import axios from 'axios'
 
     export default {
-        props: ['data'],
+        props: ['data', 'category'],
         data() {
             return {
                 errors: [],
                 dialogEditVisible: false,
                 ruleForm: {
-                    name: '',
+                    name: this.data.name || '',
                     choose: '',
                     balance: true,
                     amount: 0
@@ -74,10 +75,51 @@
         methods: {
             ...mapActions(['fetchIcons', 'fetchIncomes', 'fetchWallets', 'fetchExpenses']),
 
+            pointDelete() {
+                if (this.category === 'Доход') {
+                    axios.delete('/api/incomes/' + this.data.id)
+                        .then( response => {
+                            this.fetchIncomes()
+                            this.dialogEditVisible = false
+                            this.$message.success(this.ruleForm.name + ' успешно удален')
+                            this.$emit('cancel')
+                        })
+                        .catch((error) => {
+                            this.errors.push(error.response.data.errors.name[0])
+                            this.MessageArrayErrors(this.errors)
+                        })
+                }
+                if (this.category === 'Счета') {
+                    axios.delete('/api/wallets/' + this.data.id)
+                        .then( response => {
+                            this.fetchWallets()
+                            this.dialogEditVisible = false
+                            this.$message.success(this.ruleForm.name + ' успешно удален')
+                            this.$emit('cancel')
+                        })
+                        .catch((error) => {
+                            this.errors.push(error.response.data.errors.name[0])
+                            this.MessageArrayErrors(this.errors)
+                        })
+                }
+                if (this.category === 'Расход') {
+                    axios.delete('/api/expenses/' + this.data.id)
+                        .then( response => {
+                            this.fetchExpenses()
+                            this.dialogEditVisible = false
+                            this.$message.success(this.ruleForm.name + ' успешно удален')
+                            this.$emit('cancel')
+                        })
+                        .catch((error) => {
+                            this.errors.push(error.response.data.errors.name[0])
+                            this.MessageArrayErrors(this.errors)
+                        })
+                }
+            },
+
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.isBalance();
                         // Incomes
                         if (this.ruleForm.category === 'Доход'){
                             axios.post('/api/incomes' , {
@@ -128,10 +170,6 @@
                         return false;
                     }
                 });
-            },
-            isBalance () {
-                if (this.ruleForm.category !== 'Счета')
-                    this.ruleForm.balance = true
             },
             isSuccessSubmit () {
                 this.ruleForm.name = this.ruleForm.choose = ''
