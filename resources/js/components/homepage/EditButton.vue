@@ -7,12 +7,22 @@
             size="40%"
         >
             <div class="cstm-container">
-                <el-form :rules="rules" :model="ruleForm" status-icon ref="ruleForm">
+                <el-form :model="ruleForm" status-icon ref="ruleForm">
                     <span class="cstm-header">Редактировать {{ this.data.name }}</span>
                     <el-form-item prop="name">
                         <el-input placeholder="Введите название" v-model="ruleForm.name" autocomplete="off"></el-input>
                     </el-form-item>
-                    <br>
+                    <el-switch v-if="(this.category === 'Счета')" v-model="ruleForm.include" class="cstm-switch-margin"></el-switch>
+                    <span v-if="(this.category === 'Счета')" class="cstm-switch-text">Учитывать в общем балансе</span>
+                    <br><br>
+                    <span v-if="(this.category === 'Расход')" class="cstm-amount">Планирую потратить</span>
+                    <el-form-item v-if="(this.category === 'Расход')">
+                        <el-input-number v-model="ruleForm.amount" :min="0" :step="500"></el-input-number>
+                    </el-form-item>
+                    <span v-if="(this.category === 'Счета')" class="cstm-amount">Баланс</span>
+                    <el-form-item v-if="(this.category === 'Счета')">
+                        <el-input-number v-model="ruleForm.amount" :min="0" :step="500"></el-input-number>
+                    </el-form-item>
                     <div align="center" style="overflow: auto; max-height: 40vh">
                         <el-form-item prop="choose">
                             <el-radio-group v-model="ruleForm.choose">
@@ -29,8 +39,8 @@
                     </div>
                     <br>
                     <el-form-item align="center">
-                        <el-button @click="cancelForm">Отмена</el-button>
-                        <el-button type="primary" @click="submitForm('ruleForm')">Подтвердить</el-button>
+                        <el-button @click="cancelForm()">Отмена</el-button>
+                        <el-button type="primary" @click="submitForm()">Подтвердить</el-button>
                         <el-button type="danger" @click="pointDelete()">Удалить</el-button>
                     </el-form-item>
 
@@ -52,19 +62,11 @@
                 errors: [],
                 dialogEditVisible: false,
                 ruleForm: {
-                    name: this.data.name || '',
-                    choose: '',
-                    balance: true,
-                    amount: 0
+                    name: this.data.name,
+                    choose: this.data.choose,
+                    amount: this.data.amount || 0,
+                    include: Boolean(this.data.include)
                 },
-                rules: {
-                    name: [
-                        {required: true, message: 'Введите название', trigger: 'blur'},
-                    ],
-                    choose: [
-                        {required: true, message: 'Выберите картинку', trigger: 'change'},
-                    ]
-                }
             };
         },
         computed:
@@ -117,30 +119,28 @@
                 }
             },
 
-            submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        // Incomes
-                        if (this.ruleForm.category === 'Доход'){
-                            axios.post('/api/incomes' , {
+            submitForm() {
+                if (this.ruleForm.name) {
+                        if (this.category === 'Доход'){
+                            axios.patch('/api/incomes/' + this.data.id , {
                                 name: this.ruleForm.name,
                                 icon_id: this.ruleForm.choose
-                            }).then(response => {
-                                this.fetchIncomes()
-                                this.successForm()
-                            })
+                                }).then(response => {
+                                    this.fetchIncomes()
+                                    this.successForm()
+                                })
                                 .catch((error) => {
                                     this.errors.push(error.response.data.errors.name[0])
                                     this.MessageArrayErrors(this.errors)
                                 })
                         }
                         // Wallets
-                        if (this.ruleForm.category === 'Счета'){
-                            axios.post('/api/wallets', {
+                        if (this.category === 'Счета'){
+                            axios.patch('/api/wallets/' + this.data.id, {
                                 name: this.ruleForm.name,
+                                icon_id: this.ruleForm.choose,
                                 amount: this.ruleForm.amount,
-                                include: this.ruleForm.balance,
-                                icon_id: this.ruleForm.choose
+                                include: this.ruleForm.include
                             }).then( response => {
                                 this.fetchWallets()
                                 this.successForm()
@@ -150,11 +150,11 @@
                             })
                         }
                         // Expenses
-                        if (this.ruleForm.category === 'Расход'){
-                            axios.post('/api/expenses', {
+                        if (this.category === 'Расход'){
+                            axios.patch('/api/expenses/' + this.data.id, {
                                 name: this.ruleForm.name,
-                                max_limit: this.ruleForm.amount,
-                                icon_id: this.ruleForm.choose
+                                icon_id: this.ruleForm.choose,
+                                max_limit: this.ruleForm.amount
                             }).then( response => {
                                 this.fetchExpenses()
                                 this.successForm()
@@ -165,15 +165,9 @@
                         }
                     } else {
                         if (!this.ruleForm.name) this.errors.push('Введите название')
-                        if (!this.ruleForm.choose) this.errors.push('Выберите картинку')
                         this.MessageArrayErrors(this.errors)
                         return false;
-                    }
-                });
-            },
-            isSuccessSubmit () {
-                this.ruleForm.name = this.ruleForm.choose = ''
-                this.ruleForm.amount = 0
+                    };
             },
             MessageArrayErrors(errors) {
                 errors.forEach((error, i) => {
@@ -184,13 +178,11 @@
                 this.errors = []
             },
             cancelForm () {
-                this.isSuccessSubmit()
-                this.$emit('cancel')
+                this.dialogEditVisible = false
             },
             successForm () {
                 this.dialogEditVisible = false
-                this.$message.success(this.ruleForm.name + ' успешно добавлен')
-                this.isSuccessSubmit()
+                this.$message.success(this.ruleForm.name + ' успешно изменен')
                 this.$emit('cancel')
             }
         },
