@@ -249,7 +249,6 @@ mounted() {
         this.setWalletId(data.wallet_id)
         this.setTypeId(data.type)
         this.fetchTransactions()
-        
     }
   },
 }
