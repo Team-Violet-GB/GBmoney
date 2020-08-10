@@ -1,7 +1,13 @@
 <template>
     <div>
         <div class="container">
-            <div class="feed">
+            <el-alert
+                v-if="getErrorStatus"
+                :title="getErrorInfo"
+                type="error"
+                effect="dark">
+            </el-alert>
+            <div v-else class="feed">
                 <!--        заголовок группы транзакций-->
                 <el-card v-for="(transactionGroup, index) in getTransactions" :key="index"
                          class="box-card">
@@ -25,9 +31,8 @@
             </div>
 
             <!--        пагинация-->
-            <div class="pagination">
+            <div v-if="!getErrorStatus" class="pagination">
                 <el-pagination
-
                     :hide-on-single-page="true"
                     layout="prev, pager, next"
                     @current-change="paginate"

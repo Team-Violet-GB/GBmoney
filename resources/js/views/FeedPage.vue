@@ -1,12 +1,6 @@
 <template>
     <div>
-        <el-alert
-            v-if="getErrorStatus"
-            :title="getErrorInfo"
-            type="error"
-            effect="dark">
-        </el-alert>
-        <feed v-else/>
+        <feed />
     </div>
 </template>
 
@@ -50,9 +44,3 @@
         }
     }
 </script>
-
-<style scoped>
-    /*.container {*/
-    /*    height: 100%;*/
-    /*}*/
-</style>

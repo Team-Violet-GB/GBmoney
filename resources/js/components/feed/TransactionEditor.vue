@@ -184,7 +184,7 @@
             ]),
             getTagsOfExpense() {
                 let tagsOfExpense = [];
-                tagsOfExpense.push({name: "Без категории", id: null});
+                tagsOfExpense.push({name: "Без подкатегории", id: null});
                 for (let tag in this.tags) {
                     if (this.tags[tag].expense_id === this.editorData.edata.expense_id) {
                         tagsOfExpense.push(this.tags[tag])

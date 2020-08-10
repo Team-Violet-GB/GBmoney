@@ -1,16 +1,16 @@
 <template>
     <div class="container">
         <el-row :gutter="2">
-            <el-col :lg="14" :xl="12">
+            <el-col :lg="11" :xl="11">
 
                 <!--                выбор диапазона месяцов при помощи компонента MonthPicker-->
                 <el-row :gutter="20" type="flex" justify="end" class="params">
-                    <el-col :lg="13" :xl="10">
+                    <el-col :lg="12" :xl="11">
                         <month-picker @changeDate="onMonthChange"/>
                     </el-col>
 
                     <!--                    выбор типа категории для отображения-->
-                    <el-col :lg="9" :xl="8">
+                    <el-col :lg="12" :xl="9">
                         <div class="btn-group">
                             <el-button-group>
                                 <el-button @click="onTypeBtnClick('Доходы')" type="success" size="mini"
@@ -26,6 +26,7 @@
                 </el-row>
 
                 <!--                круговая диаграмма-->
+                <div class="chart-block-wrapper">
                 <div class="chart-block">
                     <div class="chart">
                         <div v-show="totalAmount !== 0" class="total-amount-wrapper"
@@ -34,6 +35,7 @@
                         </div>
                         <monthChart ref="chart" :chartData="dataChart" :options="chartOptions"/>
                     </div>
+                </div>
 
                     <!--                легенда для диаграммы в которую можно тыкать-->
                     <div class="box-card text-chart-table-wrapper">
@@ -65,19 +67,14 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </el-col>
-            <el-col :lg="10" :xl="12">
+            <el-col :lg="13" :xl="13">
+
+                <!--                интегрированный компонент ленты с выбором альтернативной разметки-->
                 <div class="feed-container-wrapper">
                     <div class="feed-container">
-                        <el-alert
-                            v-if="getErrorStatus"
-                            :title="getErrorInfo"
-                            type="error"
-                            effect="dark">
-                        </el-alert>
-
-                        <!--                интегрированный компонент ленты-->
                         <feed :feed-template="false"/>
                     </div>
                 </div>
@@ -87,11 +84,11 @@
 </template>
 
 <script>
-    import monthPicker from '../CalendarMonth'
-    import monthChart from "./MonthChart"
-    import feed from "../feed/Feed";
+    import monthPicker from '../components/CalendarMonth'
+    import monthChart from "../components/chart/DoughnutChart"
+    import feed from "../components/feed/Feed";
     import {mapActions, mapGetters, mapMutations} from 'vuex';
-    import type from '../feed/TypeMixin';
+    import type from '../components/feed/TypeMixin';
 
     export default {
         name: "monthlyReport",
@@ -184,6 +181,8 @@
                 this.setIncomeId('');
                 this.setExpenseId('');
                 this.setTypeId(this.typeOfChart == 'Расходы' ? 3 : 1);
+                this.setPage(1);
+
 
                 // выполнение запросов
                 this.fetchTotalAmountOfCategories();
@@ -268,7 +267,7 @@
         text-align: right;
         font-size: 20px;
         font-weight: 500;
-        padding-right: 20px;
+        padding-right: 10px;
     }
 
     .text-chart-data-name {
@@ -283,8 +282,13 @@
         text-align: center;
     }
 
+    .chart-block-wrapper {
+        width: 87%;
+        margin: 0 auto;
+    }
+
     .chart-block {
-        width: 70%;
+        width: 85%;
         margin: 0 auto;
     }
 
@@ -306,7 +310,7 @@
 
     .text-chart-table-wrapper {
         border: none;
-        margin-top: 20px;
+        margin-top: 40px;
         width: 100%;
     }
 
