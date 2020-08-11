@@ -6,40 +6,46 @@
                 <!--        разметка и поведение для ленты-->
                 <el-row v-if="feedTemplate" :gutter="10" class="tran-row-data text-no-wrap">
                     <el-col :span="3">
-                        <div>{{ from.name }}</div>
+                        <div :title="from.name" class="text-no-wrap">{{ from.name }}</div>
                     </el-col>
                     <el-col :span="3"><span style="color: #8e8e8e">{{ from.typeName }}</span></el-col>
-                    <el-col :span="6"><span>{{ to.to }}</span><span class="tran-tag-name">{{ to.tagName }}</span>
+                    <el-col :span="6"><span :title="`${to.to} ${to.tagName}`"
+                                            class="text-no-wrap">{{ to.to }}</span><span class="tran-tag-name">{{ to.tagName }}</span>
                     </el-col>
                     <el-col :span="8">
-                        <div class="tran-comment text-no-wrap" :title="transaction.data.comment">&nbsp;{{ transaction.data.comment }}</div>
+                        <div :title="transaction.data.comment" class="tran-comment text-no-wrap">&nbsp;{{
+                            transaction.data.comment }}
+                        </div>
                     </el-col>
                     <el-col :span="4">
                         <div
                             :class="getTypeData(this.transaction.data).color"
-                            style="display: flex; justify-content: flex-end">
+                            class="flex-right text-no-wrap" :title="transaction.data.amount">
                             {{ getTypeData(this.transaction.data).symbol}}{{
                             Number(transaction.data.amount).toLocaleString('ru',
                             {minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} &#8381;
-
                         </div>
                     </el-col>
                 </el-row>
 
                 <!--        разметка для отчетов-->
-                <el-row v-else :gutter="10" class="tran-row-data text-no-wrap">
-                    <el-col :span="5">{{ from.name }}</el-col>
+                <el-row v-else :gutter="10" class="tran-row-data">
+                    <el-col :span="5" :title="from.name" class="text-no-wrap">{{ from.name }}</el-col>
                     <el-col :span="2">
                         <i :class="getTypeData(this.transaction.data).color" class="el-icon-right"></i>
                     </el-col>
-                    <el-col :span="5">
-                        {{ to.to }}<span class="tran-tag-name">{{ to.tagName }}</span>
+                    <el-col :span="6" :title="`${to.to} ${to.tagName}`" class="text-no-wrap">
+                        {{ to.to }}<span class="tran-tag-name text-no-wrap">{{ to.tagName }}</span>
                     </el-col>
-                    <el-col :span="6"><div :title="transaction.data.comment" class="tran-comment">&nbsp;{{ transaction.data.comment }}</div></el-col>
+                    <el-col :span="5">
+                        <div :title="transaction.data.comment" class="tran-comment text-no-wrap">&nbsp;{{
+                            transaction.data.comment }}
+                        </div>
+                    </el-col>
                     <el-col :span="6">
                         <div
                             :class="getTypeData(this.transaction.data).color"
-                            style="display: flex; justify-content: flex-end">
+                            class="flex-right text-no-wrap" :title="transaction.data.amount">
                             {{ getTypeData(this.transaction.data).symbol}}{{
                             Number(transaction.data.amount).toLocaleString('ru',
                             {minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} &#8381;
@@ -181,11 +187,15 @@
         font-weight: 400;
     }
 
+    .flex-right {
+        display: flex;
+        justify-content: flex-end
+    }
+
     .text-no-wrap {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        padding: 0 5px;
     }
 
     .tran-tag-name {
