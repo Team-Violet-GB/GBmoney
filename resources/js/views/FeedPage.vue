@@ -26,6 +26,7 @@
                 'setDateFrom',
                 'setDateTo',
                 'setExpenseId',
+                'setWalletId',
                 'setIncomeId',
                 'setTypeId',
             ]),
@@ -38,6 +39,7 @@
             this.setDateFrom('')
             this.setDateTo('')
             this.setIncomeId('')
+            this.setWalletId('')
             this.setExpenseId('')
             this.setTypeId('')
             this.fetchTransactions()

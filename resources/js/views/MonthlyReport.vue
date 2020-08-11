@@ -164,6 +164,7 @@
                 'setDateFrom',
                 'setDateTo',
                 'setExpenseId',
+                'setWalletId',
                 'setIncomeId',
                 'setTypeId',
             ]),
@@ -179,6 +180,7 @@
                     this.setDateTo(range.to);
                 }
                 this.setIncomeId('');
+                this.setWalletId('')
                 this.setExpenseId('');
                 this.setTypeId(this.typeOfChart == 'Расходы' ? 3 : 1);
                 this.setPage(1);
