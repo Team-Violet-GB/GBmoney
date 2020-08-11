@@ -13,14 +13,20 @@
                     <CalendarMonth v-bind:default-value="this.currentISODateFrom"
                                    @changeDate="newDate => onMonthChange(newDate)"/>
                 </div>
-                <p class="total incomes">Доход за период: {{ this.getTotalIncomes }} руб.</p>
-                <p class="total expenses">Расход за период: {{ this.getTotalExpenses }} руб.</p>
+                <p class="total incomes">Доход за период: {{ Number(this.getTotalIncomes).toLocaleString('ru') }} &#8381;</p>
+                <p class="total expenses">Расход за период: {{ Number(this.getTotalExpenses).toLocaleString('ru') }} &#8381;</p>
             </el-col>
-            <el-col :span="16">
-                <div class="grid-content">
-                    <el-card v-for="cat in this.$store.getters.getCategories" :key="id" class="box-card"></el-card>
-                </div>
+            <el-col :span="8">
+
             </el-col>
+            <el-col :span="8">
+
+            </el-col>
+        </el-row>
+        <el-row>
+            <div class="grid-content">
+                <el-card v-for="cat in this.$store.getters.getCategories" :key="id" class="box-card"></el-card>
+            </div>
         </el-row>
 
     </div>
@@ -62,6 +68,33 @@ export default {
             return {
                 responsive: true,
                 maintainAspectRatio: true,
+                legend: {
+                    labels: {
+                        fontColor: 'white',
+                        fontSize: 16
+                    },
+
+                },
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            fontColor: 'white'
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            fontColor: 'white'
+                        }
+                    }],
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            return data.datasets[tooltipItem.datasetIndex].label + ': ' + Number(tooltipItem.value).toLocaleString('ru') + ' ₽';
+                        },
+                    },
+                    displayColors: false
+                }
             }
         },
         chartHistData() {
@@ -71,12 +104,14 @@ export default {
                     {
                         label: 'Доходы',
                         data: store.getters["history/getIncomesSums"],
-                        borderColor: ['green']
+                        borderColor: ['green'],
+                        color:['white']
                     },
                     {
                         label: 'Расходы',
                         data: store.getters["history/getExpensesSums"],
-                        borderColor: ['red']
+                        borderColor: ['red'],
+                        color:['white']
                     },
                 ]
             }
