@@ -13,10 +13,9 @@ export default {
                 income_id: this.getters.getIncomeId,
                 type: this.getters.getTypeId
             }
-
-
             commit('setErrorStatus', false);
-            axios.get('/api/transactions', {params: params})
+            commit('setLoaded', false);
+            axios.get('/api/transactions', {params})
                 .then(response => {
                     commit('setTotal', response.data.meta.total);
                     commit('setTransactions', response.data.data);
@@ -24,12 +23,15 @@ export default {
                         commit('setErrorStatus', true);
                         commit('setErrorInfo', `За запрошеный период транзакции не производились ...`);
                     } else {
+                        commit('setLoaded', true);
                         commit('setErrorStatus', false);
+
                     }
                 })
                 .catch(error => {
                     commit('setErrorStatus', true);
                     commit('setErrorInfo', `Ошибка во время запроса транзакций: (${error})`);
+                    console.log(error);
                 })
         },
     },
@@ -37,8 +39,6 @@ export default {
         setTransactions(state, data) {
             state.transactions = data
         },
-
-        //сеттеры параметров запроса
         setPage(state, data) {
             state.page = Number(data)
         },
@@ -54,21 +54,21 @@ export default {
         setExpenseId(state, data) {
             state.expenseId = data
         },
-
         setIncomeId(state, data) {
             state.incomeId = data
         },
         setWalletId(state, data) {
             state.walletId = data
         },
-
         setErrorStatus(state, data) {
             state.errorStatus = data
         },
         setErrorInfo(state, data) {
             state.errorInfo = data
         },
-
+        setLoaded(state, data) {
+            state.loaded = data
+        },
         setTotal(state, data) {
             state.total = Number(data)
         },
@@ -77,8 +77,7 @@ export default {
         transactions: null,
         errorStatus: false,
         errorInfo: 'Не предопределенное сообщение об ошибке ...',
-
-        //параметры запроса транзакций
+        loaded: false,
         page: 1,
         dateFrom: '',
         dateTo: '',
@@ -99,7 +98,9 @@ export default {
         getErrorInfo(state) {
             return state.errorInfo
         },
-
+        getLoaded(state) {
+            return state.loaded
+        },
         getDateFrom(state) {
             return state.dateFrom
         },
@@ -123,6 +124,6 @@ export default {
         },
         getTotal(state) {
             return Number(state.total)
-        },
+        }
     }
 }
