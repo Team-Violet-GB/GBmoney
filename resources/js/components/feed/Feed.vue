@@ -27,6 +27,7 @@
                     <transaction-group :transactionGroup="transactionGroup" :transactionGroupName="index"
                                        class="tran-group"
                                        :feed-template="feedTemplate"
+                                       @change-transactionn="test"
                                        />
                 </el-card>
             </div>
@@ -71,6 +72,10 @@
             ]),
         },
         methods: {
+            test() {
+                console.log('from feed')
+                this.$emit('change-transactionnn')
+            },
             ...mapActions([
                 'fetchWallets',
                 'fetchIncomes',

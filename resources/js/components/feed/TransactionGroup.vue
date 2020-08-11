@@ -33,8 +33,8 @@
         },
         methods: {
             changeTransaction() {
-              console.log('1')
-              this.$parent.$emit('change-transactionn')
+              console.log('from TransactionGroup')
+              this.$emit('change-transactionn')
             },
         },
     }
