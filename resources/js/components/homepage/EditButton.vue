@@ -1,12 +1,10 @@
 <template>
-    <div class="cstm-edit">
-        <i class="el-icon-edit"  @click="dialogEditVisible = true"></i>
+    <div class="">
+        <i class="cstm-edit el-icon-edit"  @click="dialogEditVisible = true"></i>
 
         <el-drawer
             :visible.sync="dialogEditVisible"
             size="40%"
-            :wrapperClosable = false
-            :modal-append-to-body = false
         >
             <div class="cstm-container">
                 <el-form :model="ruleForm" status-icon ref="ruleForm">
@@ -204,6 +202,34 @@
 </script>
 
 <style lang="scss" scoped>
+    .cstm-point {
+        display: block;
+        position: relative;
+        cursor: pointer;
+    }
+    .cstm-point:hover .cstm-edit {
+        display: block;
+        cursor: pointer;
+    }
+    .cstm-edit {
+        color: #9a9898;
+        position: absolute;
+        top: 17%;
+        right: 23%;
+        font-size: 15px;
+        display: none;
+        transition: 0.3s;
+    }
+    .cstm-edit:hover {
+        color: #67c23a;
+    }
+    .cstm-point {
+        margin-bottom: 10px;
+        flex-basis: 15%;
+        position: relative;
+        margin-right: 0.72%;
+        margin-left: 0.72%;
+    }
     .cstm-container {
         padding: 10px 10px;
     }
