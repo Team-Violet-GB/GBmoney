@@ -6,8 +6,8 @@ export default {
         expenses: null,
         incomes: null,
         categories: {
-          incomes: null,
-          expenses: null
+            incomes: null,
+            expenses: null
         },
         labels: [],
         dateFrom: '',
@@ -16,6 +16,12 @@ export default {
         incomesSums: [],
         totalIncomes: "",
         totalExpenses: "",
+        minIncomes: '',
+        avgIncomes: '',
+        maxIncomes: '',
+        minExpenses: '',
+        avgExpenses: '',
+        maxExpenses: '',
     },
     mutations: {
         setExpenses(state, data) {
@@ -51,9 +57,27 @@ export default {
         setTotalExpenses(state, data) {
             state.totalExpenses = data
         },
+        setMinIncomes(state, data) {
+            state.minIncomes = data
+        },
+        setAvgIncomes(state, data) {
+            state.avgIncomes = data
+        },
+        setMaxIncomes(state, data) {
+            state.maxIncomes = data
+        },
+        setMinExpenses(state, data) {
+            state.minExpenses = data
+        },
+        setAvgExpenses(state, data) {
+            state.avgExpenses = data
+        },
+        setMaxExpenses(state, data) {
+            state.maxExpenses = data
+        },
     },
     actions: {
-        fetchIncomes({ commit }) {
+        fetchIncomes({commit}) {
             const headers = {
                 'Content-Type': 'application/json'
             }
@@ -71,7 +95,7 @@ export default {
                     console.log(error)
                 })
         },
-        fetchExpenses({ commit }) {
+        fetchExpenses({commit}) {
             const headers = {
                 'Content-Type': 'application/json'
             }
@@ -120,6 +144,24 @@ export default {
         },
         getTotalIncomes(state) {
             return state.totalIncomes
+        },
+        getMinIncomes(state) {
+            return state.minIncomes
+        },
+        getAvgIncomes(state) {
+            return state.avgIncomes
+        },
+        getMaxIncomes(state) {
+            return state.maxIncomes
+        },
+        getMinExpenses(state) {
+            return state.minExpenses
+        },
+        getAvgExpenses(state) {
+            return state.avgExpenses
+        },
+        getMaxExpenses(state) {
+            return state.maxExpenses
         },
     }
 }
