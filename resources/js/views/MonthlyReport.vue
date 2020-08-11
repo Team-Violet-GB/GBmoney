@@ -4,13 +4,13 @@
             <el-col :lg="11" :xl="11">
 
                 <!--                выбор диапазона месяцов при помощи компонента MonthPicker-->
-                <el-row :gutter="20" type="flex" justify="end" class="params">
-                    <el-col :lg="12" :xl="11">
+                <el-row :gutter="10" type="flex" justify="end" class="params">
+                    <el-col :lg="12" :xl="12">
                         <month-picker @changeDate="onMonthChange"/>
                     </el-col>
 
                     <!--                    выбор типа категории для отображения-->
-                    <el-col :lg="12" :xl="9">
+                    <el-col :lg="12" :xl="8">
                         <div class="btn-group">
                             <el-button-group>
                                 <el-button @click="onTypeBtnClick('Доходы')" type="success" size="mini"
@@ -38,7 +38,7 @@
                 </div>
 
                     <!--                легенда для диаграммы в которую можно тыкать-->
-                    <div class="box-card text-chart-table-wrapper">
+                    <div v-show="!getErrorStatus" class="box-card text-chart-table-wrapper">
                         <el-row class="tran-group-header">
                             <el-col class="text-chart-data-name" :span="10">{{ typeOfChart }}</el-col>
                             <el-col class="cstm-percent" :span="7">100%</el-col>
@@ -310,7 +310,7 @@
 
     .text-chart-table-wrapper {
         border: none;
-        margin-top: 40px;
+        padding-top: 40px;
         width: 100%;
     }
 
