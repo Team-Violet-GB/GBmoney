@@ -55,7 +55,7 @@
                                          class="text-chart-data-row-wrapper" style="cursor: pointer">
                                         <el-col :span="10">{{ item.name }}</el-col>
                                         <el-col class="cstm-percent" :span="7">{{ item.show ? ((100 / totalAmount) *
-                                            +item.amount).toFixed(1) + '%' : 'не отображается'}}
+                                            +item.amount).toFixed(1) + '%' : '-'}}
                                         </el-col>
                                         <el-col class="cstm-amount" :span="7">{{
                                             Number(item.amount).toLocaleString('ru',
