@@ -9,6 +9,7 @@ export default {
                 date_from: this.getters.getDateFrom,
                 date_to: this.getters.getDateTo,
                 expense_id: this.getters.getExpenseId,
+                wallet_id: this.getters.getWalletId,
                 income_id: this.getters.getIncomeId,
                 type: this.getters.getTypeId
             }
@@ -23,6 +24,8 @@ export default {
                         commit('setErrorInfo', `За запрошеный период транзакции не производились ...`);
                     } else {
                         commit('setLoaded', true);
+                        commit('setErrorStatus', false);
+
                     }
                 })
                 .catch(error => {
@@ -30,22 +33,6 @@ export default {
                     commit('setErrorInfo', `Ошибка во время запроса транзакций: (${error})`);
                     console.log(error);
                 })
-        },
-        fetchTransactionsByPoint({ commit }, data) {
-            // axios.get('/api/get/transactions', {      \\ ждём реализацию на бэке
-            //     params: {
-            //         id: data.id,
-            //         type: data.type,
-            //         dateFrom: data.dateFrom,
-            //         dateFrom: data.dateTo
-            //       }
-            // })
-            // .then(response => {
-            //     const transactions = response.data.data
-            //     commit('updateTransactionsByPoint', transactions)
-            // })
-                const transactions = this.getters.getTransactions // заглушка
-                commit('updateTransactionsByPoint', transactions)
         },
     },
     mutations: {
@@ -70,6 +57,9 @@ export default {
         setIncomeId(state, data) {
             state.incomeId = data
         },
+        setWalletId(state, data) {
+            state.walletId = data
+        },
         setErrorStatus(state, data) {
             state.errorStatus = data
         },
@@ -82,13 +72,9 @@ export default {
         setTotal(state, data) {
             state.total = Number(data)
         },
-        updateTransactionsByPoint(state, transactions) {
-            state.transactionsByPoint = transactions
-        },
     },
     state: {
         transactions: null,
-        transactionsByPoint: null,
         errorStatus: false,
         errorInfo: 'Не предопределенное сообщение об ошибке ...',
         loaded: false,
@@ -97,6 +83,7 @@ export default {
         dateTo: '',
         expenseId: '',
         incomeId: '',
+        walletId: '',
         typeId: '',
 
         total: 1,
@@ -104,9 +91,6 @@ export default {
     getters: {
         getTransactions(state) {
             return state.transactions
-        },
-        getTransactionsByPoint(state) {
-            return state.transactionsByPoint
         },
         getErrorStatus(state) {
             return state.errorStatus
@@ -134,6 +118,9 @@ export default {
         },
         getIncomeId(state) {
             return state.incomeId
+        },
+        getWalletId(state) {
+            return state.walletId
         },
         getTotal(state) {
             return Number(state.total)

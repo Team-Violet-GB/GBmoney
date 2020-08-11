@@ -1,5 +1,5 @@
 <template>
-    <div class="cstm-container">
+    <div class="cstm-modal-container">
         <el-form :rules="rules" :model="ruleForm" status-icon ref="ruleForm">
             <span class="cstm-header">Добавление карточки</span>
             <el-form-item prop="name">
@@ -75,7 +75,7 @@
             };
         },
         computed:
-            mapGetters(['allIcons']),
+            mapGetters(['allIcons', 'intervalMonth',]),
         mounted() {
             if (!this.allIcons.length) this.fetchIcons()
         },
@@ -92,7 +92,10 @@
                                 name: this.ruleForm.name,
                                 icon_id: this.ruleForm.choose
                             }).then(response => {
-                                    this.fetchIncomes()
+                                    this.fetchIncomes({
+                                        dateFrom: this.intervalMonth.dateFrom,
+                                        dateTo: this.intervalMonth.dateTo,
+                                    })
                                     this.successForm()
                                 })
                                 .catch((error) => {
@@ -122,7 +125,10 @@
                                 max_limit: this.ruleForm.amount,
                                 icon_id: this.ruleForm.choose
                             }).then( response => {
-                                this.fetchExpenses()
+                                this.fetchExpenses({
+                                    dateFrom: this.intervalMonth.dateFrom,
+                                    dateTo: this.intervalMonth.dateTo,
+                                })
                                 this.successForm()
                             }).catch( error => {
                                 this.errors.push(error.response.data.errors.name[0])
@@ -168,7 +174,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .cstm-container {
+    .cstm-modal-container {
         padding: 10px 10px;
     }
 
@@ -243,6 +249,13 @@
             height: 72px;
         }
     }
+    .cstm-radio-gap .el-radio-button__inner:first-child
+    {
+            border-radius: 50%;
+            border: none;
+            height: 72px;
+        }
+
     .el-radio-button:first-child {
         border-radius: 50%;
         .el-radio-button__inner {

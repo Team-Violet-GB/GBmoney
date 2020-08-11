@@ -48,7 +48,7 @@
             </div>
             <!-- Введите сумму -->
             <el-input placeholder="Сумма" class="cstm-input cstm-mrgn-top-20" type="number" v-model="transaction.amount"></el-input>
-            <Numbers @clickNumber="(number) => addNumber(number)" />  
+            <Numbers @click-number="(number) => addNumber(number)" />  
             <!-- Введите комментарий -->
             <el-input
               type="textarea"
@@ -106,10 +106,10 @@ import Numbers from './Numbers.vue'
             'wallets',
             'expenses',
             'tags',
+            'intervalMonth',
         ]),
 
         tagsFromCategory() {
-          console.log(this.tags)
           var tags = []
           for (var tag in this.tags){
               if (this.tags[tag].expense_id == this.transaction.toID && !this.tags[tag].deleted) {
@@ -134,8 +134,8 @@ import Numbers from './Numbers.vue'
     methods: {
       ...mapActions([
         'fetchTags',
-        'fetchIncomes',
         'fetchWallets',
+        'fetchIncomes',
         'fetchExpenses',
       ]),
 
@@ -199,7 +199,7 @@ import Numbers from './Numbers.vue'
             }
           })
         })
-        .catch(() => {});
+        .catch(() => {})
       },
 
       approveTag() {
@@ -280,11 +280,17 @@ import Numbers from './Numbers.vue'
 
       getNewPoints(type) {
         if (type == 1) {
-          this.fetchIncomes()
+          this.fetchIncomes({
+            dateFrom: this.intervalMonth.dateFrom,
+            dateTo: this.intervalMonth.dateTo,
+          })
           this.fetchWallets()
         } else if (type == 3) {
           this.fetchWallets()
-          this.fetchExpenses()
+          this.fetchExpenses({
+            dateFrom: this.intervalMonth.dateFrom,
+            dateTo: this.intervalMonth.dateTo,
+          })
         } else {
           this.fetchWallets()
         }
@@ -312,7 +318,6 @@ import Numbers from './Numbers.vue'
           if (number == 'delete') this.transaction.amount = null
           else amount ? this.transaction.amount = amount.substring(0, amount.length - 1) : ''
         }
-        console.log(this.transaction.amount)
       },
 
       MessageError(message) {

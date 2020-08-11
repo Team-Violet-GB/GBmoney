@@ -1,24 +1,24 @@
 <template>
     <div>
         <div class="cstm-row-number">
-          <el-button class="cstm-button-numbers" type="info" @click="$emit('clickNumber', 1)">1</el-button>
-          <el-button class="cstm-button-numbers" type="info" @click="$emit('clickNumber', 2)">2</el-button>
-          <el-button class="cstm-button-numbers" type="info" @click="$emit('clickNumber', 3)">3</el-button>
+          <el-button class="cstm-button-numbers" type="info" @click="$emit('click-number', 1)">1</el-button>
+          <el-button class="cstm-button-numbers" type="info" @click="$emit('click-number', 2)">2</el-button>
+          <el-button class="cstm-button-numbers" type="info" @click="$emit('click-number', 3)">3</el-button>
         </div>
         <div class="cstm-row-number">
-          <el-button class="cstm-button-numbers" type="info" @click="$emit('clickNumber', 4)">4</el-button>
-          <el-button class="cstm-button-numbers" type="info" @click="$emit('clickNumber', 5)">5</el-button>
-          <el-button class="cstm-button-numbers" type="info" @click="$emit('clickNumber', 6)">6</el-button>
+          <el-button class="cstm-button-numbers" type="info" @click="$emit('click-number', 4)">4</el-button>
+          <el-button class="cstm-button-numbers" type="info" @click="$emit('click-number', 5)">5</el-button>
+          <el-button class="cstm-button-numbers" type="info" @click="$emit('click-number', 6)">6</el-button>
         </div>
         <div class="cstm-row-number">
-          <el-button class="cstm-button-numbers" type="info" @click="$emit('clickNumber', 7)">7</el-button>
-          <el-button class="cstm-button-numbers" type="info" @click="$emit('clickNumber', 8)">8</el-button>
-          <el-button class="cstm-button-numbers" type="info" @click="$emit('clickNumber', 9)">9</el-button>
+          <el-button class="cstm-button-numbers" type="info" @click="$emit('click-number', 7)">7</el-button>
+          <el-button class="cstm-button-numbers" type="info" @click="$emit('click-number', 8)">8</el-button>
+          <el-button class="cstm-button-numbers" type="info" @click="$emit('click-number', 9)">9</el-button>
         </div>
         <div class="cstm-row-number">
-          <el-button class="cstm-button-numbers" type="info" @click="$emit('clickNumber', 'delete')"><i class="el-icon-delete-solid"></i></el-button>
-          <el-button class="cstm-button-numbers" type="info" @click="$emit('clickNumber', 0)">0</el-button>
-          <el-button class="cstm-button-numbers" type="info" @click="$emit('clickNumber', 'back')"><i class="el-icon-back"></i></el-button>
+          <el-button class="cstm-button-numbers" type="info" @click="$emit('click-number', 'delete')"><i class="el-icon-delete-solid"></i></el-button>
+          <el-button class="cstm-button-numbers" type="info" @click="$emit('click-number', 0)">0</el-button>
+          <el-button class="cstm-button-numbers" type="info" @click="$emit('click-number', 'back')"><i class="el-icon-back"></i></el-button>
         </div>
     </div>
 </template>

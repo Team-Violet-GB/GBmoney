@@ -1,3 +1,4 @@
+
 import axios from 'axios'
 
 export default {
@@ -29,28 +30,33 @@ export default {
                     console.log(error)
                 })
         },
-        fetchIncomes({ commit }) {
-            axios.get('/api/get/incomes')
-            .then(response => {
-                const incomes = response.data.data
-                commit('updateIncomes', incomes)
-                commit('updateIncomesLoad', false)
-            })
-        },
+
         fetchWallets({ commit }) {
             axios.get('/api/get/wallets')
             .then(response => {
                 const wallets = response.data.data
                 commit('updateWallets', wallets)
-                commit('updateWalletsSumm', false)
+                commit('updateWalletsLoad', false)
             })
         },
-        fetchExpenses({ commit }) {
+
+        fetchIncomes({ commit, dispatch }, interval) {
+            axios.get('/api/get/incomes')
+            .then(response => {
+                const incomes = response.data.data
+                commit('updateIncomes', incomes)
+                if (interval) dispatch('fetchIncomesByInterval', interval)
+                else commit('updateIncomesLoad', false)
+            })
+        },
+
+        fetchExpenses({ commit, dispatch }, interval) {
             axios.get('/api/get/expenses')
             .then(response => {
                 const expenses = response.data.data
                 commit('updateExpenses', expenses)
-                commit('updateExpensesLoad', false)
+                if (interval) dispatch('fetchExpensesByInterval', interval)
+                else commit('updateExpensesLoad', false)
             })
         },
         fetchTags({ commit }) {
@@ -60,30 +66,36 @@ export default {
                 commit('updateTags', tags)
             })
         },
+
+        fetchIncomesByInterval({ commit }, interval) {
+            axios.get(`api/report/sum-incomes?date_from=${interval.dateFrom}&date_to=${interval.dateTo}`)
+                .then(response => {
+                    commit('updateIncomesByInterval', response.data.data)
+                    commit('updateIncomesLoad', false)
+                })
+        },
+
+        fetchExpensesByInterval({ commit }, interval) {
+            axios.get(`api/report/sum-expenses?date_from=${interval.dateFrom}&date_to=${interval.dateTo}`)
+                .then(response => {
+                    commit('updateExpensesByInterval', response.data.data)
+                    commit('updateExpensesLoad', false)
+                })
+        },
+
     },
     mutations: {
         updateIncomes(state, points) {
             state.incomesList = points
-            let summ = 0
-            for (let point in points)  summ += Number(points[point].amount)
-            state.incomesSumm = summ
-            console.log()
         },
         updateWallets(state, points) {
             state.walletsList = points
             let summ = 0
-            for (let point in points)  summ += Number(points[point].amount)
+            for (let point in points) if (points[point].include) summ += Number(points[point].amount)
             state.walletsSumm = summ
         },
         updateExpenses(state, points) {
             state.expensesList = points
-            let summ = 0
-            for (let point in points)  summ += Number(points[point].amount)
-            state.expensesSumm = summ
-
-            let limit = 0
-            for (let point in points)  limit += Number(points[point].max_limit)
-            state.expensesLimit = limit
         },
         updateTags(state, points) {
             state.tagsList = points
@@ -92,18 +104,53 @@ export default {
         updateIncomesLoad(state, newState) {
             state.incomesLoad = newState
         },
-        updateWalletsSumm(state, newState) {
+        updateWalletsLoad(state, newState) {
             state.walletsLoad = newState
         },
         updateExpensesLoad(state, newState) {
             state.expensesLoad = newState
         },
 
+        updateIncomesByInterval(state, pointsByInterval) {
+            let points = state.incomesList
+            let summ = 0
+            for (let point in points)  {
+                if (pointsByInterval[point]) {
+                    points[point].amount = pointsByInterval[point].amount
+                    summ += Number(points[point].amount)
+                } else {
+                    points[point].amount = 0
+                }
+            }
+            state.incomesListByInterval = points
+            state.incomesSumm = summ
+        },
+
+        updateExpensesByInterval(state, pointsByInterval) {
+            let points = state.expensesList
+            let summ = 0
+            for (let point in points)  {
+                if (pointsByInterval[point]) {
+                    points[point].amount = pointsByInterval[point].amount
+                    summ += Number(points[point].amount)
+                } else {
+                    points[point].amount = 0
+                }
+            }
+            state.expensesListByInterval = points
+            state.expensesSumm = summ
+
+            let limit = 0
+            for (let point in points)  limit += Number(points[point].max_limit)
+            state.expensesLimit = limit
+        },
     },
     state: {
         incomesList: null,
         walletsList: null,
         expensesList: null,
+        incomesListByInterval: null,
+        expensesListByInterval: null,
         tagsList: null,
         incomesSumm: null,
         walletsSumm: null,
@@ -133,7 +180,7 @@ export default {
             return state.walletsSumm
         },
         expensesSumm(state) {
-            return state.walletsSumm
+            return state.expensesSumm
         },
         expensesLimit(state) {
             return state.expensesLimit
@@ -146,6 +193,20 @@ export default {
         },
         expensesLoading(state) {
             return state.expensesLoad
+        },
+        incomesByInterval(state) {
+            return state.incomesListByInterval
+        },
+        expensesByInterval(state) {
+            return state.expensesListByInterval
+        },
+        
+        intervalMonth() {
+            let date = new Date()
+            let dateFrom = new Date(date.getFullYear(), date.getMonth(), 1)
+            dateFrom = dateFrom.getFullYear() + '-' + (dateFrom.getMonth() + 1) + '-' + dateFrom.getDate()
+            let dateTo = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+            return  {dateFrom, dateTo}
         },
     }
 }

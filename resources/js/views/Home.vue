@@ -11,7 +11,7 @@
       <div slot="header" class="cstm-header-card">
         <div class="clearfix cstm-up-text">
           <span>Доходы</span>
-          <span>{{ incomesSumm }} &#8381;</span>
+          <span>{{ Number(incomesSumm).toLocaleString() }} &#8381;</span>
         </div>
         <div class="clearfix cstm-down-text">
           <span>{{ dateNowString }}</span>
@@ -20,21 +20,21 @@
       </div>
       <!-- тело -->
       <transition-group name="list" tag="div" class="cstm-body-card">
-        <div v-for="point in incomes" :key="point.id" :id="point.id" class="cstm-point">
+        <div v-for="point in incomesByInterval" :key="point.id" :id="point.id" class="cstm-point">
           <div class="cstm-head-point">{{ point.name }}</div>
           <drag :data="{ id: point.id, type: 'income'}">
             <drop :accepts-data="() => false">
-              <el-button 
-                type="primary" 
-                :icon="point.icon_name" 
-                circle 
-                class="cstm-icon-point" 
+              <el-button
+                type="primary"
+                :icon="point.icon_name"
+                circle
+                class="cstm-icon-point"
                 @click="$router.push(`/income/${point.id}`)">
               </el-button>
             </drop>
           </drag>
-          <div class="cstm-money-point cstm-blue">{{ point.amount }} &#8381;</div>
-          <i class="el-icon-edit cstm-edit"></i>
+          <div class="cstm-money-point cstm-blue">{{ Number(point.amount).toLocaleString('ru') }} &#8381;</div>
+          <EditButton :key="'edit'" :data="{id: point.id, name: point.name, choose: point.icon_id}" category="Доход"/>
         </div>
         <Addbutton :key="'add'" category="Доход"/>
       </transition-group>
@@ -45,7 +45,7 @@
       <div slot="header" class="cstm-header-card">
         <div class="clearfix cstm-up-text">
           <span>Счета</span>
-          <span type="text">{{ walletsSumm }} &#8381;</span>
+          <span type="text">{{ Number(walletsSumm).toLocaleString() }} &#8381;</span>
         </div>
         <div class="clearfix cstm-down-text">
           <span>{{ dateNowString }}</span>
@@ -61,17 +61,17 @@
               :accepts-data="(data) => (data.type == 'income') || data.type == 'wallet'"
             >
               <drag :data="{ id: point.id, type: 'wallet'}">
-                <el-button 
-                  type="warning" 
-                  :icon="point.icon_name" 
-                  circle 
-                  class="cstm-icon-point" 
+                <el-button
+                  type="warning"
+                  :icon="point.icon_name"
+                  circle
+                  class="cstm-icon-point"
                   @click="$router.push(`/wallet/${point.id}`)" >
                 </el-button>
                 </drag>
             </drop>
-          <div class="cstm-money-point cstm-yellow">{{ point.amount }} &#8381;</div>
-          <i class="el-icon-edit cstm-edit"></i>
+          <div class="cstm-money-point cstm-yellow">{{ Number(point.amount).toLocaleString() }} &#8381;</div>
+            <EditButton :key="'edit'" :data="{id: point.id, name: point.name, choose: point.icon_id, include: point.include, amount: point.amount}" category="Счета"/>
         </div>
         <Addbutton :key="'add'" category="Счета"/>
       </transition-group>
@@ -82,8 +82,8 @@
       <div slot="header" class="cstm-header-card">
         <div class="clearfix cstm-up-text">
           <span>Расходы</span>
-          <span>{{ expensesSumm }} &#8381;</span>
-          <span>{{ expensesLimit }} &#8381;</span>
+          <span>{{ Number(expensesSumm).toLocaleString() }} &#8381;</span>
+          <span>{{ Number(expensesLimit).toLocaleString() }} &#8381;</span>
         </div>
         <div class="clearfix cstm-down-text">
           <span>{{ dateNowString }}</span>
@@ -93,11 +93,11 @@
       </div>
       <!-- тело -->
       <transition-group name="list" tag="div" class="cstm-body-card">
-        <div v-for="point in expenses" :key="point.id" :id="point.id" class="cstm-point">
+        <div v-for="point in expensesByInterval" :key="point.id" :id="point.id" class="cstm-point">
           <div class="cstm-head-point">{{ point.name }}</div>
           <drop @drop="transactionExpense" :accepts-data="(data) => (data.type == 'wallet')">
             <el-button
-              :type="(point.amount > point.max_limit)? 'danger' : 'success'"
+              :type="(Number(point.amount) > Number(point.max_limit))? 'danger' : 'success'"
               :icon="point.icon_name"
               circle
               class="cstm-icon-point cstm-expense"
@@ -106,10 +106,10 @@
           </drop>
           <div
             class="cstm-money-point"
-            :class="(point.amount > point.max_limit)? 'cstm-red' : 'cstm-green'"
-          >{{ point.amount }} &#8381;</div>
-          <div  v-if="point.max_limit" class="cstm-plan">{{ point.max_limit }} &#8381;</div>
-          <i class="el-icon-edit cstm-edit"></i>
+            :class="(Number(point.amount) > Number(point.max_limit))? 'cstm-red' : 'cstm-green'"
+          >{{ Number(point.amount).toLocaleString() }} &#8381;</div>
+          <div  v-if="point.max_limit" class="cstm-plan">{{ Number(point.max_limit).toLocaleString() }} &#8381;</div>
+            <EditButton :key="'edit'" :data="{id: point.id, name: point.name, choose: point.icon_id, amount: point.max_limit}" category="Расход"/>
         </div>
         <Addbutton :key="'add'" category="Расход"/>
       </transition-group>
@@ -121,10 +121,12 @@
     import { mapGetters, mapActions, mapMutations } from "vuex"
     import Addbutton from "../components/homepage/Addbutton"
     import Transaction from "../components/homepage/Transaction"
+    import EditButton from "../components/homepage/EditButton";
 
     export default {
         name: "App",
         components: {
+            EditButton,
             Drag,
             Drop,
             Addbutton,
@@ -138,9 +140,9 @@
         },
         computed: {
           ...mapGetters([
-              'incomes',
               'wallets',
-              'expenses',
+              'incomesByInterval',
+              'expensesByInterval',
               'incomesSumm',
               'walletsSumm',
               'expensesSumm',
@@ -148,26 +150,30 @@
               'incomesLoading',
               'walletsLoading',
               'expensesLoading',
+              'intervalMonth',
               ]),
 
               dateNowString() {
                 return new Date().toLocaleString('ru', {month: 'long', year: 'numeric'})
-              }
+              },
         },
 
-        async mounted() {
-            if (!this.incomes) {
-              var fetchInc = await this.fetchIncomes()
-              this.loadingIncomes = false
-            }
-            if (!this.wallets) this.fetchWallets()
-            if (!this.expenses) this.fetchExpenses()
+       mounted() {
+            this.fetchWallets()
+            this.fetchIncomes({
+              dateFrom: this.intervalMonth.dateFrom,
+              dateTo: this.intervalMonth.dateTo,
+            })
+            this.fetchExpenses({
+              dateFrom: this.intervalMonth.dateFrom,
+              dateTo: this.intervalMonth.dateTo,
+            })
         },
 
         methods: {
             ...mapActions([
-              'fetchIncomes',
               'fetchWallets',
+              'fetchIncomes',
               'fetchExpenses',
             ]),
 
