@@ -262,8 +262,8 @@ export default {
 }
 
 .total {
-    font-size: 20px;
-    font-weight: 500;
+    font-size: 18px;
+    font-weight: 300;
 }
 .expenses {
     color: #e3342f;
