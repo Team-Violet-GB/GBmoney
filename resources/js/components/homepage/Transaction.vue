@@ -316,7 +316,7 @@ import Numbers from './Numbers.vue'
           amount ? (this.transaction.amount = amount + '' + number) : this.transaction.amount =  number 
         } else {
           if (number == 'delete') this.transaction.amount = null
-          else amount ? this.transaction.amount = amount.substring(0, amount.length - 1) : ''
+          else amount ? this.transaction.amount = String(amount).substring(0, amount.length - 1) : ''
         }
       },
 
