@@ -11,7 +11,7 @@
       <CalendarMonth @changeDate="newDate => changeDate(newDate)" />
         <br>
     </div>
-     <Feed v-if="type == 'income' || type == 'wallet'" />
+     <Feed @change-transaction="changeTransaction" v-if="type == 'income' || type == 'wallet'" />
 
     <el-row v-if="type == 'expense'">
       <el-col class="grid-content bg-purple cstm-col-left" :span="12">
@@ -34,7 +34,7 @@
           </div>
       </el-col>
       <el-col  class="grid-content bg-purple-light cstm-feed" :span="12">
-        <Feed :feed-template="false" @change-transactionn="console.log('2')" />
+        <Feed @change-transaction="changeTransaction" :feed-template="false" />
       </el-col>
     </el-row>
   </div>
@@ -66,10 +66,16 @@ export default {
       lineChart: null,
       loadingPie: true, 
       loadingLine: true,
+      colorsPie: {},
     }
   },
 
   computed: {
+    ...mapGetters([
+        'getDateFrom',
+        'getDateTo',
+    ]),
+            
     loading() {
       if (!this.loadingPie && !this.loadingLine) return false
       return true
@@ -136,14 +142,20 @@ mounted() {
     ]),
 
     changeDate(newDate) {
-      if (this.type == 'expense') {
-        this.fetchPieChart({ dateFrom: newDate.from, dateTo: newDate.to })
-      }
-      if (this.type == 'expense' || this.type == 'income') {
-        this.fetchLineChart({ dateFrom: newDate.from, dateTo: newDate.to })
-      }
+      this. changeCharts(newDate)
       this.getTransactionList({ [`${this.type}_id`]: this.id, dateFrom: newDate.from, dateTo: newDate.to })
     },
+
+    changeCharts(newDate) {
+      if (this.type == 'expense') this.fetchPieChart({ dateFrom: newDate.from, dateTo: newDate.to })
+      if (this.type == 'expense' || this.type == 'income') this.fetchLineChart({ dateFrom: newDate.from, dateTo: newDate.to })
+    },
+
+    changeTransaction() {
+      if (this.getDateFrom && this.getDateTo) this.changeCharts({ from: this.getDateFrom, to: this.getDateTo })
+      else this.changeCharts({ from: this.intervalHalfYear.dateFrom, to: this.intervalHalfYear.dateTo })
+    },
+
     
     fetchLineChart(data) {
         this.axios.get(`/api/report/sum-points-by-months?${this.type}_id=${this.id}&date_from=${data.dateFrom}&date_to=${data.dateTo}`)
@@ -162,42 +174,6 @@ mounted() {
                 this.setPieChart(pieData)
                 this.loadingPie = false
             })
-    },
-
-    prepareLineData(months) {
-      let names = []
-      let amounts = []
-      let color = {}
-      for (let month in months) {
-        names.push(month)
-        if (months[month][0]) amounts.push(months[month][0].amount)
-        else amounts.push(0)
-      }
-      if (this.type == 'expense') {
-        color.r = '255'
-        color.g = color.b =  '0'
-      } else {
-        color.g = '255'
-        color.r = color.b =  '0'
-      }
-      return { names, amounts, color }
-    },
-
-    preparePieData(tags) {
-        let names = []
-        let amounts = []
-        let colors = []
-        this.pieSumm = 0
-        for (let tag in tags) {
-            let color = this.colorGenerator()
-            if (tags[tag].tag_id == 0) color = '#C9C9C9'
-            names.push(tags[tag].name)
-            amounts.push(tags[tag].amount)
-            colors.push(color)
-            this.pieTable[tag].color = color
-            this.pieSumm += Number(tags[tag].amount)
-        }
-        return { names, amounts, colors }
     },
 
     setLineChart(lineData) {
@@ -228,6 +204,48 @@ mounted() {
         }
     },
 
+    prepareLineData(months) {
+      let names = []
+      let amounts = []
+      let color = {}
+      for (let month in months) {
+        names.push(month)
+        if (months[month][0]) amounts.push(months[month][0].amount)
+        else amounts.push(0)
+      }
+      if (this.type == 'expense') {
+        color.r = '255'
+        color.g = color.b =  '0'
+      } else {
+        color.g = '255'
+        color.r = color.b =  '0'
+      }
+      return { names, amounts, color }
+    },
+
+    preparePieData(tags) {
+        let names = []
+        let amounts = []
+        let colors = []
+        this.pieSumm = 0
+        for (let tag in tags) {
+            let color = ''
+            if (tags[tag].tag_id == 0) color = '#C9C9C9'
+            else if (this.colorsPie[`${tags[tag].name}`]) {
+              color = this.colorsPie[`${tags[tag].name}`]
+            } else {
+              color = this.colorGenerator() 
+              this.colorsPie[`${tags[tag].name}`] = color
+            } 
+            names.push(tags[tag].name)
+            amounts.push(tags[tag].amount)
+            colors.push(color)
+            this.pieTable[tag].color = color
+            this.pieSumm += Number(tags[tag].amount)
+        }
+        return { names, amounts, colors }
+    },
+
     colorGenerator() {
       let rbg = [0, 255, (Math.floor(Math.random() * (256)))] // параметры для самого яркого цвета, чтобы не получались тёмные
       let value1 = rbg.splice(Math.floor(Math.random()*rbg.length), 1)[0] // перемешиваем, выбирая случайный элемент масива, удаляем его из массива
@@ -250,10 +268,6 @@ mounted() {
         this.setTypeId(data.type)
         this.fetchTransactions()
     },
-
-    changeTransaction() {
-      console.log('Хэй')
-    }
   },
 }
 </script>

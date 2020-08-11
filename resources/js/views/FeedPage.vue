@@ -1,6 +1,6 @@
 <template>
     <div>
-        <feed @change-transactionnn="test"/>
+        <feed />
     </div>
 </template>
 
@@ -21,9 +21,6 @@
             ]),
         },
         methods: {
-            test() {
-                console.log('обработчик события from Feed')
-            },
             ...mapMutations([
                 'setPage',
                 'setDateFrom',

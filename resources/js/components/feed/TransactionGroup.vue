@@ -4,7 +4,6 @@
                      :key="transaction.id" :transaction="{transactionGroupName: transactionGroupName,
                      transactionGroupLength: transactionGroup.length,
                      transactionIndex: index, data: transaction, edata: {}, isEdit: false}" :feedTemplate="feedTemplate"
-                     @change-transaction="changeTransaction"
                      />
     </div>
 </template>
@@ -30,12 +29,6 @@
         },
         components: {
             transaction
-        },
-        methods: {
-            changeTransaction() {
-              console.log('from TransactionGroup')
-              this.$emit('change-transactionn')
-            },
         },
     }
 </script>

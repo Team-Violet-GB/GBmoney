@@ -261,8 +261,10 @@
                     });
             },
             updateOtherData(type) {
-                this.$parent.$emit('change-transaction')
-                if (!this.feedTemplate) this.fetchTotalAmountOfCategories();
+                this.$parent.$parent.$emit('change-transaction')
+                if (this.$route.name == 'monthlyReport') {
+                    if (!this.feedTemplate) this.fetchTotalAmountOfCategories();
+                }
                 this.fetchTransactions();
                 this.fetchWallets();
                 if (type == 1) this.fetchIncomes();
