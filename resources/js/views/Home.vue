@@ -308,22 +308,22 @@
 .cstm-expense {
   cursor: pointer;
 }
-.cstm-point:hover .cstm-edit {
-  display: block;
-  cursor: pointer;
-}
-.cstm-edit {
-  color: #9a9898;
-  position: absolute;
-  top: 17%;
-  right: 23%;
-  font-size: 15px;
-  display: none;
-  transition: 0.3s;
-}
-.cstm-edit:hover {
-  color: #67c23a;
-}
+/*.cstm-point:hover .cstm-edit {*/
+/*  display: block;*/
+/*  cursor: pointer;*/
+/*}*/
+/*.cstm-edit {*/
+/*  color: #9a9898;*/
+/*  position: absolute;*/
+/*  top: 17%;*/
+/*  right: 23%;*/
+/*  font-size: 15px;*/
+/*  display: none;*/
+/*  transition: 0.3s;*/
+/*}*/
+/*.cstm-edit:hover {*/
+/*  color: #67c23a;*/
+/*}*/
 
 /* при наведении взятого элемента на ячейку */
 .drop-in button {
