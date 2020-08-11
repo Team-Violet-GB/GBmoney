@@ -152,10 +152,10 @@
                 'setErrorStatus',
                 'setErrorInfo'
             ]),
-        },
-        created() {
-            this.$on('change-transaction', console.log('change-transaction'));
         }
+        // async created() {
+        //    this.$on('change-transaction',  () => {console.log('change-transaction')});
+        // }
     }
 </script>
 

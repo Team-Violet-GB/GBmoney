@@ -268,7 +268,7 @@
                     });
             },
             updateOtherData(type) {
-                this.$emit('change-transaction')
+                this.$parent.$emit('change-transaction')
                 // console.log(this.changeTransaction)
                 // this.changeTransaction = !this.changeTransaction
                 // console.log(this.changeTransaction)
