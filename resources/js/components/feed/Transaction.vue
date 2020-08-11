@@ -57,7 +57,6 @@
 
         <!--    компонент редактора транзакций    -->
         <transactionEditor
-        @change-transaction="alert('change-transaction! ')"
             v-if="editorData.isEdit"
             :editorData="editorData"
             :feedTemplate="feedTemplate"
@@ -153,9 +152,6 @@
                 'setErrorInfo'
             ]),
         }
-        // async created() {
-        //    this.$on('change-transaction',  () => {console.log('change-transaction')});
-        // }
     }
 </script>
 

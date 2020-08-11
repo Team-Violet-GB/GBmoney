@@ -157,7 +157,6 @@
                 }
             };
             return {
-                // changeTransaction: false,
                 rules: {
                     amount: [
                         {validator: checkAmount, trigger: 'blur'}
@@ -176,12 +175,6 @@
                 }
             }
         },
-        // watch: {
-        //     changeTransaction() {
-        //         this.$emit('change-transaction')
-        //         console.log('watch changeTransaction')
-        //     }
-        // },
 
         computed: {
             ...mapGetters([
@@ -269,9 +262,6 @@
             },
             updateOtherData(type) {
                 this.$parent.$emit('change-transaction')
-                // console.log(this.changeTransaction)
-                // this.changeTransaction = !this.changeTransaction
-                // console.log(this.changeTransaction)
                 if (!this.feedTemplate) this.fetchTotalAmountOfCategories();
                 this.fetchTransactions();
                 this.fetchWallets();

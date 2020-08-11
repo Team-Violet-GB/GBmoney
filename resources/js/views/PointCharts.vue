@@ -34,7 +34,7 @@
           </div>
       </el-col>
       <el-col  class="grid-content bg-purple-light cstm-feed" :span="12">
-        <Feed :feed-template="false" />
+        <Feed :feed-template="false" @change-transactionn="console.log('2')" />
       </el-col>
     </el-row>
   </div>
@@ -249,6 +249,10 @@ mounted() {
         this.setWalletId(data.wallet_id)
         this.setTypeId(data.type)
         this.fetchTransactions()
+    },
+
+    changeTransaction() {
+      console.log('Хэй')
     }
   },
 }
