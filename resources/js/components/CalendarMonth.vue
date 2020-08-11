@@ -22,7 +22,7 @@
     data() {
       return {
         date: null,
-        dateSelect: [new Date(), new Date()],
+        dateSelect: [new Date(this.defaultValue ? this.defaultValue : new Date()), new Date()],
         pickerOptions: {
           shortcuts: [{
             text: 'Этот месяц',
@@ -48,7 +48,7 @@
         },
       };
     },
-
+    props: ['defaultValue'],
     watch: {
       dateSelect(newDate) {
         var dateTo = new Date(newDate[1].split('-'))
