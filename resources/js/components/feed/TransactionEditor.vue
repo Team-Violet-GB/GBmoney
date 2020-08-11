@@ -167,6 +167,12 @@
         props: {
             editorData: {
                 type: Object
+            },
+            feedTemplate: {
+                type: Boolean,
+                default() {
+                    return true;
+                }
             }
         },
         computed: {
@@ -178,7 +184,7 @@
             ]),
             getTagsOfExpense() {
                 let tagsOfExpense = [];
-                tagsOfExpense.push({name: "Без тега", id: null});
+                tagsOfExpense.push({name: "Без подкатегории", id: null});
                 for (let tag in this.tags) {
                     if (this.tags[tag].expense_id === this.editorData.edata.expense_id) {
                         tagsOfExpense.push(this.tags[tag])
@@ -216,7 +222,6 @@
                             .then(response => {
                                 if (response.status === 200) {
                                     this.updateOtherData(this.editorData.type);
-                                    this.fetchTransactions()
                                 }
                             })
                             .catch(error => {
@@ -238,7 +243,6 @@
                     .then(response => {
                         if (response.status === 200) {
                             this.updateOtherData(this.editorData.type);
-                            this.fetchTransactions()
                             this.$message({
                                 type: 'info',
                                 message: `Транзакции от ${new Date(this.editorData.data.date).toLocaleDateString()} была удалена`
@@ -255,10 +259,11 @@
                     });
             },
             updateOtherData(type) {
-                this.fetchTotalAmountOfCategories();
-                this.fetchWallets()
-                if (type == 1) this.fetchIncomes()
-                if (type == 3) this.fetchExpenses()
+                if (!this.feedTemplate) this.fetchTotalAmountOfCategories();
+                this.fetchTransactions();
+                this.fetchWallets();
+                if (type == 1) this.fetchIncomes();
+                if (type == 3) this.fetchExpenses();
             }
         }
     }
@@ -267,8 +272,7 @@
 <style scoped>
     .editor {
         color: rgb(255, 208, 75) !important;
-        /*background-color: #3d3e48;*/
-        background-color: rgba(88, 89, 106, 0.30);
+        background-color: rgba(88, 89, 106, 0.0);
         border-radius: 2px;
         padding: 15px 17px 1px;
     }

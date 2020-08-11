@@ -75,7 +75,7 @@
             };
         },
         computed:
-            mapGetters(['allIcons']),
+            mapGetters(['allIcons', 'intervalMonth',]),
         mounted() {
             if (!this.allIcons.length) this.fetchIcons()
         },
@@ -92,7 +92,10 @@
                                 name: this.ruleForm.name,
                                 icon_id: this.ruleForm.choose
                             }).then(response => {
-                                    this.fetchIncomes()
+                                    this.fetchIncomes({
+                                        dateFrom: this.intervalMonth.dateFrom,
+                                        dateTo: this.intervalMonth.dateTo,
+                                    })
                                     this.successForm()
                                 })
                                 .catch((error) => {
@@ -122,7 +125,10 @@
                                 max_limit: this.ruleForm.amount,
                                 icon_id: this.ruleForm.choose
                             }).then( response => {
-                                this.fetchExpenses()
+                                this.fetchExpenses({
+                                    dateFrom: this.intervalMonth.dateFrom,
+                                    dateTo: this.intervalMonth.dateTo,
+                                })
                                 this.successForm()
                             }).catch( error => {
                                 this.errors.push(error.response.data.errors.name[0])

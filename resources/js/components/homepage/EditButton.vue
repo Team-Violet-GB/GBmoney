@@ -5,6 +5,8 @@
         <el-drawer
             :visible.sync="dialogEditVisible"
             size="40%"
+            :wrapperClosable = false
+            :modal-append-to-body = false
         >
             <div class="cstm-container">
                 <el-form :model="ruleForm" status-icon ref="ruleForm">
@@ -70,7 +72,7 @@
             };
         },
         computed:
-            mapGetters(['allIcons']),
+            mapGetters(['allIcons', 'intervalMonth',]),
         mounted() {
             if (!this.allIcons.length) this.fetchIcons()
         },
@@ -81,7 +83,10 @@
                 if (this.category === 'Доход') {
                     axios.delete('/api/incomes/' + this.data.id)
                         .then( response => {
-                            this.fetchIncomes()
+                            this.fetchIncomes({
+                                dateFrom: this.intervalMonth.dateFrom,
+                                dateTo: this.intervalMonth.dateTo,
+                            })
                             this.dialogEditVisible = false
                             this.$message.success(this.ruleForm.name + ' успешно удален')
                             this.$emit('cancel')
@@ -107,7 +112,10 @@
                 if (this.category === 'Расход') {
                     axios.delete('/api/expenses/' + this.data.id)
                         .then( response => {
-                            this.fetchExpenses()
+                            this.fetchExpenses({
+                                dateFrom: this.intervalMonth.dateFrom,
+                                dateTo: this.intervalMonth.dateTo,
+                            })
                             this.dialogEditVisible = false
                             this.$message.success(this.ruleForm.name + ' успешно удален')
                             this.$emit('cancel')
@@ -126,7 +134,10 @@
                                 name: this.ruleForm.name,
                                 icon_id: this.ruleForm.choose
                                 }).then(response => {
-                                    this.fetchIncomes()
+                                    this.fetchIncomes({
+                                        dateFrom: this.intervalMonth.dateFrom,
+                                        dateTo: this.intervalMonth.dateTo,
+                                    })
                                     this.successForm()
                                 })
                                 .catch((error) => {
@@ -156,7 +167,10 @@
                                 icon_id: this.ruleForm.choose,
                                 max_limit: this.ruleForm.amount
                             }).then( response => {
-                                this.fetchExpenses()
+                                this.fetchExpenses({
+                                    dateFrom: this.intervalMonth.dateFrom,
+                                    dateTo: this.intervalMonth.dateTo,
+                                })
                                 this.successForm()
                             }).catch( error => {
                                 this.errors.push(error.response.data.errors.name[0])

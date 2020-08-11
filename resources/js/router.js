@@ -48,7 +48,7 @@ const router = new VueRouter({
       path: '/monthly-report',
       name: 'monthlyReport',
       meta: { layout: 'main', auth: true },
-      component: () => import('./components/reports/MonthlyReport.vue')
+      component: () => import('./views/MonthlyReport.vue')
     },
     {
       path: '/history',
