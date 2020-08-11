@@ -82,20 +82,20 @@
       <div slot="header" class="cstm-header-card">
         <div class="clearfix cstm-up-text">
           <span>Расходы</span>
-          <span>{{ Number(expensesLimit).toLocaleString() }} &#8381;</span>
           <span>{{ Number(expensesSumm).toLocaleString() }} &#8381;</span>
+          <span>{{ Number(expensesLimit).toLocaleString() }} &#8381;</span>
         </div>
         <div class="clearfix cstm-down-text">
           <span>{{ dateNowString }}</span>
-          <span>В планах</span>
           <span>Потрачено</span>
+          <span>В планах</span>
         </div>
       </div>
       <!-- тело -->
       <transition-group name="list" tag="div" class="cstm-body-card">
         <div v-for="point in expensesByInterval" :key="point.id" :id="point.id" class="cstm-point">
           <div class="cstm-head-point">{{ point.name }}</div>
-          <drop @drop="transactionExpense" :accepts-data="(data) => (data.type == 'wallet')">
+          <drop @drop="transactionExpense" :accepts-data="(data) => (data.type == 'wallet')"> 
             <el-button
               :type="(Number(point.amount) > Number(point.max_limit))? 'danger' : 'success'"
               :icon="point.icon_name"
@@ -162,7 +162,7 @@
             this.updateIncomesLoad(true)
             this.updateWalletsLoad(true)
             this.updateExpensesLoad(true)
-
+            
             this.fetchWallets()
             this.fetchIncomes({
               dateFrom: this.intervalMonth.dateFrom,
@@ -182,9 +182,9 @@
             ]),
 
             ...mapMutations([
-              'updateWalletsLoad',
-              'updateIncomesLoad',
               'updateExpensesLoad',
+              'updateIncomesLoad',
+              'updateWalletsLoad',
             ]),
 
             transactionWallet (event) {

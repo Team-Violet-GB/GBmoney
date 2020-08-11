@@ -51,6 +51,7 @@
 
         <!--    компонент редактора транзакций    -->
         <transactionEditor
+        @change-transaction="alert('change-transaction! ')"
             v-if="editorData.isEdit"
             :editorData="editorData"
             :feedTemplate="feedTemplate"

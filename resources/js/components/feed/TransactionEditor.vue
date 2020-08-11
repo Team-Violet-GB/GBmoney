@@ -157,6 +157,7 @@
                 }
             };
             return {
+                changeTransaction: false,
                 rules: {
                     amount: [
                         {validator: checkAmount, trigger: 'blur'}
@@ -175,6 +176,13 @@
                 }
             }
         },
+        watch: {
+            changeTransaction() {
+                this.$emit('change-transaction')
+                console.log('watch changeTransaction')
+            }
+        },
+
         computed: {
             ...mapGetters([
                 'wallets',
@@ -242,6 +250,7 @@
                 axios.delete(`/api/transactions/${this.editorData.edata.id}`)
                     .then(response => {
                         if (response.status === 200) {
+
                             this.updateOtherData(this.editorData.type);
                             this.$message({
                                 type: 'info',
@@ -259,6 +268,9 @@
                     });
             },
             updateOtherData(type) {
+                console.log(this.changeTransaction)
+                this.changeTransaction = !this.changeTransaction 
+                console.log(this.changeTransaction)
                 if (!this.feedTemplate) this.fetchTotalAmountOfCategories();
                 this.fetchTransactions();
                 this.fetchWallets();
