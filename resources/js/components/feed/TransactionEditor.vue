@@ -149,7 +149,6 @@
                         </el-form-item>
 
                         <el-form-item class="no_feed">
-                            <!--                                    <i :class="getTypeData(editorData.edata).color" class="el-icon-d-arrow-right"></i>-->
                             <el-select class="selector-no-feed no_feed"
                                        v-if="getTypeData(editorData.edata).typeName === 'Доход'"
                                        v-model="editorData.edata.wallet_id_to">
@@ -158,10 +157,8 @@
                                            class="select_option">
                                 </el-option>
                             </el-select>
-                            <div class="flex">
+                            <div v-if="getTypeData(editorData.edata).typeName === 'Расход'" class="flex">
                                 <el-select @change="setCurrentTagOfSelectedExpense" class="selector-no-feed no_feed50"
-                                           style="float: left"
-                                           v-if="getTypeData(editorData.edata).typeName === 'Расход'"
                                            v-model="editorData.edata.expense_id">
                                     <el-option v-for="expense in expenses" :key="expense.id"
                                                :label="expense.name" :value="expense.id"
@@ -169,7 +166,6 @@
                                     </el-option>
                                 </el-select>&nbsp;&nbsp;
                                 <el-select class="selector-no-feed  no_feed50"
-                                           v-if="getTypeData(editorData.edata).typeName === 'Расход'"
                                            v-model="editorData.edata.tag_id">
                                     <el-option v-for="tag in getTagsOfExpense" :key="tag.id"
                                                :label="tag.name" :value="tag.id" class="select_option">
