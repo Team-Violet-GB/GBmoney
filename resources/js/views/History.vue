@@ -7,32 +7,68 @@
                 </div>
             </el-col>
         </el-row>
-        <div class="grid-content">
-            <CalendarMonth :default-value="currentISODateFrom"
-                           @changeDate="newDate => onMonthChange(newDate)"/>
-        </div>
+        <el-row type="flex" class="row-bg" justify="center">
+            <div class="grid-content">
+                <el-col :span="8">
+                    <CalendarMonth :default-value="currentISODateFrom"
+                                   @changeDate="newDate => onMonthChange(newDate)"/>
+                </el-col>
+            </div>
+        </el-row>
         <el-row :gutter="20">
             <el-col :span="6">
-                <p class="total incomes">Доход за период: {{ Number(this.getTotalIncomes).toLocaleString('ru') }} &#8381;</p>
-                <p class="total expenses">Расход за период: {{ Number(this.getTotalExpenses).toLocaleString('ru') }} &#8381;</p>
-                <p class="total profit">Прибыль: {{ Number(this.getTotalIncomes - this.getTotalExpenses).toLocaleString('ru') }} &#8381;</p>
+                <p class="total incomes">Доход за период: {{ Number(this.getTotalIncomes).toLocaleString('ru') }}
+                    &#8381;</p>
+                <p class="total expenses">Расход за период: {{ Number(this.getTotalExpenses).toLocaleString('ru') }}
+                    &#8381;</p>
+                <p class="total profit">Прибыль:
+                    {{ Number(this.getTotalIncomes - this.getTotalExpenses).toLocaleString('ru') }} &#8381;</p>
             </el-col>
             <el-col :span="6">
                 <p class="total incomes">Мин. доход: {{ Number(this.getMinIncomes).toLocaleString('ru') }} &#8381;</p>
-                <p class="total expenses">Мин. расход: {{ Number(this.getMinExpenses).toLocaleString('ru') }} &#8381;</p>
+                <p class="total expenses">Мин. расход: {{ Number(this.getMinExpenses).toLocaleString('ru') }}
+                    &#8381;</p>
             </el-col>
             <el-col :span="6">
-                <p class="total incomes">Средний доход: {{ Number(this.getAvgIncomes).toLocaleString('ru') }} &#8381;</p>
-                <p class="total expenses">Средний расход: {{ Number(this.getAvgExpenses).toLocaleString('ru') }} &#8381;</p>
+                <p class="total incomes">Средний доход: {{ Number(this.getAvgIncomes).toLocaleString('ru') }}
+                    &#8381;</p>
+                <p class="total expenses">Средний расход: {{ Number(this.getAvgExpenses).toLocaleString('ru') }}
+                    &#8381;</p>
             </el-col>
             <el-col :span="6">
                 <p class="total incomes">Макс. доход: {{ Number(this.getMaxIncomes).toLocaleString('ru') }} &#8381;</p>
-                <p class="total expenses">Макс. расход: {{ Number(this.getMaxExpenses).toLocaleString('ru') }} &#8381;</p>
+                <p class="total expenses">Макс. расход: {{ Number(this.getMaxExpenses).toLocaleString('ru') }}
+                    &#8381;</p>
             </el-col>
         </el-row>
         <el-row>
             <div class="grid-content">
-                <el-card v-for="cat in this.$store.getters.getCategories" :key="id" class="box-card"></el-card>
+                <el-col :span="12">
+                    <el-row type="flex" class="row-bg" justify="center">
+                        <el-col :span="8">
+                            <p class="incomes label">Фильтр Доходов</p>
+                        </el-col>
+                    </el-row>
+                    <el-checkbox-group v-model="checkListIncomes">
+                        <el-checkbox v-for="cat in this.$store.getters['history/getCategories'].incomes"
+                                     :label="cat" :key="cat"
+                                     @change="handleChangeIncomes(cat)">
+                        </el-checkbox>
+                    </el-checkbox-group>
+                </el-col>
+                <el-col :span="12">
+                    <el-row type="flex" class="row-bg" justify="center">
+                        <el-col :span="8">
+                            <p class="expenses label">Фильтр Расходов</p>
+                        </el-col>
+                    </el-row>
+                    <el-checkbox-group v-model="checkListExpenses">
+                        <el-checkbox v-for="cat in this.$store.getters['history/getCategories'].expenses"
+                                     :label="cat" :key="cat"
+                                     @change="handleChangeExpenses(cat)">
+                        </el-checkbox>
+                    </el-checkbox-group>
+                </el-col>
             </div>
         </el-row>
 
@@ -40,10 +76,10 @@
 </template>
 
 <script>
-import LineChart from "./HistoryChart"
+import LineChart from "../components/history/HistoryChart"
 import {mapActions, mapGetters, mapMutations} from 'vuex'
-import CalendarMonth from "../CalendarMonth"
-import store from "../../store/index.js"
+import CalendarMonth from "../components/CalendarMonth"
+import store from "../store"
 
 export default {
     name: "History",
@@ -58,6 +94,9 @@ export default {
             labels: [],
             sumExpenses: [],
             sumIncomes: [],
+            checkListsRenew: true,
+            checkListIncomes: [],
+            checkListExpenses: [],
         }
     },
     computed: {
@@ -88,6 +127,15 @@ export default {
                     },
 
                 },
+                elements: {
+                    point: {
+                        radius: 7,
+                        pointStyle: 'circle',
+                        hitRadius: 25,
+                        hoverRadius: 11,
+                        backgroundColor: '#f6993f'
+                    },
+                },
                 scales: {
                     xAxes: [{
                         ticks: {
@@ -102,7 +150,7 @@ export default {
                 },
                 tooltips: {
                     callbacks: {
-                        label: function(tooltipItem, data) {
+                        label: function (tooltipItem, data) {
                             return data.datasets[tooltipItem.datasetIndex].label + ': ' + Number(tooltipItem.value).toLocaleString('ru') + ' ₽';
                         },
                     },
@@ -118,13 +166,13 @@ export default {
                         label: 'Доходы',
                         data: store.getters["history/getIncomesSums"],
                         borderColor: ['green'],
-                        color:['white']
+                        color: ['white']
                     },
                     {
                         label: 'Расходы',
                         data: store.getters["history/getExpensesSums"],
                         borderColor: ['red'],
-                        color:['white']
+                        color: ['white']
                     },
                 ]
             }
@@ -156,14 +204,21 @@ export default {
                 store.commit('setDateFrom', range.from)
                 store.commit('setDateTo', range.to)
             }
+            this.checkListsRenew = true
             store.dispatch('history/fetchExpenses')
             store.dispatch('history/fetchIncomes')
         },
-    },
-    watch: {
-        getIncomes: getIncomes => {
+        handleChangeIncomes(value) {
+            this.checkListsRenew = false
+            this.updateIncomes(store.getters['history/getIncomes'])
+        },
+        handleChangeExpenses(value) {
+            this.checkListsRenew = false
+            this.updateExpenses(store.getters['history/getExpenses'])
+        },
+        updateIncomes(getIncomes) {
             let labels = []
-            let cats = new Map
+            let cats = []
             let sum = []
             let total = 0
             let min = 0
@@ -175,17 +230,23 @@ export default {
                     sum.push(0)
                     if (getIncomes[key].length) {
                         for (let point of getIncomes[key]) {
-                            if (!cats.has(point.income_id))
-                                cats.set(point.income_id, point.name)
-                            sum[sum.length - 1] = (+sum[sum.length - 1] + +point.amount).toFixed(2)
-                            total = (+total + +point.amount).toFixed(2)
-                            max = max < +point.amount ? (+point.amount).toFixed(2) : max
-                            min = min >= +point.amount ? (+point.amount).toFixed(2) : min
+                            if (!cats.includes(point.name)) {
+                                cats.push(point.name)
+                            }
+                            if (this.checkListsRenew)
+                                this.checkListIncomes = cats
+                            if (this.checkListIncomes.includes(point.name)) {
+                                sum[sum.length - 1] = (+sum[sum.length - 1] + +point.amount).toFixed(2)
+                                total = (+total + +point.amount).toFixed(2)
+                            }
                         }
                     }
+                    let num = Number(sum[sum.length - 1])
+                    max = max < num ? num.toFixed(2) : max
+                    min = min >= num ? num.toFixed(2) : min
                 }
             )
-            avg = (total/labels.length).toFixed(2)
+            avg = (total / labels.length).toFixed(2)
 
             store.commit('history/setIncomesCategories', cats)
             store.commit('history/setIncomesSums', sum)
@@ -195,10 +256,9 @@ export default {
             store.commit('history/setAvgIncomes', avg)
             store.commit('history/setMaxIncomes', max)
         },
-
-        getExpenses: getExpenses => {
+        updateExpenses(getExpenses) {
             let labels = []
-            let cats = new Map
+            let cats = []
             let sum = []
             let total = 0
             let min = 0
@@ -210,17 +270,23 @@ export default {
                     sum.push(0)
                     if (getExpenses[key].length) {
                         for (let point of getExpenses[key]) {
-                            if (!cats.has(point.expense_id))
-                                cats.set(point.expense_id, point.name)
-                            sum[sum.length - 1] = (+sum[sum.length - 1] + +point.amount).toFixed(2)
-                            total = (+total + +point.amount).toFixed(2)
-                            max = max < +point.amount ? (+point.amount).toFixed(2) : max
-                            min = min >= +point.amount ? (+point.amount).toFixed(2) : min
+                            if (!cats.includes(point.name)) {
+                                cats.push(point.name)
+                            }
+                            if (this.checkListsRenew)
+                                this.checkListExpenses = cats
+                            if (this.checkListExpenses.includes(point.name)) {
+                                sum[sum.length - 1] = (+sum[sum.length - 1] + +point.amount).toFixed(2)
+                                total = (+total + +point.amount).toFixed(2)
+                            }
                         }
                     }
+                    let num = Number(sum[sum.length - 1])
+                    max = max < num ? num.toFixed(2) : max
+                    min = min >= num ? num.toFixed(2) : min
                 }
             )
-            avg = (total/labels.length).toFixed(2)
+            avg = (total / labels.length).toFixed(2)
 
             store.commit('history/setExpensesCategories', cats)
             store.commit('history/setExpensesSums', sum)
@@ -228,8 +294,19 @@ export default {
             store.commit('history/setMinExpenses', min)
             store.commit('history/setAvgExpenses', avg)
             store.commit('history/setMaxExpenses', max)
+        }
+    },
+    watch: {
+        getIncomes: function (getIncomes) {
+            this.updateIncomes(getIncomes)
+        },
+
+        getExpenses: function (getExpenses) {
+            this.updateExpenses(getExpenses)
         },
     },
+
+
     mounted() {
         store.commit('setDateFrom', this.currentISODateFrom)
         store.commit('setDateTo', this.currentISODateTo)
@@ -265,6 +342,7 @@ export default {
     font-size: 18px;
     font-weight: 300;
 }
+
 .expenses {
     color: #e3342f;
 }
@@ -276,5 +354,11 @@ export default {
 .profit {
     color: #0dadec;
 }
+
+.label {
+    font-size: 16px;
+    font-weight: 600;
+}
+
 
 </style>
