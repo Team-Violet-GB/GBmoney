@@ -200,7 +200,7 @@ export default {
         expensesByInterval(state) {
             return state.expensesListByInterval
         },
-        
+
         intervalMonth() {
             let date = new Date()
             let dateFrom = new Date(date.getFullYear(), date.getMonth(), 1)
