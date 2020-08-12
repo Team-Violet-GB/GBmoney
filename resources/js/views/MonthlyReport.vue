@@ -332,7 +332,7 @@
 
     .text-chart-data-row {
         padding: 0 0 3px 15px;
-        font-weight: 500;
+        font-weight: 600;
         transition: transform 200ms;
     }
 
