@@ -5,12 +5,12 @@
 
                 <!--                выбор диапазона месяцов при помощи компонента MonthPicker-->
                 <el-row :gutter="10" type="flex" justify="end" class="params">
-                    <el-col :lg="12" :xl="12">
+                    <el-col :lg="12" :xl="13">
                         <month-picker @changeDate="onMonthChange"/>
                     </el-col>
 
                     <!--                    выбор типа категории для отображения-->
-                    <el-col :lg="12" :xl="8">
+                    <el-col :lg="12" :xl="10">
                         <div class="btn-group">
                             <el-button-group>
                                 <el-button @click="onTypeBtnClick('Расходы')" type="danger" size="mini"
