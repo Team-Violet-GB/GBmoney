@@ -13,12 +13,12 @@
                     <el-col :lg="12" :xl="8">
                         <div class="btn-group">
                             <el-button-group>
-                                <el-button @click="onTypeBtnClick('Доходы')" type="success" size="mini"
-                                           :class="typeOfChart == 'Доходы' ? 'isActive' : 'inActive'">Доходы
-                                </el-button>
                                 <el-button @click="onTypeBtnClick('Расходы')" type="danger" size="mini"
                                            :class="typeOfChart == 'Расходы' ? 'isActive' : 'inActive'" class="inActive">
                                     Расходы
+                                </el-button>
+                                <el-button @click="onTypeBtnClick('Доходы')" type="success" size="mini"
+                                           :class="typeOfChart == 'Доходы' ? 'isActive' : 'inActive'">Доходы
                                 </el-button>
                             </el-button-group>
                         </div>
@@ -96,7 +96,7 @@
         data() {
             return {
                 currentISODateFrom: new Date().toISOString().slice(0, 8) + '01',
-                typeOfChart: 'Доходы',
+                typeOfChart: 'Расходы',
                 totalAmount: 0
             }
         },
@@ -229,15 +229,14 @@
     .btn-group {
         min-width: max-content;
         padding: 0 35px;
-
     }
 
     .inActive {
-        box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.7);
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.45);
     }
 
     .isActive {
-        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9);
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.85);
     }
 
     .feed-container-wrapper {
