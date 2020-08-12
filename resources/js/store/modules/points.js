@@ -85,24 +85,16 @@ export default {
 
     },
     mutations: {
-        updateIncomes(state, points) {      
-            for (let point in points) if (points[point].deleted) delete points[point]
+        updateIncomes(state, points) {
             state.incomesList = points
         },
         updateWallets(state, points) {
-            let summ = 0
-            for (let point in points) {
-                if (points[point].deleted) {
-                    delete points[point]
-                    continue
-                }
-                if (points[point].include) summ += Number(points[point].amount)
-            }
             state.walletsList = points
+            let summ = 0
+            for (let point in points) if (points[point].include) summ += Number(points[point].amount)
             state.walletsSumm = summ
         },
         updateExpenses(state, points) {
-            for (let point in points) if (points[point].deleted) delete points[point]
             state.expensesList = points
         },
         updateTags(state, points) {
