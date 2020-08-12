@@ -323,5 +323,9 @@
     .el-select-dropdown__item:hover {
         background-color: #3d3e48;
     }
+    
+    .el-button {
+        border-radius: 0%;
+    }
 
 </style>
