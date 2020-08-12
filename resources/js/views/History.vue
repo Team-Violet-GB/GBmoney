@@ -179,10 +179,11 @@ export default {
                                 cats.set(point.income_id, point.name)
                             sum[sum.length - 1] = (+sum[sum.length - 1] + +point.amount).toFixed(2)
                             total = (+total + +point.amount).toFixed(2)
-                            max = max < +point.amount ? (+point.amount).toFixed(2) : max
-                            min = min >= +point.amount ? (+point.amount).toFixed(2) : min
                         }
                     }
+                    let num = Number(sum[sum.length - 1])
+                    max = max < num ? num.toFixed(2) : max
+                    min = min >= num ? num.toFixed(2) : min
                 }
             )
             avg = (total/labels.length).toFixed(2)
@@ -214,10 +215,11 @@ export default {
                                 cats.set(point.expense_id, point.name)
                             sum[sum.length - 1] = (+sum[sum.length - 1] + +point.amount).toFixed(2)
                             total = (+total + +point.amount).toFixed(2)
-                            max = max < +point.amount ? (+point.amount).toFixed(2) : max
-                            min = min >= +point.amount ? (+point.amount).toFixed(2) : min
                         }
                     }
+                    let num = Number(sum[sum.length - 1])
+                    max = max < num ? num.toFixed(2) : max
+                    min = min >= num ? num.toFixed(2) : min
                 }
             )
             avg = (total/labels.length).toFixed(2)
