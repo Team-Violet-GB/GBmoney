@@ -124,10 +124,10 @@ import Numbers from './Numbers.vue'
         },
 
         pointsFrom() {
-          return (this.transaction.type == 1) ? this.incomes : this.wallets
+          return this.deletedFilter((this.transaction.type == 1) ? this.incomes : this.wallets)
         }, 
         pointsTo() {
-          return (this.transaction.type == 3) ? this.expenses : this.wallets
+          return this.deletedFilter(((this.transaction.type == 3) ? this.expenses : this.wallets))
         }, 
     },
 
@@ -139,6 +139,10 @@ import Numbers from './Numbers.vue'
         'fetchExpenses',
       ]),
 
+      deletedFilter(points) {
+        for (let point in points) if (points[point].deleted) delete points[point]
+        return points
+      },
       
       handleClose() {
         this.$emit('closeCreateWindow')
