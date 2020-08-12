@@ -14,7 +14,7 @@
      <Feed @change-transaction="changeTransaction" v-if="type == 'income' || type == 'wallet'" />
 
     <el-row v-if="type == 'expense'">
-      <el-col class="grid-content bg-purple cstm-col-left" :span="12">
+      <el-col class="grid-content bg-purple cstm-col-left" :span="10">
           <div>
             <div class="cstm-pie-chart">
             <PieChart :chartData="pieChart" :height="350"></PieChart>
@@ -33,7 +33,7 @@
           </el-card>
           </div>
       </el-col>
-      <el-col  class="grid-content bg-purple-light cstm-feed" :span="12">
+      <el-col  class="grid-content bg-purple-light cstm-feed" :span="14">
         <Feed @change-transaction="changeTransaction" :feed-template="false" />
       </el-col>
     </el-row>
@@ -153,9 +153,15 @@ mounted() {
 
     changeTransaction() {
       if (this.getDateFrom && this.getDateTo) this.changeCharts({ from: this.getDateFrom, to: this.getDateTo })
-      else this.changeCharts({ from: this.intervalHalfYear.dateFrom, to: this.intervalHalfYear.dateTo })
+      else {
+          if (this.type == 'expense') {
+            this.fetchPieChart({ dateFrom: this.intervalMonth.dateFrom, dateTo: this.intervalMonth.dateTo })
+          }
+          if (this.type == 'expense' || this.type == 'income') {
+            this.fetchLineChart({ dateFrom: this.intervalHalfYear.dateFrom, dateTo: this.intervalHalfYear.dateTo })
+          }
+      }
     },
-
     
     fetchLineChart(data) {
         this.axios.get(`/api/report/sum-points-by-months?${this.type}_id=${this.id}&date_from=${data.dateFrom}&date_to=${data.dateTo}`)
@@ -303,8 +309,7 @@ body {
 .el-card {
   border: none;
   background-color: #3d3e48;
-  width: 120%;
-  margin-left: -10%;
+  width: 100%;
 }
 .tran-group-header {
   color: #b3fb2acf;

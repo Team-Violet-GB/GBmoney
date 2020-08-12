@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="cstm-numbers-component">
         <div class="cstm-row-number">
           <el-button class="cstm-button-numbers" type="info" @click="$emit('click-number', 1)">1</el-button>
           <el-button class="cstm-button-numbers" type="info" @click="$emit('click-number', 2)">2</el-button>
@@ -45,6 +45,9 @@
 
 
 <style scoped lang="scss">
+    .cstm-numbers-component{
+        margin-top: 12px;
+    }
     .cstm-row-number {
         display: flex;
         .cstm-button-numbers {
