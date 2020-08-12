@@ -9,7 +9,7 @@
         :before-close="handleClose">
           <div class="cstm-body-window">
             <!-- Календарь -->
-            <Calendar 
+            <Calendar
               :date="transaction.date"
               @changeDate="(newDate) => newDate ? transaction.date = newDate : transaction.date = null " />
             <!-- Блок Откуда -> Куда  будет производиться транзакция -->
@@ -20,19 +20,19 @@
             </div>
             <!-- Выбор подкатегории -->
             <div v-if="transaction.type == 3" class="cstm-select-box cstm-tags cstm-mrgn-top-20">
-                <span class="cstm-label">Подкатегория: </span> 
-                <SelectCustom 
+                <span class="cstm-label">Подкатегория: </span>
+                <SelectCustom
                   v-if="!isAddingTag && !isEditingTag"
-                  :list="tagsFromCategory" 
-                  :idSelected="transaction.tag" 
-                  :withEmptySelect="true" 
+                  :list="tagsFromCategory"
+                  :idSelected="transaction.tag"
+                  :withEmptySelect="true"
                   @changeSelect="(id) =>  { changeTags(id) }
                 "/>
                 <!-- Редактирование/Создание подкатегорий -->
-                <el-input 
-                  v-if="isAddingTag || isEditingTag" 
-                  type=text 
-                  class="cstm-input-tag" 
+                <el-input
+                  v-if="isAddingTag || isEditingTag"
+                  type=text
+                  class="cstm-input-tag"
                   :placeholder="placeholderTag"
                   v-model="changeTag" >
                 </el-input>
@@ -42,13 +42,13 @@
                   <i v-if="isAddingTag || isEditingTag" @click="() => { cancelTag() } " class="el-icon-close cstm-button"></i>
                   <!-- Кнопки Редактировать, Добавить, Удалить Подкатегорию -->
                   <i v-if="!isAddingTag && !isEditingTag" @click="() => { addTag() } " class="el-icon-plus cstm-button"></i>
-                  <i v-if="!isAddingTag && !isEditingTag && transaction.tag" @click="() => { editTag() } " class="el-icon-edit cstm-button"></i>        
+                  <i v-if="!isAddingTag && !isEditingTag && transaction.tag" @click="() => { editTag() } " class="el-icon-edit cstm-button"></i>
                   <i v-if="!isAddingTag && !isEditingTag && transaction.tag" @click="() => { deleteTag() } " class="el-icon-delete cstm-button"></i>
                 </div>
             </div>
             <!-- Введите сумму -->
             <el-input placeholder="Сумма" class="cstm-input cstm-mrgn-top-20" type="number" v-model="transaction.amount"></el-input>
-            <Numbers @click-number="(number) => addNumber(number)" />  
+            <Numbers @click-number="(number) => addNumber(number)" />
             <!-- Введите комментарий -->
             <el-input
               type="textarea"
@@ -73,8 +73,8 @@ import Numbers from './Numbers.vue'
 
   export default {
     components: {
-      SelectCustom, 
-      Calendar, 
+      SelectCustom,
+      Calendar,
       Numbers
     },
     props: ['newTransaction'],
@@ -125,10 +125,10 @@ import Numbers from './Numbers.vue'
 
         pointsFrom() {
           return this.deletedFilter((this.transaction.type == 1) ? this.incomes : this.wallets)
-        }, 
+        },
         pointsTo() {
           return this.deletedFilter(((this.transaction.type == 3) ? this.expenses : this.wallets))
-        }, 
+        },
     },
 
     methods: {
@@ -140,16 +140,17 @@ import Numbers from './Numbers.vue'
       ]),
 
       deletedFilter(points) {
-        for (let point in points) if (points[point].deleted) delete points[point]
-        return points
+          let newPoint = Object.assign({}, points)
+        for (let point in newPoint) if (newPoint[point].deleted) delete newPoint[point]
+        return newPoint
       },
-      
+
       handleClose() {
         this.$emit('closeCreateWindow')
         this.isAddingTag = false
         this.isEditingTag = false
       },
-      
+
       checkForm() {
         this.errors = []
         if (!this.transaction.amount) this.errors.push('Не указана сумма')
@@ -268,7 +269,7 @@ import Numbers from './Numbers.vue'
           "tag_id": this.transaction.tag,
           "type": this.transaction.type,
           "amount": this.transaction.amount,
-          "comment": this.transaction.comment, 
+          "comment": this.transaction.comment,
         })
         .then(response => {
           let pointsNames = this.getPointsNames(response.data.data)
@@ -278,7 +279,7 @@ import Numbers from './Numbers.vue'
           this.handleClose()
         })
         .catch((error) => {
-          this.MessageError(error.response.data.errors) 
+          this.MessageError(error.response.data.errors)
         })
       },
 
@@ -317,7 +318,7 @@ import Numbers from './Numbers.vue'
       addNumber(number) {
         var amount = this.transaction.amount
         if (!isNaN(number)) {
-          amount ? (this.transaction.amount = amount + '' + number) : this.transaction.amount =  number 
+          amount ? (this.transaction.amount = amount + '' + number) : this.transaction.amount =  number
         } else {
           if (number == 'delete') this.transaction.amount = null
           else amount ? this.transaction.amount = String(amount).substring(0, amount.length - 1) : ''
@@ -387,7 +388,7 @@ import Numbers from './Numbers.vue'
 
 .cstm-label {
   color: #ffffff;
-  
+
 }
 
 .cstm-input-tag {
