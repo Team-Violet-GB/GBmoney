@@ -46,7 +46,7 @@
 
 <style scoped lang="scss">
     .cstm-numbers-component{
-        margin-top: 13px;
+        margin-top: 12px;
     }
     .cstm-row-number {
         display: flex;
