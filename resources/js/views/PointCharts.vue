@@ -64,7 +64,7 @@ export default {
       pieSumm: 0,
       pieChart: null,
       lineChart: null,
-      loadingPie: true, 
+      loadingPie: true,
       loadingLine: true,
       colorsPie: {},
     }
@@ -75,7 +75,7 @@ export default {
         'getDateFrom',
         'getDateTo',
     ]),
-            
+
     loading() {
       if (!this.loadingPie && !this.loadingLine) return false
       return true
@@ -89,14 +89,14 @@ export default {
         dateTo = dateTo.getFullYear() + '-' + (dateTo.getMonth() + 1) + '-' + dateTo.getDate()
         return  {dateFrom, dateTo}
     },
-  
+
     intervalHalfYear() {
         let date = new Date()
         let dateFrom = new Date(date.getFullYear(), date.getMonth() - 5 , 1)
         let dateTo = new Date(date.getFullYear(), date.getMonth() + 1, 0)
         dateFrom = dateFrom.getFullYear() + '-' + (dateFrom.getMonth() + 1) + '-' + dateFrom.getDate()
-        dateTo = dateTo.getFullYear() + '-' + (dateTo.getMonth() + 1) + '-' + dateTo.getDate() 
-        return  {dateFrom, dateTo} 
+        dateTo = dateTo.getFullYear() + '-' + (dateTo.getMonth() + 1) + '-' + dateTo.getDate()
+        return  {dateFrom, dateTo}
     },
   },
 
@@ -162,7 +162,7 @@ mounted() {
           }
       }
     },
-    
+
     fetchLineChart(data) {
         this.axios.get(`/api/report/sum-points-by-months?${this.type}_id=${this.id}&date_from=${data.dateFrom}&date_to=${data.dateTo}`)
             .then(response => {
@@ -240,9 +240,9 @@ mounted() {
             else if (this.colorsPie[`${tags[tag].name}`]) {
               color = this.colorsPie[`${tags[tag].name}`]
             } else {
-              color = this.colorGenerator() 
+              color = this.colorGenerator()
               this.colorsPie[`${tags[tag].name}`] = color
-            } 
+            }
             names.push(tags[tag].name)
             amounts.push(tags[tag].amount)
             colors.push(color)
@@ -259,7 +259,7 @@ mounted() {
       let value3 = rbg[0]
       return '#' + this.rgbToHex(value1) + this.rgbToHex(value2) + this.rgbToHex(value3)
     },
-    
+
     rgbToHex(c) { // конвертирует rgb цвет в hex 16-ти битный для css
         let hex = c.toString(16)
         return hex.length == 1 ? "0" + hex : hex
@@ -307,6 +307,7 @@ body {
   margin: 0;
 }
 .el-card {
+    margin-top: 20px;
   border: none;
   background-color: #3d3e48;
   width: 100%;
