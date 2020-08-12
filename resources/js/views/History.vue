@@ -40,10 +40,10 @@
 </template>
 
 <script>
-import LineChart from "./HistoryChart"
+import LineChart from "../components/history/HistoryChart"
 import {mapActions, mapGetters, mapMutations} from 'vuex'
-import CalendarMonth from "../CalendarMonth"
-import store from "../../store/index.js"
+import CalendarMonth from "../components/CalendarMonth"
+import store from "../store"
 
 export default {
     name: "History",
