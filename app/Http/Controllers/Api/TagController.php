@@ -22,7 +22,6 @@ class TagController extends Controller
     {
         $tags = Tag::query()
             ->where('user_id', Auth::id())
-            ->where('deleted', false)
             ->get();
 
         return response()->json(['data' => collect($tags)->keyBy('id')]);
