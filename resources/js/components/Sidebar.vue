@@ -41,7 +41,7 @@ export default {
         { title: 'Лента', url: '/feed', class: 'el-icon-menu' },
         { title: 'Отчет по месяцам', url: '/monthly-report', class: 'el-icon-date' },
         { title: 'История', url: '/history', class: 'el-icon-s-data' },
-        { title: 'Настройки', url: '/test', class: 'el-icon-s-tools' }
+        // { title: 'Настройки', url: '/settings', class: 'el-icon-s-tools' }
       ]
     }
   },
