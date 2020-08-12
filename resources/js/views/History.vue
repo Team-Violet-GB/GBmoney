@@ -127,6 +127,15 @@ export default {
                     },
 
                 },
+                elements: {
+                    point: {
+                        radius: 7,
+                        pointStyle: 'circle',
+                        hitRadius: 25,
+                        hoverRadius: 11,
+                        backgroundColor: '#f6993f'
+                    },
+                },
                 scales: {
                     xAxes: [{
                         ticks: {
