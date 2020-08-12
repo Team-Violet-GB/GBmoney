@@ -175,6 +175,7 @@
                 }
             }
         },
+
         computed: {
             ...mapGetters([
                 'wallets',
@@ -242,6 +243,7 @@
                 axios.delete(`/api/transactions/${this.editorData.edata.id}`)
                     .then(response => {
                         if (response.status === 200) {
+
                             this.updateOtherData(this.editorData.type);
                             this.$message({
                                 type: 'info',
@@ -259,7 +261,10 @@
                     });
             },
             updateOtherData(type) {
-                if (!this.feedTemplate) this.fetchTotalAmountOfCategories();
+                this.$parent.$parent.$emit('change-transaction')
+                if (this.$route.name == 'monthlyReport') {
+                    if (!this.feedTemplate) this.fetchTotalAmountOfCategories();
+                }
                 this.fetchTransactions();
                 this.fetchWallets();
                 if (type == 1) this.fetchIncomes();

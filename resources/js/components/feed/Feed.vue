@@ -26,7 +26,9 @@
                     <!--            группа транзакций-->
                     <transaction-group :transactionGroup="transactionGroup" :transactionGroupName="index"
                                        class="tran-group"
-                                       :feed-template="feedTemplate"/>
+                                       :feed-template="feedTemplate"
+                                       @change-transaction="$emit('change-transaction')"
+                                       />
                 </el-card>
             </div>
 
@@ -113,7 +115,7 @@
             paginate(page) {
                 this.setPage(page);
                 this.fetchTransactions()
-            }
+            },
         },
         mounted() {
             if (!this.incomes) this.fetchIncomes();

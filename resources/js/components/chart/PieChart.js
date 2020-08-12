@@ -11,13 +11,11 @@ export default {
   data() {
     return {
       options: {
+        default:null,
         responsive: true,
         maintainAspectRation: true,
         legend: {
           position: 'bottom',
-        },
-        tooltips: {
-          enabled: false
         },
       }
     }
