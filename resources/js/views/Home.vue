@@ -95,7 +95,7 @@
       <transition-group name="list" tag="div" class="cstm-body-card">
         <div v-for="point in deletedFilter(expensesByInterval)" :key="point.id" :id="point.id" class="cstm-point">
           <div class="cstm-head-point">{{ point.name }}</div>
-          <drop @drop="transactionExpense" :accepts-data="(data) => (data.type == 'wallet')"> 
+          <drop @drop="transactionExpense" :accepts-data="(data) => (data.type == 'wallet')">
             <el-button
               :type="(Number(point.amount) > Number(point.max_limit))? 'danger' : 'success'"
               :icon="point.icon_name"
@@ -108,7 +108,7 @@
             class="cstm-money-point"
             :class="(Number(point.amount) > Number(point.max_limit))? 'cstm-red' : 'cstm-green'"
           >{{ Number(point.amount).toLocaleString() }} &#8381;</div>
-          <div  v-if="point.max_limit" class="cstm-plan">{{ Number(point.max_limit).toLocaleString() }} &#8381;</div>
+          <div  v-if="point.max_limit != 0" class="cstm-plan">{{ Number(point.max_limit).toLocaleString() }} &#8381;</div>
             <EditButton :key="'edit'" :data="{id: point.id, name: point.name, choose: point.icon_id, amount: point.max_limit}" category="Расход"/>
         </div>
         <Addbutton :key="'add'" category="Расход"/>
@@ -162,7 +162,7 @@
             this.updateIncomesLoad(true)
             this.updateWalletsLoad(true)
             this.updateExpensesLoad(true)
-            
+
             this.fetchWallets()
             this.fetchIncomes({
               dateFrom: this.intervalMonth.dateFrom,
@@ -218,8 +218,9 @@
             },
 
             deletedFilter(points) {
-              for (let point in points) if (points[point].deleted) delete points[point]
-              return points
+                let newPoints = Object.assign({}, points)
+                for (let point in newPoints) if (newPoints[point].deleted) delete newPoints[point]
+                return newPoints
             },
 
             dateNow() {

@@ -54,7 +54,7 @@ const router = new VueRouter({
       path: '/history',
       name: 'History',
       meta: { layout: 'main', auth: true },
-      component: () => import('./components/history/History.vue')
+      component: () => import('./views/History.vue')
     },
 
   ]

@@ -6,8 +6,8 @@ export default {
         expenses: null,
         incomes: null,
         categories: {
-            incomes: null,
-            expenses: null
+            incomes: [],
+            expenses: [],
         },
         labels: [],
         dateFrom: '',
