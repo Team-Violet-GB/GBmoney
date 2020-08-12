@@ -153,9 +153,15 @@ mounted() {
 
     changeTransaction() {
       if (this.getDateFrom && this.getDateTo) this.changeCharts({ from: this.getDateFrom, to: this.getDateTo })
-      else this.changeCharts({ from: this.intervalHalfYear.dateFrom, to: this.intervalHalfYear.dateTo })
+      else {
+          if (this.type == 'expense') {
+            this.fetchPieChart({ dateFrom: this.intervalMonth.dateFrom, dateTo: this.intervalMonth.dateTo })
+          }
+          if (this.type == 'expense' || this.type == 'income') {
+            this.fetchLineChart({ dateFrom: this.intervalHalfYear.dateFrom, dateTo: this.intervalHalfYear.dateTo })
+          }
+      }
     },
-
     
     fetchLineChart(data) {
         this.axios.get(`/api/report/sum-points-by-months?${this.type}_id=${this.id}&date_from=${data.dateFrom}&date_to=${data.dateTo}`)
