@@ -241,7 +241,7 @@
 
     .feed-container-wrapper {
         width: 100%;
-        height: 85vh;
+        height: 83vh;
         overflow: hidden;
         padding-bottom: 10px;
     }
@@ -311,7 +311,7 @@
 
     .text-chart-table-wrapper {
         border: none;
-        padding-top: 40px;
+        padding-top: 37px;
         width: 100%;
     }
 

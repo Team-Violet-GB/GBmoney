@@ -129,10 +129,10 @@ export default {
                 },
                 elements: {
                     point: {
-                        radius: 7,
+                        radius: 3,
                         pointStyle: 'circle',
                         hitRadius: 25,
-                        hoverRadius: 11,
+                        hoverRadius: 5,
                         backgroundColor: '#f6993f'
                     },
                 },
