@@ -52,7 +52,7 @@
                                         class="text-chart-data-row"
                                         :style="{color: item.show ? item.color : 'rgba(110, 110, 114, 0.99)'}">
                                     <div @click="item.show = !item.show"
-                                         class="text-chart-data-row-wrapper" style="cursor: pointer">
+                                         class="text-chart-data-row-wrapper">
                                         <el-col :span="10">{{ item.name }}</el-col>
                                         <el-col class="cstm-percent" :span="7">{{ item.show ? ((100 / totalAmount) *
                                             +item.amount).toFixed(1) + '%' : '-'}}
@@ -333,13 +333,14 @@
     .text-chart-data-row {
         padding: 0 0 3px 15px;
         font-weight: 500;
+        transition: transform 200ms;
+    }
+
+    .text-chart-data-row:hover {
+        transform: scale(0.98)
     }
 
     .text-chart-data-row-wrapper {
         cursor: pointer;
-    }
-
-    .text-chart-data-row:hover {
-        color: #FFF8F6F6;
     }
 </style>
