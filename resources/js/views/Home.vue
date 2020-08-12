@@ -82,13 +82,13 @@
       <div slot="header" class="cstm-header-card">
         <div class="clearfix cstm-up-text">
           <span>Расходы</span>
-          <span>{{ Number(expensesSumm).toLocaleString() }} &#8381;</span>
           <span>{{ Number(expensesLimit).toLocaleString() }} &#8381;</span>
+          <span>{{ Number(expensesSumm).toLocaleString() }} &#8381;</span>
         </div>
         <div class="clearfix cstm-down-text">
           <span>{{ dateNowString }}</span>
-          <span>Потрачено</span>
           <span>В планах</span>
+          <span>Потрачено</span>
         </div>
       </div>
       <!-- тело -->
