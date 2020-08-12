@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionCollection extends ResourceCollection
 {
@@ -27,6 +28,7 @@ class TransactionCollection extends ResourceCollection
 
         // Получаем массив транзакций для каждого элемента входного массива пагинации.
         $transaction = Transaction::query()->whereIn('date', $dates)
+            ->where('user_id', Auth::id())
             ->when($incomeID, function ($query) use ($incomeID) {
                 return $query->where('income_id', '=', $incomeID);
             })
