@@ -13,12 +13,12 @@
                     <el-col :lg="12" :xl="8">
                         <div class="btn-group">
                             <el-button-group>
-                                <el-button @click="onTypeBtnClick('Доходы')" type="success" size="mini"
-                                           :class="typeOfChart == 'Доходы' ? 'isActive' : 'inActive'">Доходы
-                                </el-button>
                                 <el-button @click="onTypeBtnClick('Расходы')" type="danger" size="mini"
                                            :class="typeOfChart == 'Расходы' ? 'isActive' : 'inActive'" class="inActive">
                                     Расходы
+                                </el-button>
+                                <el-button @click="onTypeBtnClick('Доходы')" type="success" size="mini"
+                                           :class="typeOfChart == 'Доходы' ? 'isActive' : 'inActive'">Доходы
                                 </el-button>
                             </el-button-group>
                         </div>
@@ -52,7 +52,7 @@
                                         class="text-chart-data-row"
                                         :style="{color: item.show ? item.color : 'rgba(110, 110, 114, 0.99)'}">
                                     <div @click="item.show = !item.show"
-                                         class="text-chart-data-row-wrapper" style="cursor: pointer">
+                                         class="text-chart-data-row-wrapper">
                                         <el-col :span="10">{{ item.name }}</el-col>
                                         <el-col class="cstm-percent" :span="7">{{ item.show ? ((100 / totalAmount) *
                                             +item.amount).toFixed(1) + '%' : '-'}}
@@ -96,7 +96,7 @@
         data() {
             return {
                 currentISODateFrom: new Date().toISOString().slice(0, 8) + '01',
-                typeOfChart: 'Доходы',
+                typeOfChart: 'Расходы',
                 totalAmount: 0
             }
         },
@@ -229,15 +229,14 @@
     .btn-group {
         min-width: max-content;
         padding: 0 35px;
-
     }
 
     .inActive {
-        box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.7);
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.45);
     }
 
     .isActive {
-        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9);
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.85);
     }
 
     .feed-container-wrapper {
@@ -332,14 +331,15 @@
 
     .text-chart-data-row {
         padding: 0 0 3px 15px;
-        font-weight: 500;
+        font-weight: 600;
+        transition: transform 200ms;
+    }
+
+    .text-chart-data-row:hover {
+        transform: scale(0.98)
     }
 
     .text-chart-data-row-wrapper {
         cursor: pointer;
-    }
-
-    .text-chart-data-row:hover {
-        color: #FFF8F6F6;
     }
 </style>

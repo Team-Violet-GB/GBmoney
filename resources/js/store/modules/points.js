@@ -129,6 +129,7 @@ export default {
         updateExpensesByInterval(state, pointsByInterval) {
             let points = state.expensesList
             let summ = 0
+            let limit = 0
             for (let point in points)  {
                 if (pointsByInterval[point]) {
                     points[point].amount = pointsByInterval[point].amount
@@ -136,13 +137,12 @@ export default {
                 } else {
                     points[point].amount = 0
                 }
+                limit += Number(points[point].max_limit)
             }
+
             state.expensesListByInterval = points
             state.expensesSumm = summ
-
-            let limit = 0
-            for (let point in points)  limit += Number(points[point].max_limit)
-            state.expensesLimit = limit
+            state.expensesLimit = limit - summ
         },
     },
     state: {

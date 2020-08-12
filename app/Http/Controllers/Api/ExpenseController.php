@@ -26,7 +26,6 @@ class ExpenseController extends Controller
         /** @var Expense $expenses */
         $expenses = Expense::query()
             ->where('user_id', Auth::id())
-            ->where('expenses.deleted', false)
             ->get();
 
         return response()->json(['data' => collect($expenses)->keyBy('id')]);
@@ -122,7 +121,6 @@ class ExpenseController extends Controller
         $collection = Expense::query()->select('expenses.*', 'i.name as icon_name')
             ->join('icons as i', 'i.id', '=', 'expenses.icon_id')
             ->where('expenses.user_id', Auth::id())
-            ->where('expenses.deleted', false)
             ->get();
 
         return new ExpensesCollection($collection->keyBy('id'));

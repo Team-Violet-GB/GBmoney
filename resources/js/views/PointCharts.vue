@@ -14,7 +14,7 @@
      <Feed @change-transaction="changeTransaction" v-if="type == 'income' || type == 'wallet'" />
 
     <el-row v-if="type == 'expense'">
-      <el-col class="grid-content bg-purple cstm-col-left" :span="12">
+      <el-col class="grid-content bg-purple cstm-col-left" :span="10">
           <div>
             <div class="cstm-pie-chart">
             <PieChart :chartData="pieChart" :height="350"></PieChart>
@@ -33,7 +33,7 @@
           </el-card>
           </div>
       </el-col>
-      <el-col  class="grid-content bg-purple-light cstm-feed" :span="12">
+      <el-col  class="grid-content bg-purple-light cstm-feed" :span="14">
         <Feed @change-transaction="changeTransaction" :feed-template="false" />
       </el-col>
     </el-row>
@@ -309,8 +309,7 @@ body {
 .el-card {
   border: none;
   background-color: #3d3e48;
-  width: 120%;
-  margin-left: -10%;
+  width: 100%;
 }
 .tran-group-header {
   color: #b3fb2acf;

@@ -20,7 +20,7 @@
       </div>
       <!-- тело -->
       <transition-group name="list" tag="div" class="cstm-body-card">
-        <div v-for="point in incomesByInterval" :key="point.id" :id="point.id" class="cstm-point">
+        <div v-for="point in deletedFilter(incomesByInterval)" :key="point.id" :id="point.id" class="cstm-point">
           <div class="cstm-head-point">{{ point.name }}</div>
           <drag :data="{ id: point.id, type: 'income'}">
             <drop :accepts-data="() => false">
@@ -54,7 +54,7 @@
       </div>
       <!-- тело -->
       <transition-group name="list" tag="div" class="cstm-body-card">
-        <div v-for="point in wallets" :key="point.id" :id="point.id" class="cstm-point">
+        <div v-for="point in deletedFilter(wallets)" :key="point.id" :id="point.id" class="cstm-point">
           <div class="cstm-head-point">{{ point.name }}</div>
             <drop
               @drop="transactionWallet"
@@ -82,18 +82,18 @@
       <div slot="header" class="cstm-header-card">
         <div class="clearfix cstm-up-text">
           <span>Расходы</span>
-          <span>{{ Number(expensesSumm).toLocaleString() }} &#8381;</span>
           <span>{{ Number(expensesLimit).toLocaleString() }} &#8381;</span>
+          <span>{{ Number(expensesSumm).toLocaleString() }} &#8381;</span>
         </div>
         <div class="clearfix cstm-down-text">
           <span>{{ dateNowString }}</span>
-          <span>Потрачено</span>
           <span>В планах</span>
+          <span>Потрачено</span>
         </div>
       </div>
       <!-- тело -->
       <transition-group name="list" tag="div" class="cstm-body-card">
-        <div v-for="point in expensesByInterval" :key="point.id" :id="point.id" class="cstm-point">
+        <div v-for="point in deletedFilter(expensesByInterval)" :key="point.id" :id="point.id" class="cstm-point">
           <div class="cstm-head-point">{{ point.name }}</div>
           <drop @drop="transactionExpense" :accepts-data="(data) => (data.type == 'wallet')"> 
             <el-button
@@ -216,6 +216,12 @@
                     comment: null,
                 }
             },
+
+            deletedFilter(points) {
+              for (let point in points) if (points[point].deleted) delete points[point]
+              return points
+            },
+
             dateNow() {
               let date = new Date()
               return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()

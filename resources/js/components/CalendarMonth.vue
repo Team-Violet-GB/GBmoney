@@ -1,6 +1,6 @@
 <template>
   <div class="params">
-    <span class="demonstration">Месяц&nbsp;&nbsp;</span>
+    <span class="demonstration"></span>
     <el-date-picker
       v-model="dateSelect"
       @change="$emit('changeDate', date)"
